@@ -6,6 +6,7 @@
 #include "bg.h"
 #include "cable_club.h"
 #include "clock.h"
+#include "credits.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
@@ -64,6 +65,7 @@
 #include "constants/map_types.h"
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
+#include "constants/rgb.h"
 #include "constants/trainer_hill.h"
 #include "constants/weather.h"
 
@@ -173,6 +175,11 @@ static void TransitionMapMusic(void);
 static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *, u16, u8);
 static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *, u8, u16, u8);
 static u16 GetCenterScreenMetatileBehavior(void);
+static bool32 SetUpScrollSceneForCredits(u8 *state, u8 unused);
+static bool8 MapLdr_Credits(void);
+static void CameraCB_CreditsPan(struct CameraObject * camera);
+static void Task_OvwldCredits_FadeOut(u8 taskId);
+static void Task_OvwldCredits_WaitFade(u8 taskId);
 
 static void *sUnusedOverworldCallback;
 static u8 sPlayerLinkStates[MAX_LINK_PLAYERS];
@@ -199,9 +206,15 @@ EWRAM_DATA static struct WarpData sFixedDiveWarp = {0};
 EWRAM_DATA static struct WarpData sFixedHoleWarp = {0};
 EWRAM_DATA static u16 sLastMapSectionId = 0;
 EWRAM_DATA static struct InitialPlayerAvatarState sInitialPlayerAvatarState = {0};
+
+EWRAM_DATA bool8 gDisableMapMusicChangeOnMapLoad = FALSE;
 EWRAM_DATA static u16 sAmbientCrySpecies = 0;
 EWRAM_DATA static bool8 sIsAmbientCryWaterMon = FALSE;
 EWRAM_DATA struct LinkPlayerObjectEvent gLinkPlayerObjectEvents[4] = {0};
+
+static EWRAM_DATA const struct CreditsOverworldCmd *sCreditsOverworld_Script = NULL;
+static EWRAM_DATA s16 sCreditsOverworld_CmdLength = 0;
+static EWRAM_DATA s16 sCreditsOverworld_CmdIndex = 0;
 
 static const struct WarpData sDummyWarpData =
 {
@@ -372,8 +385,10 @@ void Overworld_ResetStateAfterFly(void)
 {
     ResetInitialPlayerAvatarState();
     FlagClear(FLAG_SYS_CYCLING_ROAD);
+    VarSet(VAR_MAP_SCENE_ROUTE16, 0);
     FlagClear(FLAG_SYS_CRUISE_MODE);
     FlagClear(FLAG_SYS_SAFARI_MODE);
+    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
 }
@@ -382,8 +397,10 @@ void Overworld_ResetStateAfterTeleport(void)
 {
     ResetInitialPlayerAvatarState();
     FlagClear(FLAG_SYS_CYCLING_ROAD);
+    VarSet(VAR_MAP_SCENE_ROUTE16, 0);
     FlagClear(FLAG_SYS_CRUISE_MODE);
     FlagClear(FLAG_SYS_SAFARI_MODE);
+    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
     ScriptContext2_RunNewScript(EventScript_ResetMrBriney);
@@ -393,8 +410,10 @@ void Overworld_ResetStateAfterDigEscRope(void)
 {
     ResetInitialPlayerAvatarState();
     FlagClear(FLAG_SYS_CYCLING_ROAD);
+    VarSet(VAR_MAP_SCENE_ROUTE16, 0);
     FlagClear(FLAG_SYS_CRUISE_MODE);
     FlagClear(FLAG_SYS_SAFARI_MODE);
+    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
 }
@@ -403,8 +422,10 @@ static void Overworld_ResetStateAfterWhiteOut(void)
 {
     ResetInitialPlayerAvatarState();
     FlagClear(FLAG_SYS_CYCLING_ROAD);
+    VarSet(VAR_MAP_SCENE_ROUTE16, 0);
     FlagClear(FLAG_SYS_CRUISE_MODE);
     FlagClear(FLAG_SYS_SAFARI_MODE);
+    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
     // If you were defeated by Kyogre/Groudon and the step counter has
@@ -419,6 +440,7 @@ static void Overworld_ResetStateAfterWhiteOut(void)
 static void UpdateMiscOverworldStates(void)
 {
     FlagClear(FLAG_SYS_SAFARI_MODE);
+    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
     ChooseAmbientCrySpecies();
     ResetCyclingRoadChallengeData();
     UpdateLocationHistoryForRoamer();
@@ -472,12 +494,34 @@ void ApplyNewEncryptionKeyToGameStats(u32 newKey)
 void LoadObjEventTemplatesFromHeader(void)
 {
     // Clear map object templates
-    CpuFill32(0, gSaveBlock1Ptr->objectEventTemplates, sizeof(gSaveBlock1Ptr->objectEventTemplates));
+    /*CpuFill32(0, gSaveBlock1Ptr->objectEventTemplates, sizeof(gSaveBlock1Ptr->objectEventTemplates));
 
     // Copy map header events to save block
     CpuCopy32(gMapHeader.events->objectEvents,
               gSaveBlock1Ptr->objectEventTemplates,
-              gMapHeader.events->objectEventCount * sizeof(struct ObjectEventTemplate));
+              gMapHeader.events->objectEventCount * sizeof(struct ObjectEventTemplate));*/
+
+    u8 i;
+
+    for (i = 0; i < gMapHeader.events->objectEventCount; i++)
+    {
+        if (gMapHeader.events->objectEvents[i].inConnection == 0xFF)
+        {
+            gSaveBlock1Ptr->objectEventTemplates[i] = Overworld_GetMapHeaderByGroupAndId(gMapHeader.events->objectEvents[i].trainerRange_berryTreeId, gMapHeader.events->objectEvents[i].trainerType)->events->objectEvents[gMapHeader.events->objectEvents[i].elevation - 1];
+            gSaveBlock1Ptr->objectEventTemplates[i].localId = gMapHeader.events->objectEvents[i].localId;
+            gSaveBlock1Ptr->objectEventTemplates[i].x = gMapHeader.events->objectEvents[i].x;
+            gSaveBlock1Ptr->objectEventTemplates[i].y = gMapHeader.events->objectEvents[i].y;
+            // set up object for seamless map transitions
+            gSaveBlock1Ptr->objectEventTemplates[i].elevation = gMapHeader.events->objectEvents[i].elevation;
+            gSaveBlock1Ptr->objectEventTemplates[i].trainerType = gMapHeader.events->objectEvents[i].trainerType;
+            gSaveBlock1Ptr->objectEventTemplates[i].trainerRange_berryTreeId = gMapHeader.events->objectEvents[i].trainerRange_berryTreeId;
+            gSaveBlock1Ptr->objectEventTemplates[i].inConnection = 0xFF;
+        }
+        else
+        {
+            gSaveBlock1Ptr->objectEventTemplates[i] = gMapHeader.events->objectEvents[i];
+        }
+    }
 }
 
 void LoadSaveblockObjEventScripts(void)
@@ -917,6 +961,8 @@ static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *pla
         return PLAYER_AVATAR_FLAG_ON_FOOT;
     else if (mapType == MAP_TYPE_UNDERWATER)
         return PLAYER_AVATAR_FLAG_UNDERWATER;
+    else if (sub_8055B38(metatileBehavior) == TRUE)
+        return PLAYER_AVATAR_FLAG_ON_FOOT;
     else if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) == TRUE)
         return PLAYER_AVATAR_FLAG_SURFING;
     else if (Overworld_IsBikingAllowed() != TRUE)
@@ -927,6 +973,18 @@ static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *pla
         return PLAYER_AVATAR_FLAG_ON_FOOT;
     else
         return PLAYER_AVATAR_FLAG_ACRO_BIKE;
+}
+
+bool8 sub_8055B38(u16 metatileBehavior)
+{
+    if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) != TRUE)
+        return FALSE;
+    if ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SEAFOAM_ISLANDS_B3F)
+          && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEAFOAM_ISLANDS_B3F))
+     || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SEAFOAM_ISLANDS_B4F)
+          && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SEAFOAM_ISLANDS_B4F)))
+        return TRUE;
+    return FALSE;
 }
 
 static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *playerStruct, u8 transitionFlags, u16 metatileBehavior, u8 mapType)
@@ -945,6 +1003,10 @@ static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *playerStr
         return DIR_EAST;
     else if (MetatileBehavior_IsEastArrowWarp(metatileBehavior) == TRUE)
         return DIR_WEST;
+    else if (MetatileBehavior_IsDirectionalUpRightStairWarp(metatileBehavior) == TRUE || MetatileBehavior_IsDirectionalDownRightStairWarp(metatileBehavior) == TRUE)
+        return DIR_WEST;
+    else if (MetatileBehavior_IsDirectionalUpLeftStairWarp(metatileBehavior) == TRUE || MetatileBehavior_IsDirectionalDownLeftStairWarp(metatileBehavior) == TRUE)
+        return DIR_EAST;
     else if ((playerStruct->transitionFlags == PLAYER_AVATAR_FLAG_UNDERWATER  && transitionFlags == PLAYER_AVATAR_FLAG_SURFING)
           || (playerStruct->transitionFlags == PLAYER_AVATAR_FLAG_SURFING && transitionFlags == PLAYER_AVATAR_FLAG_UNDERWATER))
         return playerStruct->direction;
@@ -1025,15 +1087,12 @@ static bool16 ShouldLegendaryMusicPlayAtLocation(struct WarpData *warp)
         case MAP_NUM(ROUTE124):
         case MAP_NUM(ROUTE125):
         case MAP_NUM(ROUTE126):
-        case MAP_NUM(ROUTE127):
-        case MAP_NUM(ROUTE128):
             return TRUE;
         default:
             if (VarGet(VAR_SOOTOPOLIS_CITY_STATE) < 4)
                 return FALSE;
             switch (warp->mapNum)
             {
-            case MAP_NUM(ROUTE129):
             case MAP_NUM(ROUTE130):
             case MAP_NUM(ROUTE131):
                 return TRUE;
@@ -1101,10 +1160,6 @@ u16 GetCurrLocationDefaultMusic(void)
     u16 music;
 
     // Play the desert music only when the sandstorm is active on Route 111.
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE111)
-     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE111)
-     && GetSavedWeather() == WEATHER_SANDSTORM)
-        return MUS_ROUTE111;
 
     music = GetLocationMusic(&gSaveBlock1Ptr->location);
     if (music != MUS_ROUTE118)
@@ -1144,7 +1199,29 @@ void Overworld_ResetMapMusic(void)
 
 void Overworld_PlaySpecialMapMusic(void)
 {
-    u16 music = GetCurrLocationDefaultMusic();
+    u16 music;
+    s16 x, y;
+
+    if (gDisableMapMusicChangeOnMapLoad == 1)
+    {
+        StopMapMusic();
+        return;
+    }
+    if (gDisableMapMusicChangeOnMapLoad == 2)
+    {
+        return;
+    }
+    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(POKEMON_LEAGUE_CHAMPIONS_ROOM) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(POKEMON_LEAGUE_CHAMPIONS_ROOM))
+    {
+        PlayerGetDestCoords(&x, &y);
+        if (y - 7 < 11 && gMPlayInfo_BGM.songHeader == &mus_rg_victory_gym_leader)
+        {
+            FadeInBGM(4);
+            return;
+        }
+    }
+
+    music = GetCurrLocationDefaultMusic();
 
     if (music != MUS_ABNORMAL_WEATHER && music != MUS_NONE)
     {
@@ -1152,7 +1229,7 @@ void Overworld_PlaySpecialMapMusic(void)
             music = gSaveBlock1Ptr->savedMusic;
         else if (GetCurrentMapType() == MAP_TYPE_UNDERWATER)
             music = MUS_UNDERWATER;
-        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && Overworld_MusicCanOverrideMapMusic(MUS_SURF))
             music = MUS_SURF;
     }
 
@@ -1172,15 +1249,28 @@ void Overworld_ClearSavedMusic(void)
 
 static void TransitionMapMusic(void)
 {
+    u16 newMusic;
+    u16 currentMusic;
+
+    if (gDisableMapMusicChangeOnMapLoad == 1)
+    {
+        StopMapMusic();
+        return;
+    }
+    if (gDisableMapMusicChangeOnMapLoad == 2)
+    {
+        return;
+    }
+
     if (FlagGet(FLAG_DONT_TRANSITION_MUSIC) != TRUE)
     {
-        u16 newMusic = GetWarpDestinationMusic();
-        u16 currentMusic = GetCurrentMapMusic();
+        newMusic = GetWarpDestinationMusic();
+        currentMusic = GetCurrentMapMusic();
         if (newMusic != MUS_ABNORMAL_WEATHER && newMusic != MUS_NONE)
         {
             if (currentMusic == MUS_UNDERWATER || currentMusic == MUS_SURF)
                 return;
-            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && Overworld_MusicCanOverrideMapMusic(MUS_SURF))
                 newMusic = MUS_SURF;
         }
         if (newMusic != currentMusic)
@@ -1257,6 +1347,17 @@ static void PlayAmbientCry(void)
         return;
     pan = (Random() % 88) + 212;
     volume = (Random() % 30) + 50;
+
+    if (gDisableMapMusicChangeOnMapLoad == 1)
+    {
+        StopMapMusic();
+        return;
+    }
+    if (gDisableMapMusicChangeOnMapLoad == 2)
+    {
+        return;
+    }
+
     PlayCry_NormalNoDucking(sAmbientCrySpecies, pan, volume, CRY_PRIORITY_AMBIENT);
 }
 
@@ -1319,6 +1420,16 @@ static void ChooseAmbientCrySpecies(void)
     {
         sAmbientCrySpecies = GetLocalWildMon(&sIsAmbientCryWaterMon);
     }
+}
+
+bool32 Overworld_MusicCanOverrideMapMusic(u16 music)
+{
+    if (music == MUS_CYCLING || music == MUS_SURF)
+    {
+        if (gMapHeader.regionMapSectionId == MAPSEC_KANTO_VICTORY_ROAD || gMapHeader.regionMapSectionId == MAPSEC_ROUTE_23 || gMapHeader.regionMapSectionId == MAPSEC_INDIGO_PLATEAU)
+            return FALSE;
+    }
+    return TRUE;
 }
 
 u8 GetMapTypeByGroupAndId(s8 mapGroup, s8 mapNum)
@@ -1529,7 +1640,6 @@ void CB2_NewGame(void)
     PlayTimeCounter_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
-    gFieldCallback = ExecuteTruckSequence;
     gFieldCallback2 = NULL;
     DoMapLoadLoop(&gMain.state);
     SetFieldVBlankCallback();
@@ -1707,7 +1817,7 @@ void CB2_ContinueSavedGame(void)
     trainerHillMapId = GetCurrentTrainerHillMapId();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
         LoadBattlePyramidFloorObjectEventScripts();
-    else if (trainerHillMapId != 0 && trainerHillMapId != TRAINER_HILL_ENTRANCE)
+    else if (trainerHillMapId != 0 && trainerHillMapId != TRAINER_TOWER_LOBBY)
         LoadTrainerHillFloorObjectEventScripts();
     else
         LoadSaveblockObjEventScripts();
@@ -2127,10 +2237,7 @@ static void ResumeMap(bool32 a1)
     ResetAllPicSprites();
     ResetCameraUpdateInfo();
     InstallCameraPanAheadCallback();
-    if (!a1)
-        InitObjectEventPalettes(0);
-    else
-        InitObjectEventPalettes(1);
+    FreeAllSpritePalettes();
 
     FieldEffectActiveListClear();
     StartWeather();
@@ -3214,5 +3321,203 @@ static void SpriteCB_LinkPlayer(struct Sprite *sprite)
     {
         sprite->invisible = ((sprite->data[7] & 4) >> 2);
         sprite->data[7]++;
+    }
+}
+
+// Credits
+
+void Overworld_CreditsMainCB(void)
+{
+    bool8 fading = !!gPaletteFade.active;
+    if (fading)
+        SetVBlankCallback(NULL);
+    RunTasks();
+    AnimateSprites();
+    CameraUpdateNoObjectRefresh();
+    UpdateCameraPanning();
+    BuildOamBuffer();
+    UpdatePaletteFade();
+    UpdateTilesetAnimations();
+    DoScheduledBgTilemapCopiesToVram();
+    if (fading)
+        SetFieldVBlankCallback();
+}
+
+static bool8 FieldCB2_Credits_WaitFade(void)
+{
+    if (gPaletteFade.active)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool32 Overworld_DoScrollSceneForCredits(u8 *state_p, const struct CreditsOverworldCmd * script, u8 tintMode)
+{
+    sCreditsOverworld_Script = script;
+    gGlobalFieldTintMode = tintMode;
+    return SetUpScrollSceneForCredits(state_p, 0);
+}
+
+static bool32 SetUpScrollSceneForCredits(u8 *state, u8 unused)
+{
+    struct WarpData warp;
+    switch (*state)
+    {
+    case 0:
+        sCreditsOverworld_CmdIndex = 0;
+        sCreditsOverworld_CmdLength = 0;
+        (*state)++;
+        return FALSE;
+    case 1:
+        warp.mapGroup = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_2;
+        warp.mapNum = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_4;
+        warp.warpId = -1;
+        sCreditsOverworld_CmdIndex++;
+        warp.x = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_0;
+        warp.y = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_2;
+        sWarpDestination = warp;
+        sCreditsOverworld_CmdLength = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_4;
+        WarpIntoMap();
+        gPaletteFade.bufferTransferDisabled = TRUE;
+        ScriptContext1_Init();
+        ScriptContext2_Disable();
+        SetMainCallback1(NULL);
+        gFieldCallback2 = FieldCB2_Credits_WaitFade;
+        gMain.state = 0;
+        (*state)++;
+        return FALSE;
+    case 2:
+        if (MapLdr_Credits())
+        {
+            (*state)++;
+            return FALSE;
+        }
+        break;
+    case 3:
+        gFieldCamera.callback = CameraCB_CreditsPan;
+        SetFieldVBlankCallback();
+        *state = 0;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static bool8 MapLdr_Credits(void)
+{
+    u8 *state = &gMain.state;
+    switch (*state)
+    {
+    case 0:
+        InitOverworldBgs();
+        LoadMapFromWarp(FALSE);
+        (*state)++;
+        break;
+    case 1:
+        ScanlineEffect_Clear();
+        ResetAllPicSprites();
+        ResetCameraUpdateInfo();
+        InstallCameraPanAheadCallback();
+        FieldEffectActiveListClear();
+        StartWeather();
+        ResumePausedWeather();
+        SetUpFieldTasks();
+        RunOnResumeMapScript();
+        (*state)++;
+        break;
+    case 2:
+        InitCurrentFlashLevelScanlineEffect();
+        InitOverworldGraphicsRegisters();
+        (*state)++;
+        break;
+    case 3:
+        ResetFieldCamera();
+        (*state)++;
+        break;
+    case 4:
+        CopyPrimaryTilesetToVram(gMapHeader.mapLayout);
+        (*state)++;
+        break;
+    case 5:
+        CopySecondaryTilesetToVram(gMapHeader.mapLayout);
+        (*state)++;
+        break;
+    case 6:
+        if (FreeTempTileDataBuffersIfPossible() != TRUE)
+        {
+            LoadMapTilesetPalettes(gMapHeader.mapLayout);
+            (*state)++;
+        }
+        break;
+    case 7:
+        DrawWholeMapView();
+        (*state)++;
+        break;
+    case 8:
+        InitTilesetAnimations();
+        gPaletteFade.bufferTransferDisabled = FALSE;
+        FadeSelectedPals(FADE_FROM_BLACK, 0, 0x3FFFFFFF);
+        (*state)++;
+        break;
+    default:
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static void CameraCB_CreditsPan(struct CameraObject * camera)
+{
+    if (sCreditsOverworld_CmdLength == 0)
+    {
+        sCreditsOverworld_CmdIndex++;
+        switch (sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_0)
+        {
+        case CREDITSOVWLDCMD_FC:
+        case CREDITSOVWLDCMD_LOADMAP:
+            return;
+        case CREDITSOVWLDCMD_FF:
+            camera->movementSpeedX = 0;
+            camera->movementSpeedY = 0;
+            camera->callback = NULL;
+            CreateTask(Task_OvwldCredits_FadeOut, 0);
+            return;
+        case CREDITSOVWLDCMD_FB:
+            camera->movementSpeedX = 0;
+            camera->movementSpeedY = 0;
+            camera->callback = NULL;
+            break;
+        case CREDITSOVWLDCMD_END:
+            camera->movementSpeedX = 0;
+            camera->movementSpeedY = 0;
+            camera->callback = NULL;
+            return;
+        default:
+            sCreditsOverworld_CmdLength = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_4;
+            camera->movementSpeedX = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_0;
+            camera->movementSpeedY = sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_2;
+            break;
+        }
+    }
+    if (sCreditsOverworld_Script[sCreditsOverworld_CmdIndex].unk_0 == 0xFF)
+    {
+        camera->movementSpeedX = 0;
+        camera->movementSpeedY = 0;
+    }
+    else
+        sCreditsOverworld_CmdLength--;
+}
+
+static void Task_OvwldCredits_FadeOut(u8 taskId)
+{
+    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+    gTasks[taskId].func = Task_OvwldCredits_WaitFade;
+}
+
+static void Task_OvwldCredits_WaitFade(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        CleanupOverworldWindowsAndTilemaps();
+        SetMainCallback2(CB2_LoadMap);
+        DestroyTask(taskId);
     }
 }

@@ -155,21 +155,6 @@ bool8 TrySetTrendyPhrase(u16 *phrase)
 
     if (!IsPhraseInSavedTrends(phrase))
     {
-        if (!FlagGet(FLAG_SYS_CHANGED_DEWFORD_TREND))
-        {
-            FlagSet(FLAG_SYS_CHANGED_DEWFORD_TREND);
-
-            // Make sure player couldn't have received this phrase by mixing records
-            if (!FlagGet(FLAG_SYS_MIX_RECORD))
-            {
-                // This is the first time submitting a phrase
-                // No need to check saved phrases or reset rng, just set the new words
-                gSaveBlock1Ptr->dewfordTrends[0].words[0] = phrase[0];
-                gSaveBlock1Ptr->dewfordTrends[0].words[1] = phrase[1];
-                return TRUE;
-            }
-        }
-
         // Initialize DewfordTrend using given phrase
         trend.words[0] = phrase[0];
         trend.words[1] = phrase[1];

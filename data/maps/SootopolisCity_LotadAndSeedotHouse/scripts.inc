@@ -2,7 +2,7 @@ SootopolisCity_LotadAndSeedotHouse_MapScripts::
 	.byte 0
 
 SootopolisCity_LotadAndSeedotHouse_EventScript_SeedotBrother::
-	special GetSeedotSizeRecordInfo
+	special GetHeracrossSizeRecordInfo
 	lock
 	faceplayer
 	msgbox SootopolisCity_LotadAndSeedotHouse_Text_PleaseShowMeBigSeedot, MSGBOX_DEFAULT
@@ -10,7 +10,7 @@ SootopolisCity_LotadAndSeedotHouse_EventScript_SeedotBrother::
 	waitstate
 	copyvar VAR_RESULT, VAR_0x8004
 	goto_if_eq VAR_RESULT, PARTY_NOTHING_CHOSEN, SootopolisCity_LotadAndSeedotHouse_EventScript_CancelShowSeedot
-	special CompareSeedotSize
+	special CompareHeracrossSize
 	goto_if_eq VAR_RESULT, 1, SootopolisCity_LotadAndSeedotHouse_EventScript_NotSeedot
 	goto_if_eq VAR_RESULT, 2, SootopolisCity_LotadAndSeedotHouse_EventScript_SmallSeedot
 	goto_if_eq VAR_RESULT, 3, SootopolisCity_LotadAndSeedotHouse_EventScript_BigSeedot
@@ -46,7 +46,7 @@ SootopolisCity_LotadAndSeedotHouse_EventScript_NoRoomForElixir1::
 	end
 
 SootopolisCity_LotadAndSeedotHouse_EventScript_LotadBrother::
-	special GetLotadSizeRecordInfo
+	special GetMagikarpSizeRecordInfo
 	lock
 	faceplayer
 	msgbox SootopolisCity_LotadAndSeedotHouse_Text_PleaseShowMeBigLotad, MSGBOX_DEFAULT
@@ -54,7 +54,7 @@ SootopolisCity_LotadAndSeedotHouse_EventScript_LotadBrother::
 	waitstate
 	copyvar VAR_RESULT, VAR_0x8004
 	goto_if_eq VAR_RESULT, PARTY_NOTHING_CHOSEN, SootopolisCity_LotadAndSeedotHouse_EventScript_CancelShowLotad
-	special CompareLotadSize
+	special CompareMagikarpSize
 	goto_if_eq VAR_RESULT, 1, SootopolisCity_LotadAndSeedotHouse_EventScript_NotLotad
 	goto_if_eq VAR_RESULT, 2, SootopolisCity_LotadAndSeedotHouse_EventScript_SmallLotad
 	goto_if_eq VAR_RESULT, 3, SootopolisCity_LotadAndSeedotHouse_EventScript_BigLotad
@@ -90,14 +90,14 @@ SootopolisCity_LotadAndSeedotHouse_EventScript_NoRoomForElixir2::
 	end
 
 SootopolisCity_LotadAndSeedotHouse_EventScript_SeedotSizeRecord::
-	special GetSeedotSizeRecordInfo
+	special GetHeracrossSizeRecordInfo
 	lockall
 	msgbox SootopolisCity_LotadAndSeedotHouse_Text_BiggestSeedotInHistory, MSGBOX_DEFAULT
 	releaseall
 	end
 
 SootopolisCity_LotadAndSeedotHouse_EventScript_LotadSizeRecord::
-	special GetLotadSizeRecordInfo
+	special GetMagikarpSizeRecordInfo
 	lockall
 	msgbox SootopolisCity_LotadAndSeedotHouse_Text_BiggestLotadInHistory, MSGBOX_DEFAULT
 	releaseall

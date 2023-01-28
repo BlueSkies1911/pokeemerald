@@ -19,10 +19,10 @@ static bool32 IsCurMapInLocationList(const u16 *list)
 
 static const u16 sSaveLocationPokeCenterList[] =
 {
-    MAP_OLDALE_TOWN_POKEMON_CENTER_1F,
-    MAP_OLDALE_TOWN_POKEMON_CENTER_2F,
-    MAP_DEWFORD_TOWN_POKEMON_CENTER_1F,
-    MAP_DEWFORD_TOWN_POKEMON_CENTER_2F,
+    MAP_VIRIDIAN_CITY_POKEMON_CENTER_1F,
+    MAP_VIRIDIAN_CITY_POKEMON_CENTER_2F,
+    MAP_PEWTER_CITY_POKEMON_CENTER_1F,
+    MAP_PEWTER_CITY_POKEMON_CENTER_2F,
     MAP_LAVARIDGE_TOWN_POKEMON_CENTER_1F,
     MAP_LAVARIDGE_TOWN_POKEMON_CENTER_2F,
     MAP_FALLARBOR_TOWN_POKEMON_CENTER_1F,
@@ -124,16 +124,16 @@ void TrySetMapSaveWarpStatus(void)
 // These flags are read by Pokemon Colosseum/XD for linking. XD Additionally requires FLAG_SYS_GAME_CLEAR
 void SetUnlockedPokedexFlags(void)
 {
-    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 15);
     gSaveBlock2Ptr->gcnLinkFlags |= (1 << 0);
-    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 1);
-    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 2);
     gSaveBlock2Ptr->gcnLinkFlags |= (1 << 4);
     gSaveBlock2Ptr->gcnLinkFlags |= (1 << 5);
-    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 3);
 }
 
-void SetChampionSaveWarp(void)
+void SetPostgameFlags(void)
 {
     gSaveBlock2Ptr->specialSaveWarpFlags |= CHAMPION_SAVEWARP;
+    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 1);
+    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 2);
+    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 3);
+    gSaveBlock2Ptr->gcnLinkFlags |= (1 << 15);
 }

@@ -37,19 +37,19 @@ SootopolisCity_MysteryEventsHouse_B1F_EventScript_BattleVisitingTrainer::
 	end
 
 SootopolisCity_MysteryEventsHouse_B1F_EventScript_BattleTie::
-	setvar VAR_SOOTOPOLIS_MYSTERY_EVENTS_STATE, 3
+	setvar VAR_MAP_SCENE_SEVEN_ISLAND_HOUSE_ROOM1, 3
 	msgbox SootopolisCity_MysteryEventsHouse_B1F_Text_MatchEndedUpDraw, MSGBOX_DEFAULT
 	return
 
 SootopolisCity_MysteryEventsHouse_B1F_EventScript_BattleWon::
-	setvar VAR_SOOTOPOLIS_MYSTERY_EVENTS_STATE, 1
+	setvar VAR_MAP_SCENE_SEVEN_ISLAND_HOUSE_ROOM1, 1
 	special ShowFieldMessageStringVar4
 	waitmessage
 	waitbuttonpress
 	return
 
 SootopolisCity_MysteryEventsHouse_B1F_EventScript_BattleLost::
-	setvar VAR_SOOTOPOLIS_MYSTERY_EVENTS_STATE, 2
+	setvar VAR_MAP_SCENE_SEVEN_ISLAND_HOUSE_ROOM1, 2
 	special ShowFieldMessageStringVar4
 	waitmessage
 	waitbuttonpress

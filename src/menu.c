@@ -4,6 +4,8 @@
 #include "blit.h"
 #include "dma3.h"
 #include "event_data.h"
+#include "field_specials.h"
+#include "gpu_regs.h"
 #include "graphics.h"
 #include "main.h"
 #include "menu.h"
@@ -19,6 +21,8 @@
 #include "text_window.h"
 #include "window.h"
 #include "constants/songs.h"
+
+static void Task_SmoothBlendLayers(u8 taskId);
 
 #define DLG_WINDOW_PALETTE_NUM 15
 #define DLG_WINDOW_BASE_TILE_NUM 0x200
@@ -185,6 +189,15 @@ u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 speed
 
     gTextFlags.useAlternateDownArrow = 0;
     return AddTextPrinter(&printer, speed, callback);
+}
+
+void AddTextPrinterForMessageWithTextColor(bool8 allowSkippingDelayWithButtonPress)
+{
+    u8 color;
+    gTextFlags.canABSpeedUpPrint = allowSkippingDelayWithButtonPress;
+
+    color = ContextNpcGetTextColor();
+    AddTextPrinterParameterized2(0, 1, gStringVar4, GetPlayerTextSpeedDelay(), NULL, gSpecialVar_TextColor, 1, 3);
 }
 
 void AddTextPrinterForMessage(bool8 allowSkippingDelayWithButtonPress)
@@ -515,8 +528,7 @@ static u16 GetDialogFrameBaseTileNum(void)
     return DLG_WINDOW_BASE_TILE_NUM;
 }
 
-// Unused
-static u16 GetStandardFrameBaseTileNum(void)
+u16 GetStandardFrameBaseTileNum(void)
 {
     return STD_WINDOW_BASE_TILE_NUM;
 }
@@ -810,7 +822,7 @@ u8 HofPCTopBar_AddWindow(u8 bg, u8 xPos, u8 yPos, u8 palette, u16 baseTile)
     else
         palette *= 16;
 
-    LoadPalette(sHofPC_TopBar_Pal, palette, sizeof(sHofPC_TopBar_Pal));
+    LoadPalette(GetTextWindowPalette(2), palette, 0x20);
     return sHofPCTopBarWindowId;
 }
 
@@ -883,8 +895,7 @@ static void HofPCTopBar_CopyToVram(void)
         CopyWindowToVram(sHofPCTopBarWindowId, COPYWIN_FULL);
 }
 
-// Unused
-static void HofPCTopBar_Clear(void)
+void HofPCTopBar_Clear(void)
 {
     if (sHofPCTopBarWindowId != WINDOW_NONE)
     {
@@ -2162,5 +2173,62 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
             *string = flagCount + CHAR_0;
             *endOfString = EOS;
             break;
+    }
+}
+
+#define tEvA data[0]
+#define tEvB data[1]
+#define tEvAEnd data[2]
+#define tEvBEnd data[3]
+#define tEvADelta data[4]
+#define tEvBDelta data[5]
+#define tEvWhich data[6]
+#define tEvStepCount data[8]
+
+void StartBlendTask(u8 eva_start, u8 evb_start, u8 eva_end, u8 evb_end, u8 ev_step, u8 priority)
+{
+    u8 taskId = CreateTask(Task_SmoothBlendLayers, priority);
+    gTasks[taskId].tEvA = eva_start << 8;
+    gTasks[taskId].tEvB = evb_start << 8;
+    gTasks[taskId].tEvAEnd = eva_end;
+    gTasks[taskId].tEvBEnd = evb_end;
+    gTasks[taskId].tEvADelta = (eva_end - eva_start) * 256 / ev_step;
+    gTasks[taskId].tEvBDelta = (evb_end - evb_start) * 256 / ev_step;
+    gTasks[taskId].tEvStepCount = ev_step;
+    SetGpuReg(REG_OFFSET_BLDALPHA, (evb_start << 8) | eva_start);
+}
+
+bool8 IsBlendTaskActive(void)
+{
+    return FuncIsActiveTask(Task_SmoothBlendLayers);
+}
+
+static void Task_SmoothBlendLayers(u8 taskId)
+{
+    s16 * data = gTasks[taskId].data;
+
+    if (tEvStepCount != 0)
+    {
+        if (tEvWhich == 0)
+        {
+            tEvA += tEvADelta;
+            tEvWhich = 1;
+        }
+        else
+        {
+            if (--tEvStepCount != 0)
+            {
+                tEvB += tEvBDelta;
+            }
+            else
+            {
+                tEvA = tEvAEnd << 8;
+                tEvB = tEvBEnd << 8;
+            }
+            tEvWhich = 0;
+        }
+        SetGpuReg(REG_OFFSET_BLDALPHA, (tEvB & ~0xFF) | ((u16)tEvA >> 8));
+        if (tEvStepCount == 0)
+            DestroyTask(taskId);
     }
 }

@@ -38,11 +38,11 @@ SouthernIsland_Interior_EventScript_SetUpPlayerGfx::
 	end
 
 SouthernIsland_Interior_EventScript_SetBrendanGfx::
-	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RIVAL_RED_NORMAL
 	return
 
 SouthernIsland_Interior_EventScript_SetMayGfx::
-	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RIVAL_MAY_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RIVAL_GREEN_NORMAL
 	return
 
 SouthernIsland_Interior_EventScript_TryLatiEncounter::
@@ -56,7 +56,6 @@ SouthernIsland_Interior_EventScript_Lati::
 	goto_if_set FLAG_DEFEATED_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
 	goto_if_set FLAG_CAUGHT_LATIAS_OR_LATIOS, SouthernIsland_Interior_EventScript_Sign
 	goto_if_unset FLAG_ENABLE_SHIP_SOUTHERN_ISLAND, SouthernIsland_Interior_EventScript_Sign
-	setflag FLAG_ENCOUNTERED_LATIAS_OR_LATIOS
 	setflag FLAG_TEMP_2
 	special SpawnCameraObject
 	applymovement OBJ_EVENT_ID_CAMERA, SouthernIsland_Interior_Movement_CameraPanUp

@@ -35,21 +35,16 @@ Route120_EventScript_RemoveKecleon::
 	return
 
 Route120_OnLoad:
-	call_if_unset FLAG_REGI_DOORS_OPENED, Route120_EventScript_CloseAncientTomb
 	call_if_set FLAG_RECEIVED_DEVON_SCOPE, Route120_EventScript_SetBridgeClearMetatiles
 	call_if_unset FLAG_RECEIVED_DEVON_SCOPE, Route120_EventScript_SetBridgeKecleonMovement
 	end
 
 Route120_EventScript_CloseAncientTomb::
-	setmetatile 7, 54, METATILE_General_RockWall_RockBase, TRUE
-	setmetatile 7, 55, METATILE_General_RockWall_SandBase, TRUE
 	return
 
 Route120_EventScript_SetBridgeClearMetatiles::
 	setmetatile 13, 15, METATILE_Fortree_WoodBridge1_Top, FALSE
 	setmetatile 12, 16, METATILE_Fortree_WoodBridge1_Bottom, FALSE
-	setmetatile 12, 17, METATILE_General_ReflectiveWater, FALSE
-	setmetatile 13, 17, METATILE_General_ReflectiveWater, FALSE
 	return
 
 Route120_EventScript_SetBridgeKecleonMovement::
@@ -232,8 +227,6 @@ Route120_EventScript_StevenGiveDeconScope::
 	waitfieldeffect FLDEFF_NPCFLY_OUT
 	setmetatile 13, 15, METATILE_Fortree_WoodBridge1_Top, FALSE
 	setmetatile 12, 16, METATILE_Fortree_WoodBridge1_Bottom, FALSE
-	setmetatile 12, 17, METATILE_General_ReflectiveWater, FALSE
-	setmetatile 13, 17, METATILE_General_ReflectiveWater, FALSE
 	special DrawWholeMapView
 	release
 	end
@@ -263,93 +256,6 @@ Route120_EventScript_RouteSignFortree::
 
 Route120_EventScript_RouteSign121::
 	msgbox Route120_Text_RouteSign121, MSGBOX_SIGN
-	end
-
-Route120_EventScript_Colin::
-	trainerbattle_single TRAINER_COLIN, Route120_Text_ColinIntro, Route120_Text_ColinDefeat
-	msgbox Route120_Text_ColinPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Robert::
-	trainerbattle_single TRAINER_ROBERT_1, Route120_Text_RobertIntro, Route120_Text_RobertDefeat, Route120_EventScript_RegisterRobert
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, Route120_EventScript_RematchRobert
-	msgbox Route120_Text_RobertPostBattle, MSGBOX_DEFAULT
-	release
-	end
-
-Route120_EventScript_RegisterRobert::
-	special PlayerFaceTrainerAfterBattle
-	waitmovement 0
-	msgbox Route120_Text_RobertRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_ROBERT_1
-	release
-	end
-
-Route120_EventScript_RematchRobert::
-	trainerbattle_rematch TRAINER_ROBERT_1, Route120_Text_RobertRematchIntro, Route120_Text_RobertRematchDefeat
-	msgbox Route120_Text_RobertPostRematch, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Lorenzo::
-	trainerbattle_single TRAINER_LORENZO, Route120_Text_LorenzoIntro, Route120_Text_LorenzoDefeat
-	msgbox Route120_Text_LorenzoPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Jenna::
-	trainerbattle_single TRAINER_JENNA, Route120_Text_JennaIntro, Route120_Text_JennaDefeat
-	msgbox Route120_Text_JennaPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Jeffrey::
-	trainerbattle_single TRAINER_JEFFREY_1, Route120_Text_JeffreyIntro, Route120_Text_JeffreyDefeat, Route120_EventScript_RegisterJeffrey
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, Route120_EventScript_RematchJeffrey
-	msgbox Route120_Text_JeffreyPostBattle, MSGBOX_DEFAULT
-	release
-	end
-
-Route120_EventScript_RegisterJeffrey::
-	special PlayerFaceTrainerAfterBattle
-	waitmovement 0
-	msgbox Route120_Text_JeffreyRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_JEFFREY_1
-	release
-	end
-
-Route120_EventScript_RematchJeffrey::
-	trainerbattle_rematch TRAINER_JEFFREY_1, Route120_Text_JeffreyRematchIntro, Route120_Text_JeffreyRematchDefeat
-	msgbox Route120_Text_JeffreyPostRematch, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Jennifer::
-	trainerbattle_single TRAINER_JENNIFER, Route120_Text_JenniferIntro, Route120_Text_JenniferDefeat
-	msgbox Route120_Text_JenniferPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Chip::
-	trainerbattle_single TRAINER_CHIP, Route120_Text_ChipIntro, Route120_Text_ChipDefeat
-	msgbox Route120_Text_ChipPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Clarissa::
-	trainerbattle_single TRAINER_CLARISSA, Route120_Text_ClarissaIntro, Route120_Text_ClarissaDefeat
-	msgbox Route120_Text_ClarissaPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Angelica::
-	trainerbattle_single TRAINER_ANGELICA, Route120_Text_AngelicaIntro, Route120_Text_AngelicaDefeat
-	msgbox Route120_Text_AngelicaPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Keigo::
-	trainerbattle_single TRAINER_KEIGO, Route120_Text_KeigoIntro, Route120_Text_KeigoDefeat
-	msgbox Route120_Text_KeigoPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route120_EventScript_Riley::
-	trainerbattle_single TRAINER_RILEY, Route120_Text_RileyIntro, Route120_Text_RileyDefeat
-	msgbox Route120_Text_RileyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 Route120_EventScript_Leonel::

@@ -35,7 +35,7 @@ LittlerootTown_ProfessorBirchsLab_OnTransition:
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter::
-	specialvar VAR_RESULT, HasAllHoennMons
+	specialvar VAR_RESULT, HasAllKantoMons
 	goto_if_eq VAR_RESULT, TRUE, LittlerootTown_ProfessorBirchsLab_EventScript_SetReadyForJohtoStarter
 	setobjectmovementtype LOCALID_RIVAL, MOVEMENT_TYPE_WANDER_UP_AND_DOWN
 	setobjectxyperm LOCALID_RIVAL, 5, 10
@@ -277,9 +277,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Aide::
 	lock
 	faceplayer
 	goto_if_ge VAR_BIRCH_LAB_STATE, 3, LittlerootTown_ProfessorBirchsLab_EventScript_AideReceivedStarter
-	goto_if_set FLAG_BIRCH_AIDE_MET, LittlerootTown_ProfessorBirchsLab_EventScript_AideAlreadyMet
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchAwayOnFieldwork, MSGBOX_DEFAULT
-	setflag FLAG_BIRCH_AIDE_MET
 	release
 	end
 
@@ -473,7 +471,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Birch::
 	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 5, LittlerootTown_ProfessorBirchsLab_EventScript_CanHaveAnyOneOfRarePokemon
 	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_ProfessorBirchsLab_EventScript_GrassyPatchWaiting
 	goto_if_unset FLAG_HAS_MATCH_CALL, LittlerootTown_ProfessorBirchsLab_EventScript_TryRatePokedexOrRegister
-	goto_if_unset FLAG_ENABLE_PROF_BIRCH_MATCH_CALL, EventScript_RegisterProfBirch
+	goto_if_unset FLAG_ENABLE_PROF_OAK_MATCH_CALL, EventScript_RegisterProfBirch
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_TryRatePokedexOrRegister
 	end
 
@@ -505,7 +503,7 @@ EventScript_RegisterProfBirch::
 	waitfanfare
 	closemessage
 	delay 30
-	setflag FLAG_ENABLE_PROF_BIRCH_MATCH_CALL
+	setflag FLAG_ENABLE_PROF_OAK_MATCH_CALL
 	setvar VAR_REGISTER_BIRCH_STATE, 2
 	release
 	end
@@ -523,7 +521,6 @@ LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex::
 	call_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls
 	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanGivePokeBalls
 	setvar VAR_BIRCH_LAB_STATE, 5
-	setflag FLAG_ADVENTURE_STARTED
 	setvar VAR_OLDALE_TOWN_STATE, 1
 	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
 	setvar VAR_LITTLEROOT_TOWN_STATE, 3

@@ -1099,6 +1099,18 @@ static void Cmd_accuracycheck(void)
 {
     u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);
 
+    if ((gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
+        && !BtlCtrl_OakOldMan_TestState2Flag(1)
+        && gBattleMoves[move].power != 0
+        && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+     || (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
+        && !BtlCtrl_OakOldMan_TestState2Flag(2)
+        && gBattleMoves[move].power == 0
+        && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER))
+    {
+        JumpIfMoveFailed(7, move);
+        return;
+    }
     if (move == NO_ACC_CALC || move == NO_ACC_CALC_CHECK_LOCK_ON)
     {
         if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && move == NO_ACC_CALC_CHECK_LOCK_ON && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
@@ -1276,7 +1288,7 @@ static void Cmd_critcalc(void)
 
     if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
-     && !(gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
+     && !(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
      && !(Random() % sCriticalHitChance[critChance]))
         gCritMultiplier = 2;
     else
@@ -3508,7 +3520,7 @@ static void Cmd_checkteamslost(void)
         return;
 
     // Get total HP for the player's party to determine if the player has lost
-    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId == TRAINER_STEVEN_PARTNER)
+    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && (gPartnerTrainerId == TRAINER_STEVEN_PARTNER || gPartnerTrainerId >= TRAINER_CUSTOM_PARTNER))
     {
         // In multi battle with Steven, skip his Pokémon
         for (i = 0; i < MULTI_PARTY_SIZE; i++)
@@ -4641,7 +4653,9 @@ static void Cmd_switchinanim(void)
         && !(gBattleTypeFlags & (BATTLE_TYPE_LINK
                                  | BATTLE_TYPE_EREADER_TRAINER
                                  | BATTLE_TYPE_RECORDED_LINK
+                                 | BATTLE_TYPE_OLD_MAN_TUTORIAL
                                  | BATTLE_TYPE_TRAINER_HILL
+                                 | BATTLE_TYPE_GHOST
                                  | BATTLE_TYPE_FRONTIER)))
             HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[gActiveBattler].species), FLAG_SET_SEEN, gBattleMons[gActiveBattler].personality);
 
@@ -7512,6 +7526,13 @@ static void Cmd_setsandstorm(void)
 
 static void Cmd_weatherdamage(void)
 {
+    if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags)
+     && (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT))
+    {
+        gBattleMoveDamage = 0;
+        ++gBattlescriptCurrInstr;
+        return;
+    }
     if (WEATHER_HAS_EFFECT)
     {
         if (gBattleWeather & B_WEATHER_SANDSTORM)
@@ -9780,18 +9801,23 @@ static void Cmd_handleballthrow(void)
 
     gActiveBattler = gBattlerAttacker;
     gBattlerTarget = gBattlerAttacker ^ BIT_SIDE;
-
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+    if (gBattleTypeFlags & BATTLE_TYPE_GHOST)
+    {
+        BtlController_EmitBallThrowAnim(0, BALL_GHOST_DODGE);
+        MarkBattlerForControllerExec(gActiveBattler);
+        gBattlescriptCurrInstr = BattleScript_GhostBallDodge;
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
     {
         BtlController_EmitBallThrowAnim(BUFFER_A, BALL_TRAINER_BLOCK);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr = BattleScript_TrainerBallBlock;
     }
-    else if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
+    else if (gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
     {
         BtlController_EmitBallThrowAnim(BUFFER_A, BALL_3_SHAKES_SUCCESS);
         MarkBattlerForControllerExec(gActiveBattler);
-        gBattlescriptCurrInstr = BattleScript_WallyBallThrow;
+        gBattlescriptCurrInstr = BattleScript_OldMan_Pokedude_CaughtMessage;
     }
     else
     {
@@ -9938,7 +9964,7 @@ static void Cmd_givecaughtmon(void)
         }
 
         // Change to B_MSG_SENT_LANETTES_PC or B_MSG_LANETTES_BOX_FULL
-        if (FlagGet(FLAG_SYS_PC_LANETTE))
+        if (FlagGet(FLAG_SYS_PC_BILL))
             gBattleCommunication[MULTISTRING_CHOOSER]++;
     }
 

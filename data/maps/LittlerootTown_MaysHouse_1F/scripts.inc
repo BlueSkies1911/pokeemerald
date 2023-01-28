@@ -59,7 +59,7 @@ LittlerootTown_MaysHouse_1F_OnFrame:
 
 LittlerootTown_MaysHouse_1F_EventScript_GoUpstairsToSetClock::
 	lockall
-	msgbox PlayersHouse_1F_Text_GoSetTheClock, MSGBOX_DEFAULT
+	msgbox PlayersHouse_2F_Text_GoSetTheClock, MSGBOX_DEFAULT
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_MaysHouse_1F_Movement_PushTowardStairs
 	applymovement LOCALID_MOM, LittlerootTown_MaysHouse_1F_Movement_PushTowardStairs
@@ -99,7 +99,6 @@ LittlerootTown_MaysHouse_1F_EventScript_YoureNewNeighbor::
 	waitmovement 0
 	special GetRivalSonDaughterString
 	msgbox RivalsHouse_1F_Text_OhYoureTheNewNeighbor, MSGBOX_DEFAULT
-	setflag FLAG_MET_RIVAL_MOM
 	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2
 	releaseall
 	end
@@ -116,7 +115,6 @@ LittlerootTown_MaysHouse_1F_Movement_RivalMomApproach:
 RivalsHouse_1F_EventScript_RivalMom::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_RIVAL_ROUTE103, RivalsHouse_1F_EventScript_GoHomeEverySoOften
 	goto_if_set FLAG_SYS_POKEMON_GET, RivalsHouse_1F_EventScript_RivalIsOnRoute103
 	goto_if_eq VAR_LITTLEROOT_RIVAL_STATE, 3, RivalsHouse_1F_EventScript_RivalTooBusy
 	special GetRivalSonDaughterString
@@ -198,7 +196,7 @@ LittlerootTown_MaysHouse_1F_EventScript_MeetRival::
 	removeobject LOCALID_RIVAL
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_MAY
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_POKE_BALL
-	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM
+	clearflag FLAG_HIDE_CREDITS_RIVAL
 	delay 30
 	setvar VAR_LITTLEROOT_RIVAL_STATE, 3
 	setvar VAR_LITTLEROOT_TOWN_STATE, 1

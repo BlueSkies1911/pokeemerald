@@ -12,7 +12,7 @@
   "allow_running": false,
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": 0,
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_LASS",
@@ -28,7 +28,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_1",
+      "graphics_id": "OBJ_EVENT_GFX_MAN",
       "x": 4,
       "y": 5,
       "elevation": 3,
@@ -41,7 +41,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_F",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_F",
       "x": 7,
       "y": 4,
       "elevation": 3,
@@ -68,21 +68,11 @@
     }
   ],
   "warp_events": [
-    {
-      "x": 3,
-      "y": 7,
-      "elevation": 0,
-      "dest_map": "MAP_ROUTE111",
-      "dest_warp_id": 0
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "elevation": 0,
-      "dest_map": "MAP_ROUTE111",
-      "dest_warp_id": 0
-    }
   ],
-  "coord_events": [],
-  "bg_events": []
+  "coord_events": [
+
+  ],
+  "bg_events": [
+
+  ]
 }

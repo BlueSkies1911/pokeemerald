@@ -117,9 +117,9 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 
 static const u16 sStarterMon[STARTER_MON_COUNT] =
 {
-    SPECIES_TREECKO,
-    SPECIES_TORCHIC,
-    SPECIES_MUDKIP,
+    SPECIES_BULBASAUR,
+    SPECIES_SQUIRTLE,
+    SPECIES_CHARMANDER,
 };
 
 static const struct BgTemplate sBgTemplates[3] =
@@ -358,6 +358,11 @@ u16 GetStarterPokemon(u16 chosenStarterId)
     if (chosenStarterId > STARTER_MON_COUNT)
         chosenStarterId = 0;
     return sStarterMon[chosenStarterId];
+}
+
+u16 GetStarterSpecies(void)
+{
+    return GetStarterPokemon(VarGet(VAR_STARTER_MON));
 }
 
 static void VblankCB_StarterChoose(void)

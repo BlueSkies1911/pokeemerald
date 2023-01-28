@@ -13,6 +13,6 @@
 #define CHAMPION_SAVEWARP            (1 << 7)
 
 void TrySetMapSaveWarpStatus(void);
-void SetChampionSaveWarp(void);
+void SetPostgameFlags(void);
 
 #endif // GUARD_SAVE_LOCATION_H

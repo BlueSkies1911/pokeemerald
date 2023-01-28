@@ -1882,7 +1882,7 @@ static void SpriteCB_StatusSummaryBalls_OnSwitchout(struct Sprite *sprite)
     sprite->y2 = gSprites[barSpriteId].y2;
 }
 
-static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
+void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 {
     u8 nickname[POKEMON_NAME_LENGTH + 1];
     void *ptr;
@@ -1900,6 +1900,9 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     species = GetMonData(mon, MON_DATA_SPECIES);
 
     if ((species == SPECIES_NIDORAN_F || species == SPECIES_NIDORAN_M) && StringCompare(nickname, gSpeciesNames[species]) == 0)
+        gender = 100;
+
+    if (CheckBattleTypeGhost(mon, gSprites[healthboxSpriteId].hMain_Battler))
         gender = 100;
 
     // AddTextPrinterAndCreateWindowOnHealthbox's arguments are the same in all 3 cases.
@@ -1940,17 +1943,19 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     RemoveWindowOnHealthbox(windowId);
 }
 
-static void TryAddPokeballIconToHealthbox(u8 healthboxSpriteId, bool8 noStatus)
+void TryAddPokeballIconToHealthbox(u8 healthboxSpriteId, bool8 noStatus)
 {
     u8 battlerId, healthBarSpriteId;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
+    if (gBattleTypeFlags & (BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_OLD_MAN_TUTORIAL))
         return;
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         return;
 
     battlerId = gSprites[healthboxSpriteId].hMain_Battler;
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        return;
+    if (CheckBattleTypeGhost(&gEnemyParty[gBattlerPartyIndexes[battlerId]], battlerId))
         return;
     if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES)), FLAG_GET_CAUGHT))
         return;

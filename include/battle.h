@@ -395,10 +395,7 @@ struct BattleStruct
     u8 absentBattlerFlags;
     u8 palaceFlags; // First 4 bits are "is < 50% HP and not asleep" for each battler, last 4 bits are selected moves to pass to AI
     u8 field_93; // related to choosing pokemon?
-    u8 wallyBattleState;
-    u8 wallyMovesState;
-    u8 wallyWaitFrames;
-    u8 wallyMoveFrames;
+    u8 simulatedInputState[4];
     u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // Last move that a battler was hit with. This field seems to erroneously take 16 bytes instead of 8.
     u16 hpOnSwitchout[2];
     u32 savedBattleTypeFlags;
@@ -708,6 +705,7 @@ extern struct BattleHealthboxInfo *gBattleControllerOpponentFlankHealthboxData;
 extern u16 gBattleMovePower;
 extern u16 gMoveToLearn;
 extern u8 gBattleMonForms[MAX_BATTLERS_COUNT];
+extern u16 gPartnerSpriteId;
 
 extern void (*gPreBattleCallback1)(void);
 extern void (*gBattleMainFunc)(void);

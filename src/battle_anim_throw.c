@@ -90,6 +90,8 @@ static void Task_ShinyStars_Wait(u8);
 static void SpriteCB_PokeBlock_LiftArm(struct Sprite *);
 static void SpriteCB_PokeBlock_Arc(struct Sprite *);
 static void SpriteCB_ThrowPokeBlock_Free(struct Sprite *);
+static void GhostBallDodge(struct Sprite *sprite);
+static void GhostBallDodge2(struct Sprite *sprite);
 static void PokeBallOpenParticleAnimation(u8);
 static void GreatBallOpenParticleAnimation(u8);
 static void SafariBallOpenParticleAnimation(u8);
@@ -415,8 +417,7 @@ static const union AnimCmd *const sAnims_SafariRock[] = {
     sAnim_SafariRock,
 };
 
-// Unused, leftover from FRLG
-static const struct SpriteTemplate sSafariRockSpriteTemplate =
+const struct SpriteTemplate gSafariRockTemplate =
 {
     .tileTag = ANIM_TAG_ROCKS,
     .paletteTag = ANIM_TAG_ROCKS,
@@ -717,10 +718,18 @@ void AnimTask_FreeBallGfx(u8 taskId)
 
 void AnimTask_IsBallBlockedByTrainer(u8 taskId)
 {
-    if (gBattleSpritesDataPtr->animationData->ballThrowCaseId == BALL_TRAINER_BLOCK)
+    switch (gBattleSpritesDataPtr->animationData->ballThrowCaseId)
+    {
+    case BALL_TRAINER_BLOCK:
         gBattleAnimArgs[ARG_RET_ID] = -1;
-    else
+        break;
+    case BALL_GHOST_DODGE:
+        gBattleAnimArgs[ARG_RET_ID] = -2;
+        break;
+    default:
         gBattleAnimArgs[ARG_RET_ID] = 0;
+        break;
+    }
 
     DestroyAnimVisualTask(taskId);
 }
@@ -794,9 +803,9 @@ void AnimTask_ThrowBall_StandingTrainer(u8 taskId)
     u8 subpriority;
     u8 spriteId;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
+    if (gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
     {
-        x = 32;
+        x = 28;
         y = 11;
     }
     else
@@ -887,6 +896,10 @@ static void SpriteCB_Ball_Arc(struct Sprite *sprite)
         if (gBattleSpritesDataPtr->animationData->ballThrowCaseId == BALL_TRAINER_BLOCK)
         {
             sprite->callback = SpriteCB_Ball_Block;
+        }
+        else if (gBattleSpritesDataPtr->animationData->ballThrowCaseId == BALL_GHOST_DODGE)
+        {
+            sprite->callback = GhostBallDodge;
         }
         else
         {
@@ -1552,6 +1565,36 @@ static void SpriteCB_Ball_Block_Step(struct Sprite *sprite)
 #undef sDx
 
 #undef sFrame
+
+static void GhostBallDodge(struct Sprite *sprite)
+{
+    sprite->x += sprite->x2;
+    sprite->y += sprite->y2;
+    sprite->x2 = sprite->y2 = 0;
+    sprite->data[0] = 0x22;
+    sprite->data[1] = sprite->x;
+    sprite->data[2] = sprite->x - 8;
+    sprite->data[3] = sprite->y;
+    sprite->data[4] = 0x90;
+    sprite->data[5] = 0x20;
+    InitAnimArcTranslation(sprite);
+    TranslateAnimVerticalArc(sprite);
+    sprite->callback = GhostBallDodge2;
+}
+
+static void GhostBallDodge2(struct Sprite *sprite)
+{
+    if (!TranslateAnimVerticalArc(sprite))
+    {
+        if ((sprite->y + sprite->y2) < 65)
+            return;
+    }
+    
+    sprite->data[0] = 0;
+    sprite->callback = DestroySpriteAfterOneFrame;
+    gDoingBattleAnim = FALSE;
+    UpdateOamPriorityInAllHealthboxes(1);
+}
 
 static void LoadBallParticleGfx(u8 ballId)
 {
@@ -2466,6 +2509,16 @@ void AnimTask_SetAttackerTargetLeftPos(u8 taskId)
         break;
     }
 
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SafariGetReaction(u8 taskId)
+{
+    if (gBattleCommunication[MULTISTRING_CHOOSER] > 2)
+        gBattleAnimArgs[7] = 0;
+    else
+        gBattleAnimArgs[7] = gBattleCommunication[MULTISTRING_CHOOSER];
+    
     DestroyAnimVisualTask(taskId);
 }
 

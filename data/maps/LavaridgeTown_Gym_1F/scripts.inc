@@ -19,40 +19,30 @@ LavaridgeTown_Gym_1F_EventScript_SetTrainerTempVars::
 	setvar VAR_TEMP_D, 0
 	setvar VAR_TEMP_E, 0
 	setvar VAR_TEMP_F, 0
-	goto_if_defeated TRAINER_COLE, LavaridgeTown_Gym_1F_EventScript_SetGeraldTempVar
 	setvar VAR_TEMP_B, 1
 LavaridgeTown_Gym_1F_EventScript_SetGeraldTempVar::
-	goto_if_defeated TRAINER_GERALD, LavaridgeTown_Gym_1F_EventScript_SetAxleTempVar
-	setvar VAR_TEMP_C, 1
+    setvar VAR_TEMP_C, 1
 LavaridgeTown_Gym_1F_EventScript_SetAxleTempVar::
-	goto_if_defeated TRAINER_AXLE, LavaridgeTown_Gym_1F_EventScript_SetDanielleTempVar
 	setvar VAR_TEMP_D, 1
 LavaridgeTown_Gym_1F_EventScript_SetDanielleTempVar::
-	goto_if_defeated TRAINER_DANIELLE, LavaridgeTown_Gym_1F_EventScript_EndSetTrainerTempVars
 	setvar VAR_TEMP_E, 1
 LavaridgeTown_Gym_1F_EventScript_EndSetTrainerTempVars::
 	return
 
 LavaridgeTown_Gym_1F_EventScript_CheckBuryTrainers::
-	goto_if_defeated TRAINER_COLE, LavaridgeTown_Gym_1F_EventScript_CheckBuryGerald
 	setobjectmovementtype LOCALID_COLE, MOVEMENT_TYPE_BURIED
 LavaridgeTown_Gym_1F_EventScript_CheckBuryGerald::
-	goto_if_defeated TRAINER_GERALD, LavaridgeTown_Gym_1F_EventScript_CheckBuryAxle
 	setobjectmovementtype LOCALID_GERALD, MOVEMENT_TYPE_BURIED
 LavaridgeTown_Gym_1F_EventScript_CheckBuryAxle::
-	goto_if_defeated TRAINER_AXLE, LavaridgeTown_Gym_1F_EventScript_CheckBuryDanielle
 	setobjectmovementtype LOCALID_AXLE, MOVEMENT_TYPE_BURIED
 LavaridgeTown_Gym_1F_EventScript_CheckBuryDanielle::
-	goto_if_defeated TRAINER_DANIELLE, LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers
 	setobjectmovementtype LOCALID_DANIELLE, MOVEMENT_TYPE_BURIED
 LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers::
 	return
 
 LavaridgeTown_Gym_1F_EventScript_Flannery::
-	trainerbattle_single TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	goto_if_eq VAR_RESULT, TRUE, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
-	goto_if_unset FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat2
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -62,8 +52,8 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated::
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
 	msgbox LavaridgeTown_Gym_1F_Text_ExplainHeatBadgeTakeThis, MSGBOX_DEFAULT
-	setflag FLAG_WHITEOUT_TO_LAVARIDGE
-	setflag FLAG_DEFEATED_LAVARIDGE_GYM
+	setflag FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1
+	setflag FLAG_DEFEATED_ERIKA
 	setflag FLAG_BADGE04_GET
 	addvar VAR_PETALBURG_GYM_STATE, 1
 	call_if_eq VAR_PETALBURG_GYM_STATE, 6, Common_EventScript_ReadyPetalburgGymForBattle
@@ -79,7 +69,7 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated::
 	waitfanfare
 	closemessage
 	delay 30
-	setflag FLAG_ENABLE_FLANNERY_MATCH_CALL
+	setflag FLAG_ENABLE_ERIKA_MATCH_CALL
 	release
 	end
 
@@ -87,7 +77,6 @@ LavaridgeTown_Gym_1F_EventScript_GiveOverheat2::
 	giveitem ITEM_TM50
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	msgbox LavaridgeTown_Gym_1F_Text_ExplainOverheat, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM50
 	release
 	end
 
@@ -95,17 +84,10 @@ LavaridgeTown_Gym_1F_EventScript_GiveOverheat::
 	giveitem ITEM_TM50
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_BagIsFull
 	msgbox LavaridgeTown_Gym_1F_Text_ExplainOverheat, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM50
 	return
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryRematch::
-	trainerbattle_rematch_double TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryPreRematch, LavaridgeTown_Gym_1F_Text_FlanneryRematchDefeat, LavaridgeTown_Gym_1F_Text_FlanneryRematchNeedTwoMons
 	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostRematch, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Cole::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_COLE, LOCALID_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro, LavaridgeTown_Gym_1F_Text_ColeDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE
 	end
 
 LavaridgeTown_Gym_EventScript_CheckTrainerScript::
@@ -115,45 +97,10 @@ LavaridgeTown_Gym_EventScript_CheckTrainerScript::
 	goto_if_eq VAR_RESULT, 1, EventScript_GotoTrainerScript
 	end
 
-LavaridgeTown_Gym_1F_EventScript_Axle::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_AXLE, LOCALID_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro, LavaridgeTown_Gym_1F_Text_AxleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Keegan::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_KEEGAN, LOCALID_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro, LavaridgeTown_Gym_B1F_Text_KeeganDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Danielle::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_DANIELLE, LOCALID_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro, LavaridgeTown_Gym_1F_Text_DanielleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Gerald::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_GERALD, LOCALID_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro, LavaridgeTown_Gym_1F_Text_GeraldDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jace::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JACE, LOCALID_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro, LavaridgeTown_Gym_B1F_Text_JaceDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jeff::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JEFF, LOCALID_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro, LavaridgeTown_Gym_B1F_Text_JeffDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Eli::
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_ELI, LOCALID_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro, LavaridgeTown_Gym_B1F_Text_EliDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 LavaridgeTown_Gym_1F_EventScript_GymGuide::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_ERIKA, LavaridgeTown_Gym_1F_EventScript_GymGuidePostVictory
 	msgbox LavaridgeTown_Gym_1F_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
 	end

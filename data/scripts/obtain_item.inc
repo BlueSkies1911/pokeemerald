@@ -108,6 +108,13 @@ Std_FindItem::
 	release
 	return
 
+Std_PutItemAway::
+    bufferitemnameplural 1, VAR_0x8000, VAR_0x8001
+    checkitemtype VAR_0x8000
+    call EventScript_BufferPutAwayPocketName
+    msgbox gText_PutItemInPocket
+    return
+
 EventScript_PickUpItem::
 	removeobject VAR_LAST_TALKED
 	additem VAR_0x8004, VAR_0x8005
@@ -136,6 +143,11 @@ EventScript_FoundItem::
 	message gText_PlayerFoundOneItem
 	return
 
+EventScript_FoundCoins::
+    buffernumberstring 0, VAR_0x8006
+    message gText_FoundXCoins
+    return
+
 EventScript_NoRoomToPickUpItem::
 	msgbox gText_ObtainedTheItem, MSGBOX_DEFAULT
 	msgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT
@@ -145,6 +157,14 @@ EventScript_NoRoomToPickUpItem::
 EventScript_HiddenItemScript::
 	lockall
 	waitse
+    compare VAR_0x8005, ITEM_COINS10
+    goto_if_eq EventScript_HiddenCoins10
+    compare VAR_0x8005, ITEM_COINS20
+    goto_if_eq EventScript_HiddenCoins20
+    compare VAR_0x8005, ITEM_COINS40
+    goto_if_eq EventScript_HiddenCoins40
+    compare VAR_0x8005, ITEM_COINS100
+    goto_if_eq EventScript_HiddenCoins100
 	additem VAR_0x8005
 	copyvar VAR_0x8007, VAR_RESULT
 	bufferitemnameplural STR_VAR_2, VAR_0x8005, 1
@@ -190,3 +210,114 @@ EventScript_NoRoomForHiddenItem::
 	setvar VAR_RESULT, 0
 	releaseall
 	end
+
+EventScript_HiddenCoins10::
+    setvar VAR_0x8006, 10
+    goto EventScript_TryPickUpHiddenCoins
+    end
+
+EventScript_HiddenCoins20::
+    setvar VAR_0x8006, 20
+    goto EventScript_TryPickUpHiddenCoins
+    end
+
+EventScript_HiddenCoins40::
+    setvar VAR_0x8006, 40
+    goto EventScript_TryPickUpHiddenCoins
+    end
+
+EventScript_HiddenCoins100::
+    setvar VAR_0x8006, 100
+    goto EventScript_TryPickUpHiddenCoins
+    end
+
+EventScript_TryPickUpHiddenCoins::
+    goto_if_unset FLAG_GOT_COIN_CASE, EventScript_NoCaseForHiddenCoins
+    checkcoins VAR_RESULT
+    compare VAR_RESULT, (MAX_COINS + 1) - VAR_0x8006
+    goto_if_ge EventScript_HiddenCoinsButCaseIsFull
+    addcoins VAR_0x8006
+    bufferstdstring 1, STDSTRING_COINS
+    call EventScript_ReceivedItemFanfare1
+    call EventScript_FoundCoins
+    waitfanfare
+    waitmessage
+    msgbox gText_PutCoinsAwayInCoinCase, MSGBOX_DEFAULT
+    special SetHiddenItemFlag
+    releaseall
+    end
+
+EventScript_HiddenCoinsButCaseIsFull::
+    buffernumberstring 0, VAR_0x8006
+    bufferstdstring 1, STDSTRING_COINS
+    msgbox gText_FoundXCoins, MSGBOX_DEFAULT
+    msgbox gText_CoinCaseIsFull, MSGBOX_DEFAULT
+    setvar VAR_RESULT, 0
+    releaseall
+    end
+
+EventScript_NoCaseForHiddenCoins::
+    buffernumberstring 0, VAR_0x8006
+    bufferstdstring 1, STDSTRING_COINS
+    msgbox gText_FoundXCoins, MSGBOX_DEFAULT
+    msgbox gText_NothingToPutThemIn, MSGBOX_DEFAULT
+    setvar VAR_RESULT, 0
+    releaseall
+    end
+
+Std_ReceivedItem::
+    compare VAR_0x8002, MUS_LEVEL_UP
+    call_if_eq EventScript_ReceivedItemFanfare1
+    compare VAR_0x8002, MUS_RG_OBTAIN_KEY_ITEM
+    call_if_eq EventScript_ReceivedItemFanfare2
+    message 0x0
+    waitmessage
+    waitfanfare
+    compare VAR_0x8002, MUS_LEVEL_UP
+    call_if_eq EventScript_ReceivedItemWaitFanfare
+    bufferitemnameplural STR_VAR_2, ITEMID, AMOUNT
+    checkitemtype ITEMID
+    call EventScript_BufferPutAwayPocketName
+    msgbox gText_PutItemInPocket
+    return
+
+EventScript_ReceivedItemFanfare1::
+    playfanfare MUS_LEVEL_UP
+    return
+
+EventScript_ReceivedItemFanfare2::
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    return
+
+EventScript_ReceivedItemWaitFanfare::
+    delay 50
+    return
+
+EventScript_BufferPutAwayPocketName:: @ 81A8E6F
+    switch VAR_RESULT
+    case POCKET_ITEMS,       EventScript_BufferPutAwayPocketItems
+    case POCKET_KEY_ITEMS,   EventScript_BufferPutAwayPocketKeyItems
+    case POCKET_POKE_BALLS,  EventScript_BufferPutAwayPocketPokeBalls
+    case POCKET_TM_HM,       EventScript_BufferPutAwayPocketTMCase
+    case POCKET_BERRIES,     EventScript_BufferPutAwayPocketBerryPouch
+    end
+
+EventScript_BufferPutAwayPocketItems::
+    bufferstdstring STR_VAR_3, STDSTRING_ITEMS
+    return
+
+EventScript_BufferPutAwayPocketKeyItems::
+    bufferstdstring STR_VAR_3, STDSTRING_KEYITEMS
+    return
+
+EventScript_BufferPutAwayPocketPokeBalls::
+    bufferstdstring STR_VAR_3, STDSTRING_POKEBALLS
+    return
+
+EventScript_BufferPutAwayPocketTMCase::
+    bufferstdstring STR_VAR_3, STDSTRING_TMHMS
+    return
+
+EventScript_BufferPutAwayPocketBerryPouch::
+    bufferstdstring STR_VAR_3, STDSTRING_BERRIES
+    return

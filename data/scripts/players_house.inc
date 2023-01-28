@@ -48,16 +48,16 @@ PlayersHouse_1F_EventScript_MomGoSeeRoom::
 LittlerootTown_BrendansHouse_2F_EventScript_WallClock::
 	lockall
 	setvar VAR_0x8004, MALE
-	goto PlayersHouse_2F_EventScript_WallClock
+	goto PlayersHouse_2F_EventScript_Clock
 	end
 
 LittlerootTown_MaysHouse_2F_EventScript_WallClock::
 	lockall
 	setvar VAR_0x8004, FEMALE
-	goto PlayersHouse_2F_EventScript_WallClock
+	goto PlayersHouse_2F_EventScript_Clock
 	end
 
-PlayersHouse_2F_EventScript_WallClock::
+PlayersHouse_2F_EventScript_Clock::
 	goto_if_set FLAG_SET_WALL_CLOCK, PlayersHouse_2F_EventScript_CheckWallClock
 	msgbox PlayersHouse_2F_Text_ClockIsStopped, MSGBOX_DEFAULT
 	call PlayersHouse_2F_EventScript_SetWallClock
@@ -98,20 +98,6 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsFemale
 	waitmovement 0
-	return
-
-PlayersHouse_2F_EventScript_CheckWallClock::
-	incrementgamestat GAME_STAT_CHECKED_CLOCK
-	fadescreen FADE_TO_BLACK
-	special Special_ViewWallClock
-	waitstate
-	releaseall
-	end
-
-PlayersHouse_2F_EventScript_SetWallClock::
-	fadescreen FADE_TO_BLACK
-	special StartWallClock
-	waitstate
 	return
 
 PlayersHouse_2F_Movement_MomEntersMale:
@@ -303,13 +289,13 @@ PlayersHouse_1F_Movement_MomReturnToSeatFemale:
 	walk_in_place_faster_left
 	step_end
 
-PlayersHouse_1F_EventScript_Mom::
+PlayersHouse_1F_EventScript_Mommy::
 	lock
 	faceplayer
 	goto_if_eq VAR_LITTLEROOT_HOUSES_STATE_MAY, 4, PlayersHouse_1F_EventScript_DontPushYourselfTooHard
 	goto_if_eq VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4, PlayersHouse_1F_EventScript_DontPushYourselfTooHard
 	goto_if_set FLAG_HAS_MATCH_CALL, PlayersHouse_1F_EventScript_TryRegisterMom
-	goto_if_set FLAG_RESCUED_BIRCH, PlayersHouse_1F_EventScript_MomHealsParty
+	goto_if_set FLAG_HIDE_MOM_PLAYERS_HOUSE_2F, PlayersHouse_1F_EventScript_MomHealsParty
 	goto_if_eq VAR_TEMP_1, 1, PlayersHouse_1F_EventScript_SeeYouHoney
 	goto_if_eq VAR_LITTLEROOT_INTRO_STATE, 7, PlayersHouse_1F_EventScript_DidYouMeetProfBirch
 	msgbox PlayersHouse_1F_Text_IsntItNiceInHere, MSGBOX_DEFAULT
@@ -340,12 +326,12 @@ PlayersHouse_1F_EventScript_CheckGiveAmuletCoin::
 	goto PlayersHouse_1F_EventScript_MomHealsParty
 
 PlayersHouse_1F_EventScript_TryGiveAmuletCoin::
-	goto_if_set FLAG_RECEIVED_AMULET_COIN, PlayersHouse_1F_EventScript_MomHealsParty
+	goto_if_set FLAG_GOT_AMULET_COIN_FROM_OAKS_AIDE, PlayersHouse_1F_EventScript_MomHealsParty
 	msgbox PlayersHouse_1F_Text_GotDadsBadgeHeresSomethingFromMom, MSGBOX_DEFAULT
 	giveitem ITEM_AMULET_COIN
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	msgbox PlayersHouse_1F_Text_DontPushYourselfTooHard, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_AMULET_COIN
+	setflag FLAG_GOT_AMULET_COIN_FROM_OAKS_AIDE
 	release
 	end
 

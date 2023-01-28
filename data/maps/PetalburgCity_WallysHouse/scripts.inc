@@ -22,7 +22,7 @@ PetalburgCity_WallysHouse_EventScript_GiveHM03Surf::
 	lockall
 	msgbox PetalburgCity_WallysHouse_Text_PleaseExcuseUs, MSGBOX_DEFAULT
 	giveitem ITEM_HM03
-	setflag FLAG_RECEIVED_HM03
+	setflag FLAG_GOT_HM03
 	msgbox PetalburgCity_WallysHouse_Text_SurfGoAllSortsOfPlaces, MSGBOX_DEFAULT
 	setvar VAR_PETALBURG_CITY_STATE, 5
 	releaseall
@@ -31,11 +31,11 @@ PetalburgCity_WallysHouse_EventScript_GiveHM03Surf::
 PetalburgCity_WallysHouse_EventScript_WallysDad::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_WALLY_VICTORY_ROAD, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
-	goto_if_set FLAG_RECEIVED_HM03, PetalburgCity_WallysHouse_EventScript_ReceievedHM03Surf
-	goto_if_set FLAG_THANKED_FOR_PLAYING_WITH_WALLY, PetalburgCity_WallysHouse_EventScript_PlayedWithWally
+	goto_if_set FLAG_HIDE_VIRIDIAN_GIOVANNI, PetalburgCity_WallysHouse_EventScript_DefeatedWallyInVictoryRoad
+	goto_if_set FLAG_GOT_HM03, PetalburgCity_WallysHouse_EventScript_ReceievedHM03Surf
+	goto_if_set FLAG_REVIVED_DOME, PetalburgCity_WallysHouse_EventScript_PlayedWithWally
 	msgbox PetalburgCity_WallysHouse_Text_ThanksForPlayingWithWally, MSGBOX_DEFAULT
-	setflag FLAG_THANKED_FOR_PLAYING_WITH_WALLY
+	setflag FLAG_REVIVED_DOME
 	release
 	end
 
@@ -57,7 +57,7 @@ PetalburgCity_WallysHouse_EventScript_PlayedWithWally::
 PetalburgCity_WallysHouse_EventScript_WallysMom::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_HM03, PetalburgCity_WallysHouse_EventScript_ReceivedHM03Surf
+	goto_if_set FLAG_GOT_HM03, PetalburgCity_WallysHouse_EventScript_ReceivedHM03Surf
 	msgbox PetalburgCity_WallysHouse_Text_WallyWasReallyHappy, MSGBOX_DEFAULT
 	release
 	end

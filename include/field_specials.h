@@ -12,11 +12,10 @@ void UpdateTrainerFansAfterLinkBattle(void);
 void IncrementBirthIslandRockStepCount(void);
 bool8 AbnormalWeatherHasExpired(void);
 bool8 ShouldDoBrailleRegicePuzzle(void);
-bool32 ShouldDoWallyCall(void);
-bool32 ShouldDoScottFortreeCall(void);
 bool32 ShouldDoScottBattleFrontierCall(void);
-bool32 ShouldDoRoxanneCall(void);
-bool32 ShouldDoRivalRayquazaCall(void);
+bool32 ShouldDoOakCall(void);
+bool32 ShouldDoDaisyCall(void);
+bool32 ShouldDoBrockCall(void);
 bool32 CountSSTidalStep(u16 delta);
 u8 GetSSTidalLocation(s8 *mapGroup, s8 *mapNum, s16 *x, s16 *y);
 void ShowScrollableMultichoice(void);
@@ -31,5 +30,10 @@ bool8 UsedPokemonCenterWarp(void);
 void ResetFanClub(void);
 bool8 ShouldShowBoxWasFullMessage(void);
 void SetPCBoxToSendMon(u8 boxId);
+u16 GetStarterSpecies(void);
+u8 ContextNpcGetTextColor(void);
+bool8 CutMoveRuinValleyCheck(void);
+void CutMoveOpenDottedHoleDoor(void);
+void RunMassageCooldownStepCounter(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

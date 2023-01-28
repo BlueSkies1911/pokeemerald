@@ -18,6 +18,10 @@
 #include "task.h"
 #include "constants/battle_anim.h"
 
+// Defines
+#define TAG_HEALTHBOX_PALS_1      55049
+#define TAG_HEALTHBOX_PALS_2      55050
+
 /*
     This file handles the commands for the macros defined in
     battle_anim_script.inc and used in battle_anim_scripts.s
@@ -1850,4 +1854,42 @@ static void Cmd_stopsound(void)
     m4aMPlayStop(&gMPlayInfo_SE1);
     m4aMPlayStop(&gMPlayInfo_SE2);
     sBattleAnimScriptPtr++;
+}
+
+void DoLoadHealthboxPalsForLevelUp(u8 *paletteId1, u8 *paletteId2, u8 battler)
+{
+    u8 healthBoxSpriteId;
+    u8 spriteId1, spriteId2;
+    u16 offset1, offset2;
+
+    healthBoxSpriteId = gHealthboxSpriteIds[battler];
+    spriteId1 = gSprites[healthBoxSpriteId].oam.affineParam;
+    spriteId2 = gSprites[healthBoxSpriteId].data[5];
+    *paletteId1 = AllocSpritePalette(TAG_HEALTHBOX_PALS_1);
+    *paletteId2 = AllocSpritePalette(TAG_HEALTHBOX_PALS_2);
+    offset1 = (gSprites[healthBoxSpriteId].oam.paletteNum * 16) + 0x100;
+    offset2 = (gSprites[spriteId2].oam.paletteNum * 16) + 0x100;
+    LoadPalette(&gPlttBufferUnfaded[offset1], *paletteId1 * 16 + 0x100, 0x20);
+    LoadPalette(&gPlttBufferUnfaded[offset2], *paletteId2 * 16 + 0x100, 0x20);
+    gSprites[healthBoxSpriteId].oam.paletteNum = *paletteId1;
+    gSprites[spriteId1].oam.paletteNum = *paletteId1;
+    gSprites[spriteId2].oam.paletteNum = *paletteId2;
+}
+
+void DoFreeHealthboxPalsForLevelUp(u8 battler)
+{
+    u8 healthBoxSpriteId;
+    u8 spriteId1, spriteId2;
+    u8 paletteId1, paletteId2;
+
+    healthBoxSpriteId = gHealthboxSpriteIds[battler];
+    spriteId1 = gSprites[healthBoxSpriteId].oam.affineParam;
+    spriteId2 = gSprites[healthBoxSpriteId].data[5];
+    FreeSpritePaletteByTag(TAG_HEALTHBOX_PALS_1);
+    FreeSpritePaletteByTag(TAG_HEALTHBOX_PALS_2);
+    paletteId1 = IndexOfSpritePaletteTag(TAG_HEALTHBOX_PAL);
+    paletteId2 = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+    gSprites[healthBoxSpriteId].oam.paletteNum = paletteId1;
+    gSprites[spriteId1].oam.paletteNum = paletteId1;
+    gSprites[spriteId2].oam.paletteNum = paletteId2;
 }

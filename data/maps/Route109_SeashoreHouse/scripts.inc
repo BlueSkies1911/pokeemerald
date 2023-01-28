@@ -9,8 +9,8 @@ Route109_SeashoreHouse_OnTransition:
 Route109_SeashoreHouse_EventScript_Owner::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_6_SODA_POP, Route109_SeashoreHouse_EventScript_AlreadyReceivedSodaPop
-	goto_if_set FLAG_DEFEATED_SEASHORE_HOUSE, Route109_SeashoreHouse_EventScript_DefeatedTrainers
+	goto_if_set FLAG_CINNABAR_GYM_QUIZ_4, Route109_SeashoreHouse_EventScript_AlreadyReceivedSodaPop
+	goto_if_set FLAG_CINNABAR_GYM_QUIZ_5, Route109_SeashoreHouse_EventScript_DefeatedTrainers
 	goto_if_set FLAG_TEMP_2, Route109_SeashoreHouse_EventScript_AlreadyGaveIntroduction
 	msgbox Route109_SeashoreHouse_Text_SeashoreHouseIntro, MSGBOX_DEFAULT
 	setflag FLAG_TEMP_2
@@ -26,7 +26,7 @@ Route109_SeashoreHouse_EventScript_DefeatedTrainers::
 	msgbox Route109_SeashoreHouse_Text_TakeTheseSodaPopBottles, MSGBOX_DEFAULT
 	giveitem ITEM_SODA_POP, 6
 	goto_if_eq VAR_RESULT, FALSE, Route109_SeashoreHouse_EventScript_BagFull
-	setflag FLAG_RECEIVED_6_SODA_POP
+	setflag FLAG_CINNABAR_GYM_QUIZ_4
 	release
 	end
 
@@ -69,26 +69,8 @@ Route109_SeashoreHouse_EventScript_NotEnoughSpace::
 	release
 	end
 
-Route109_SeashoreHouse_EventScript_Dwayne::
-	trainerbattle_single TRAINER_DWAYNE, Route109_SeashoreHouse_Text_DwayneIntro, Route109_SeashoreHouse_Text_DwayneDefeated, Route109_SeashoreHouse_EventScript_CheckTrainersCompletion
-	msgbox Route109_SeashoreHouse_Text_DwaynePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route109_SeashoreHouse_EventScript_Johanna::
-	trainerbattle_single TRAINER_JOHANNA, Route109_SeashoreHouse_Text_JohannaIntro, Route109_SeashoreHouse_Text_JohannaDefeated, Route109_SeashoreHouse_EventScript_CheckTrainersCompletion
-	msgbox Route109_SeashoreHouse_Text_JohannaPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route109_SeashoreHouse_EventScript_Simon::
-	trainerbattle_single TRAINER_SIMON, Route109_SeashoreHouse_Text_SimonIntro, Route109_SeashoreHouse_Text_SimonDefeated, Route109_SeashoreHouse_EventScript_CheckTrainersCompletion
-	msgbox Route109_SeashoreHouse_Text_SimonPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 Route109_SeashoreHouse_EventScript_CheckTrainersCompletion::
-	goto_if_not_defeated TRAINER_DWAYNE, Route109_SeashoreHouse_EventScript_TrainersNotCompleted
-	goto_if_not_defeated TRAINER_JOHANNA, Route109_SeashoreHouse_EventScript_TrainersNotCompleted
-	goto_if_not_defeated TRAINER_SIMON, Route109_SeashoreHouse_EventScript_TrainersNotCompleted
-	setflag FLAG_DEFEATED_SEASHORE_HOUSE
+	setflag FLAG_CINNABAR_GYM_QUIZ_5
 	release
 	end
 

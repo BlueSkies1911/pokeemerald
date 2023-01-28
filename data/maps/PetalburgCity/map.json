@@ -13,20 +13,10 @@
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
-    {
-      "direction": "left",
-      "offset": -50,
-      "map": "MAP_ROUTE104"
-    },
-    {
-      "direction": "right",
-      "offset": 10,
-      "map": "MAP_ROUTE102"
-    }
   ],
   "object_events": [
     {
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_4",
+      "graphics_id": "OBJ_EVENT_GFX_BATTLE_GIRL",
       "x": 16,
       "y": 18,
       "elevation": 3,
@@ -39,7 +29,7 @@
       "flag": "FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_WALLY",
+      "graphics_id": "OBJ_EVENT_GFX_MACHOKE",
       "x": 15,
       "y": 10,
       "elevation": 3,
@@ -49,10 +39,10 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "0x0",
-      "flag": "FLAG_HIDE_PETALBURG_CITY_WALLY"
+      "flag": "FLAG_HIDE_CREDITS_OAK"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BOY_1",
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
       "x": 8,
       "y": 22,
       "elevation": 3,
@@ -88,36 +78,10 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "0x0",
-      "flag": "FLAG_HIDE_PETALBURG_CITY_WALLYS_DAD"
+      "flag": "FLAG_HIDE_OAK_IN_CHAMP_ROOM"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 19,
-      "y": 2,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "PetalburgCity_EventScript_ItemMaxRevive",
-      "flag": "FLAG_ITEM_PETALBURG_CITY_MAX_REVIVE"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 3,
-      "y": 28,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "PetalburgCity_EventScript_ItemEther",
-      "flag": "FLAG_ITEM_PETALBURG_CITY_ETHER"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_BOY_2",
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
       "x": 12,
       "y": 15,
       "elevation": 3,
@@ -128,19 +92,6 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "PetalburgCity_EventScript_GymBoy",
       "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_SCOTT",
-      "x": 13,
-      "y": 12,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "0x0",
-      "flag": "FLAG_HIDE_PETALBURG_CITY_SCOTT"
     }
   ],
   "warp_events": [
@@ -317,14 +268,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "PetalburgCity_EventScript_WallyHouseSign"
-    },
-    {
-      "type": "hidden_item",
-      "x": 11,
-      "y": 29,
-      "elevation": 3,
-      "item": "ITEM_RARE_CANDY",
-      "flag": "FLAG_HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY"
     }
   ]
 }

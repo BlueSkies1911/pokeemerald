@@ -52,7 +52,7 @@ static void DummyPerStepCallback(u8);
 static void AshGrassPerStepCallback(u8);
 static void FortreeBridgePerStepCallback(u8);
 static void PacifidlogBridgePerStepCallback(u8);
-static void SootopolisGymIcePerStepCallback(u8);
+static void IcefallCaveIcePerStepCallback(u8 taskId);
 static void CrackedFloorPerStepCallback(u8);
 static void Task_MuddySlope(u8);
 
@@ -62,7 +62,7 @@ static const TaskFunc sPerStepCallbacks[] =
     [STEP_CB_ASH]               = AshGrassPerStepCallback,
     [STEP_CB_FORTREE_BRIDGE]    = FortreeBridgePerStepCallback,
     [STEP_CB_PACIFIDLOG_BRIDGE] = PacifidlogBridgePerStepCallback,
-    [STEP_CB_SOOTOPOLIS_ICE]    = SootopolisGymIcePerStepCallback,
+    [STEP_CB_ICE]               = IcefallCaveIcePerStepCallback,
     [STEP_CB_TRUCK]             = EndTruckSequence,
     [STEP_CB_SECRET_BASE]       = SecretBasePerStepCallback,
     [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback
@@ -593,55 +593,42 @@ static void FortreeBridgePerStepCallback(u8 taskId)
 #undef tOldBridgeY
 #undef tBounceTime
 
-// Boundaries of the ice puzzle in Sootopolis Gym
-#define ICE_PUZZLE_L 3
-#define ICE_PUZZLE_R 13
-#define ICE_PUZZLE_T 6
-#define ICE_PUZZLE_B 19
-
-#define ICE_PUZZLE_WIDTH  (ICE_PUZZLE_R - ICE_PUZZLE_L + 1)
-#define ICE_PUZZLE_HEIGHT (ICE_PUZZLE_B - ICE_PUZZLE_T + 1)
-
-static bool32 CoordInIcePuzzleRegion(s16 x, s16 y)
+static const u8 sIcefallCaveIceTileCoords[][2] =
 {
-    if ((u16)(x - ICE_PUZZLE_L) < ICE_PUZZLE_WIDTH
-     && (u16)(y - ICE_PUZZLE_T) < ICE_PUZZLE_HEIGHT
-     && sSootopolisGymIceRowVars[y])
-        return TRUE;
-    else
-        return FALSE;
-}
+    {  8,  3 },
+    { 10,  5 },
+    { 15,  5 },
+    {  8,  9 },
+    {  9,  9 },
+    { 16,  9 },
+    {  8, 10 },
+    {  9, 10 },
+    {  8, 14 }
+};
 
-static void MarkIcePuzzleCoordVisited(s16 x, s16 y)
+static void MarkIcefallCaveCoordVisited(s16 x, s16 y)
 {
-    if (CoordInIcePuzzleRegion(x, y))
-        *GetVarPointer(sSootopolisGymIceRowVars[y]) |= (1 << (x - ICE_PUZZLE_L));
-}
-
-static bool32 IsIcePuzzleCoordVisited(s16 x, s16 y)
-{
-    u16 var;
-    if (!CoordInIcePuzzleRegion(x, y))
-        return FALSE;
-
-    var = VarGet(sSootopolisGymIceRowVars[y]);
-    if (var &= (1 << (x - ICE_PUZZLE_L)))
-        return TRUE;
-    else
-        return FALSE;
-}
-
-void SetSootopolisGymCrackedIceMetatiles(void)
-{
-    s32 x, y;
-    s32 width = gMapHeader.mapLayout->width;
-    s32 height = gMapHeader.mapLayout->height;
-    for (x = 0; x < width; x++)
+    u8 i = 0;
+    for (; i < NELEMS(sIcefallCaveIceTileCoords); ++i)
     {
-        for (y = 0; y < height; y++)
+        if (sIcefallCaveIceTileCoords[i][0] + 7 == x && sIcefallCaveIceTileCoords[i][1] + 7 == y)
         {
-            if (IsIcePuzzleCoordVisited(x, y) == TRUE)
-                MapGridSetMetatileIdAt(x + MAP_OFFSET, y + MAP_OFFSET, METATILE_SootopolisGym_Ice_Cracked);
+            FlagSet(i + 1);
+            break;
+        }
+    }
+}
+
+void SetIcefallCaveCrackedIceMetatiles(void)
+{
+    u8 i = 0;
+    for (; i < NELEMS(sIcefallCaveIceTileCoords); ++i)
+    {
+        if (FlagGet(i + 1) == TRUE)
+        {
+            int x = sIcefallCaveIceTileCoords[i][0] + 7;
+            int y = sIcefallCaveIceTileCoords[i][1] + 7;
+            MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_CrackedIce);
         }
     }
 }
@@ -653,82 +640,75 @@ void SetSootopolisGymCrackedIceMetatiles(void)
 #define tIceY  data[5]
 #define tDelay data[6]
 
-static void SootopolisGymIcePerStepCallback(u8 taskId)
+static void IcefallCaveIcePerStepCallback(u8 taskId)
 {
     s16 x, y;
-    u16 tileBehavior;
+    u8 tileBehavior;
     u16 *iceStepCount;
     s16 *data = gTasks[taskId].data;
     switch (tState)
     {
-    case 0:
-        PlayerGetDestCoords(&x, &y);
-        tPrevX = x;
-        tPrevY = y;
-        tState = 1;
-        break;
-    case 1:
-        PlayerGetDestCoords(&x, &y);
-        // End if player hasn't moved
-        if (x == tPrevX && y == tPrevY)
-            return;
-        
-        tPrevX = x;
-        tPrevY = y;
-        tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
-        iceStepCount = GetVarPointer(VAR_ICE_STEP_COUNT);
-        if (MetatileBehavior_IsThinIce(tileBehavior) == TRUE)
-        {
-            // Thin ice, set it to cracked ice
-            (*iceStepCount)++;
-            tDelay = 4;
-            tState = 2;
-            tIceX = x;
-            tIceY = y;
-        }
-        else if (MetatileBehavior_IsCrackedIce(tileBehavior) == TRUE)
-        {
-            // Cracked ice, set it to broken ice
-            *iceStepCount = 0;
-            tDelay = 4;
-            tState = 3;
-            tIceX = x;
-            tIceY = y;
-        }
-        break;
-    case 2:
-        if (tDelay != 0)
-        {
-            tDelay--;
-        }
-        else
-        {
-            // Crack ice
-            x = tIceX;
-            y = tIceY;
-            PlaySE(SE_ICE_CRACK);
-            MapGridSetMetatileIdAt(x, y, METATILE_SootopolisGym_Ice_Cracked);
-            CurrentMapDrawMetatileAt(x, y);
-            MarkIcePuzzleCoordVisited(x - MAP_OFFSET, y - MAP_OFFSET);
+        case 0:
+            PlayerGetDestCoords(&x, &y);
+            tPrevX = x;
+            tPrevY = y;
             tState = 1;
-        }
-        break;
-    case 3:
-        if (tDelay != 0)
-        {
-            tDelay--;
-        }
-        else
-        {
-            // Break ice
-            x = tIceX;
-            y = tIceY;
-            PlaySE(SE_ICE_BREAK);
-            MapGridSetMetatileIdAt(x, y, METATILE_SootopolisGym_Ice_Broken);
-            CurrentMapDrawMetatileAt(x, y);
-            tState = 1;
-        }
-        break;
+            break;
+        case 1:
+            PlayerGetDestCoords(&x, &y);
+            if (x != tPrevX || y != tPrevY)
+            {
+                tPrevX = x;
+                tPrevY = y;
+                tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
+                if (MetatileBehavior_IsThinIce(tileBehavior) == TRUE)
+                {
+                    MarkIcefallCaveCoordVisited(x, y);
+                    tDelay = 4;
+                    tState = 2;
+                    tIceX = x;
+                    tIceY = y;
+                }
+                else if (MetatileBehavior_IsCrackedIce(tileBehavior) == TRUE)
+                {
+                    tDelay = 4;
+                    tState = 3;
+                    tIceX = x;
+                    tIceY = y;
+                }
+            }
+            break;
+        case 2:
+            if (tDelay != 0)
+            {
+                tDelay--;
+            }
+            else
+            {
+                x = tIceX;
+                y = tIceY;
+                PlaySE(SE_ICE_CRACK);
+                MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_CrackedIce);
+                CurrentMapDrawMetatileAt(x, y);
+                tState = 1;
+            }
+            break;
+        case 3:
+            if (tDelay != 0)
+            {
+                tDelay--;
+            }
+            else
+            {
+                x = tIceX;
+                y = tIceY;
+                PlaySE(SE_ICE_BREAK);
+                MapGridSetMetatileIdAt(x, y, METATILE_SeafoamIslands_IceHole);
+                CurrentMapDrawMetatileAt(x, y);
+                VarSet(VAR_TEMP_1, 1);
+                tState = 1;
+            }
+            break;
     }
 }
 
@@ -781,7 +761,7 @@ static void AshGrassPerStepCallback(u8 taskId)
 // and hole metatiles, such as gTileset_MirageTower.
 static void SetCrackedFloorHoleMetatile(s16 x, s16 y)
 {
-    u16 metatileId = MapGridGetMetatileIdAt(x, y) == METATILE_Cave_CrackedFloor ? METATILE_Cave_CrackedFloor_Hole : METATILE_Pacifidlog_SkyPillar_CrackedFloor_Hole;
+    u16 metatileId = MapGridGetMetatileIdAt(x, y) ==  METATILE_Pacifidlog_SkyPillar_CrackedFloor_Hole;
     MapGridSetMetatileIdAt(x, y, metatileId);
     CurrentMapDrawMetatileAt(x, y);
 }
@@ -865,10 +845,6 @@ enum {
 #define tSlopeAnimTime(i) data[(i) * SLOPE_DATA_SIZE + SLOPE_DATA_START + SLOPE_TIME]
 
 static const u16 sMuddySlopeMetatiles[] = {
-    METATILE_General_MuddySlope_Frame0,
-    METATILE_General_MuddySlope_Frame3,
-    METATILE_General_MuddySlope_Frame2,
-    METATILE_General_MuddySlope_Frame1
 };
 
 #define SLOPE_ANIM_TIME 32
@@ -876,15 +852,6 @@ static const u16 sMuddySlopeMetatiles[] = {
 
 static void SetMuddySlopeMetatile(s16 *data, s16 x, s16 y)
 {
-    u16 metatileId;
-    if ((--data[SLOPE_TIME]) == 0)
-        metatileId = METATILE_General_MuddySlope_Frame0;
-    else
-        metatileId = sMuddySlopeMetatiles[data[SLOPE_TIME] / SLOPE_ANIM_STEP_TIME];
-
-    MapGridSetMetatileIdAt(x, y, metatileId);
-    CurrentMapDrawMetatileAt(x, y);
-    MapGridSetMetatileIdAt(x, y, METATILE_General_MuddySlope_Frame0);
 }
 
 static void Task_MuddySlope(u8 taskId)

@@ -117,9 +117,6 @@ static const struct MetatileCoords sInvisibleMirageTowerMetatiles[] =
     {18, 57, METATILE_Mauville_DeepSand_BottomMid},
     {19, 57, METATILE_Mauville_DeepSand_BottomMid},
     {20, 57, METATILE_Mauville_DeepSand_BottomMid},
-    {18, 58, METATILE_General_SandPit_Center},
-    {19, 58, METATILE_General_SandPit_Center},
-    {20, 58, METATILE_General_SandPit_Center},
 };
 
 static const union AnimCmd sAnim_FallingFossil[] =
@@ -262,7 +259,7 @@ static u16 sDebug_DisintegrationData[8];
 
 bool8 IsMirageTowerVisible(void)
 {
-    if (!(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE111) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE111)))
+    if (!(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE133) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE133)))
         return FALSE;
     return FlagGet(FLAG_MIRAGE_TOWER_VISIBLE);
 }
@@ -285,8 +282,8 @@ void TryStartMirageTowerPulseBlendEffect(void)
         return;
     }
 
-    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(ROUTE111)
-     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(ROUTE111)
+    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(ROUTE133)
+     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(ROUTE133)
      || !FlagGet(FLAG_MIRAGE_TOWER_VISIBLE))
         return;
 
@@ -299,8 +296,8 @@ void TryStartMirageTowerPulseBlendEffect(void)
 
 void ClearMirageTowerPulseBlendEffect(void)
 {
-    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(ROUTE111)
-     || gSaveBlock1Ptr->location.mapNum   != MAP_NUM(ROUTE111)
+    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(ROUTE133)
+     || gSaveBlock1Ptr->location.mapNum   != MAP_NUM(ROUTE133)
      || !FlagGet(FLAG_MIRAGE_TOWER_VISIBLE)
      || sMirageTowerPulseBlend == NULL)
         return;
@@ -327,7 +324,7 @@ void SetMirageTowerVisibility(void)
 
     rand = Random();
     visible = rand & 1;
-    if (FlagGet(FLAG_FORCE_MIRAGE_TOWER_VISIBLE) == TRUE)
+    if (FlagGet(FLAG_DID_ESPHERE_TRADE) == TRUE)
         visible = TRUE;
 
     if (visible)

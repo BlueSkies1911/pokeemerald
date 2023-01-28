@@ -28,7 +28,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_TWIN",
+      "graphics_id": "OBJ_EVENT_GFX_SWIMMER_M_WATER",
       "x": 7,
       "y": 2,
       "elevation": 0,
@@ -41,7 +41,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BOY_1",
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
       "x": 9,
       "y": 2,
       "elevation": 0,
@@ -54,7 +54,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BOY_2",
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
       "x": 11,
       "y": 2,
       "elevation": 0,
@@ -67,7 +67,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_NINJA_BOY",
+      "graphics_id": "OBJ_EVENT_GFX_SEAGALLOP",
       "x": 16,
       "y": 2,
       "elevation": 0,
@@ -80,7 +80,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_1",
+      "graphics_id": "OBJ_EVENT_GFX_MAN",
       "x": 4,
       "y": 2,
       "elevation": 0,
@@ -93,7 +93,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_EXPERT_M",
+      "graphics_id": "OBJ_EVENT_GFX_SAPPHIRE",
       "x": 16,
       "y": 1,
       "elevation": 0,
@@ -119,7 +119,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_2",
+      "graphics_id": "OBJ_EVENT_GFX_GYM_GUY",
       "x": 0,
       "y": 4,
       "elevation": 0,
@@ -145,7 +145,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_2",
+      "graphics_id": "OBJ_EVENT_GFX_MEWTWO",
       "x": 13,
       "y": 2,
       "elevation": 0,
@@ -158,7 +158,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_1",
+      "graphics_id": "OBJ_EVENT_GFX_FEAROW",
       "x": 10,
       "y": 2,
       "elevation": 0,

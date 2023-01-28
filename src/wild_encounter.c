@@ -49,6 +49,8 @@ enum {
 
 static u16 FeebasRandom(void);
 static void FeebasSeedRng(u16 seed);
+static bool8 UnlockedTanobyOrAreNotInTanoby(void);
+static u32 GenerateUnownPersonalityByLetter(u8 letter);
 static bool8 IsWildLevelAllowedByRepel(u8 level);
 static void ApplyFluteEncounterRateMod(u32 *encRate);
 static void ApplyCleanseTagEncounterRateMod(u32 *encRate);
@@ -59,6 +61,23 @@ EWRAM_DATA static u8 sWildEncountersDisabled = 0;
 EWRAM_DATA static u32 sFeebasRngValue = 0;
 
 #include "data/wild_encounters.h"
+
+static const u8 sUnownLetterSlots[][12] = {
+  //  A   A   A   A   A   A   A   A   A   A   A   ?
+    { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 27},
+  //  C   C   C   D   D   D   H   H   H   U   U   O
+    { 2,  2,  2,  3,  3,  3,  7,  7,  7, 20, 20, 14},
+  //  N   N   N   N   S   S   S   S   I   I   E   E
+    {13, 13, 13, 13, 18, 18, 18, 18,  8,  8,  4,  4},
+  //  P   P   L   L   J   J   R   R   R   Q   Q   Q
+    {15, 15, 11, 11,  9,  9, 17, 17, 17, 16, 16, 16},
+  //  Y   Y   T   T   G   G   G   F   F   F   K   K
+    {24, 24, 19, 19,  6,  6,  6,  5,  5,  5, 10, 10},
+  //  V   V   V   W   W   W   X   X   M   M   B   B
+    {21, 21, 21, 22, 22, 22, 23, 23, 12, 12,  1,  1},
+  //  Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   Z   !
+    {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26},
+};
 
 static const struct WildPokemon sWildFeebas = {20, 25, SPECIES_FEEBAS};
 
@@ -321,11 +340,31 @@ static u16 GetCurrentMapWildMonHeaderId(void)
                 i += alteringCaveId;
             }
 
+            if (!UnlockedTanobyOrAreNotInTanoby())
+                break;
             return i;
         }
     }
 
     return HEADER_NONE;
+}
+
+static bool8 UnlockedTanobyOrAreNotInTanoby(void)
+{
+    if (FlagGet(FLAG_SYS_UNLOCKED_TANOBY_RUINS))
+        return TRUE;
+    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(TANOBY_RUINS_DILFORD_CHAMBER))
+        return TRUE;
+    if (!(gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_MONEAN_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_LIPTOO_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_WEEPTH_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_DILFORD_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_SCUFIB_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_RIXY_CHAMBER)
+    ||  gSaveBlock1Ptr->location.mapNum == MAP_NUM(TANOBY_RUINS_VIAPOIS_CHAMBER)
+    ))
+        return TRUE;
+    return FALSE;
 }
 
 static u8 PickWildMonNature(void)
@@ -372,42 +411,68 @@ static u8 PickWildMonNature(void)
     return Random() % NUM_NATURES;
 }
 
-static void CreateWildMon(u16 species, u8 level)
+static void CreateWildMon(u16 species, u8 level, u8 wildMonIndex)
 {
     bool32 checkCuteCharm;
+    u32 personality;
+    s8 chamber;
 
     ZeroEnemyPartyMons();
-    checkCuteCharm = TRUE;
-
-    switch (gBaseStats[species].genderRatio)
+    if (species != SPECIES_UNOWN)
     {
-    case MON_MALE:
-    case MON_FEMALE:
-    case MON_GENDERLESS:
-        checkCuteCharm = FALSE;
-        break;
-    }
+        checkCuteCharm = TRUE;
 
-    if (checkCuteCharm
-        && !GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG)
-        && GetMonAbility(&gPlayerParty[0]) == ABILITY_CUTE_CHARM
-        && Random() % 3 != 0)
+        switch (gBaseStats[species].genderRatio)
+        {
+        case MON_MALE:
+        case MON_FEMALE:
+        case MON_GENDERLESS:
+            checkCuteCharm = FALSE;
+            break;
+        }
+
+        if (checkCuteCharm
+            && !GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG)
+            && GetMonAbility(&gPlayerParty[0]) == ABILITY_CUTE_CHARM
+            && Random() % 3 != 0)
+        {
+            u16 leadingMonSpecies = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES);
+            u32 leadingMonPersonality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+            u8 gender = GetGenderFromSpeciesAndPersonality(leadingMonSpecies, leadingMonPersonality);
+
+            // misses mon is genderless check, although no genderless mon can have cute charm as ability
+            if (gender == MON_FEMALE)
+                gender = MON_MALE;
+            else
+                gender = MON_FEMALE;
+
+            CreateMonWithGenderNatureLetter(&gEnemyParty[0], species, level, USE_RANDOM_IVS, gender, PickWildMonNature(), 0);
+            return;
+        }
+
+        CreateMonWithNature(&gEnemyParty[0], species, level, USE_RANDOM_IVS, PickWildMonNature());
+    }
+    else
     {
-        u16 leadingMonSpecies = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES);
-        u32 leadingMonPersonality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
-        u8 gender = GetGenderFromSpeciesAndPersonality(leadingMonSpecies, leadingMonPersonality);
-
-        // misses mon is genderless check, although no genderless mon can have cute charm as ability
-        if (gender == MON_FEMALE)
-            gender = MON_MALE;
-        else
-            gender = MON_FEMALE;
-
-        CreateMonWithGenderNatureLetter(&gEnemyParty[0], species, level, USE_RANDOM_IVS, gender, PickWildMonNature(), 0);
-        return;
+        chamber = gSaveBlock1Ptr->location.mapNum - MAP_NUM(TANOBY_RUINS_MONEAN_CHAMBER);
+        personality = GenerateUnownPersonalityByLetter(sUnownLetterSlots[chamber][wildMonIndex]);
+        CreateMon(&gEnemyParty[0], species, level, 32, TRUE, personality, FALSE, 0);
     }
+}
 
-    CreateMonWithNature(&gEnemyParty[0], species, level, USE_RANDOM_IVS, PickWildMonNature());
+static u32 GenerateUnownPersonalityByLetter(u8 letter)
+{
+    u32 personality;
+    do
+    {
+        personality = (Random() << 16) | Random();
+    } while (GetUnownLetterByPersonalityLoByte(personality) != letter);
+    return personality;
+}
+
+u8 GetUnownLetterByPersonalityLoByte(u32 personality)
+{
+    return (((personality & 0x3000000) >> 18) | ((personality & 0x30000) >> 12) | ((personality & 0x300) >> 6) | (personality & 0x3)) % 0x1C;
 }
 
 static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 flags)
@@ -442,7 +507,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
+    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level, wildMonIndex);
     return TRUE;
 }
 
@@ -451,7 +516,7 @@ static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 
     u8 wildMonIndex = ChooseWildMonIndex_Fishing(rod);
     u8 level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[wildMonIndex]);
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
+    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level, wildMonIndex);
     return wildMonInfo->wildPokemon[wildMonIndex].species;
 }
 
@@ -462,7 +527,7 @@ static bool8 SetUpMassOutbreakEncounter(u8 flags)
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(gSaveBlock1Ptr->outbreakPokemonLevel))
         return FALSE;
 
-    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
+    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel, 0);
     for (i = 0; i < MAX_MON_MOVES; i++)
         SetMonMoveSlot(&gEnemyParty[0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
 
@@ -524,17 +589,6 @@ static bool8 DoGlobalWildEncounterDiceRoll(void)
         return FALSE;
     else
         return TRUE;
-}
-
-static bool8 AreLegendariesInSootopolisPreventingEncounters(void)
-{
-    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(SOOTOPOLIS_CITY)
-     || gSaveBlock1Ptr->location.mapNum != MAP_NUM(SOOTOPOLIS_CITY))
-    {
-        return FALSE;
-    }
-
-    return FlagGet(FLAG_LEGENDARIES_IN_SOOTOPOLIS);
 }
 
 bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavior)
@@ -619,9 +673,7 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
         else if (MetatileBehavior_IsWaterWildEncounter(currMetaTileBehavior) == TRUE
                  || (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && MetatileBehavior_IsBridgeOverWater(currMetaTileBehavior) == TRUE))
         {
-            if (AreLegendariesInSootopolisPreventingEncounters() == TRUE)
-                return FALSE;
-            else if (gWildMonHeaders[headerId].waterMonsInfo == NULL)
+            if (gWildMonHeaders[headerId].waterMonsInfo == NULL)
                 return FALSE;
             else if (previousMetaTileBehavior != currMetaTileBehavior && !DoGlobalWildEncounterDiceRoll())
                 return FALSE;
@@ -735,8 +787,6 @@ bool8 SweetScentWildEncounter(void)
         }
         else if (MetatileBehavior_IsWaterWildEncounter(MapGridGetMetatileBehaviorAt(x, y)) == TRUE)
         {
-            if (AreLegendariesInSootopolisPreventingEncounters() == TRUE)
-                return FALSE;
             if (gWildMonHeaders[headerId].waterMonsInfo == NULL)
                 return FALSE;
 
@@ -774,7 +824,7 @@ void FishingWildEncounter(u8 rod)
         u8 level = ChooseWildMonLevel(&sWildFeebas);
 
         species = sWildFeebas.species;
-        CreateWildMon(species, level);
+        CreateWildMon(species, level, 0);
     }
     else
     {

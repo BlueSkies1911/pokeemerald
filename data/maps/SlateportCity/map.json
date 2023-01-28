@@ -13,21 +13,6 @@
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
-    {
-      "direction": "up",
-      "offset": 0,
-      "map": "MAP_ROUTE110"
-    },
-    {
-      "direction": "down",
-      "offset": 0,
-      "map": "MAP_ROUTE109"
-    },
-    {
-      "direction": "right",
-      "offset": 0,
-      "map": "MAP_ROUTE134"
-    }
   ],
   "object_events": [
     {
@@ -44,7 +29,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_1",
+      "graphics_id": "OBJ_EVENT_GFX_MAN",
       "x": 34,
       "y": 29,
       "elevation": 3,
@@ -57,7 +42,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_RICH_BOY",
+      "graphics_id": "OBJ_EVENT_GFX_RUBY",
       "x": 5,
       "y": 13,
       "elevation": 3,
@@ -70,7 +55,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_4",
+      "graphics_id": "OBJ_EVENT_GFX_BATTLE_GIRL",
       "x": 26,
       "y": 29,
       "elevation": 3,
@@ -83,7 +68,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_F",
+      "graphics_id": "OBJ_EVENT_GFX_CHANSEY",
       "x": 31,
       "y": 27,
       "elevation": 3,
@@ -96,7 +81,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_COOK",
+      "graphics_id": "OBJ_EVENT_GFX_CHEF",
       "x": 5,
       "y": 43,
       "elevation": 3,
@@ -122,7 +107,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_1",
+      "graphics_id": "OBJ_EVENT_GFX_FEAROW",
       "x": 8,
       "y": 42,
       "elevation": 3,
@@ -161,7 +146,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_GABBY_AND_TY"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SCIENTIST_1",
+      "graphics_id": "OBJ_EVENT_GFX_SCIENTIST",
       "x": 28,
       "y": 13,
       "elevation": 3,
@@ -200,7 +185,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_F",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_F",
       "x": 9,
       "y": 50,
       "elevation": 3,
@@ -213,7 +198,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_3",
+      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2",
       "x": 16,
       "y": 46,
       "elevation": 3,
@@ -252,7 +237,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 30,
       "y": 27,
       "elevation": 3,
@@ -265,7 +250,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 29,
       "y": 27,
       "elevation": 3,
@@ -278,7 +263,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MART_EMPLOYEE",
+      "graphics_id": "OBJ_EVENT_GFX_MR_FUJI",
       "x": 6,
       "y": 38,
       "elevation": 3,
@@ -291,7 +276,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MART_EMPLOYEE",
+      "graphics_id": "OBJ_EVENT_GFX_MR_FUJI",
       "x": 5,
       "y": 51,
       "elevation": 3,
@@ -304,7 +289,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_5",
+      "graphics_id": "OBJ_EVENT_GFX_MAN",
       "x": 34,
       "y": 51,
       "elevation": 3,
@@ -330,7 +315,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MART_EMPLOYEE",
+      "graphics_id": "OBJ_EVENT_GFX_MR_FUJI",
       "x": 11,
       "y": 47,
       "elevation": 3,
@@ -356,7 +341,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 22,
       "y": 27,
       "elevation": 3,
@@ -369,7 +354,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 23,
       "y": 27,
       "elevation": 3,
@@ -382,7 +367,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 24,
       "y": 27,
       "elevation": 3,
@@ -395,7 +380,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 21,
       "y": 26,
       "elevation": 3,
@@ -408,7 +393,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 20,
       "y": 26,
       "elevation": 3,
@@ -421,7 +406,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 26,
       "y": 27,
       "elevation": 3,
@@ -434,7 +419,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 28,
       "y": 27,
       "elevation": 3,
@@ -447,7 +432,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "graphics_id": "OBJ_EVENT_GFX_PIDGEY",
       "x": 25,
       "y": 27,
       "elevation": 3,
@@ -460,7 +445,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_TEAM_AQUA"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_F",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_F",
       "x": 11,
       "y": 37,
       "elevation": 3,

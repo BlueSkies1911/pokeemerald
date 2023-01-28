@@ -981,8 +981,6 @@ const u16 gBattlePyramidFloor_Pal[] = INCBIN_U16("graphics/battle_frontier/pyram
 const u32 gMultiBattleIntroBg_Opponent_Tilemap[] = INCBIN_U32("graphics/battle_frontier/multi_battle_intro_bg_opponent.bin.lz");
 const u32 gMultiBattleIntroBg_Player_Tilemap[] = INCBIN_U32("graphics/battle_frontier/multi_battle_intro_bg_player.bin.lz");
 
-#include "data/graphics/intro_scene.h"
-
 const u32 gBattleAnimSpriteGfx_FlyingDirt[] = INCBIN_U32("graphics/battle_anims/sprites/flying_dirt.4bpp.lz");
 
 const u32 gBattleAnimBgTilemap_Sandstorm[] = INCBIN_U32("graphics/battle_anims/backgrounds/sandstorm_brew.bin.lz");
@@ -1202,6 +1200,9 @@ const u32 gBattleAnimSpriteGfx_WhiteFeather[] = INCBIN_U32("graphics/battle_anim
 const u32 gBattleAnimSpritePal_Sparkle6[] = INCBIN_U32("graphics/battle_anims/sprites/sparkle_6.gbapal.lz");
 const u32 gBattleAnimSpriteGfx_Sparkle6[] = INCBIN_U32("graphics/battle_anims/sprites/sparkle_6.4bpp.lz");
 
+const u32 gGhostPalette[] = INCBIN_U32("graphics/pokemon/ghost/front.gbapal.lz");
+const u32 gGhostFrontPic[] = INCBIN_U32("graphics/pokemon/ghost/front.4bpp.lz");
+
 const u16 gCableCarBg_Pal[]    = INCBIN_U16("graphics/cable_car/bg.gbapal");
 const u16 gCableCar_Pal[]      = INCBIN_U16("graphics/cable_car/cable_car.gbapal");
 const u32 gCableCarBg_Gfx[]    = INCBIN_U32("graphics/cable_car/bg.4bpp.lz");
@@ -1263,9 +1264,7 @@ const u16 gSummaryScreen_MoveEffect_Battle_Tilemap[] = INCBIN_U16("graphics/summ
 const u16 gSummaryScreen_MoveEffect_Contest_Tilemap[] = INCBIN_U16("graphics/summary_screen/effect_contest.bin");
 const u16 gSummaryScreen_MoveEffect_Cancel_Tilemap[] = INCBIN_U16("graphics/summary_screen/effect_cancel.bin");
 
-const u16 gIntroCopyright_Pal[] = INCBIN_U16("graphics/intro/copyright.gbapal");
-const u32 gIntroCopyright_Gfx[] = INCBIN_U32("graphics/intro/copyright.4bpp.lz");
-const u32 gIntroCopyright_Tilemap[] = INCBIN_U32("graphics/intro/copyright.bin.lz");
+const u16 gIntroCopyright_Pal[] = INCBIN_U16("graphics/intro/scene_2/copyright.gbapal");
 
 const u16 gPokedexAreaScreenAreaUnknown_Pal[] = INCBIN_U16("graphics/pokedex/area_unknown.gbapal");
 const u32 gPokedexAreaScreenAreaUnknown_Gfx[] = INCBIN_U32("graphics/pokedex/area_unknown.4bpp.lz");
@@ -1312,7 +1311,7 @@ const u32 gPokenavLeftHeaderCondition_Gfx[] = INCBIN_U32("graphics/pokenav/left_
 const u32 gPokenavLeftHeaderCute_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/cute.4bpp.lz");
 const u32 gPokenavLeftHeaderMatchCall_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/match_call.4bpp.lz");
 const u32 gPokenavLeftHeaderMainMenu_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/main_menu.4bpp.lz");
-const u32 gPokenavLeftHeaderHoennMap_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/hoenn_map.4bpp.lz");
+const u32 gPokenavLeftHeaderKantoMap_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/kanto_map.4bpp.lz");
 const u32 gPokenavLeftHeaderRibbons_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/ribbons.4bpp.lz");
 const u32 gPokenavLeftHeaderSearch_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/search.4bpp.lz");
 const u32 gPokenavLeftHeaderTough_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/tough.4bpp.lz");
@@ -1500,16 +1499,6 @@ const u16 gMonIconPalettes[][16] =
     INCBIN_U16("graphics/pokemon/icon_palettes/icon_palette_2.gbapal"),
 };
 
-const u16 gTitleScreenBgPalettes[]         = INCBIN_U16("graphics/title_screen/pokemon_logo.gbapal",
-                                                        "graphics/title_screen/rayquaza_and_clouds.gbapal");
-const u16 gTitleScreenEmeraldVersionPal[]  = INCBIN_U16("graphics/title_screen/emerald_version.gbapal");
-const u32 gTitleScreenCloudsTilemap[]      = INCBIN_U32("graphics/title_screen/clouds.bin.lz");
-const u32 gTitleScreenPokemonLogoGfx[]     = INCBIN_U32("graphics/title_screen/pokemon_logo.8bpp.lz");
-const u32 gTitleScreenEmeraldVersionGfx[]  = INCBIN_U32("graphics/title_screen/emerald_version.8bpp.lz");
-const u16 gTitleScreenPressStartPal[]      = INCBIN_U16("graphics/title_screen/press_start.gbapal");
-const u32 gTitleScreenPressStartGfx[]      = INCBIN_U32("graphics/title_screen/press_start.4bpp.lz");
-const u32 gTitleScreenPokemonLogoTilemap[] = INCBIN_U32("graphics/title_screen/pokemon_logo.bin.lz");
-
 // size in LoadPalette calls is reported as 0xD0 << 1, which is 0x1A0, but palette is only 0x100 bytes long so it loads garbage as well
 const u16 gFrontierPassBg_Pal[][16]                      = INCBIN_U16("graphics/frontier_pass/bg.gbapal");
 const u32 gFrontierPassBg_Gfx[]                          = INCBIN_U32("graphics/frontier_pass/bg.4bpp.lz");
@@ -1531,3 +1520,30 @@ static const u8 sUnused2[]       = {0x02};
 static const u8 sEmpty5[0x3242]  = {0};
 static const u8 sUnused3[]       = {0x40};
 static const u8 sEmpty6[0x13]    = {0};
+
+const u16 gCreditsMonBackdropPals[][16] =
+{
+    INCBIN_U16("graphics/credits/charizard.gbapal"),
+    INCBIN_U16("graphics/credits/venusaur.gbapal"),
+    INCBIN_U16("graphics/credits/blastoise.gbapal"),
+    INCBIN_U16("graphics/credits/pikachu.gbapal"),
+};
+
+const u32 gCreditsPokeballBgGfxTiles[] = INCBIN_U32("graphics/credits/unk_8EAAB98.4bpp.lz");
+const u32 gCreditsPokeballBgGfxMap[] = INCBIN_U32("graphics/credits/unk_8EAB30C.bin.lz");
+
+const u16 gGraphics_TitleScreen_GameTitleLogoPals[] = INCBIN_U16("graphics/title_screen/game_title_logo.gbapal");
+const u8 gGraphics_TitleScreen_GameTitleLogoTiles[] = INCBIN_U8("graphics/title_screen/game_title_logo.8bpp.lz");
+const u8 gGraphics_TitleScreen_GameTitleLogoMap[] = INCBIN_U8("graphics/title_screen/game_title_logo.bin.lz");
+const u16 gGraphics_TitleScreen_BoxArtMonPals[] = INCBIN_U16("graphics/title_screen/box_art_mon.gbapal");
+const u8 gGraphics_TitleScreen_BoxArtMonTiles[] = INCBIN_U8("graphics/title_screen/box_art_mon.4bpp.lz");
+const u8 gGraphics_TitleScreen_BoxArtMonMap[] = INCBIN_U8("graphics/title_screen/box_art_mon.bin.lz");
+const u16 gGraphics_TitleScreen_BackgroundPals[] = INCBIN_U16("graphics/title_screen/background.gbapal");
+const u8 gGraphics_TitleScreen_CopyrightPressStartTiles[] = INCBIN_U8("graphics/title_screen/copyright_press_start.4bpp.lz");
+const u8 gGraphics_TitleScreen_CopyrightPressStartMap[] = INCBIN_U8("graphics/title_screen/copyright_press_start.bin.lz");
+const u16 gGraphics_TitleScreen_FireOrLeafPals[] = INCBIN_U16("graphics/title_screen/fire_sprite.gbapal");
+const u32 gGraphics_TitleScreen_BlankObjTiles[] = INCBIN_U32("graphics/title_screen/blank_obj.4bpp.lz");
+
+const u16 gCreditsAllRightsReservedGfxPal[] = INCBIN_U16("graphics/credits/unk_8EAE548.gbapal");
+const u8 gCreditsAllRightsReservedGfxTiles[] = INCBIN_U8("graphics/credits/unk_8EAE548.4bpp.lz");
+const u8 gCreditsAllRightsReservedGfxMap[] = INCBIN_U8("graphics/credits/unk_8EAE548.bin.lz");

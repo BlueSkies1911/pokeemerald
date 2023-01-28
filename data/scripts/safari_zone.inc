@@ -1,13 +1,13 @@
 SafariZone_EventScript_OutOfBallsMidBattle::
-	setvar VAR_SAFARI_ZONE_STATE, 1
+	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 3
 	special ExitSafariMode
-	setwarp MAP_ROUTE121_SAFARI_ZONE_ENTRANCE, 2, 5
+	setwarp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
 	end
 
 SafariZone_EventScript_Exit::
-	setvar VAR_SAFARI_ZONE_STATE, 1
+	setvar VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 1
 	special ExitSafariMode
-	warp MAP_ROUTE121_SAFARI_ZONE_ENTRANCE, 2, 5
+	warp MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 4, 1
 	waitstate
 	end
 
@@ -70,20 +70,22 @@ SafariZone_EventScript_PokeblockPresent::
 	end
 
 SafariZone_Text_WouldYouLikeToExit:
-	.string "Would you like to exit the SAFARI\n"
-	.string "ZONE right now?$"
+	.string "Would you like to exit the Safari\n"
+	.string "Zone right now?$"
 
 SafariZone_Text_TimesUp:
-	.string "Ding-dong! Time's up!\n"
-	.string "Your SAFARI Game is over.$"
+	.string "PA: Ding-dong!\p"
+	.string "Time's up!\p"
+	.string "PA: Your Safari Game is over!$"
 
 SafariZone_Text_OutOfBalls:
-	.string "You've run out of SAFARI BALLS.\n"
-	.string "Your SAFARI Game is over.$"
+	.string "PA: Ding-dong!\p"
+	.string "You are out of Safari Balls!\n"
+	.string "PA: Your Safari Game is over!$"
 
 SafariZone_Text_PlacePokeblockOnFeeder:
 	.string "Would you like to place a {POKEBLOCK}\n"
-	.string "on the {POKEBLOCK} FEEDER?$"
+	.string "on the {POKEBLOCK} Feeder?$"
 
 SafariZone_Text_PokeblockStillHere:
 	.string "The {STR_VAR_1} you left\n"
@@ -91,7 +93,7 @@ SafariZone_Text_PokeblockStillHere:
 
 SafariZone_Text_PokeblockWasPlaced:
 	.string "The {STR_VAR_1} was placed\n"
-	.string "on the {POKEBLOCK} FEEDER.$"
+	.string "on the {POKEBLOCK} Feeder.$"
 
 Route121_SafariZoneEntrance_Text_WelcomeToSafariZone:
 	.string "Welcome to the SAFARI ZONE!\p"
@@ -149,7 +151,7 @@ Route121_SafariZoneEntrance_Text_PleaseEnjoyYourself:
 	.string "So, until then, enjoy yourself, please!\n"
 	.string "Off you go on your wild excursion!$"
 
-Route121_SafariZoneEntrance_Text_PCIsFull:
+SafariZone_Text_ExcuseMeYourPCBoxIsFull:
 	.string "Excuse me!\n"
 	.string "Your PC BOX is full.$"
 

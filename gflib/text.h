@@ -166,6 +166,9 @@ u8 GetKeypadIconHeight(u8 keypadIconId);
 void SetDefaultFontsPointer(void);
 u8 GetFontAttribute(u8 fontId, u8 attributeId);
 u8 GetMenuCursorDimensionByFont(u8 fontId, u8 whichDimension);
+void sub_80062B0(struct Sprite *sprite);
+u8 CreateTextCursorSpriteForOakSpeech(u8 sheetId, u16 x, u16 y, u8 priority, u8 subpriority);
+void DestroyTextCursorSprite(u8 spriteId);
 
 // braille.c
 u16 FontFunc_Braille(struct TextPrinter *textPrinter);

@@ -26,22 +26,22 @@ static void SetUnionRoomObjectFacingDirection(s32, s32, u8);
 // + 2 is just to match, those elements are empty and never read
 static const u8 sUnionRoomObjGfxIds[GENDER_COUNT][MAX_UNION_ROOM_LEADERS + 2] = {
     [MALE] = {
-        OBJ_EVENT_GFX_MAN_3,
-        OBJ_EVENT_GFX_BLACK_BELT,
+        OBJ_EVENT_GFX_OLD_MAN_2,
+        OBJ_EVENT_GFX_BLACKBELT,
         OBJ_EVENT_GFX_CAMPER,
         OBJ_EVENT_GFX_YOUNGSTER,
         OBJ_EVENT_GFX_PSYCHIC_M,
         OBJ_EVENT_GFX_BUG_CATCHER,
-        OBJ_EVENT_GFX_MAN_4,
-        OBJ_EVENT_GFX_MAN_5
+        OBJ_EVENT_GFX_WORKER_M,
+        OBJ_EVENT_GFX_MAN
     },
     [FEMALE] = {
         OBJ_EVENT_GFX_WOMAN_5,
-        OBJ_EVENT_GFX_HEX_MANIAC,
+        OBJ_EVENT_GFX_CHANNELER,
         OBJ_EVENT_GFX_PICNICKER,
         OBJ_EVENT_GFX_LASS,
         OBJ_EVENT_GFX_LASS,
-        OBJ_EVENT_GFX_GIRL_3,
+        OBJ_EVENT_GFX_SWIMMER_F_LAND,
         OBJ_EVENT_GFX_WOMAN_2,
         OBJ_EVENT_GFX_BEAUTY
     }
@@ -400,7 +400,7 @@ void CreateUnionRoomPlayerSprites(u8 * spriteIds, s32 leaderId)
     for (memberId = 0; memberId < MAX_RFU_PLAYERS; memberId++)
     {
         s32 id = UR_PLAYER_SPRITE_ID(leaderId, memberId);
-        spriteIds[id] = CreateVirtualObject(OBJ_EVENT_GFX_MAN_4,
+        spriteIds[id] = CreateVirtualObject(OBJ_EVENT_GFX_WORKER_M,
                                            id - UR_SPRITE_START_ID,
                                            sUnionRoomPlayerCoords[leaderId][0] + sUnionRoomGroupOffsets[memberId][0],
                                            sUnionRoomPlayerCoords[leaderId][1] + sUnionRoomGroupOffsets[memberId][1],

@@ -54,6 +54,8 @@ struct MapLayout
     /*0x0c*/ u16 *map;
     /*0x10*/ struct Tileset *primaryTileset;
     /*0x14*/ struct Tileset *secondaryTileset;
+    u8 borderWidth;
+    u8 borderHeight;
 };
 
 struct BackupMapLayout
@@ -224,7 +226,7 @@ struct ObjectEventGraphicsInfo
 {
     /*0x00*/ u16 tileTag;
     /*0x02*/ u16 paletteTag;
-    /*0x04*/ u16 reflectionPaletteTag;
+    /*0x04*/ u16 textColor;
     /*0x06*/ u16 size;
     /*0x08*/ s16 width;
     /*0x0A*/ s16 height;
@@ -287,6 +289,8 @@ enum
     COLLISION_ISOLATED_HORIZONTAL_RAIL,
     COLLISION_VERTICAL_RAIL,
     COLLISION_HORIZONTAL_RAIL,
+    COLLISION_STAIR_WARP,
+    COLLISION_COUNT,
 };
 
 // player running states
@@ -325,6 +329,7 @@ struct PlayerAvatar
     // these two are timer history arrays which [0] is the active timer for acro bike. every element is backed up to the next element upon update.
     /*0x14*/ u8 dirTimerHistory[8];
     /*0x1C*/ u8 abStartSelectTimerHistory[8];
+    u16 lastSpinTile;
 };
 
 struct Camera

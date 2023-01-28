@@ -130,10 +130,10 @@ gSpecials::
 	def_special IsDecorationCategoryFull
 	def_special TraderShowDecorationMenu
 	def_special TraderDoDecorationTrade
-	def_special GetSeedotSizeRecordInfo
-	def_special CompareSeedotSize
-	def_special GetLotadSizeRecordInfo
-	def_special CompareLotadSize
+	def_special GetHeracrossSizeRecordInfo
+	def_special CompareHeracrossSize
+	def_special GetMagikarpSizeRecordInfo
+	def_special CompareMagikarpSize
 	def_special TryPutNameRaterShowOnTheAir
 	def_special BufferMonNickname
 	def_special IsMonOTIDNotPlayers
@@ -168,7 +168,7 @@ gSpecials::
 	def_special StartWallClock
 	def_special Special_ViewWallClock
 	def_special ChooseStarter
-	def_special StartWallyTutorialBattle
+	def_special StartOldManTutorialBattle
 	def_special ChangePokemonNickname
 	def_special ChoosePartyMon
 	def_special GetFirstFreePokeblockSlot
@@ -283,7 +283,7 @@ gSpecials::
 	def_special CheckLeadMonTough
 	def_special LookThroughPorthole
 	def_special DoSoftReset
-	def_special GameClear
+	def_special EnterHallOfFame
 	def_special MoveElevator
 	def_special ShowGlassWorkshopMenu
 	def_special SpawnCameraObject
@@ -319,14 +319,13 @@ gSpecials::
 	def_special ShowDeptStoreElevatorFloorSelect
 	def_special InteractWithShieldOrTVDecoration
 	def_special IsPokerusInParty
-	def_special SetSootopolisGymCrackedIceMetatiles
+	def_special SetIcefallCaveCrackedIceMetatiles
 	def_special ShakeCamera
 	def_special StartGroudonKyogreBattle
 	def_special BattleSetup_StartLegendaryBattle
 	def_special StartRegiBattle
 	def_special SetTrainerFacingDirection
 	def_special DoSealedChamberShakingEffect_Short
-	def_special FoundBlackGlasses
 	def_special StartDroughtWeatherBlend
 	def_special DoDiveWarp
 	def_special DoFallWarp
@@ -345,13 +344,13 @@ gSpecials::
 	def_special Script_FadeOutMapMusic
 	def_special SetPacifidlogTMReceivedDay
 	def_special GetDaysUntilPacifidlogTMAvailable
-	def_special HasAllHoennMons
+	def_special HasAllKantoMons
 	def_special MonOTNameNotPlayer
 	def_special BufferLottoTicketNumber
 	def_special TryHideBattleTowerReporter
 	def_special DoesPartyHaveEnigmaBerry
 	def_special GenerateContestRand
-	def_special SetChampionSaveWarp
+	def_special SetPostgameFlags
 	def_special TryPutTreasureInvestigatorsOnAir
 	def_special TryPutLotteryWinnerReportOnAir
 	def_special TryPutTrainerFanClubOnAir
@@ -535,3 +534,34 @@ gSpecials::
 	def_special RemoveRecordsWindow
 	def_special CloseDeptStoreElevatorWindow
 	def_special TrySetBattleTowerLinkType
+    def_special OpenMuseumFossilPic
+    def_special CloseMuseumFossilPic
+    def_special SetSeenMon
+    def_special AnimateTeleporterHousing
+    def_special AnimateTeleporterCable
+    def_special PutMonInRoute5Daycare
+    def_special GetCostToWithdrawRoute5DaycareMon
+    def_special IsThereMonInRoute5Daycare
+    def_special GetNumLevelsGainedForRoute5DaycareMon
+    def_special TakePokemonFromRoute5Daycare
+    def_special SetVermilionTrashCans
+    def_special DoSSAnneDepartureCutscene
+	def_special StartMarowakBattle
+    def_special DoesPlayerPartyContainSpecies
+    def_special ForcePlayerOntoBike
+	def_special ForcePlayerToStartSurfing
+	def_special SeafoamIslandsB4F_CurrentDumpsPlayerOnLand
+	def_special DoPokemonLeagueLightingEffect
+	def_special GetStarterSpecies
+	def_special DoCredits
+	def_special DaisyMassageServices
+	def_special IsNationalPokedexEnabled
+	def_special DrawSeagallopDestinationMenu
+	def_special GetSelectedSeagallopDestination
+	def_special GetSeagallopNumber
+	def_special IsPlayerLeftOfVermilionSailor
+	def_special DoSeagallopFerryScene
+	def_special CapeBrinkGetMoveToTeachLeadPokemon
+	def_special HasLearnedAllMovesFromCapeBrinkTutor
+	def_special UpdateLoreleiDollCollection
+	def_special SampleResortGorgeousMonAndReward

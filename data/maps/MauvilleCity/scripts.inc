@@ -7,19 +7,16 @@ MauvilleCity_MapScripts::
 	.byte 0
 
 MauvilleCity_OnTransition:
-	setflag FLAG_VISITED_MAUVILLE_CITY
-	clearflag FLAG_FORCE_MIRAGE_TOWER_VISIBLE
+	setflag FLAG_WORLD_MAP_CINNABAR_ISLAND
+	clearflag FLAG_DID_ESPHERE_TRADE
 	clearflag FLAG_HIDE_SLATEPORT_MUSEUM_POPULATION
 	setflag FLAG_SYS_TV_START
-	clearflag FLAG_MAUVILLE_GYM_BARRIERS_STATE
 	setvar VAR_MAUVILLE_GYM_STATE, 0
-	call_if_set FLAG_GOT_TM24_FROM_WATTSON, MauvilleCity_EventScript_MoveWattsonBackToGym
 	end
 
 MauvilleCity_EventScript_MoveWattsonBackToGym::
 	clearflag FLAG_HIDE_MAUVILLE_GYM_WATTSON
 	setflag FLAG_HIDE_MAUVILLE_CITY_WATTSON
-	setflag FLAG_WATTSON_REMATCH_AVAILABLE
 	return
 
 MauvilleCity_EventScript_Boy::
@@ -159,9 +156,8 @@ MauvilleCity_EventScript_DefeatedWally::
 	removeobject LOCALID_WALLYS_UNCLE
 	clearflag FLAG_HIDE_VERDANTURF_TOWN_WANDAS_HOUSE_WALLY
 	clearflag FLAG_HIDE_VERDANTURF_TOWN_WANDAS_HOUSE_WALLYS_UNCLE
-	setflag FLAG_DEFEATED_WALLY_MAUVILLE
-	setvar VAR_WALLY_CALL_STEP_COUNTER, 0
-	setflag FLAG_ENABLE_FIRST_WALLY_POKENAV_CALL
+	setvar VAR_DAISY_CALL_STEP_COUNTER, 0
+	setflag FLAG_ENABLE_DAISY_FIRST_CALL
 	call_if_eq VAR_FACING, DIR_NORTH, MauvilleCity_EventScript_ScottApproachPlayerNorth
 	call_if_eq VAR_FACING, DIR_EAST, MauvilleCity_EventScript_ScottApproachPlayerEast
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterDown
@@ -202,7 +198,6 @@ MauvilleCity_EventScript_ScottExitEast::
 
 MauvilleCity_EventScript_BattleWally::
 	msgbox MauvilleCity_Text_WallyHereICome, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_WALLY_MAUVILLE, MauvilleCity_Text_WallyDefeat
 	applymovement LOCALID_WALLY, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	msgbox MauvilleCity_Text_WallyIllGoBackToVerdanturf, MSGBOX_DEFAULT
@@ -418,12 +413,9 @@ MauvilleCity_Movement_ScottExitEast:
 MauvilleCity_EventScript_Wattson::
 	lock
 	faceplayer
-	goto_if_set FLAG_GOT_TM24_FROM_WATTSON, MauvilleCity_EventScript_ReceivedThunderbolt
 	goto_if_eq VAR_NEW_MAUVILLE_STATE, 2, MauvilleCity_EventScript_CompletedNewMauville
-	goto_if_set FLAG_GOT_BASEMENT_KEY_FROM_WATTSON, MauvilleCity_EventScript_BegunNewMauville
 	msgbox MauvilleCity_Text_WattsonNeedFavorTakeKey, MSGBOX_DEFAULT
 	giveitem ITEM_BASEMENT_KEY
-	setflag FLAG_GOT_BASEMENT_KEY_FROM_WATTSON
 	msgbox MauvilleCity_Text_WattsonWontBeChallenge, MSGBOX_DEFAULT
 	release
 	end
@@ -437,7 +429,6 @@ MauvilleCity_EventScript_CompletedNewMauville::
 	msgbox MauvilleCity_Text_WattsonThanksTakeTM, MSGBOX_DEFAULT
 	giveitem ITEM_TM24
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	setflag FLAG_GOT_TM24_FROM_WATTSON
 	msgbox MauvilleCity_Text_WattsonYoungTakeCharge, MSGBOX_DEFAULT
 	release
 	end
@@ -457,8 +448,8 @@ MauvilleCity_EventScript_RegisterWallyCall::
 	waitfanfare
 	closemessage
 	delay 30
-	setflag FLAG_ENABLE_WALLY_MATCH_CALL
-	clearflag FLAG_ENABLE_FIRST_WALLY_POKENAV_CALL
+	setflag FLAG_ENABLE_DAISY_MATCH_CALL
+	clearflag FLAG_ENABLE_DAISY_FIRST_CALL
 	releaseall
 	end
 

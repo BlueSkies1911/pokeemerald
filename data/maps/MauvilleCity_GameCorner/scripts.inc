@@ -121,7 +121,7 @@ MauvilleCity_GameCorner_EventScript_ReturnToChooseDollPrize::
 	goto MauvilleCity_GameCorner_EventScript_ChooseDollPrize
 
 MauvilleCity_GameCorner_EventScript_ChooseDollPrize::
-	multichoice 12, 0, MULTI_GAME_CORNER_DOLLS, FALSE
+	multichoice 12, 0, MULTI_GAME_CORNER_ITEMS, FALSE
 	switch VAR_RESULT
 	case 0, MauvilleCity_GameCorner_EventScript_TreeckoDoll
 	case 1, MauvilleCity_GameCorner_EventScript_TorchicDoll
@@ -379,7 +379,6 @@ MauvilleCity_GameCorner_EventScript_Gentleman::
 MauvilleCity_GameCorner_EventScript_Girl::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_STARTER_DOLL, MauvilleCity_GameCorner_EventScript_ReceivedStarterDoll
 	msgbox MauvilleCity_GameCorner_Text_GotTwoOfSameDollWantOne, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, MauvilleCity_GameCorner_EventScript_DeclineStarterDoll
 	switch VAR_STARTER_MON
@@ -394,7 +393,6 @@ MauvilleCity_GameCorner_EventScript_GiveTreeckoDoll::
 	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoRoomForStarterDoll
 	msgbox MauvilleCity_GameCorner_Text_HereYouGo2, MSGBOX_DEFAULT
 	givedecoration DECOR_TREECKO_DOLL
-	setflag FLAG_RECEIVED_STARTER_DOLL
 	goto MauvilleCity_GameCorner_EventScript_ReceivedStarterDoll
 	end
 
@@ -404,7 +402,6 @@ MauvilleCity_GameCorner_EventScript_GiveTorchicDoll::
 	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoRoomForStarterDoll
 	msgbox MauvilleCity_GameCorner_Text_HereYouGo2, MSGBOX_DEFAULT
 	givedecoration DECOR_TORCHIC_DOLL
-	setflag FLAG_RECEIVED_STARTER_DOLL
 	goto MauvilleCity_GameCorner_EventScript_ReceivedStarterDoll
 	end
 
@@ -414,7 +411,6 @@ MauvilleCity_GameCorner_EventScript_GiveMudkipDoll::
 	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoRoomForStarterDoll
 	msgbox MauvilleCity_GameCorner_Text_HereYouGo2, MSGBOX_DEFAULT
 	givedecoration DECOR_MUDKIP_DOLL
-	setflag FLAG_RECEIVED_STARTER_DOLL
 	goto MauvilleCity_GameCorner_EventScript_ReceivedStarterDoll
 	end
 
@@ -444,10 +440,8 @@ MauvilleCity_GameCorner_EventScript_PokefanM::
 	end
 
 MauvilleCity_GameCorner_EventScript_TryGive20Coins::
-	goto_if_set FLAG_RECEIVED_20_COINS, MauvilleCity_GameCorner_EventScript_PokefanMNormal
 	checkcoins VAR_TEMP_1
 	goto_if_ge VAR_TEMP_1, 1, MauvilleCity_GameCorner_EventScript_PokefanMNormal @ Only give 20 coins if player has no coins
-	setflag FLAG_RECEIVED_20_COINS
 	addcoins 20
 	msgbox MauvilleCity_GameCorner_Text_LuckOnlyLastSoLongTakeCoins, MSGBOX_DEFAULT
 	playse SE_SHOP

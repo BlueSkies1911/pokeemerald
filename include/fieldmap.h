@@ -17,6 +17,12 @@
 #define MAP_OFFSET_W (MAP_OFFSET * 2 + 1)
 #define MAP_OFFSET_H (MAP_OFFSET * 2)
 
+// gGlobalFieldTintMode
+#define QL_TINT_NONE              0
+#define QL_TINT_GRAYSCALE         1
+#define QL_TINT_SEPIA             2
+#define QL_TINT_BACKUP_GRAYSCALE  3
+
 #include "main.h"
 
 extern struct BackupMapLayout gBackupMapLayout;
@@ -34,6 +40,7 @@ void GetCameraFocusCoords(u16 *x, u16 *y);
 u8 MapGridGetMetatileLayerTypeAt(int x, int y);
 u8 MapGridGetElevationAt(int x, int y);
 bool8 CameraMove(int deltaX, int deltaY);
+void Fieldmap_ApplyGlobalTintToPaletteSlot(u8 slot, u8 count);
 void SaveMapView(void);
 void SetCameraFocusCoords(u16 x, u16 y);
 void InitMap(void);

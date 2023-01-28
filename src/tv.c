@@ -200,13 +200,13 @@ static const struct {
         .species = SPECIES_SEEDOT,
         .moves = {MOVE_BIDE, MOVE_HARDEN, MOVE_LEECH_SEED},
         .level = 3,
-        .location = MAP_NUM(ROUTE102)
+        .location = MAP_NUM(ROUTE2)
     },
     {
         .species = SPECIES_NUZLEAF,
         .moves = {MOVE_HARDEN, MOVE_GROWTH, MOVE_NATURE_POWER, MOVE_LEECH_SEED},
         .level = 15,
-        .location = MAP_NUM(ROUTE114),
+        .location = MAP_NUM(ROUTE14),
     },
     {
         .species = SPECIES_SEEDOT,
@@ -1507,7 +1507,7 @@ void TryPutSmartShopperOnAir(void)
     TVShow *show;
     u8 i;
 
-    if (!(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRAINER_HILL_ENTRANCE) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRAINER_HILL_ENTRANCE))
+    if (!(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRAINER_TOWER_LOBBY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRAINER_TOWER_LOBBY))
      && !(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(BATTLE_FRONTIER_MART) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(BATTLE_FRONTIER_MART))
      && !rbernoulli(1, 3))
     {

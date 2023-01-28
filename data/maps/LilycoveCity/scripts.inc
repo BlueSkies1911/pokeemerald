@@ -7,7 +7,7 @@ LilycoveCity_MapScripts::
 	.byte 0
 
 LilycoveCity_OnTransition:
-	setflag FLAG_VISITED_LILYCOVE_CITY
+	setflag FLAG_WORLD_MAP_THREE_ISLAND
 	setvar VAR_CONTEST_HALL_STATE, 0
 	setflag FLAG_HIDE_LILYCOVE_CONTEST_HALL_REPORTER
 	call_if_set FLAG_SYS_WEATHER_CTRL, Common_EventScript_SetAbnormalWeather
@@ -15,7 +15,7 @@ LilycoveCity_OnTransition:
 	end
 
 LilycoveCity_OnLoad:
-	call_if_unset FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, LilycoveCity_EventScript_SetWailmerMetatiles
+	call_if_unset FLAG_HIDE_ZAPDOS, LilycoveCity_EventScript_SetWailmerMetatiles
 	end
 
 LilycoveCity_EventScript_SetWailmerMetatiles::
@@ -77,7 +77,7 @@ LilycoveCity_EventScript_RichBoy::
 LilycoveCity_EventScript_Sailor2::
 	lock
 	faceplayer
-	goto_if_set FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, LilycoveCity_EventScript_Sailor2AquaGone
+	goto_if_set FLAG_HIDE_ZAPDOS, LilycoveCity_EventScript_Sailor2AquaGone
 	msgbox LilycoveCity_Text_TeamAquaBeenTrainingWailmer, MSGBOX_DEFAULT
 	release
 	end
@@ -90,7 +90,7 @@ LilycoveCity_EventScript_Sailor2AquaGone::
 LilycoveCity_EventScript_Woman2::
 	lock
 	faceplayer
-	goto_if_set FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, LilycoveCity_EventScript_Woman2AquaGone
+	goto_if_set FLAG_HIDE_ZAPDOS, LilycoveCity_EventScript_Woman2AquaGone
 	msgbox LilycoveCity_Text_SomeoneStoleMyPokemon, MSGBOX_DEFAULT
 	release
 	end
@@ -197,14 +197,12 @@ LilycoveCity_EventScript_MoveDeletersHouseSign::
 
 LilycoveCity_EventScript_WailmerTrainerGrunt::
 	lockall
-	goto_if_set FLAG_MET_WAILMER_TRAINER, LilycoveCity_EventScript_MetWailmerTrainer
 	msgbox LilycoveCity_Text_WailmerLeapOutOfWater, MSGBOX_DEFAULT
 	applymovement VAR_LAST_TALKED, Common_Movement_FacePlayer
 	waitmovement 0
 	msgbox LilycoveCity_Text_GetLostMessingUpTraining, MSGBOX_DEFAULT
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
-	setflag FLAG_MET_WAILMER_TRAINER
 	releaseall
 	end
 
@@ -243,10 +241,6 @@ LilycoveCity_EventScript_May::
 	call_if_unset FLAG_DECLINED_RIVAL_BATTLE_LILYCOVE, LilycoveCity_EventScript_MayAskToBattle
 	goto_if_eq VAR_RESULT, NO, LilycoveCity_EventScript_DeclineMayBattle
 	msgbox LilycoveCity_Text_MayWontBeBeaten, MSGBOX_DEFAULT
-	switch VAR_STARTER_MON
-	case 0, LilycoveCity_EventScript_BattleMayTreecko
-	case 1, LilycoveCity_EventScript_BattleMayTorchic
-	case 2, LilycoveCity_EventScript_BattleMayMudkip
 	end
 
 LilycoveCity_EventScript_MayAskToBattleAgain::
@@ -271,10 +265,6 @@ LilycoveCity_EventScript_Brendan::
 	call_if_unset FLAG_DECLINED_RIVAL_BATTLE_LILYCOVE, LilycoveCity_EventScript_BrendanAskToBattle
 	goto_if_eq VAR_RESULT, NO, LilycoveCity_EventScript_DeclineBrendanBattle
 	msgbox LilycoveCity_Text_BrendanWontBeBeaten, MSGBOX_DEFAULT
-	switch VAR_STARTER_MON
-	case 0, LilycoveCity_EventScript_BattleBrendanTreecko
-	case 1, LilycoveCity_EventScript_BattleBrendanTorchic
-	case 2, LilycoveCity_EventScript_BattleBrendanMudkip
 	end
 
 LilycoveCity_EventScript_BrendanAskToBattleAgain::
@@ -293,43 +283,13 @@ LilycoveCity_EventScript_DeclineBrendanBattle::
 	release
 	end
 
-LilycoveCity_EventScript_BattleMayTreecko::
-	trainerbattle_no_intro TRAINER_MAY_LILYCOVE_TREECKO, LilycoveCity_Text_MayDefeat
-	goto LilycoveCity_EventScript_DefeatedMay
-	end
-
-LilycoveCity_EventScript_BattleMayTorchic::
-	trainerbattle_no_intro TRAINER_MAY_LILYCOVE_TORCHIC, LilycoveCity_Text_MayDefeat
-	goto LilycoveCity_EventScript_DefeatedMay
-	end
-
-LilycoveCity_EventScript_BattleMayMudkip::
-	trainerbattle_no_intro TRAINER_MAY_LILYCOVE_MUDKIP, LilycoveCity_Text_MayDefeat
-	goto LilycoveCity_EventScript_DefeatedMay
-	end
-
-LilycoveCity_EventScript_BattleBrendanTreecko::
-	trainerbattle_no_intro TRAINER_BRENDAN_LILYCOVE_TREECKO, LilycoveCity_Text_BrendanDefeat
-	goto LilycoveCity_EventScript_DefeatedBrendan
-	end
-
-LilycoveCity_EventScript_BattleBrendanTorchic::
-	trainerbattle_no_intro TRAINER_BRENDAN_LILYCOVE_TORCHIC, LilycoveCity_Text_BrendanDefeat
-	goto LilycoveCity_EventScript_DefeatedBrendan
-	end
-
-LilycoveCity_EventScript_BattleBrendanMudkip::
-	trainerbattle_no_intro TRAINER_BRENDAN_LILYCOVE_MUDKIP, LilycoveCity_Text_BrendanDefeat
-	goto LilycoveCity_EventScript_DefeatedBrendan
-	end
-
 LilycoveCity_EventScript_DefeatedMay::
 	msgbox LilycoveCity_Text_MayGoingBackToLittleroot, MSGBOX_DEFAULT
 	setvar VAR_RESULT, FALSE
 	call_if_set FLAG_BADGE06_GET, LilycoveCity_EventScript_CheckFinalBadge
 	call_if_eq VAR_RESULT, FALSE, LilycoveCity_EventScript_MayCollectBadges
 	call_if_eq VAR_RESULT, TRUE, LilycoveCity_EventScript_MayPokemonLeague
-	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM
+	clearflag FLAG_HIDE_CREDITS_RIVAL
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_PICHU_DOLL
 	goto LilycoveCity_EventScript_RivalFlyAway
 	end

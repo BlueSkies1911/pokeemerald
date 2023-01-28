@@ -34,7 +34,7 @@ SlateportCity_OnTransition:
 	end
 
 SlateportCity_EventScript_EnterSlateport::
-	setflag FLAG_VISITED_SLATEPORT_CITY
+	setflag FLAG_WORLD_MAP_SAFFRON_CITY
 	setvar VAR_CONTEST_HALL_STATE, 0
 	setflag FLAG_HIDE_SLATEPORT_CITY_CONTEST_REPORTER
 	return
@@ -269,7 +269,7 @@ SlateportCity_EventScript_Man1SternInterview::
 SlateportCity_EventScript_Woman1::
 	lock
 	faceplayer
-	goto_if_set FLAG_DOCK_REJECTED_DEVON_GOODS, SlateportCity_EventScript_Woman1AquaGone
+	goto_if_set FLAG_HIDE_VICTORY_ROAD_3F_BOULDER, SlateportCity_EventScript_Woman1AquaGone
 	msgbox SlateportCity_Text_WhatsLongLineOverThere, MSGBOX_DEFAULT
 	release
 	end

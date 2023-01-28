@@ -1,12 +1,12 @@
 #ifndef GUARD_CONSTANTS_TRAINER_HILL_H
 #define GUARD_CONSTANTS_TRAINER_HILL_H
 
-#define TRAINER_HILL_1F        1
-#define TRAINER_HILL_2F        2
-#define TRAINER_HILL_3F        3
-#define TRAINER_HILL_4F        4
-#define TRAINER_HILL_ROOF      5
-#define TRAINER_HILL_ENTRANCE  6
+#define TRAINER_TOWER_1F       1
+#define TRAINER_TOWER_2F       2
+#define TRAINER_TOWER_3F       3
+#define TRAINER_TOWER_4F       4
+#define TRAINER_TOWER_ROOF     5
+#define TRAINER_TOWER_LOBBY    6
 
 #define HILL_MODE_NORMAL  0
 #define HILL_MODE_VARIETY 1

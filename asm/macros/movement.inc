@@ -8,6 +8,10 @@
 	create_movement_action face_up, MOVEMENT_ACTION_FACE_UP
 	create_movement_action face_left, MOVEMENT_ACTION_FACE_LEFT
 	create_movement_action face_right, MOVEMENT_ACTION_FACE_RIGHT
+    create_movement_action walk_slower_down, MOVEMENT_ACTION_WALK_SLOWER_DOWN
+    create_movement_action walk_slower_up, MOVEMENT_ACTION_WALK_SLOWER_UP
+    create_movement_action walk_slower_left, MOVEMENT_ACTION_WALK_SLOWER_LEFT
+    create_movement_action walk_slower_right, MOVEMENT_ACTION_WALK_SLOWER_RIGHT
 	create_movement_action walk_slow_down, MOVEMENT_ACTION_WALK_SLOW_DOWN
 	create_movement_action walk_slow_up, MOVEMENT_ACTION_WALK_SLOW_UP
 	create_movement_action walk_slow_left, MOVEMENT_ACTION_WALK_SLOW_LEFT

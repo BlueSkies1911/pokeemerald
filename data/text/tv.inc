@@ -825,7 +825,7 @@ gTVNameRaterText18::
 
 gTVPokemonAnglerText00::
 	.string "{STR_VAR_2} ANGLER\p"
-	.string "ANNOUNCER: Hello! Today, we'll get tips\n"
+	.string "Announcer: Hello! Today, we'll get tips\n"
 	.string "on fishing for {STR_VAR_2}.\p"
 	.string "GURU, what advice can you give for\n"
 	.string "catching {STR_VAR_2}?\p"
@@ -838,7 +838,7 @@ gTVPokemonAnglerText00::
 	.string "{STR_VAR_3} POKéMON get away.\p"
 	.string "But there {STR_VAR_1} waits. No giving up.\n"
 	.string "That's the law for catching {STR_VAR_2}.\p"
-	.string "ANNOUNCER: I see…\p"
+	.string "Announcer: I see…\p"
 	.string "Oh! {STR_VAR_1} has finally landed an\n"
 	.string "elusive {STR_VAR_2}!\p"
 	.string "The TRAINER appears close to tears\n"
@@ -852,7 +852,7 @@ gTVPokemonAnglerText00::
 
 gTVPokemonAnglerText01::
 	.string "{STR_VAR_2} ANGLER\p"
-	.string "ANNOUNCER: Hello! Today, we'll get tips\n"
+	.string "Announcer: Hello! Today, we'll get tips\n"
 	.string "on fishing for {STR_VAR_2}.\p"
 	.string "GURU, what advice can you give for\n"
 	.string "catching {STR_VAR_2}?\p"
@@ -863,7 +863,7 @@ gTVPokemonAnglerText01::
 	.string "See how the ROD is handled?\p"
 	.string "That TRAINER's already caught\n"
 	.string "{STR_VAR_3} in a row.\p"
-	.string "ANNOUNCER: It's incredible!\n"
+	.string "Announcer: It's incredible!\n"
 	.string "It looks like a storm…\p"
 	.string "Seeing technique of that caliber, I'm\n"
 	.string "getting the itch to go fishing, too.\p"
@@ -2969,7 +2969,7 @@ ContestLadyShow_Text_Lost::
 	.string "But I feel like I've let down everyone\n"
 	.string "who has supported us through this.\p"
 	.string "MC: I hate to say it, but the POKéMON's\n"
-	.string "coloration is a little wanting.\p"
+	.string "colouration is a little wanting.\p"
 	.string "BEAUTY: {STR_VAR_3}, I'm so sorry…\n"
 	.string "I'll do better next time, I swear…\l"
 	.string "…Sniff… Waaaaah!\p"
@@ -2987,7 +2987,7 @@ ContestLadyShow_Text_LostBadly::
 	.string "For some reason, my {STR_VAR_2}\l"
 	.string "couldn't attract any popularity.\p"
 	.string "MC: I hate to say it, but the POKéMON's\n"
-	.string "coloration is a little wanting.\p"
+	.string "colouration is a little wanting.\p"
 	.string "BEAUTY: … … … … … …\n"
 	.string "…Sniff… Waaaaah!\p"
 	.string "Spectators: See that?\n"

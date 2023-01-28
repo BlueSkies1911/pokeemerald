@@ -40,6 +40,18 @@ struct LinkPlayerObjectEvent
     u8 movementMode;
 };
 
+struct CreditsOverworldCmd
+{
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+};
+
+/* gDisableMapMusicChangeOnMapLoad */
+#define MUSIC_DISABLE_OFF 0
+#define MUSIC_DISABLE_STOP 1
+#define MUSIC_DISABLE_KEEP 2
+
 extern struct WarpData gLastUsedWarp;
 extern struct LinkPlayerObjectEvent gLinkPlayerObjectEvents[4];
 
@@ -51,6 +63,8 @@ extern void (*gFieldCallback)(void);
 extern bool8 (*gFieldCallback2)(void);
 extern u8 gLocalLinkPlayerId;
 extern u8 gFieldLinkPlayerCount;
+extern u8 gDisableMapMusicChangeOnMapLoad;
+extern u8 gGlobalFieldTintMode;
 
 extern const struct UCoords32 gDirectionToVectors[];
 
@@ -103,10 +117,12 @@ void SetObjectEventLoadFlag(u8 var);
 u16 GetLocationMusic(struct WarpData *warp);
 u16 GetCurrLocationDefaultMusic(void);
 u16 GetWarpDestinationMusic(void);
+bool8 sub_8055B38(u16 metatileBehavior);
 void Overworld_ResetMapMusic(void);
 void Overworld_PlaySpecialMapMusic(void);
 void Overworld_SetSavedMusic(u16 songNum);
 void Overworld_ClearSavedMusic(void);
+bool32 Overworld_MusicCanOverrideMapMusic(u16 song);
 void Overworld_ChangeMusicToDefault(void);
 void Overworld_ChangeMusicTo(u16 newMusic);
 u8 GetMapMusicFadeoutSpeed(void);
@@ -154,5 +170,8 @@ bool32 Overworld_RecvKeysFromLinkIsRunning(void);
 bool32 Overworld_SendKeysToLinkIsRunning(void);
 bool32 IsSendingKeysOverCable(void);
 void ClearLinkPlayerObjectEvents(void);
+
+void Overworld_CreditsMainCB(void);
+bool32 Overworld_DoScrollSceneForCredits(u8 *, const struct CreditsOverworldCmd *, u8);
 
 #endif // GUARD_OVERWORLD_H

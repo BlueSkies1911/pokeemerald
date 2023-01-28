@@ -55,6 +55,8 @@
 	STD_FIND_ITEM = 1
 	STD_OBTAIN_DECORATION = 7
 	STD_REGISTER_MATCH_CALL = 8
+    STD_RECEIVED_ITEM = 11
+    STD_PUT_ITEM_AWAY = 12
 
 	@ Calls the script in gStdScripts at index function.
 	.macro callstd function:req
@@ -720,6 +722,9 @@
 		.4byte \pointer2 @ text
 		.4byte \pointer3 @ text
 		.4byte \pointer4 @ event script
+    .elseif \type == TRAINER_BATTLE_EARLY_RIVAL
+        .4byte \pointer1 @ text
+        .4byte \pointer2 @ text
 	.elseif \type == TRAINER_BATTLE_PYRAMID
 		.4byte \pointer1 @ text
 		.4byte \pointer2 @ text
@@ -776,6 +781,10 @@
 	trainerbattle TRAINER_BATTLE_SINGLE_NO_INTRO_TEXT, \trainer, 0, \lose_text
 	.endm
 
+    @ Starts a trainer battle with victory text if the player loses. If flags is nonzero, the player will be healed after battle (and its assumed to be the tutorial battle)
+    .macro trainerbattle_earlyrival trainer:req, flags:req, defeat_text:req, victory_text:req
+    trainerbattle TRAINER_BATTLE_EARLY_RIVAL, \trainer, \flags, \defeat_text, \victory_text
+    .endm
 
 	@ Starts a trainer battle using the battle information stored in RAM (usually by the scripts in trainer_battle.inc, which
 	@ are run by trainerbattle), and blocks script execution until the battle finishes.
@@ -1902,6 +1911,25 @@
 	setorcopyvar VAR_0x8001, \amount
 	callstd STD_FIND_ITEM
 	.endm
+
+    .macro putitemaway item:req, amount=1
+    setorcopyvar VAR_0x8000, \item
+    setorcopyvar VAR_0x8001, \amount
+    callstd STD_PUT_ITEM_AWAY
+    .endm
+
+    .macro giveitem_msg msg:req, item:req, amount=1, fanfare=MUS_RG_OBTAIN_KEY_ITEM
+    additem \item, \amount
+    msgreceiveditem \msg, \item, \amount, \fanfare
+    .endm
+
+    .macro msgreceiveditem msg:req, item:req, amount=1, fanfare=MUS_RG_OBTAIN_KEY_ITEM
+    loadword 0, \msg
+    setorcopyvar VAR_0x8000, \item
+    setorcopyvar VAR_0x8001, \amount
+    setorcopyvar VAR_0x8002, \fanfare
+    callstd STD_RECEIVED_ITEM
+    .endm
 
 	@ Equivalent to giveitem but for a single decoration.
 	.macro givedecoration decoration:req

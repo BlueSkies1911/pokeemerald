@@ -5,7 +5,7 @@ FortreeCity_House2_EventScript_HiddenPowerGiver::
 	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_TM10, FortreeCity_House2_EventScript_ExplainHiddenPower
-	call_if_unset FLAG_MET_HIDDEN_POWER_GIVER, FortreeCity_House2_EventScript_Greeting
+	call_if_unset FLAG_FOUGHT_POWER_PLANT_ELECTRODE_2, FortreeCity_House2_EventScript_Greeting
 	msgbox FortreeCity_House2_Text_CoinInWhichHand, MSGBOX_DEFAULT
 	multichoice 21, 8, MULTI_RIGHTLEFT, TRUE
 	switch VAR_RESULT
@@ -28,7 +28,7 @@ FortreeCity_House2_EventScript_HiddenPowerGiver::
 
 FortreeCity_House2_EventScript_Greeting::
 	msgbox FortreeCity_House2_Text_HiddenPowersArousedByNature, MSGBOX_DEFAULT
-	setflag FLAG_MET_HIDDEN_POWER_GIVER
+	setflag FLAG_FOUGHT_POWER_PLANT_ELECTRODE_2
 	return
 
 FortreeCity_House2_EventScript_ExplainHiddenPower::

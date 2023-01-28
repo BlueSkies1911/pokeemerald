@@ -1,10 +1,16 @@
 EventScript_PC::
 	lockall
+	goto_if_set FLAG_SYS_PC_STORAGE_DISABLED, EventScript_PCDisabled
 	setvar VAR_0x8004, PC_LOCATION_OTHER
 	special DoPCTurnOnEffect
 	playse SE_PC_ON
 	msgbox Text_BootUpPC, MSGBOX_DEFAULT
 	goto EventScript_PCMainMenu
+	end
+
+EventScript_PCDisabled::
+	msgbox OneIsland_PokemonCenter_1F_Text_UsualPCServicesUnavailable, MSGBOX_DEFAULT
+	releaseall
 	end
 
 EventScript_PCMainMenu::
@@ -34,8 +40,8 @@ EventScript_AccessPlayersPC::
 
 EventScript_AccessPokemonStorage::
 	playse SE_PC_LOGIN
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_AccessSomeonesPC
-	call_if_set FLAG_SYS_PC_LANETTE, EventScript_AccessLanettesPC
+	call_if_unset FLAG_SYS_PC_BILL, EventScript_AccessSomeonesPC
+	call_if_set FLAG_SYS_PC_BILL, EventScript_AccessBillsPC
 	msgbox gText_StorageSystemOpened, MSGBOX_DEFAULT
 	special ShowPokemonStorageSystemPC
 	waitstate
@@ -46,8 +52,8 @@ EventScript_AccessSomeonesPC::
 	msgbox gText_AccessedSomeonesPC, MSGBOX_DEFAULT
 	return
 
-EventScript_AccessLanettesPC::
-	msgbox gText_AccessedLanettesPC, MSGBOX_DEFAULT
+EventScript_AccessBillsPC::
+	msgbox gText_AccessedBillsPC, MSGBOX_DEFAULT
 	return
 
 EventScript_TurnOffPC::

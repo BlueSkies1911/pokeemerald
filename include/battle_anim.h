@@ -103,6 +103,7 @@ u8 GetBattlerYCoordWithElevation(u8 battlerId);
 void WaitAnimForDuration(struct Sprite *sprite);
 void AnimTravelDiagonally(struct Sprite *sprite);
 void InitAnimLinearTranslation(struct Sprite *sprite);
+bool8 TranslateAnimVerticalArc(struct Sprite *sprite);
 void AnimTranslateLinear_WithFollowup(struct Sprite *sprite);
 u8 GetBattlerSpriteBGPriority(u8 battlerId);
 void *LoadPointerFromVars(s16 bottom, s16 top);
@@ -158,6 +159,9 @@ u8 GetBattlerAtPosition(u8 position);
 void ConvertPosDataToTranslateLinearData(struct Sprite *sprite);
 void InitAnimFastLinearTranslationWithSpeedAndPos(struct Sprite *sprite);
 
+void DoLoadHealthboxPalsForLevelUp(u8 *, u8 *, u8 battlerId);
+void DoFreeHealthboxPalsForLevelUp(u8 batterId);
+
 enum
 {
     BATTLER_COORD_X,
@@ -190,6 +194,7 @@ void StoreSpriteCallbackInData6(struct Sprite *sprite, void (*spriteCallback)(st
 void SetSpritePrimaryCoordsFromSecondaryCoords(struct Sprite *sprite);
 u8 GetBattlerSpriteDefault_Y(u8 battlerId);
 u8 GetSubstituteSpriteDefault_Y(u8 battlerId);
+u8 GetGhostSpriteDefault_Y(u8 battlerId);
 
 // battle_anim_status_effects.c
 #define STAT_ANIM_PLUS1  15

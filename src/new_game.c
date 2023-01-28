@@ -125,7 +125,7 @@ static void ClearFrontierRecord(void)
 
 static void WarpToTruck(void)
 {
-    SetWarpDestination(MAP_GROUP(INSIDE_OF_TRUCK), MAP_NUM(INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1);
+    SetWarpDestination(MAP_GROUP(PLAYERS_HOUSE_2F), MAP_NUM(PLAYERS_HOUSE_2F), WARP_ID_NONE, 2, 5);
     WarpIntoMap();
 }
 
@@ -174,8 +174,8 @@ void NewGameInitData(void)
     ResetGameStats();
     ClearAllContestWinnerPics();
     ClearPlayerLinkBattleRecords();
-    InitSeedotSizeRecord();
-    InitLotadSizeRecord();
+    InitHeracrossSizeRecord();
+    InitMagikarpSizeRecord();
     gPlayerPartyCount = 0;
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();

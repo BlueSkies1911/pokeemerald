@@ -236,7 +236,7 @@ RustboroCity_DevonCorp_2F_EventScript_FinishReceivingAnorith::
 RustboroCity_DevonCorp_2F_EventScript_ChooseFossil::
 	message RustboroCity_DevonCorp_2F_Text_TwoFossilsPickOne
 	waitmessage
-	multichoice 17, 6, MULTI_FOSSIL, FALSE
+	multichoice 17, 6, MULTI_HELIX_AMBER, FALSE
 	switch VAR_RESULT
 	case 0, RustboroCity_DevonCorp_2F_EventScript_ChooseClawFossil
 	case 1, RustboroCity_DevonCorp_2F_EventScript_ChooseRootFossil

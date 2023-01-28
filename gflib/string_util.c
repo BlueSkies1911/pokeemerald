@@ -453,12 +453,19 @@ static const u8 *ExpandPlaceholder_KunChan(void)
         return gText_ExpandedPlaceholder_Chan;
 }
 
-static const u8 *ExpandPlaceholder_RivalName(void)
+const u8 *ExpandPlaceholder_RivalName(void)
 {
-    if (gSaveBlock2Ptr->playerGender == MALE)
-        return gText_ExpandedPlaceholder_May;
+    if (gSaveBlock2Ptr->rivalName[0] == EOS)
+    {
+        if (gSaveBlock2Ptr->playerGender == MALE)
+            return gText_ExpandedPlaceholder_Green;
+        else
+            return gText_ExpandedPlaceholder_Red;
+    }
     else
-        return gText_ExpandedPlaceholder_Brendan;
+    {
+        return gSaveBlock2Ptr->rivalName;
+    }
 }
 
 static const u8 *ExpandPlaceholder_Version(void)

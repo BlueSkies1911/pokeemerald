@@ -368,8 +368,6 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves)
         AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_SAFARI;
     else if (gBattleTypeFlags & BATTLE_TYPE_ROAMER)
         AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_ROAMING;
-    else if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
-        AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_FIRST_BATTLE;
     else if (gBattleTypeFlags & BATTLE_TYPE_FACTORY)
         AI_THINKING_STRUCT->aiFlags = GetAiScriptsInBattleFactory();
     else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL | BATTLE_TYPE_SECRET_BASE))
@@ -1996,8 +1994,23 @@ static void Cmd_flee(void)
 
 static void Cmd_if_random_safari_flee(void)
 {
-    u8 safariFleeRate = gBattleStruct->safariEscapeFactor * 5; // Safari flee rate, from 0-20.
+    u8 safariFleeRate;
 
+    if (gBattleStruct->safariGoNearCounter)
+    {
+        safariFleeRate = gBattleStruct->safariEscapeFactor * 2;
+        if (safariFleeRate > 20)
+            safariFleeRate = 20;
+    }
+    else if (gBattleStruct->safariPkblThrowCounter != 0)
+    {
+        safariFleeRate = gBattleStruct->safariEscapeFactor / 4;
+        if (safariFleeRate == 0)
+            safariFleeRate = 1;
+    }
+    else
+        safariFleeRate = gBattleStruct->safariEscapeFactor;
+    safariFleeRate *= 5;
     if ((u8)(Random() % 100) < safariFleeRate)
         gAIScriptPtr = T1_READ_PTR(gAIScriptPtr + 1);
     else

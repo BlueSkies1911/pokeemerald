@@ -77,6 +77,14 @@ Common_Movement_WalkUp6:
 	walk_up
 	step_end
 
+Common_Movement_WalkUp5::
+    walk_up
+    walk_up
+    walk_up
+    walk_up
+    walk_up
+    step_end
+
 Common_Movement_WalkUp4:
 	walk_up
 	walk_up
@@ -90,11 +98,5 @@ Common_Movement_Delay32:
 	step_end
 
 Common_Movement_WalkUp:
-	walk_up
-	step_end
-
-@ Unused
-Common_Movement_WalkUp2::
-	walk_up
 	walk_up
 	step_end

@@ -7,9 +7,9 @@ LavaridgeTown_MapScripts::
 	.byte 0
 
 LavaridgeTown_OnTransition:
-	setflag FLAG_VISITED_LAVARIDGE_TOWN
-	call_if_set FLAG_WHITEOUT_TO_LAVARIDGE, LavaridgeTown_EventScript_ClearLavaridgeWhiteOut
-	call_if_set FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY, LavaridgeTown_EventScript_ShowMtChimneyTrainers
+	setflag FLAG_WORLD_MAP_CERULEAN_CITY
+	call_if_set FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1, LavaridgeTown_EventScript_ClearLavaridgeWhiteOut
+	call_if_set FLAG_CINNABAR_GYM_QUIZ_1, LavaridgeTown_EventScript_ShowMtChimneyTrainers
 	call Common_EventScript_SetupRivalGfxId
 	call Common_EventScript_SetupRivalOnBikeGfxId
 	call_if_eq VAR_LAVARIDGE_TOWN_STATE, 1, LavaridgeTown_EventScript_CheckSetRivalPos
@@ -17,7 +17,7 @@ LavaridgeTown_OnTransition:
 	end
 
 LavaridgeTown_EventScript_ClearLavaridgeWhiteOut::
-	clearflag FLAG_WHITEOUT_TO_LAVARIDGE
+	clearflag FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1
 	return
 
 LavaridgeTown_EventScript_CheckSetRivalPos::
@@ -63,7 +63,6 @@ LavaridgeTown_EventScript_RivalGiveGoGoggles::
 LavaridgeTown_EventScript_MayGiveGoGoggles::
 	msgbox LavaridgeTown_Text_MayNiceBadgesTakeThis, MSGBOX_DEFAULT
 	giveitem ITEM_GO_GOGGLES
-	setflag FLAG_RECEIVED_GO_GOGGLES
 	msgbox LavaridgeTown_Text_MayExplainGoGogglesChallengeDad, MSGBOX_DEFAULT
 	goto LavaridgeTown_EventScript_RivalExit
 	end
@@ -71,7 +70,6 @@ LavaridgeTown_EventScript_MayGiveGoGoggles::
 LavaridgeTown_EventScript_BrendanGiveGoGoggles::
 	msgbox LavaridgeTown_Text_BrendanNiceBadgesTakeThis, MSGBOX_DEFAULT
 	giveitem ITEM_GO_GOGGLES
-	setflag FLAG_RECEIVED_GO_GOGGLES
 	msgbox LavaridgeTown_Text_BrendanExplainGoGogglesChallengeDad, MSGBOX_DEFAULT
 	goto LavaridgeTown_EventScript_RivalExit
 	end

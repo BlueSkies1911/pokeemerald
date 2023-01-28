@@ -1,0 +1,104 @@
+{
+  "id": "MAP_TRAINER_TOWER_EXTERIOR",
+  "name": "TrainerTower_Exterior",
+  "layout": "LAYOUT_TRAINER_TOWER_EXTERIOR",
+  "music": "MUS_RG_SEVII_ROUTE",
+  "region_map_section": "MAPSEC_TRAINER_TOWER",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "direction": "down",
+      "offset": 10,
+      "map": "MAP_SEVEN_ISLAND"
+    }
+  ],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
+      "x": 18,
+      "y": 26,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NORMAL",
+      "trainer_sight_or_berry_tree_id": "1",
+      "script": "TrainerTower_Exterior_EventScript_Dario",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_WOMAN_1",
+      "x": 18,
+      "y": 29,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NORMAL",
+      "trainer_sight_or_berry_tree_id": "1",
+      "script": "TrainerTower_Exterior_EventScript_Rodette",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 20,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_TRAINER_TOWER_LOBBY",
+      "dest_warp_id": 1
+    }
+  ],
+  "coord_events": [
+
+  ],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 11,
+      "y": 27,
+      "elevation": 3,
+      "item": "ITEM_BIG_PEARL",
+      "flag": "HIDDEN_ITEM_TRAINER_TOWER_EXTERIOR_BIG_PEARL"
+    },
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 30,
+      "elevation": 3,
+      "item": "ITEM_PEARL",
+      "flag": "HIDDEN_ITEM_TRAINER_TOWER_EXTERIOR_PEARL"
+    },
+    {
+      "type": "hidden_item",
+      "x": 21,
+      "y": 32,
+      "elevation": 3,
+      "item": "ITEM_NANAB_BERRY",
+      "flag": "HIDDEN_ITEM_TRAINER_TOWER_EXTERIOR_NANAB_BERRY"
+    },
+    {
+      "type": "sign",
+      "x": 18,
+      "y": 8,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TrainerTower_Exterior_EventScript_TrainerTowerSign"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 30,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TrainerTower_Exterior_EventScript_TrainerTowerAheadSign"
+    }
+  ]
+}

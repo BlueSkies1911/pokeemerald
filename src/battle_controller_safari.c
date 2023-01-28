@@ -457,7 +457,7 @@ static void SafariHandleChooseAction(void)
         ActionSelectionDestroyCursorAt(i);
 
     ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-    BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo2);
+    BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPlayerThrow);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);
 }
 

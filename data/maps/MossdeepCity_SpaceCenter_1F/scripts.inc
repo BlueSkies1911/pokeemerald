@@ -112,11 +112,9 @@ MossdeepCity_SpaceCenter_1F_EventScript_SunStoneMan::
 	lock
 	faceplayer
 	goto_if_eq VAR_MOSSDEEP_CITY_STATE, 2, MossdeepCity_SpaceCenter_1F_EventScript_SunStoneManMagma
-	goto_if_set FLAG_RECEIVED_SUN_STONE_MOSSDEEP, MossdeepCity_SpaceCenter_1F_EventScript_GaveSunStone
 	msgbox MossdeepCity_SpaceCenter_1F_Text_FoundThisYouCanHaveIt, MSGBOX_DEFAULT
 	giveitem ITEM_SUN_STONE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	setflag FLAG_RECEIVED_SUN_STONE_MOSSDEEP
 	msgbox MossdeepCity_SpaceCenter_1F_Text_HoennFamousForMeteorShowers, MSGBOX_DEFAULT
 	release
 	end
@@ -127,11 +125,9 @@ MossdeepCity_SpaceCenter_1F_EventScript_GaveSunStone::
 	end
 
 MossdeepCity_SpaceCenter_1F_EventScript_SunStoneManMagma::
-	goto_if_set FLAG_RECEIVED_SUN_STONE_MOSSDEEP, MossdeepCity_SpaceCenter_1F_EventScript_GaveSunStoneMagma
 	msgbox MossdeepCity_SpaceCenter_1F_Text_MagmaCantStealFuelTakeThis, MSGBOX_DEFAULT
 	giveitem ITEM_SUN_STONE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
-	setflag FLAG_RECEIVED_SUN_STONE_MOSSDEEP
 	msgbox MossdeepCity_SpaceCenter_1F_Text_CantStrollOnBeachWithMagma, MSGBOX_DEFAULT
 	applymovement VAR_LAST_TALKED, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
@@ -204,28 +200,10 @@ MossdeepCity_SpaceCenter_1F_EventScript_MagmaNote::
 	releaseall
 	end
 
-MossdeepCity_SpaceCenter_1F_EventScript_Grunt3::
-	trainerbattle_single TRAINER_GRUNT_SPACE_CENTER_3, MossdeepCity_SpaceCenter_1F_Text_Grunt3Intro, MossdeepCity_SpaceCenter_1F_Text_Grunt3Defeat
-	msgbox MossdeepCity_SpaceCenter_1F_Text_Grunt3PostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MossdeepCity_SpaceCenter_1F_EventScript_Grunt1::
-	trainerbattle_single TRAINER_GRUNT_SPACE_CENTER_1, MossdeepCity_SpaceCenter_1F_Text_Grunt1Intro, MossdeepCity_SpaceCenter_1F_Text_Grunt1Defeat
-	msgbox MossdeepCity_SpaceCenter_1F_Text_Grunt1PostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MossdeepCity_SpaceCenter_1F_EventScript_Grunt4::
-	trainerbattle_single TRAINER_GRUNT_SPACE_CENTER_4, MossdeepCity_SpaceCenter_1F_Text_Grunt4Intro, MossdeepCity_SpaceCenter_1F_Text_Grunt4Defeat
-	msgbox MossdeepCity_SpaceCenter_1F_Text_Grunt4PostBattle, MSGBOX_AUTOCLOSE
-	end
-
 MossdeepCity_SpaceCenter_1F_EventScript_Grunt2::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_GRUNT_SPACE_CENTER_1F, MossdeepCity_SpaceCenter_1F_EventScript_Grunt2Defeated
 	msgbox MossdeepCity_SpaceCenter_1F_Text_Grunt2Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_GRUNT_SPACE_CENTER_2, MossdeepCity_SpaceCenter_1F_Text_Grunt2Defeat
-	setflag FLAG_DEFEATED_GRUNT_SPACE_CENTER_1F
 	copyobjectxytoperm LOCALID_STAIR_GRUNT
 	switch VAR_FACING
 	case DIR_WEST, MossdeepCity_SpaceCenter_1F_EventScript_MoveGruntFromStairsWest

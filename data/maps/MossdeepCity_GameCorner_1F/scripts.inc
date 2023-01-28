@@ -16,7 +16,7 @@ MossdeepCity_GameCorner_1F_OnFrame:
 MossdeepCity_GameCorner_1F_EventScript_InfoMan::
 	lock
 	faceplayer
-	goto MossdeepCity_GameCorner_1F_EventScript_InfoMan2
+	goto GameCorner_EventScript_InfoMan2
 	release
 	end
 
@@ -24,7 +24,7 @@ MossdeepCity_GameCorner_1F_EventScript_InfoMan::
 MossdeepCity_GameCorner_1F_EventScript_OldMan::
 	lock
 	faceplayer
-	goto MossdeepCity_GameCorner_1F_EventScript_OldMan2
+	goto GameCorner_EventScript_MinigameAttendant
 	release
 	end
 

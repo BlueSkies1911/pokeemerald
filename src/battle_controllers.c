@@ -160,8 +160,8 @@ static void InitSinglePlayerBtlControllers(void)
 
         if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
             gBattlerControllerFuncs[0] = SetControllerToSafari;
-        else if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
-            gBattlerControllerFuncs[0] = SetControllerToWally;
+        else if (gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
+            gBattlerControllerFuncs[0] = SetControllerToOakOrOldMan;
         else
             gBattlerControllerFuncs[0] = SetControllerToPlayer;
 

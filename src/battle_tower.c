@@ -36,9 +36,6 @@
 #include "constants/event_objects.h"
 #include "constants/moves.h"
 
-extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_MaxieTrainer[];
-extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_TabithaTrainer[];
-
 // EWRAM vars.
 EWRAM_DATA const struct BattleFrontierTrainer *gFacilityTrainers = NULL;
 EWRAM_DATA const struct FacilityMon *gFacilityTrainerMons = NULL;
@@ -211,32 +208,32 @@ const u8 gTowerFemaleFacilityClasses[20] =
 const u8 gTowerMaleTrainerGfxIds[30] =
 {
     OBJ_EVENT_GFX_HIKER,
-    OBJ_EVENT_GFX_TUBER_M,
-    OBJ_EVENT_GFX_MAN_3,
-    OBJ_EVENT_GFX_RICH_BOY,
+    OBJ_EVENT_GFX_TUBER_M_WATER,
+    OBJ_EVENT_GFX_OLD_MAN_2,
+    OBJ_EVENT_GFX_RUBY,
     OBJ_EVENT_GFX_MANIAC,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-    OBJ_EVENT_GFX_BLACK_BELT,
-    OBJ_EVENT_GFX_MAN_5,
-    OBJ_EVENT_GFX_MAN_5,
+    OBJ_EVENT_GFX_FISHER,
+    OBJ_EVENT_GFX_BLACKBELT,
+    OBJ_EVENT_GFX_MAN,
+    OBJ_EVENT_GFX_MAN,
     OBJ_EVENT_GFX_CAMPER,
     OBJ_EVENT_GFX_MANIAC,
     OBJ_EVENT_GFX_PSYCHIC_M,
     OBJ_EVENT_GFX_GENTLEMAN,
     OBJ_EVENT_GFX_SCHOOL_KID_M,
     OBJ_EVENT_GFX_POKEFAN_M,
-    OBJ_EVENT_GFX_EXPERT_M,
+    OBJ_EVENT_GFX_SAPPHIRE,
     OBJ_EVENT_GFX_YOUNGSTER,
     OBJ_EVENT_GFX_FISHERMAN,
-    OBJ_EVENT_GFX_CYCLING_TRIATHLETE_M,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-    OBJ_EVENT_GFX_MAN_3,
-    OBJ_EVENT_GFX_MAN_5,
-    OBJ_EVENT_GFX_NINJA_BOY,
+    OBJ_EVENT_GFX_CHEF,
+    OBJ_EVENT_GFX_FISHER,
+    OBJ_EVENT_GFX_FISHER,
+    OBJ_EVENT_GFX_OLD_MAN_2,
+    OBJ_EVENT_GFX_MAN,
+    OBJ_EVENT_GFX_SEAGALLOP,
     OBJ_EVENT_GFX_SAILOR,
     OBJ_EVENT_GFX_MANIAC,
-    OBJ_EVENT_GFX_MAN_4,
+    OBJ_EVENT_GFX_WORKER_M,
     OBJ_EVENT_GFX_CAMPER,
     OBJ_EVENT_GFX_BUG_CATCHER,
     OBJ_EVENT_GFX_HIKER
@@ -247,19 +244,19 @@ const u8 gTowerFemaleTrainerGfxIds[20] =
     OBJ_EVENT_GFX_WOMAN_2,
     OBJ_EVENT_GFX_TUBER_F,
     OBJ_EVENT_GFX_WOMAN_5,
-    OBJ_EVENT_GFX_HEX_MANIAC,
+    OBJ_EVENT_GFX_CHANNELER,
     OBJ_EVENT_GFX_WOMAN_2,
     OBJ_EVENT_GFX_BEAUTY,
     OBJ_EVENT_GFX_LASS,
-    OBJ_EVENT_GFX_GIRL_3,
-    OBJ_EVENT_GFX_POKEFAN_F,
+    OBJ_EVENT_GFX_SWIMMER_F_LAND,
+    OBJ_EVENT_GFX_ROCKET_F,
     OBJ_EVENT_GFX_EXPERT_F,
-    OBJ_EVENT_GFX_CYCLING_TRIATHLETE_F,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
-    OBJ_EVENT_GFX_GIRL_3,
+    OBJ_EVENT_GFX_CAPTAIN,
+    OBJ_EVENT_GFX_BIKER,
+    OBJ_EVENT_GFX_BIKER,
+    OBJ_EVENT_GFX_SWIMMER_F_LAND,
     OBJ_EVENT_GFX_WOMAN_5,
-    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+    OBJ_EVENT_GFX_BIKER,
     OBJ_EVENT_GFX_PICNICKER,
     OBJ_EVENT_GFX_WOMAN_2,
     OBJ_EVENT_GFX_PICNICKER,
@@ -293,11 +290,6 @@ static const u8 sRubyFacilityClassToEmerald[RS_FACILITY_CLASSES_COUNT - 2][2] =
     {RS_FACILITY_CLASS_PSYCHIC_M, FACILITY_CLASS_PSYCHIC_M},
     {RS_FACILITY_CLASS_PSYCHIC_F, FACILITY_CLASS_PSYCHIC_F},
     {RS_FACILITY_CLASS_GENTLEMAN, FACILITY_CLASS_GENTLEMAN},
-    {RS_FACILITY_CLASS_ELITE_FOUR_M, FACILITY_CLASS_ELITE_FOUR_SIDNEY},
-    {RS_FACILITY_CLASS_ELITE_FOUR_F, FACILITY_CLASS_ELITE_FOUR_PHOEBE},
-    {RS_FACILITY_CLASS_LEADER_F, FACILITY_CLASS_LEADER_ROXANNE},
-    {RS_FACILITY_CLASS_LEADER_M, FACILITY_CLASS_LEADER_BRAWLY},
-    {RS_FACILITY_CLASS_LEADER_MF, FACILITY_CLASS_LEADER_TATE_AND_LIZA},
     {RS_FACILITY_CLASS_SCHOOL_KID_M, FACILITY_CLASS_SCHOOL_KID_M},
     {RS_FACILITY_CLASS_SCHOOL_KID_F, FACILITY_CLASS_SCHOOL_KID_F},
     {RS_FACILITY_CLASS_SR_AND_JR, FACILITY_CLASS_SR_AND_JR},
@@ -306,7 +298,6 @@ static const u8 sRubyFacilityClassToEmerald[RS_FACILITY_CLASSES_COUNT - 2][2] =
     {RS_FACILITY_CLASS_EXPERT_M, FACILITY_CLASS_EXPERT_M},
     {RS_FACILITY_CLASS_EXPERT_F, FACILITY_CLASS_EXPERT_F},
     {RS_FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER},
-    {RS_FACILITY_CLASS_CHAMPION, FACILITY_CLASS_CHAMPION_WALLACE},
     {RS_FACILITY_CLASS_FISHERMAN, FACILITY_CLASS_FISHERMAN},
     {RS_FACILITY_CLASS_CYCLING_TRIATHLETE_M, FACILITY_CLASS_CYCLING_TRIATHLETE_M},
     {RS_FACILITY_CLASS_CYCLING_TRIATHLETE_F, FACILITY_CLASS_CYCLING_TRIATHLETE_F},
@@ -1240,13 +1231,13 @@ void SetBattleFacilityTrainerGfxId(u16 trainerId, u8 tempVarId)
     {
     case 0:
     default:
-        VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_BOY_1);
+        VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_BOY);
         return;
     case 1:
-        VarSet(VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BOY_1);
+        VarSet(VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_BOY);
         return;
     case 15:
-        VarSet(VAR_OBJ_GFX_ID_E, OBJ_EVENT_GFX_BOY_1);
+        VarSet(VAR_OBJ_GFX_ID_E, OBJ_EVENT_GFX_BOY);
         return;
     }
 }
@@ -1305,7 +1296,7 @@ u8 GetBattleFacilityTrainerGfxId(u16 trainerId)
     }
     else
     {
-        return OBJ_EVENT_GFX_BOY_1;
+        return OBJ_EVENT_GFX_BOY;
     }
 }
 
@@ -1451,6 +1442,10 @@ u8 GetFrontierOpponentClass(u16 trainerId)
     {
         trainerClass = gTrainers[TRAINER_STEVEN].trainerClass;
     }
+    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
+    {
+        trainerClass = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerClass;
+    }
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
         trainerClass = gFacilityClassToTrainerClass[gFacilityTrainers[trainerId].facilityClass];
@@ -1531,6 +1526,11 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId)
     {
         for (i = 0; i < PLAYER_NAME_LENGTH; i++)
             dst[i] = gTrainers[TRAINER_STEVEN].trainerName[i];
+    }
+    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
+    {
+        for (i = 0; gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName[i] != EOS; i++)
+            dst[i] = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName[i];
     }
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
@@ -2112,18 +2112,6 @@ void DoSpecialTrainerBattle(void)
         CreateTask(Task_StartBattleAfterTransition, 1);
         PlayMapChosenOrBattleBGM(0);
         BattleTransition_StartOnField(GetSpecialBattleTransition(B_TRANSITION_GROUP_B_PIKE));
-        break;
-    case SPECIAL_BATTLE_STEVEN:
-        gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER;
-        FillPartnerParty(TRAINER_STEVEN_PARTNER);
-        gApproachingTrainerId = 0;
-        BattleSetup_ConfigureTrainerBattle(MossdeepCity_SpaceCenter_2F_EventScript_MaxieTrainer + 1);
-        gApproachingTrainerId = 1;
-        BattleSetup_ConfigureTrainerBattle(MossdeepCity_SpaceCenter_2F_EventScript_TabithaTrainer + 1);
-        gPartnerTrainerId = TRAINER_STEVEN_PARTNER;
-        CreateTask(Task_StartBattleAfterTransition, 1);
-        PlayMapChosenOrBattleBGM(0);
-        BattleTransition_StartOnField(B_TRANSITION_MAGMA);
         break;
     }
 }
@@ -2989,6 +2977,72 @@ static void FillPartnerParty(u16 trainerId)
             CalculateMonStats(&gPlayerParty[MULTI_PARTY_SIZE + i]);
         }
     }
+    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
+    {
+        otID = Random32();
+
+        for (i = 0; i < 3; i++)
+            ZeroMonData(&gPlayerParty[i + 3]);
+
+        for (i = 0; i < 3 && i < gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partySize; i++)
+        {
+            do
+            {
+                j = Random32();
+            } while (IsShinyOtIdPersonality(otID, j));
+
+            switch (gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partyFlags)
+            {
+            case 0:
+            {
+                const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.NoItemDefaultMoves;
+
+                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
+                break;
+            }
+            case F_TRAINER_PARTY_CUSTOM_MOVESET:
+            {
+                const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.NoItemCustomMoves;
+
+                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
+
+                for (j = 0; j < 4; j++)
+                {
+                    SetMonData(&gPlayerParty[i + 3], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
+                    SetMonData(&gPlayerParty[i + 3], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+                }
+                break;
+            }
+            case F_TRAINER_PARTY_HELD_ITEM:
+            {
+                const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemDefaultMoves;
+
+                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
+
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+                break;
+            }
+            case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
+            {
+                const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemCustomMoves;
+
+                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
+
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+
+                for (j = 0; j < 4; j++)
+                {
+                    SetMonData(&gPlayerParty[i + 3], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
+                    SetMonData(&gPlayerParty[i + 3], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+                }
+                break;
+            }
+            }
+
+            StringCopy(trainerName, gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName);
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_OT_NAME, trainerName);
+        }
+    }
     else if (trainerId == TRAINER_EREADER)
     {
         // Scrapped, lol.
@@ -3491,7 +3545,7 @@ u8 FacilityClassToGraphicsId(u8 facilityClass)
     }
     else
     {
-        return OBJ_EVENT_GFX_BOY_1;
+        return OBJ_EVENT_GFX_BOY;
     }
 }
 

@@ -24,6 +24,8 @@ void DoWarp(void);
 void DoDiveWarp(void);
 void DoWhiteFadeWarp(void);
 void DoDoorWarp(void);
+void DoStairWarp(u16 metatileBehavior, u16 delay);
+bool8 IsDirectionalStairWarpMetatileBehavior(u16, u8);
 void DoFallWarp(void);
 void DoEscalatorWarp(u8 metatileBehavior);
 void DoLavaridgeGymB1FWarp(void);

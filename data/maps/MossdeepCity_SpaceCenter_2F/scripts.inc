@@ -20,7 +20,6 @@ MossdeepCity_SpaceCenter_2F_OnTransition:
 	end
 
 MossdeepCity_SpaceCenter_2F_EventScript_MoveCivilians::
-	clearflag FLAG_INTERACTED_WITH_STEVEN_SPACE_CENTER
 	setobjectxyperm LOCALID_SCIENTIST, 5, 3
 	setobjectmovementtype LOCALID_SCIENTIST, MOVEMENT_TYPE_FACE_RIGHT
 	setobjectxyperm LOCALID_RICH_BOY, 3, 2
@@ -62,19 +61,16 @@ MossdeepCity_SpaceCenter_2F_Movement_PlayerExit:
 
 MossdeepCity_SpaceCenter_2F_EventScript_BattleThreeMagmaGrunts::
 	msgbox MossdeepCity_SpaceCenter_2F_Text_Grunt5Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_GRUNT_SPACE_CENTER_5, MossdeepCity_SpaceCenter_2F_Text_Grunt5Defeat
 	applymovement LOCALID_GRUNT_5, MossdeepCity_SpaceCenter_2F_Movement_Grunt5Defeated
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
 	msgbox MossdeepCity_SpaceCenter_2F_Text_Grunt6Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_GRUNT_SPACE_CENTER_6, MossdeepCity_SpaceCenter_2F_Text_Grunt6Defeat
 	applymovement LOCALID_GRUNT_6, MossdeepCity_SpaceCenter_2F_Movement_Grunt6Defeated
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	msgbox MossdeepCity_SpaceCenter_2F_Text_Grunt7Intro, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_GRUNT_SPACE_CENTER_7, MossdeepCity_SpaceCenter_2F_Text_Grunt7Defeat
 	applymovement LOCALID_GRUNT_7, MossdeepCity_SpaceCenter_2F_Movement_Grunt7Defeated
 	waitmovement 0
 	setvar VAR_MOSSDEEP_SPACE_CENTER_STATE, 2
@@ -189,8 +185,6 @@ MossdeepCity_SpaceCenter_2F_EventScript_Maxie::
 
 MossdeepCity_SpaceCenter_2F_EventScript_Steven::
 	lockall
-	goto_if_set FLAG_INTERACTED_WITH_STEVEN_SPACE_CENTER, MossdeepCity_SpaceCenter_2F_EventScript_ReadyForBattlePrompt
-	setflag FLAG_INTERACTED_WITH_STEVEN_SPACE_CENTER
 	msgbox MossdeepCity_SpaceCenter_2F_Text_StevenWhyStealRocketFuel, MSGBOX_DEFAULT
 	msgbox MossdeepCity_SpaceCenter_2F_Text_MaxieUseFuelToEruptVolcano, MSGBOX_DEFAULT
 	closemessage
@@ -308,10 +302,9 @@ MossdeepCity_SpaceCenter_2F_EventScript_DefeatedMaxieTabitha::
 	msgbox MossdeepCity_SpaceCenter_2F_Text_StevenThankYouComeSeeMeAtHome, MSGBOX_DEFAULT
 	closemessage
 	fadescreen FADE_TO_BLACK
-	setflag FLAG_DEFEATED_MAGMA_SPACE_CENTER
+	setflag FLAG_FOUGHT_ZAPDOS
 	setflag FLAG_HIDE_MOSSDEEP_CITY_STEVENS_HOUSE_STEVEN
 	removeobject LOCALID_STEVEN
-	setflag FLAG_HIDE_MOSSDEEP_CITY_SPACE_CENTER_MAGMA_NOTE
 	clearflag FLAG_HIDE_MOSSDEEP_CITY_STEVENS_HOUSE_STEVEN
 	setvar VAR_STEVENS_HOUSE_STATE, 1
 	setflag FLAG_HIDE_MOSSDEEP_CITY_SCOTT
@@ -334,34 +327,6 @@ MossdeepCity_SpaceCenter_2F_EventScript_StevenFacePlayerSouth::
 
 MossdeepCity_SpaceCenter_2F_EventScript_StevenFacePlayerWest::
 	turnobject LOCALID_STEVEN, DIR_EAST
-	return
-
-MossdeepCity_SpaceCenter_2F_EventScript_MaxieTrainer::
-	trainerbattle TRAINER_BATTLE_SET_TRAINER_A, TRAINER_MAXIE_MOSSDEEP, 0, MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand, MossdeepCity_SpaceCenter_2F_Text_JustWantToExpandLand
-	end
-
-MossdeepCity_SpaceCenter_2F_EventScript_TabithaTrainer::
-	trainerbattle TRAINER_BATTLE_SET_TRAINER_B, TRAINER_TABITHA_MOSSDEEP, 0, MossdeepCity_SpaceCenter_Text_TabithaDefeat, MossdeepCity_SpaceCenter_Text_TabithaDefeat
-	end
-
-MossdeepCity_SpaceCenter_2F_EventScript_RivalRayquazaCall::
-	lockall
-	checkplayergender
-	call_if_eq VAR_RESULT, MALE, MossdeepCity_SpaceCenter_2F_EventScript_MayRayquazaCall
-	call_if_eq VAR_RESULT, FEMALE, MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall
-	closemessage
-	clearflag FLAG_DEFEATED_MAGMA_SPACE_CENTER
-	releaseall
-	end
-
-MossdeepCity_SpaceCenter_2F_EventScript_MayRayquazaCall::
-	pokenavcall MatchCall_Text_MayRayquazaCall
-	waitmessage
-	return
-
-MossdeepCity_SpaceCenter_2F_EventScript_BrendanRayquazaCall::
-	pokenavcall MatchCall_Text_BrendanRayquazaCall
-	waitmessage
 	return
 
 MossdeepCity_SpaceCenter_2F_Text_MossdeepIdealForRockets:

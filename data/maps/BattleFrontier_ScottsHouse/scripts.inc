@@ -322,7 +322,7 @@ BattleFrontier_ScottsHouse_Text_SoGladIBroughtYouHere:
 	.string "bring you here!$"
 
 BattleFrontier_ScottsHouse_Text_BerryPocketStuffed:
-	.string "Your BERRY POCKET seems to\n"
+	.string "Your Berry Pocket seems to\n"
 	.string "be stuffed.$"
 
 BattleFrontier_ScottsHouse_Text_Beat50TrainersInARow:

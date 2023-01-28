@@ -9,9 +9,7 @@ Route124_DivingTreasureHuntersHouse_OnTransition:
 Route124_DivingTreasureHuntersHouse_EventScript_TreasureHunter::
 	lock
 	faceplayer
-	goto_if_set FLAG_MET_DIVING_TREASURE_HUNTER, Route124_DivingTreasureHuntersHouse_EventScript_SkipGreeting
 	msgbox Route124_DivingTreasureHuntersHouse_Text_Greeting, MSGBOX_DEFAULT
-	setflag FLAG_MET_DIVING_TREASURE_HUNTER
 	goto Route124_DivingTreasureHuntersHouse_EventScript_CheckPlayerHasShard
 	end
 

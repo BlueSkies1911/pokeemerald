@@ -2940,20 +2940,38 @@ BattleScript_PayDayMoneyAndPickUpItems::
 	end2
 
 BattleScript_LocalBattleLost::
+    jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, 0, BattleScript_RivalBattleLost
 	jumpifbattletype BATTLE_TYPE_DOME, BattleScript_CheckDomeDrew
 	jumpifbattletype BATTLE_TYPE_FRONTIER, BattleScript_LocalBattleLostPrintTrainersWinText
 	jumpifbattletype BATTLE_TYPE_TRAINER_HILL, BattleScript_LocalBattleLostPrintTrainersWinText
 	jumpifbattletype BATTLE_TYPE_EREADER_TRAINER, BattleScript_LocalBattleLostEnd
 	jumpifhalfword CMP_EQUAL, gTrainerBattleOpponent_A, TRAINER_SECRET_BASE, BattleScript_LocalBattleLostEnd
+
 BattleScript_LocalBattleLostPrintWhiteOut::
 	printstring STRINGID_PLAYERWHITEOUT
 	waitmessage B_WAIT_TIME_LONG
 	printstring STRINGID_PLAYERWHITEOUT2
 	waitmessage B_WAIT_TIME_LONG
+
 BattleScript_LocalBattleLostEnd::
 	end2
+
+BattleScript_RivalBattleLost::
+    jumpifhasnohp BS_ATTACKER, BattleScript_RivalBattleLostSkipMonRecall
+    printstring STRINGID_TRAINER1MON1COMEBACK
+    waitmessage B_WAIT_TIME_LONG
+    returnatktoball
+    waitstate
+BattleScript_RivalBattleLostSkipMonRecall::
+    trainerslidein BS_ATTACKER
+    waitstate
+    printstring STRINGID_RIVALWINTEXT
+    jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_LocalBattleLostPrintWhiteOut
+    end2
+
 BattleScript_CheckDomeDrew::
 	jumpifbyte CMP_EQUAL, gBattleOutcome, B_OUTCOME_DREW, BattleScript_LocalBattleLostEnd_
+
 BattleScript_LocalBattleLostPrintTrainersWinText::
 	jumpifnotbattletype BATTLE_TYPE_TRAINER, BattleScript_LocalBattleLostPrintWhiteOut
 	returnopponentmon1toball BS_ATTACKER
@@ -2965,6 +2983,7 @@ BattleScript_LocalBattleLostPrintTrainersWinText::
 	printstring STRINGID_TRAINER1WINTEXT
 	jumpifbattletype BATTLE_TYPE_TOWER_LINK_MULTI, BattleScript_LocalBattleLostDoTrainer2WinText
 	jumpifnotbattletype BATTLE_TYPE_TWO_OPPONENTS, BattleScript_LocalBattleLostEnd_
+
 BattleScript_LocalBattleLostDoTrainer2WinText::
 	trainerslideout B_POSITION_OPPONENT_LEFT
 	waitstate
@@ -3066,8 +3085,13 @@ BattleScript_WildMonFled::
 	end2
 
 BattleScript_PrintCantRunFromTrainer::
+    jumpifbattletype BATTLE_TYPE_FIRST_BATTLE, BattleScript_LeftoverBirchString
 	printstring STRINGID_NORUNNINGFROMTRAINERS
 	end2
+
+BattleScript_LeftoverBirchString::
+    printstring STRINGID_DONTLEAVEBIRCH
+    end2
 
 BattleScript_PrintFailedToRunString::
 	printfromtable gNoEscapeStringIds
@@ -3862,6 +3886,27 @@ BattleScript_TargetPRLZHeal::
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_TARGET
 	return
+
+BattleScript_TooScaredToMove::
+	printstring STRINGID_MONTOOSCAREDTOMOVE
+	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_ATTACKER, B_ANIM_MON_SCARED, NULL
+	goto BattleScript_MoveEnd
+
+BattleScript_GhostGetOutGetOut::
+	printstring STRINGID_GHOSTGETOUTGETOUT
+	playanimation BS_ATTACKER, B_ANIM_GHOST_GET_OUT, NULL
+	goto BattleScript_MoveEnd
+
+BattleScript_SilphScopeUnveiled::
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_SILPHSCOPEUNVEILED
+	waitstate
+	playanimation BS_OPPONENT1, B_ANIM_SILPH_SCOPED, NULL
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_GHOSTWASMAROWAK
+	waitmessage B_WAIT_TIME_LONG
+	end2
 
 BattleScript_MoveEffectSleep::
 	statusanimation BS_EFFECT_BATTLER

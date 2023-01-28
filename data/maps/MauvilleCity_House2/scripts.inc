@@ -4,7 +4,7 @@ MauvilleCity_House2_MapScripts::
 MauvilleCity_House2_EventScript_Woman::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_COIN_CASE, MauvilleCity_House2_EventScript_ReceivedCoinCase
+	goto_if_set FLAG_GOT_COIN_CASE, MauvilleCity_House2_EventScript_ReceivedCoinCase
 	msgbox MauvilleCity_House2_Text_BuyHarborMailAtSlateport, MSGBOX_DEFAULT
 	checkitem ITEM_HARBOR_MAIL
 	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_House2_EventScript_AskToTradeForHarborMail
@@ -26,7 +26,7 @@ MauvilleCity_House2_EventScript_AcceptTrade::
 	msgbox MauvilleCity_House2_Text_IllTradeYouCoinCase, MSGBOX_DEFAULT
 	removeitem ITEM_HARBOR_MAIL
 	giveitem ITEM_COIN_CASE
-	setflag FLAG_RECEIVED_COIN_CASE
+	setflag FLAG_GOT_COIN_CASE
 	goto MauvilleCity_House2_EventScript_ReceivedCoinCase
 	end
 

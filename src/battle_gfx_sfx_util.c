@@ -674,6 +674,21 @@ void BattleGfxSfxDummy2(u16 species)
 {
 }
 
+void DecompressGhostFrontPic(struct Pokemon *unused, u8 battlerId)
+{
+    u16 palOffset;
+    void *buffer;
+    u8 position = GetBattlerPosition(battlerId);
+
+    LZ77UnCompWram(gGhostFrontPic, gMonSpritesGfxPtr->sprites.ptr[position]);
+    palOffset = 0x100 + 16 * battlerId;
+    buffer = AllocZeroed(0x400);
+    LZDecompressWram(gGhostPalette, buffer);
+    LoadPalette(buffer, palOffset, 0x20);
+    LoadPalette(buffer, 0x80 + 16 * battlerId, 0x20);
+    Free(buffer);
+}
+
 void DecompressTrainerFrontPic(u16 frontPicId, u8 battlerId)
 {
     u8 position = GetBattlerPosition(battlerId);
@@ -892,15 +907,44 @@ void CopyBattleSpriteInvisibility(u8 battlerId)
     gBattleSpritesDataPtr->battlerData[battlerId].invisible = gSprites[gBattlerSpriteIds[battlerId]].invisible;
 }
 
-void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 castform)
+void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, u8 transformType)
 {
-    u16 paletteOffset;
+    u16 paletteOffset, targetSpecies;
     u32 personalityValue;
     u32 otId;
     u8 position;
     const u32 *lzPaletteData;
+    void *buffer;
 
-    if (castform)
+    if (transformType == 255) // Ghost unveiled with Silph Scope
+    {
+        const void *src;
+        void *dst;
+        
+        position = GetBattlerPosition(battlerAtk);
+        targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_SPECIES);
+        personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
+        otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
+        HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonFrontPicTable[targetSpecies],
+                                                  gMonSpritesGfxPtr->sprites.ptr[position],
+                                                  targetSpecies,
+                                                  personalityValue);
+        src = gMonSpritesGfxPtr->sprites.ptr[position];
+        dst = (void *)(VRAM + 0x10000 + gSprites[gBattlerSpriteIds[battlerAtk]].oam.tileNum * 32);
+        DmaCopy32(3, src, dst, 0x800);
+        paletteOffset = 0x100 + battlerAtk * 16;
+        lzPaletteData = GetMonSpritePalFromSpeciesAndPersonality(targetSpecies, otId, personalityValue);
+        buffer = AllocZeroed(0x400);
+        LZDecompressWram(lzPaletteData, buffer);
+        LoadPalette(buffer, paletteOffset, 32);
+        Free(buffer);
+        gSprites[gBattlerSpriteIds[battlerAtk]].y = GetBattlerSpriteDefault_Y(battlerAtk);
+        StartSpriteAnim(&gSprites[gBattlerSpriteIds[battlerAtk]], gBattleMonForms[battlerAtk]);
+        SetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+        UpdateNickInHealthbox(gHealthboxSpriteIds[battlerAtk], &gEnemyParty[gBattlerPartyIndexes[battlerAtk]]);
+        TryAddPokeballIconToHealthbox(gHealthboxSpriteIds[battlerAtk], 1);
+    }
+    else if (transformType) // Castform form change
     {
         StartSpriteAnim(&gSprites[gBattlerSpriteIds[battlerAtk]], gBattleSpritesDataPtr->animationData->animArg);
         paletteOffset = 0x100 + battlerAtk * 16;
@@ -913,11 +957,10 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 castform)
         }
         gSprites[gBattlerSpriteIds[battlerAtk]].y = GetBattlerSpriteDefault_Y(battlerAtk);
     }
-    else
+    else // Transform move
     {
         const void *src;
         void *dst;
-        u16 targetSpecies;
 
         if (IsContest())
         {

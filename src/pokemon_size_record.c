@@ -128,8 +128,13 @@ static u8 CompareMonSize(u16 species, u16 *sizeRecord)
             *(&sizeParams) = GetMonSizeHash(pkmn);
             newSize = GetMonSize(species, sizeParams);
             oldSize = GetMonSize(species, *sizeRecord);
+            FormatMonSizeRecord(gStringVar3, oldSize);
             FormatMonSizeRecord(gStringVar2, newSize);
-            if (newSize <= oldSize)
+            if (newSize == oldSize)
+            {
+                return 4;
+            }
+            else if (newSize < oldSize)
             {
                 return 2;
             }
@@ -149,48 +154,44 @@ static void GetMonSizeRecordInfo(u16 species, u16 *sizeRecord)
 
     FormatMonSizeRecord(gStringVar3, size);
     StringCopy(gStringVar1, gSpeciesNames[species]);
-    if (*sizeRecord == DEFAULT_MAX_SIZE)
-        StringCopy(gStringVar2, gText_Marco);
-    else
-        StringCopy(gStringVar2, gSaveBlock2Ptr->playerName);
 }
 
-void InitSeedotSizeRecord(void)
+void InitHeracrossSizeRecord(void)
 {
-    VarSet(VAR_SEEDOT_SIZE_RECORD, DEFAULT_MAX_SIZE);
+    VarSet(VAR_HERACROSS_SIZE_RECORD, DEFAULT_MAX_SIZE);
 }
 
-void GetSeedotSizeRecordInfo(void)
+void GetHeracrossSizeRecordInfo(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_SEEDOT_SIZE_RECORD);
+    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
 
-    GetMonSizeRecordInfo(SPECIES_SEEDOT, sizeRecord);
+    GetMonSizeRecordInfo(SPECIES_HERACROSS, sizeRecord);
 }
 
-void CompareSeedotSize(void)
+void CompareHeracrossSize(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_SEEDOT_SIZE_RECORD);
+    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
 
-    gSpecialVar_Result = CompareMonSize(SPECIES_SEEDOT, sizeRecord);
+    gSpecialVar_Result = CompareMonSize(SPECIES_HERACROSS, sizeRecord);
 }
 
-void InitLotadSizeRecord(void)
+void InitMagikarpSizeRecord(void)
 {
-    VarSet(VAR_LOTAD_SIZE_RECORD, DEFAULT_MAX_SIZE);
+    VarSet(VAR_MAGIKARP_SIZE_RECORD, DEFAULT_MAX_SIZE);
 }
 
-void GetLotadSizeRecordInfo(void)
+void GetMagikarpSizeRecordInfo(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_LOTAD_SIZE_RECORD);
+    u16 *sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
 
-    GetMonSizeRecordInfo(SPECIES_LOTAD, sizeRecord);
+    GetMonSizeRecordInfo(SPECIES_MAGIKARP, sizeRecord);
 }
 
-void CompareLotadSize(void)
+void CompareMagikarpSize(void)
 {
-    u16 *sizeRecord = GetVarPointer(VAR_LOTAD_SIZE_RECORD);
+    u16 *sizeRecord = GetVarPointer(VAR_MAGIKARP_SIZE_RECORD);
 
-    gSpecialVar_Result = CompareMonSize(SPECIES_LOTAD, sizeRecord);
+    gSpecialVar_Result = CompareMonSize(SPECIES_MAGIKARP, sizeRecord);
 }
 
 void GiveGiftRibbonToParty(u8 index, u8 ribbonId)

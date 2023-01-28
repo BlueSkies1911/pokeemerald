@@ -267,13 +267,13 @@ static const struct PikeWildMon *const *const sWildMons[2] =
 static const struct PikeRoomNPC sNPCTable[] =
 {
     {
-        .graphicsId = OBJ_EVENT_GFX_POKEFAN_F,
+        .graphicsId = OBJ_EVENT_GFX_ROCKET_F,
         .speechId1 = 3,
         .speechId2 = 5,
         .speechId3 = 6
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_NINJA_BOY,
+        .graphicsId = OBJ_EVENT_GFX_SEAGALLOP,
         .speechId1 = 13,
         .speechId2 = 32,
         .speechId3 = 37
@@ -291,7 +291,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 33
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_EXPERT_M,
+        .graphicsId = OBJ_EVENT_GFX_SAPPHIRE,
         .speechId1 = 0,
         .speechId2 = 0,
         .speechId3 = 0
@@ -303,7 +303,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 1
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_BLACK_BELT,
+        .graphicsId = OBJ_EVENT_GFX_BLACKBELT,
         .speechId1 = 22,
         .speechId2 = 23,
         .speechId3 = 27
@@ -315,7 +315,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 31
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_GIRL_3,
+        .graphicsId = OBJ_EVENT_GFX_SWIMMER_F_LAND,
         .speechId1 = 13,
         .speechId2 = 39,
         .speechId3 = 21
@@ -327,13 +327,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 17
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_CYCLING_TRIATHLETE_M,
+        .graphicsId = OBJ_EVENT_GFX_CHEF,
         .speechId1 = 30,
         .speechId2 = 20,
         .speechId3 = 36
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_5,
+        .graphicsId = OBJ_EVENT_GFX_MAN,
         .speechId1 = 28,
         .speechId2 = 34,
         .speechId3 = 25
@@ -363,13 +363,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 26
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
+        .graphicsId = OBJ_EVENT_GFX_FISHER,
         .speechId1 = 37,
         .speechId2 = 12,
         .speechId3 = 32
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_3,
+        .graphicsId = OBJ_EVENT_GFX_OLD_MAN_2,
         .speechId1 = 24,
         .speechId2 = 23,
         .speechId3 = 38
@@ -405,13 +405,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 16
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+        .graphicsId = OBJ_EVENT_GFX_BIKER,
         .speechId1 = 18,
         .speechId2 = 13,
         .speechId3 = 21
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_1,
+        .graphicsId = OBJ_EVENT_GFX_MAN,
         .speechId1 = 22,
         .speechId2 = 31,
         .speechId3 = 27
@@ -556,8 +556,8 @@ static void SetupRoomObjectEvents(void)
     u32 objGfx1;
     u16 objGfx2;
 
-    VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_LINK_RECEPTIONIST);
-    VarSet(VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_DUSCLOPS);
+    VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST);
+    VarSet(VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_OMANYTE);
     setObjGfx1 = TRUE;
     setObjGfx2 = FALSE;
     objGfx1 = 0;
@@ -570,7 +570,7 @@ static void SetupRoomObjectEvents(void)
         setObjGfx1 = FALSE;
         break;
     case PIKE_ROOM_HEAL_FULL:
-        objGfx1 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx1 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         break;
     case PIKE_ROOM_NPC:
         objGfx1 = (u8)(GetNPCRoomGraphicsId());
@@ -578,9 +578,9 @@ static void SetupRoomObjectEvents(void)
     case PIKE_ROOM_STATUS:
         objGfx1 = OBJ_EVENT_GFX_GENTLEMAN;
         if (sStatusMon == PIKE_STATUSMON_DUSCLOPS)
-            objGfx2 = OBJ_EVENT_GFX_DUSCLOPS;
+            objGfx2 = OBJ_EVENT_GFX_OMANYTE;
         else
-            objGfx2 = OBJ_EVENT_GFX_KIRLIA;
+            objGfx2 = OBJ_EVENT_GFX_KANGASKHAN;
         setObjGfx2 = TRUE;
         break;
     case PIKE_ROOM_HEAL_PART:
@@ -591,7 +591,7 @@ static void SetupRoomObjectEvents(void)
         break;
     case PIKE_ROOM_HARD_BATTLE:
         PrepareOneTrainer(TRUE);
-        objGfx2 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx2 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         setObjGfx1 = FALSE;
         setObjGfx2 = TRUE;
         break;
@@ -601,7 +601,7 @@ static void SetupRoomObjectEvents(void)
         break;
     case PIKE_ROOM_BRAIN:
         SetFrontierBrainObjEventGfx(FRONTIER_FACILITY_PIKE);
-        objGfx2 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx2 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         setObjGfx1 = FALSE;
         setObjGfx2 = TRUE;
         break;

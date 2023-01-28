@@ -475,8 +475,12 @@
 // Emerald
 #define ITEM_MAGMA_EMBLEM 375
 #define ITEM_OLD_SEA_MAP 376
+#define ITEM_COINS10 377
+#define ITEM_COINS20 378
+#define ITEM_COINS40 379
+#define ITEM_COINS100 380
 
-#define ITEMS_COUNT 377
+#define ITEMS_COUNT 381
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // Range of berries given out by various NPCS

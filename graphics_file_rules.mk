@@ -130,16 +130,16 @@ $(TILESETGFXDIR)/secondary/battle_frontier_outside_east/tiles.4bpp: %.4bpp: %.pn
 	$(GFX) $< $@ -num_tiles 508
 
 $(TILESETGFXDIR)/primary/building/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 502
+	$(GFX) $< $@ -num_tiles 512
 
 $(TILESETGFXDIR)/secondary/shop/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 502
 
 $(TILESETGFXDIR)/secondary/pokemon_center/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 478
+	$(GFX) $< $@ -num_tiles 504
 
 $(TILESETGFXDIR)/secondary/cave/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 425
+	$(GFX) $< $@ -num_tiles 384
 
 $(TILESETGFXDIR)/secondary/pokemon_school/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 278
@@ -214,7 +214,7 @@ $(TILESETGFXDIR)/secondary/lilycove_museum/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 431
 
 $(TILESETGFXDIR)/secondary/lab/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 500
+	$(GFX) $< $@ -num_tiles 240
 
 $(TILESETGFXDIR)/secondary/underwater/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 500
@@ -274,13 +274,13 @@ $(TILESETGFXDIR)/secondary/mossdeep_game_corner/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 95
 
 $(TILESETGFXDIR)/secondary/island_harbor/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 503
+	$(GFX) $< $@ -num_tiles 304
 
 $(TILESETGFXDIR)/secondary/trainer_hill/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 374
 
 $(TILESETGFXDIR)/secondary/navel_rock/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 420
+	$(GFX) $< $@ -num_tiles 416
 
 $(TILESETGFXDIR)/secondary/battle_frontier_ranking_hall/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 136
@@ -678,7 +678,7 @@ $(BATTRANSGFXDIR)/frontier_logo_center.4bpp: %.4bpp: %.png
 
 ### Pokenav ###
 
-$(PKNAVOPTIONSGFXDIR)/options.4bpp: $(PKNAVOPTIONSGFXDIR)/hoenn_map.4bpp \
+$(PKNAVOPTIONSGFXDIR)/options.4bpp: $(PKNAVOPTIONSGFXDIR)/kanto_map.4bpp \
                                     $(PKNAVOPTIONSGFXDIR)/condition.4bpp \
                                     $(PKNAVOPTIONSGFXDIR)/match_call.4bpp \
                                     $(PKNAVOPTIONSGFXDIR)/ribbons.4bpp \

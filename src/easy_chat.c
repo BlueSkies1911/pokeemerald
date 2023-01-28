@@ -5000,7 +5000,7 @@ static void TryAddInterviewObjectEvents(void)
         graphicsId = OBJ_EVENT_GFX_REPORTER_F;
         break;
     case EASY_CHAT_PERSON_BOY:
-        graphicsId = OBJ_EVENT_GFX_BOY_1;
+        graphicsId = OBJ_EVENT_GFX_BOY;
         break;
     default:
         return;
@@ -5019,7 +5019,7 @@ static void TryAddInterviewObjectEvents(void)
 
     // Add object for player (facing right)
     spriteId = CreateObjectGraphicsSprite(
-        gSaveBlock2Ptr->playerGender == MALE ? OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL : OBJ_EVENT_GFX_RIVAL_MAY_NORMAL,
+        gSaveBlock2Ptr->playerGender == MALE ? OBJ_EVENT_GFX_RIVAL_RED_NORMAL : OBJ_EVENT_GFX_RIVAL_GREEN_NORMAL,
         SpriteCallbackDummy,
         52,
         40,

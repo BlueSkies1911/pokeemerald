@@ -60,7 +60,7 @@ LittlerootTown_BrendansHouse_1F_OnFrame:
 
 LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock::
 	lockall
-	msgbox PlayersHouse_1F_Text_GoSetTheClock, MSGBOX_DEFAULT
+	msgbox PlayersHouse_2F_Text_GoSetTheClock, MSGBOX_DEFAULT
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_BrendansHouse_1F_Movement_PushTowardStairs
 	applymovement LOCALID_MOM, LittlerootTown_BrendansHouse_1F_Movement_PushTowardStairs
@@ -100,7 +100,6 @@ LittlerootTown_BrendansHouse_1F_EventScript_YoureNewNeighbor::
 	waitmovement 0
 	special GetRivalSonDaughterString
 	msgbox RivalsHouse_1F_Text_OhYoureTheNewNeighbor, MSGBOX_DEFAULT
-	setflag FLAG_MET_RIVAL_MOM
 	setvar VAR_LITTLEROOT_HOUSES_STATE_MAY, 2
 	releaseall
 	end
@@ -306,10 +305,6 @@ PlayersHouse_1F_Text_ArentYouInterestedInRoom:
 	.string "Aren't you interested in seeing your\n"
 	.string "very own room?$"
 
-PlayersHouse_1F_Text_GoSetTheClock:
-	.string "MOM: {PLAYER}.\p"
-	.string "Go set the clock in your room, honey.$"
-
 PlayersHouse_1F_Text_OhComeQuickly:
 	.string "MOM: Oh! {PLAYER}, {PLAYER}!\n"
 	.string "Quick! Come quickly!$"
@@ -423,7 +418,7 @@ PlayersHouse_1F_Text_LatiEmergencyNewsFlash:
 	.string "We bring you this emergency\n"
 	.string "news flash!\p"
 	.string "In various HOENN locales, there have\n"
-	.string "been reports of a BZZT…colored\l"
+	.string "been reports of a BZZT…coloured\l"
 	.string "POKéMON in flight.\p"
 	.string "The identity of this POKéMON is\n"
 	.string "currently unknown.\p"
@@ -432,7 +427,7 @@ PlayersHouse_1F_Text_LatiEmergencyNewsFlash:
 
 PlayersHouse_1F_Text_WhatColorDidTheySay:
 	.string "MOM: {PLAYER}, did you catch that?\p"
-	.string "What color did the announcer say\n"
+	.string "What colour did the announcer say\n"
 	.string "that POKéMON was?$"
 
 PlayersHouse_1F_Text_StillUnknownPokemon:

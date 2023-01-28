@@ -12,3 +12,9 @@ EventScript_ReleaseUseSurf::
 	releaseall
 EventScript_EndUseSurf::
 	end
+
+EventScript_CurrentTooFast::
+	lockall
+	msgbox gText_CurrentIsTooFast
+	releaseall
+	end

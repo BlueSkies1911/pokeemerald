@@ -288,24 +288,24 @@ LilycoveCity_LilycoveMuseum_2F_Text_HonorToHaveYouVisit:
 	.string "visit with us.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsPinkPictureFrame:
-	.string "It's a picture frame with pink-colored\n"
+	.string "It's a picture frame with pink-coloured\n"
 	.string "adornments.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsYellowPictureFrame:
 	.string "It's a picture frame with\n"
-	.string "yellow-colored adornments.$"
+	.string "yellow-coloured adornments.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsBluePictureFrame:
 	.string "It's a picture frame with\n"
-	.string "blue-colored adornments.$"
+	.string "blue-coloured adornments.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsRedPictureFrame:
 	.string "It's a picture frame with\n"
-	.string "red-colored adornments.$"
+	.string "red-coloured adornments.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsGreenPictureFrame:
 	.string "It's a picture frame with\n"
-	.string "green-colored adornments.$"
+	.string "green-coloured adornments.$"
 
 LilycoveCity_LilycoveMuseum_2F_Text_ItsPaintingOfPokemon:
 	.string "It's a painting of POKéMON.$"

@@ -1,0 +1,53 @@
+PokedexRating_EventScript_RateInPerson::
+	call_if_set FLAG_OAK_SAW_DEX_COMPLETION, PokedexRating_EventScript_DexCompleteIntro
+	call_if_unset FLAG_OAK_SAW_DEX_COMPLETION, PokedexRating_EventScript_NormalIntro
+	call PokedexRating_EventScript_Rate
+	return
+
+PokedexRating_EventScript_DexCompleteIntro::
+	msgbox gPokedexRating_Text_LoveSeeingYourPokedex
+	return
+
+PokedexRating_EventScript_NormalIntro::
+	msgbox gPokedexRating_Text_HowIsPokedexComingAlong
+	return
+
+PokedexRating_EventScript_ShowRatingMsg::
+	compare VAR_RESULT, FALSE
+	call_if_eq PokedexRating_EventScript_NormalFanfare
+	compare VAR_RESULT, TRUE
+	call_if_eq PokedexRating_EventScript_DexCompleteFanfare
+	waitfanfare
+	waitbuttonpress
+	return
+
+PokedexRating_EventScript_NormalFanfare::
+	playfanfare MUS_RG_DEX_RATING
+	return
+
+PokedexRating_EventScript_DexCompleteFanfare::
+	playfanfare MUS_EVOLVED
+	return
+
+PokedexRating_EventScript_Rate::
+	msgbox gPokedexRating_Text_SeenXOwnedY
+	msgbox gPokedexRating_Text_NationalDexSeenXOwnedY
+	end
+
+PokedexRating_EventScript_SetTextColor::
+	textcolor 0
+	return
+
+PokedexRating_EventScript_DexIncomplete::
+	msgbox gPokedexRating_Text_LookForwardToFilledNationalDex
+	goto PokedexRating_EventScript_EndRating
+	end
+
+PokedexRating_EventScript_DexComplete::
+	setflag FLAG_OAK_SAW_DEX_COMPLETION
+	msgbox gPokedexRating_Text_YouveCompletedDex
+	goto PokedexRating_EventScript_EndRating
+	end
+
+PokedexRating_EventScript_EndRating::
+	return

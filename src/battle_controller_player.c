@@ -95,7 +95,6 @@ static void PlayerCmdEnd(void);
 
 static void PlayerBufferRunCommand(void);
 static void HandleInputChooseTarget(void);
-static void HandleInputChooseMove(void);
 static void MoveSelectionCreateCursorAt(u8 cursorPos, u8 arg1);
 static void MoveSelectionDestroyCursorAt(u8 cursorPos);
 static void MoveSelectionDisplayPpNumber(void);
@@ -468,7 +467,7 @@ static void HandleInputChooseTarget(void)
     }
 }
 
-static void HandleInputChooseMove(void)
+void HandleInputChooseMove(void)
 {
     bool32 canSelectTarget = FALSE;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
@@ -756,8 +755,10 @@ static void HandleMoveSwitching(void)
                 SetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_PP_BONUSES, &totalPPBonuses);
             }
         }
-
-        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
+            gBattlerControllerFuncs[gActiveBattler] = OakOldManHandleInputChooseMove;
+        else
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         gMoveSelectionCursor[gActiveBattler] = gMultiUsePlayerCursor;
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
         MoveSelectionDisplayPpString();
@@ -769,7 +770,10 @@ static void HandleMoveSwitching(void)
         PlaySE(SE_SELECT);
         MoveSelectionDestroyCursorAt(gMultiUsePlayerCursor);
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
+            gBattlerControllerFuncs[gActiveBattler] = OakOldManHandleInputChooseMove;
+        else
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         MoveSelectionDisplayPpString();
         MoveSelectionDisplayPpNumber();
         MoveSelectionDisplayMoveType();
@@ -2286,7 +2290,7 @@ static void PlayerHandleDrawTrainerPic(void)
         }
         else
         {
-            trainerPicId = gLinkPlayers[GetMultiplayerId()].gender + TRAINER_BACK_PIC_BRENDAN;
+            trainerPicId = gLinkPlayers[GetMultiplayerId()].gender + TRAINER_BACK_PIC_RED;
         }
     }
     else
@@ -2301,7 +2305,7 @@ static void PlayerHandleDrawTrainerPic(void)
         else // First mon, on the left.
             xPos = 32;
 
-        if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER)
+        if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER && gPartnerTrainerId < TRAINER_CUSTOM_PARTNER)
         {
             xPos = 90;
             yPos = (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 80;
@@ -2319,7 +2323,7 @@ static void PlayerHandleDrawTrainerPic(void)
     }
 
     // Use front pic table for any tag battles unless your partner is Steven.
-    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER)
+    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER && gPartnerTrainerId < TRAINER_CUSTOM_PARTNER)
     {
         trainerPicId = PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender);
         DecompressTrainerFrontPic(trainerPicId, gActiveBattler);
@@ -2368,12 +2372,12 @@ static void PlayerHandleTrainerSlide(void)
         }
         else
         {
-            trainerPicId = gLinkPlayers[GetMultiplayerId()].gender + TRAINER_BACK_PIC_BRENDAN;
+            trainerPicId = gLinkPlayers[GetMultiplayerId()].gender + TRAINER_BACK_PIC_RED;
         }
     }
     else
     {
-        trainerPicId = gSaveBlock2Ptr->playerGender + TRAINER_BACK_PIC_BRENDAN;
+        trainerPicId = gSaveBlock2Ptr->playerGender + TRAINER_BACK_PIC_RED;
     }
 
     DecompressTrainerBackPic(trainerPicId, gActiveBattler);

@@ -3,7 +3,7 @@ MauvilleCity_Gym_MapScripts::
 	.byte 0
 
 MauvilleCity_Gym_OnLoad:
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_DeactivatePuzzle
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_DeactivatePuzzle
 	switch VAR_MAUVILLE_GYM_STATE
 	case 0, MauvilleCity_Gym_EventScript_UpdateBarriers
 	case 1, MauvilleCity_Gym_EventScript_Switch1Pressed
@@ -13,7 +13,6 @@ MauvilleCity_Gym_OnLoad:
 	end
 
 MauvilleCity_Gym_EventScript_UpdateBarriers::
-	goto_if_set FLAG_MAUVILLE_GYM_BARRIERS_STATE, MauvilleCity_Gym_EventScript_SetAltBarriers
 	end
 
 MauvilleCity_Gym_EventScript_SetAltBarriers::
@@ -74,11 +73,6 @@ MauvilleCity_Gym_EventScript_DeactivatePuzzle::
 	end
 
 MauvilleCity_Gym_EventScript_Wattson::
-	trainerbattle_single TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_WattsonRematch
-	goto_if_unset FLAG_RECEIVED_TM34, MauvilleCity_Gym_EventScript_GiveShockWave2
-	goto_if_eq VAR_NEW_MAUVILLE_STATE, 2, MauvilleCity_Gym_EventScript_CompletedNewMauville
 	msgbox MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -90,7 +84,7 @@ MauvilleCity_Gym_EventScript_WattsonDefeated::
 	msgbox MauvilleCity_Gym_Text_ExplainDynamoBadgeTakeThis, MSGBOX_DEFAULT
 	setvar VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 3
 	clearflag FLAG_HIDE_VERDANTURF_TOWN_SCOTT
-	setflag FLAG_DEFEATED_MAUVILLE_GYM
+	setflag FLAG_DEFEATED_LT_SURGE
 	setflag FLAG_BADGE03_GET
 	addvar VAR_PETALBURG_GYM_STATE, 1
 	call_if_eq VAR_PETALBURG_GYM_STATE, 6, Common_EventScript_ReadyPetalburgGymForBattle
@@ -107,7 +101,7 @@ MauvilleCity_Gym_EventScript_WattsonDefeated::
 	waitfanfare
 	closemessage
 	delay 30
-	setflag FLAG_ENABLE_WATTSON_MATCH_CALL
+	setflag FLAG_ENABLE_LT_SURGE_MATCH_CALL
 	release
 	end
 
@@ -115,7 +109,7 @@ MauvilleCity_Gym_EventScript_GiveShockWave2::
 	giveitem ITEM_TM34
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	msgbox MauvilleCity_Gym_Text_ExplainShockWave, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM34
+	setflag FLAG_GOT_TM34_FROM_SURGE
 	release
 	end
 
@@ -123,7 +117,7 @@ MauvilleCity_Gym_EventScript_GiveShockWave::
 	giveitem ITEM_TM34
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_BagIsFull
 	msgbox MauvilleCity_Gym_Text_ExplainShockWave, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM34
+	setflag FLAG_GOT_TM34_FROM_SURGE
 	return
 
 MauvilleCity_Gym_EventScript_CompletedNewMauville::
@@ -132,13 +126,12 @@ MauvilleCity_Gym_EventScript_CompletedNewMauville::
 	end
 
 MauvilleCity_Gym_EventScript_WattsonRematch::
-	trainerbattle_rematch_double TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonPreRematch, MauvilleCity_Gym_Text_WattsonRematchDefeat, MauvilleCity_Gym_Text_WattsonRematchNeedTwoMons
 	msgbox MauvilleCity_Gym_Text_WattsonPostRematch, MSGBOX_AUTOCLOSE
 	end
 
 MauvilleCity_Gym_EventScript_Switch1::
 	lockall
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_SwitchDoNothing
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	goto_if_eq VAR_MAUVILLE_GYM_STATE, 1, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	setvar VAR_MAUVILLE_GYM_STATE, 1
 	setvar VAR_0x8004, 0
@@ -147,7 +140,7 @@ MauvilleCity_Gym_EventScript_Switch1::
 
 MauvilleCity_Gym_EventScript_Switch2::
 	lockall
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_SwitchDoNothing
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	goto_if_eq VAR_MAUVILLE_GYM_STATE, 2, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	setvar VAR_MAUVILLE_GYM_STATE, 2
 	setvar VAR_0x8004, 1
@@ -156,7 +149,7 @@ MauvilleCity_Gym_EventScript_Switch2::
 
 MauvilleCity_Gym_EventScript_Switch3::
 	lockall
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_SwitchDoNothing
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	goto_if_eq VAR_MAUVILLE_GYM_STATE, 3, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	setvar VAR_MAUVILLE_GYM_STATE, 3
 	setvar VAR_0x8004, 2
@@ -165,7 +158,7 @@ MauvilleCity_Gym_EventScript_Switch3::
 
 MauvilleCity_Gym_EventScript_Switch4::
 	lockall
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_SwitchDoNothing
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	goto_if_eq VAR_MAUVILLE_GYM_STATE, 4, MauvilleCity_Gym_EventScript_SwitchDoNothing
 	setvar VAR_MAUVILLE_GYM_STATE, 4
 	setvar VAR_0x8004, 3
@@ -177,8 +170,6 @@ MauvilleCity_Gym_EventScript_PressFloorSwitch::
 	special MauvilleGymPressSwitch
 	special DrawWholeMapView
 	playse SE_UNLOCK
-	goto_if_set FLAG_MAUVILLE_GYM_BARRIERS_STATE, MauvilleCity_Gym_EventScript_ClearBarriersAltState
-	goto_if_unset FLAG_MAUVILLE_GYM_BARRIERS_STATE, MauvilleCity_Gym_EventScript_SetBarriersAltState
 	releaseall
 	end
 
@@ -187,33 +178,11 @@ MauvilleCity_Gym_EventScript_SwitchDoNothing::
 	end
 
 MauvilleCity_Gym_EventScript_SetBarriersAltState::
-	setflag FLAG_MAUVILLE_GYM_BARRIERS_STATE
 	releaseall
 	end
 
 MauvilleCity_Gym_EventScript_ClearBarriersAltState::
-	clearflag FLAG_MAUVILLE_GYM_BARRIERS_STATE
 	releaseall
-	end
-
-MauvilleCity_Gym_EventScript_Kirk::
-	trainerbattle_single TRAINER_KIRK, MauvilleCity_Gym_Text_KirkIntro, MauvilleCity_Gym_Text_KirkDefeat
-	msgbox MauvilleCity_Gym_Text_KirkPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Shawn::
-	trainerbattle_single TRAINER_SHAWN, MauvilleCity_Gym_Text_ShawnIntro, MauvilleCity_Gym_Text_ShawnDefeat
-	msgbox MauvilleCity_Gym_Text_ShawnPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Ben::
-	trainerbattle_single TRAINER_BEN, MauvilleCity_Gym_Text_BenIntro, MauvilleCity_Gym_Text_BenDefeat
-	msgbox MauvilleCity_Gym_Text_BenPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Vivian::
-	trainerbattle_single TRAINER_VIVIAN, MauvilleCity_Gym_Text_VivianIntro, MauvilleCity_Gym_Text_VivianDefeat
-	msgbox MauvilleCity_Gym_Text_VivianPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 MauvilleCity_Gym_EventScript_Angelo::
@@ -224,7 +193,7 @@ MauvilleCity_Gym_EventScript_Angelo::
 MauvilleCity_Gym_EventScript_GymGuide::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_LT_SURGE, MauvilleCity_Gym_EventScript_GymGuidePostVictory
 	msgbox MauvilleCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
 	end

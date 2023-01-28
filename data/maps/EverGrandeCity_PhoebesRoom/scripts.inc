@@ -13,19 +13,19 @@ EverGrandeCity_PhoebesRoom_EventScript_PlayerTurnNorth::
 	end
 
 EverGrandeCity_PhoebesRoom_OnFrame:
-	map_script_2 VAR_ELITE_4_STATE, 1, EverGrandeCity_PhoebesRoom_EventScript_WalkInCloseDoor
+	map_script_2 VAR_MAP_SCENE_POKEMON_LEAGUE, 1, EverGrandeCity_PhoebesRoom_EventScript_WalkInCloseDoor
 	.2byte 0
 
 EverGrandeCity_PhoebesRoom_EventScript_WalkInCloseDoor::
 	lockall
 	call PokemonLeague_EliteFour_EventScript_WalkInCloseDoor
-	setvar VAR_ELITE_4_STATE, 2
+	setvar VAR_MAP_SCENE_POKEMON_LEAGUE, 2
 	releaseall
 	end
 
 EverGrandeCity_PhoebesRoom_OnLoad:
-	call_if_set FLAG_DEFEATED_ELITE_4_PHOEBE, EverGrandeCity_PhoebesRoom_EventScript_ResetAdvanceToNextRoom
-	call_if_eq VAR_ELITE_4_STATE, 2, EverGrandeCity_PhoebesRoom_EventScript_CloseDoor
+	call_if_set FLAG_DEFEATED_BRUNO, EverGrandeCity_PhoebesRoom_EventScript_ResetAdvanceToNextRoom
+	call_if_eq VAR_MAP_SCENE_POKEMON_LEAGUE, 2, EverGrandeCity_PhoebesRoom_EventScript_CloseDoor
 	end
 
 EverGrandeCity_PhoebesRoom_EventScript_ResetAdvanceToNextRoom::
@@ -39,10 +39,10 @@ EverGrandeCity_PhoebesRoom_EventScript_CloseDoor::
 EverGrandeCity_PhoebesRoom_EventScript_Phoebe::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_ELITE_4_PHOEBE, EverGrandeCity_PhoebesRoom_EventScript_PostBattleSpeech
+	goto_if_set FLAG_DEFEATED_BRUNO, EverGrandeCity_PhoebesRoom_EventScript_PostBattleSpeech
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_PhoebesRoom_Text_IntroSpeech, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_PHOEBE, EverGrandeCity_PhoebesRoom_Text_Defeat
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_BRUNO, EverGrandeCity_PhoebesRoom_Text_Defeat
 	goto EverGrandeCity_PhoebesRoom_EventScript_Defeated
 	end
 
@@ -52,7 +52,7 @@ EverGrandeCity_PhoebesRoom_EventScript_PostBattleSpeech::
 	end
 
 EverGrandeCity_PhoebesRoom_EventScript_Defeated::
-	setflag FLAG_DEFEATED_ELITE_4_PHOEBE
+	setflag FLAG_DEFEATED_BRUNO
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 	msgbox EverGrandeCity_PhoebesRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release

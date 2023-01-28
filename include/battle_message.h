@@ -57,6 +57,7 @@
 #define B_TXT_PARTNER_CLASS 0x32
 #define B_TXT_PARTNER_NAME 0x33
 #define B_TXT_BUFF3 0x34
+#define B_TXT_RIVAL_NAME 0x35
 
 // for B_TXT_BUFF1, B_TXT_BUFF2 and B_TXT_BUFF3
 
@@ -230,7 +231,7 @@ extern const u8 gText_CongratsPkmnEvolved[];
 extern const u8 gText_PkmnStoppedEvolving[];
 extern const u8 gText_EllipsisQuestionMark[];
 extern const u8 gText_WhatWillPkmnDo[];
-extern const u8 gText_WhatWillPkmnDo2[];
+extern const u8 gText_WhatWillPlayerThrow[];
 extern const u8 gText_WhatWillWallyDo[];
 extern const u8 gText_LinkStandby[];
 extern const u8 gText_BattleMenu[];

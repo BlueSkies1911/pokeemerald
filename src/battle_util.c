@@ -49,32 +49,6 @@ extern const u8 *const gBattlescriptsForRunningByItem[];
 extern const u8 *const gBattlescriptsForUsingItem[];
 extern const u8 *const gBattlescriptsForSafariActions[];
 
-static const u8 sPkblToEscapeFactor[][3] = {
-    {
-        [B_MSG_MON_CURIOUS]    = 0,
-        [B_MSG_MON_ENTHRALLED] = 0,
-        [B_MSG_MON_IGNORED]    = 0
-    },{
-        [B_MSG_MON_CURIOUS]    = 3,
-        [B_MSG_MON_ENTHRALLED] = 5,
-        [B_MSG_MON_IGNORED]    = 0
-    },{
-        [B_MSG_MON_CURIOUS]    = 2,
-        [B_MSG_MON_ENTHRALLED] = 3,
-        [B_MSG_MON_IGNORED]    = 0
-    },{
-        [B_MSG_MON_CURIOUS]    = 1,
-        [B_MSG_MON_ENTHRALLED] = 2,
-        [B_MSG_MON_IGNORED]    = 0
-    },{
-        [B_MSG_MON_CURIOUS]    = 1,
-        [B_MSG_MON_ENTHRALLED] = 1,
-        [B_MSG_MON_IGNORED]    = 0
-    }
-};
-static const u8 sGoNearCounterToCatchFactor[] = {4, 3, 2, 1};
-static const u8 sGoNearCounterToEscapeFactor[] = {4, 4, 4, 4};
-
 void HandleAction_UseMove(void)
 {
     u8 side;
@@ -445,6 +419,11 @@ bool8 TryRunFromBattle(u8 battler)
     {
         effect++;
     }
+    else if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))
+    {
+        if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+            ++effect;
+    }
     else
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
@@ -539,6 +518,34 @@ void HandleAction_WatchesCarefully(void)
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
+    if (gBattleStruct->safariGoNearCounter != 0)
+    {
+        --gBattleStruct->safariGoNearCounter;
+        if (gBattleStruct->safariGoNearCounter == 0)
+        {
+            *(&gBattleStruct->safariCatchFactor) = gBaseStats[GetMonData(gEnemyParty, MON_DATA_SPECIES)].catchRate * 100 / 1275;
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
+        else
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        }
+    }
+    else
+    {
+        if (gBattleStruct->safariPkblThrowCounter != 0)
+        {
+            --gBattleStruct->safariPkblThrowCounter;
+            if (gBattleStruct->safariPkblThrowCounter == 0)
+                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+            else
+                gBattleCommunication[5] = 2;
+        }
+        else
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
+    }
     gBattlescriptCurrInstr = gBattlescriptsForSafariActions[0];
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
@@ -559,53 +566,29 @@ void HandleAction_ThrowPokeblock(void)
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
-    gBattleCommunication[MULTISTRING_CHOOSER] = gBattleBufferB[gBattlerAttacker][1] - 1;
-    gLastUsedItem = gBattleBufferB[gBattlerAttacker][2];
-
-    if (gBattleResults.pokeblockThrows < 255)
-        gBattleResults.pokeblockThrows++;
-    if (gBattleStruct->safariPkblThrowCounter < 3)
-        gBattleStruct->safariPkblThrowCounter++;
-    if (gBattleStruct->safariEscapeFactor > 1)
-    {
-        // BUG: safariEscapeFactor can become 0 below. This causes the pokeblock throw glitch.
-        #ifdef BUGFIX
-        if (gBattleStruct->safariEscapeFactor <= sPkblToEscapeFactor[gBattleStruct->safariPkblThrowCounter][gBattleCommunication[MULTISTRING_CHOOSER]])
-        #else
-        if (gBattleStruct->safariEscapeFactor < sPkblToEscapeFactor[gBattleStruct->safariPkblThrowCounter][gBattleCommunication[MULTISTRING_CHOOSER]])
-        #endif
-            gBattleStruct->safariEscapeFactor = 1;
-        else
-            gBattleStruct->safariEscapeFactor -= sPkblToEscapeFactor[gBattleStruct->safariPkblThrowCounter][gBattleCommunication[MULTISTRING_CHOOSER]];
-    }
-
+    gBattleStruct->safariPkblThrowCounter += Random() % 5 + 2;
+    if (gBattleStruct->safariPkblThrowCounter > 6)
+        gBattleStruct->safariPkblThrowCounter = 6;
+    gBattleStruct->safariGoNearCounter = 0;
+    gBattleStruct->safariCatchFactor >>= 1;
+    if (gBattleStruct->safariCatchFactor <= 2)
+        gBattleStruct->safariCatchFactor = 3;
     gBattlescriptCurrInstr = gBattlescriptsForSafariActions[2];
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
-void HandleAction_GoNear(void)
+void HandleAction_ThrowRock(void)
 {
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
-
-    gBattleStruct->safariCatchFactor += sGoNearCounterToCatchFactor[gBattleStruct->safariGoNearCounter];
+    gBattleStruct->safariGoNearCounter += Random() % 5 + 2;
+    if (gBattleStruct->safariGoNearCounter > 6)
+        gBattleStruct->safariGoNearCounter = 6;
+    gBattleStruct->safariPkblThrowCounter = 0;
+    gBattleStruct->safariCatchFactor <<= 1;
     if (gBattleStruct->safariCatchFactor > 20)
         gBattleStruct->safariCatchFactor = 20;
-
-    gBattleStruct->safariEscapeFactor += sGoNearCounterToEscapeFactor[gBattleStruct->safariGoNearCounter];
-    if (gBattleStruct->safariEscapeFactor > 20)
-        gBattleStruct->safariEscapeFactor = 20;
-
-    if (gBattleStruct->safariGoNearCounter < 3)
-    {
-        gBattleStruct->safariGoNearCounter++;
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CREPT_CLOSER;
-    }
-    else
-    {
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CANT_GET_CLOSER;
-    }
     gBattlescriptCurrInstr = gBattlescriptsForSafariActions[1];
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
@@ -1974,6 +1957,7 @@ enum
     CANCELLER_IMPRISONED,
     CANCELLER_CONFUSED,
     CANCELLER_PARALYSED,
+    CANCELLER_GHOST,
     CANCELLER_IN_LOVE,
     CANCELLER_BIDE,
     CANCELLER_THAW,
@@ -2177,6 +2161,18 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_GHOST: // GHOST in pokemon tower
+            if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))
+            {
+                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+                    gBattlescriptCurrInstr = BattleScript_TooScaredToMove;
+                else
+                    gBattlescriptCurrInstr = BattleScript_GhostGetOutGetOut;
+                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_IN_LOVE: // infatuation
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
@@ -2460,7 +2456,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
             move = gCurrentMove;
 
         GET_MOVE_TYPE(move, moveType);
-
+        if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags)
+         && (gLastUsedAbility == ABILITY_INTIMIDATE || gLastUsedAbility == ABILITY_TRACE))
+            return effect;
         switch (caseID)
         {
         case ABILITYEFFECT_ON_SWITCHIN: // 0

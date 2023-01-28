@@ -28,6 +28,7 @@
 #include "util.h"
 #include "window.h"
 #include "constants/battle_anim.h"
+#include "constants/battle_string_ids.h"
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
@@ -93,7 +94,6 @@ static void OpponentHandleEndLinkBattle(void);
 static void OpponentCmdEnd(void);
 
 static void OpponentBufferRunCommand(void);
-static void OpponentBufferExecCompleted(void);
 static void SwitchIn_HandleSoundAndEnd(void);
 static u32 GetOpponentMonData(u8 monId, u8 *dst);
 static void SetOpponentMonData(u8 monId);
@@ -401,7 +401,17 @@ static void CompleteOnHealthbarDone(void)
         UpdateHpTextInHealthbox(gHealthboxSpriteIds[gActiveBattler], hpValue, HP_CURRENT);
     }
     else
-        OpponentBufferExecCompleted();
+    {
+        if (!BtlCtrl_OakOldMan_TestState2Flag(1) && (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE))
+        {
+            BtlCtrl_OakOldMan_SetState2Flag(1);
+            gBattlerControllerFuncs[gActiveBattler] = PrintOakText_InflictingDamageIsKey;
+        }
+        else
+        {
+            OpponentBufferExecCompleted();
+        }
+    }
 }
 
 static void HideHealthboxAfterMonFaint(void)
@@ -518,7 +528,7 @@ static void CompleteOnFinishedBattleAnimation(void)
         OpponentBufferExecCompleted();
 }
 
-static void OpponentBufferExecCompleted(void)
+void OpponentBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = OpponentBufferRunCommand;
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
@@ -1131,23 +1141,32 @@ static void OpponentHandleSetRawMonData(void)
 static void OpponentHandleLoadMonSprite(void)
 {
     u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    u32 y;
 
-    BattleLoadOpponentMonSpriteGfx(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
+    if (gBattleTypeFlags & BATTLE_TYPE_GHOST)
+    {
+        DecompressGhostFrontPic(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
+        y = GetGhostSpriteDefault_Y(gActiveBattler);
+        gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim = 1;
+        gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].finishedShinyMonAnim = 1;
+    }
+    else
+    {
+        BattleLoadOpponentMonSpriteGfx(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
+        y = GetBattlerSpriteDefault_Y(gActiveBattler);
+    }
     SetMultiuseSpriteTemplateToPokemon(species, GetBattlerPosition(gActiveBattler));
-
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                GetBattlerSpriteCoord(gActiveBattler, BATTLER_COORD_X_2),
-                                               GetBattlerSpriteDefault_Y(gActiveBattler),
+                                               y,
                                                GetBattlerSpriteSubpriority(gActiveBattler));
-
     gSprites[gBattlerSpriteIds[gActiveBattler]].x2 = -DISPLAY_WIDTH;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[0] = gActiveBattler;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[2] = species;
     gSprites[gBattlerSpriteIds[gActiveBattler]].oam.paletteNum = gActiveBattler;
     StartSpriteAnim(&gSprites[gBattlerSpriteIds[gActiveBattler]], gBattleMonForms[gActiveBattler]);
-
-    SetBattlerShadowSpriteCallback(gActiveBattler, GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES));
-
+    if (!(gBattleTypeFlags & BATTLE_TYPE_GHOST))
+        SetBattlerShadowSpriteCallback(gActiveBattler, GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES));
     gBattlerControllerFuncs[gActiveBattler] = TryShinyAnimAfterMonAnim;
 }
 
@@ -1522,6 +1541,18 @@ static void OpponentHandlePrintString(void)
     stringId = (u16*)(&gBattleBufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
+    if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
+    {
+        switch (*stringId)
+        {
+        case STRINGID_RIVALWINTEXT:
+            gBattlerControllerFuncs[gActiveBattler] = PrintOakText_HowDisappointing;
+            return;
+        case STRINGID_DONTLEAVEBIRCH:
+            gBattlerControllerFuncs[gActiveBattler] = PrintOakText_OakNoRunningFromATrainer;
+            return;
+        }
+    }
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter;
     BattleArena_DeductSkillPoints(gActiveBattler, *stringId);
 }

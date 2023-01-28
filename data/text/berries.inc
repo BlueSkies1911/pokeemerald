@@ -27,11 +27,11 @@ Route111_Text_WateredPlantsEveryDayTakeBerry:
 
 Route111_Text_GoingToTryToMakeDifferentColorBerries:
 	.string "I'm going to try really hard and make\n"
-	.string "BERRIES in different colors.\p"
+	.string "BERRIES in different colours.\p"
 	.string "I hope you try hard, too!$"
 
 Route111_Text_WhatColorBerriesToLookForToday:
-	.string "I wonder what color BERRIES I'll look\n"
+	.string "I wonder what colour BERRIES I'll look\n"
 	.string "for today?$"
 
 Route114_Text_LoveUsingBerryCrushShareBerry:

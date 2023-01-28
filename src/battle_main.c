@@ -50,6 +50,7 @@
 #include "util.h"
 #include "window.h"
 #include "constants/abilities.h"
+#include "constants/battle_setup.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_string_ids.h"
 #include "constants/hold_effects.h"
@@ -236,6 +237,7 @@ EWRAM_DATA struct BattleHealthboxInfo *gBattleControllerOpponentFlankHealthboxDa
 EWRAM_DATA u16 gBattleMovePower = 0;
 EWRAM_DATA u16 gMoveToLearn = 0;
 EWRAM_DATA u8 gBattleMonForms[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA u16 gPartnerSpriteId = 0;
 
 void (*gPreBattleCallback1)(void);
 void (*gBattleMainFunc)(void);
@@ -433,24 +435,24 @@ const u8 gTypeEffectiveness[336] =
 
 const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1] =
 {
-    [TYPE_NORMAL] = _("NORMAL"),
-    [TYPE_FIGHTING] = _("FIGHT"),
-    [TYPE_FLYING] = _("FLYING"),
-    [TYPE_POISON] = _("POISON"),
-    [TYPE_GROUND] = _("GROUND"),
-    [TYPE_ROCK] = _("ROCK"),
-    [TYPE_BUG] = _("BUG"),
-    [TYPE_GHOST] = _("GHOST"),
-    [TYPE_STEEL] = _("STEEL"),
+    [TYPE_NORMAL] = _("Normal"),
+    [TYPE_FIGHTING] = _("Fight"),
+    [TYPE_FLYING] = _("Flying"),
+    [TYPE_POISON] = _("Poison"),
+    [TYPE_GROUND] = _("Ground"),
+    [TYPE_ROCK] = _("Rock"),
+    [TYPE_BUG] = _("Bug"),
+    [TYPE_GHOST] = _("Ghost"),
+    [TYPE_STEEL] = _("Steel"),
     [TYPE_MYSTERY] = _("???"),
-    [TYPE_FIRE] = _("FIRE"),
-    [TYPE_WATER] = _("WATER"),
-    [TYPE_GRASS] = _("GRASS"),
-    [TYPE_ELECTRIC] = _("ELECTR"),
-    [TYPE_PSYCHIC] = _("PSYCHC"),
-    [TYPE_ICE] = _("ICE"),
-    [TYPE_DRAGON] = _("DRAGON"),
-    [TYPE_DARK] = _("DARK"),
+    [TYPE_FIRE] = _("Fire"),
+    [TYPE_WATER] = _("Water"),
+    [TYPE_GRASS] = _("Grass"),
+    [TYPE_ELECTRIC] = _("Electr"),
+    [TYPE_PSYCHIC] = _("Psychc"),
+    [TYPE_ICE] = _("Ice"),
+    [TYPE_DRAGON] = _("Dragon"),
+    [TYPE_DARK] = _("Dark"),
 };
 
 // This is a factor in how much money you get for beating a trainer.
@@ -460,6 +462,7 @@ const struct TrainerMoney gTrainerMoneyTable[] =
     {TRAINER_CLASS_AQUA_ADMIN, 10},
     {TRAINER_CLASS_AQUA_LEADER, 20},
     {TRAINER_CLASS_AROMA_LADY, 10},
+    {TRAINER_CLASS_SUPER_NERD, 6},
     {TRAINER_CLASS_RUIN_MANIAC, 15},
     {TRAINER_CLASS_INTERVIEWER, 12},
     {TRAINER_CLASS_TUBER_F, 1},
@@ -511,6 +514,24 @@ const struct TrainerMoney gTrainerMoneyTable[] =
     {TRAINER_CLASS_HIKER, 10},
     {TRAINER_CLASS_YOUNG_COUPLE, 8},
     {TRAINER_CLASS_WINSTRATE, 10},
+    {TRAINER_CLASS_RIVAL_EARLY, 4},
+    {TRAINER_CLASS_RIVAL_LATE, 9},
+    {TRAINER_CLASS_TEAM_ROCKET, 8},
+    {TRAINER_CLASS_ENGINEER, 12},
+    {TRAINER_CLASS_GAMBLER, 18},
+    {TRAINER_CLASS_BIKER, 5},
+    {TRAINER_CLASS_BOSS, 25},
+    {TRAINER_CLASS_CHANNELER, 8},
+    {TRAINER_CLASS_SCIENTIST, 12},
+    {TRAINER_CLASS_JUGGLER, 10},
+    {TRAINER_CLASS_ROCKER, 6},
+    {TRAINER_CLASS_CRUSH_KIN, 6},
+    {TRAINER_CLASS_TAMER, 10},
+    {TRAINER_CLASS_CUE_BALL, 6},
+    {TRAINER_CLASS_BURGLAR, 22},
+    {TRAINER_CLASS_COOL_COUPLE, 6},
+    {TRAINER_CLASS_CRUSH_GIRL, 6},
+    {TRAINER_CLASS_PAINTER, 4},
     {0xFF, 5}, // Any trainer class not listed above uses this
 };
 
@@ -525,7 +546,7 @@ static void (* const sTurnActionsFuncsTable[])(void) =
     [B_ACTION_SAFARI_WATCH_CAREFULLY] = HandleAction_WatchesCarefully,
     [B_ACTION_SAFARI_BALL]            = HandleAction_SafariZoneBallThrow,
     [B_ACTION_SAFARI_POKEBLOCK]       = HandleAction_ThrowPokeblock,
-    [B_ACTION_SAFARI_GO_NEAR]         = HandleAction_GoNear,
+    [B_ACTION_SAFARI_GO_NEAR]         = HandleAction_ThrowRock,
     [B_ACTION_SAFARI_RUN]             = HandleAction_SafariZoneRun,
     [B_ACTION_WALLY_THROW]            = HandleAction_WallyBallThrow,
     [B_ACTION_EXEC_SCRIPT]            = HandleAction_RunBattleScript,
@@ -616,7 +637,7 @@ static void CB2_InitBattleInternal(void)
 
     gBattle_WIN0H = DISPLAY_WIDTH;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER)
+    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gPartnerTrainerId != TRAINER_STEVEN_PARTNER && gPartnerTrainerId < TRAINER_CUSTOM_PARTNER)
     {
         gBattle_WIN0V = DISPLAY_HEIGHT - 1;
         gBattle_WIN1H = DISPLAY_WIDTH;
@@ -3432,6 +3453,8 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                                       | BATTLE_TYPE_FRONTIER
                                       | BATTLE_TYPE_LINK
                                       | BATTLE_TYPE_RECORDED_LINK
+                                      | BATTLE_TYPE_GHOST
+                                      | BATTLE_TYPE_OLD_MAN_TUTORIAL
                                       | BATTLE_TYPE_TRAINER_HILL)))
             {
                 HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[gActiveBattler].species), FLAG_SET_SEEN, gBattleMons[gActiveBattler].personality);
@@ -3441,11 +3464,18 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
         {
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
             {
-                if (!(gBattleTypeFlags & (BATTLE_TYPE_EREADER_TRAINER
-                                      | BATTLE_TYPE_FRONTIER
-                                      | BATTLE_TYPE_LINK
-                                      | BATTLE_TYPE_RECORDED_LINK
-                                      | BATTLE_TYPE_TRAINER_HILL)))
+                if (gBattleTypeFlags & (BATTLE_TYPE_GHOST | BATTLE_TYPE_GHOST_UNVEILED))
+                {
+                    if (!IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))
+                        HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[gActiveBattler].species), FLAG_SET_SEEN, gBattleMons[gActiveBattler].personality);
+                }
+                else if (!(gBattleTypeFlags & (BATTLE_TYPE_EREADER_TRAINER
+                                            | BATTLE_TYPE_FRONTIER
+                                            | BATTLE_TYPE_LINK
+                                            | BATTLE_TYPE_RECORDED_LINK
+                                            | BATTLE_TYPE_GHOST
+                                            | BATTLE_TYPE_OLD_MAN_TUTORIAL
+                                            | BATTLE_TYPE_TRAINER_HILL)))
                 {
                     HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[gActiveBattler].species), FLAG_SET_SEEN, gBattleMons[gActiveBattler].personality);
                 }
@@ -3567,6 +3597,11 @@ static void BattleIntroPrintWildMonAttacked(void)
     {
         gBattleMainFunc = BattleIntroPrintPlayerSendsOut;
         PrepareStringBattle(STRINGID_INTROMSG, 0);
+        if (IS_BATTLE_TYPE_GHOST_WITH_SCOPE(gBattleTypeFlags))
+        {
+            gBattleScripting.battler = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+            BattleScriptExecute(BattleScript_SilphScopeUnveiled);
+        }
     }
 }
 
@@ -3671,6 +3706,8 @@ static void BattleIntroRecordMonsToDex(void)
                                       | BATTLE_TYPE_FRONTIER
                                       | BATTLE_TYPE_LINK
                                       | BATTLE_TYPE_RECORDED_LINK
+                                      | BATTLE_TYPE_GHOST
+                                      | BATTLE_TYPE_OLD_MAN_TUTORIAL
                                       | BATTLE_TYPE_TRAINER_HILL)))
             {
                 HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[gActiveBattler].species), FLAG_SET_SEEN, gBattleMons[gActiveBattler].personality);
@@ -4968,6 +5005,8 @@ static void HandleEndTurn_BattleWon(void)
         case TRAINER_CLASS_LEADER:
             PlayBGM(MUS_VICTORY_GYM_LEADER);
             break;
+        case TRAINER_CLASS_BOSS:
+        case TRAINER_CLASS_TEAM_ROCKET:
         default:
             PlayBGM(MUS_VICTORY_TRAINER);
             break;
@@ -5011,9 +5050,20 @@ static void HandleEndTurn_BattleLost(void)
     }
     else
     {
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && GetTrainerBattleMode() == TRAINER_BATTLE_EARLY_RIVAL)
+        {
+            if (GetRivalBattleFlags() & RIVAL_BATTLE_HEAL_AFTER)
+                gBattleCommunication[MULTISTRING_CHOOSER] = 1; // Dont do white out text
+            else
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2; // Do white out text
+            gBattlerAttacker = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        }
+        else
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
         gBattlescriptCurrInstr = BattleScript_LocalBattleLost;
     }
-
     gBattleMainFunc = HandleEndTurn_FinishBattle;
 }
 
@@ -5070,7 +5120,7 @@ static void HandleEndTurn_FinishBattle(void)
                                   | BATTLE_TYPE_FIRST_BATTLE
                                   | BATTLE_TYPE_SAFARI
                                   | BATTLE_TYPE_EREADER_TRAINER
-                                  | BATTLE_TYPE_WALLY_TUTORIAL
+                                  | BATTLE_TYPE_OLD_MAN_TUTORIAL
                                   | BATTLE_TYPE_FRONTIER)))
         {
             for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -5099,7 +5149,7 @@ static void HandleEndTurn_FinishBattle(void)
                                   | BATTLE_TYPE_SAFARI
                                   | BATTLE_TYPE_FRONTIER
                                   | BATTLE_TYPE_EREADER_TRAINER
-                                  | BATTLE_TYPE_WALLY_TUTORIAL))
+                                  | BATTLE_TYPE_OLD_MAN_TUTORIAL))
             && gBattleResults.shinyWildMon)
         {
             TryPutBreakingNewsOnAir();

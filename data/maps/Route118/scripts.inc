@@ -25,7 +25,7 @@ Route118_OnFrame:
 Route118_EventScript_GoodRodFisherman::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_GOOD_ROD, Route118_EventScript_ReceivedGoodRod
+	goto_if_set FLAG_GOT_GOOD_ROD, Route118_EventScript_ReceivedGoodRod
 	msgbox Route118_Text_YouAgreeGoodRodIsGood, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, Route118_EventScript_ReceiveGoodRod
 	goto_if_eq VAR_RESULT, NO, Route118_EventScript_DeclineGoodRod
@@ -34,7 +34,7 @@ Route118_EventScript_GoodRodFisherman::
 Route118_EventScript_ReceiveGoodRod::
 	msgbox Route118_Text_IdenticalMindsTakeThis, MSGBOX_DEFAULT
 	giveitem ITEM_GOOD_ROD
-	setflag FLAG_RECEIVED_GOOD_ROD
+	setflag FLAG_GOT_GOOD_ROD
 	msgbox Route118_Text_TryYourLuckFishing, MSGBOX_DEFAULT
 	release
 	end
@@ -176,73 +176,6 @@ Route118_Movement_StevenExit2:
 	walk_right
 	walk_right
 	step_end
-
-Route118_EventScript_Rose::
-	trainerbattle_single TRAINER_ROSE_1, Route118_Text_RoseIntro, Route118_Text_RoseDefeat, Route118_EventScript_RegisterRose
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, Route118_EventScript_RematchRose
-	msgbox Route118_Text_RosePostBattle, MSGBOX_DEFAULT
-	release
-	end
-
-Route118_EventScript_RegisterRose::
-	special PlayerFaceTrainerAfterBattle
-	waitmovement 0
-	msgbox Route118_Text_RoseRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_ROSE_1
-	release
-	end
-
-Route118_EventScript_RematchRose::
-	trainerbattle_rematch TRAINER_ROSE_1, Route118_Text_RoseRematchIntro, Route118_Text_RoseRematchDefeat
-	msgbox Route118_Text_RosePostRematch, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Barny::
-	trainerbattle_single TRAINER_BARNY, Route118_Text_BarnyIntro, Route118_Text_BarnyDefeat
-	msgbox Route118_Text_BarnyPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Wade::
-	trainerbattle_single TRAINER_WADE, Route118_Text_WadeIntro, Route118_Text_WadeDefeat
-	msgbox Route118_Text_WadePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Dalton::
-	trainerbattle_single TRAINER_DALTON_1, Route118_Text_DaltonIntro, Route118_Text_DaltonDefeat, Route118_EventScript_RegisterDalton
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, Route118_EventScript_RematchDalton
-	msgbox Route118_Text_DaltonPostBattle, MSGBOX_DEFAULT
-	release
-	end
-
-Route118_EventScript_RegisterDalton::
-	special PlayerFaceTrainerAfterBattle
-	waitmovement 0
-	msgbox Route118_Text_DaltonRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_DALTON_1
-	release
-	end
-
-Route118_EventScript_RematchDalton::
-	trainerbattle_rematch TRAINER_DALTON_1, Route118_Text_DaltonRematchIntro, Route118_Text_DaltonRematchDefeat
-	msgbox Route118_Text_DaltonPostRematch, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Perry::
-	trainerbattle_single TRAINER_PERRY, Route118_Text_PerryIntro, Route118_Text_PerryDefeat
-	msgbox Route118_Text_PerryPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Chester::
-	trainerbattle_single TRAINER_CHESTER, Route118_Text_ChesterIntro, Route118_Text_ChesterDefeat
-	msgbox Route118_Text_ChesterPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route118_EventScript_Deandre::
-	trainerbattle_single TRAINER_DEANDRE, Route118_Text_DeandreIntro, Route118_Text_DeandreDefeat
-	msgbox Route118_Text_DeandrePostBattle, MSGBOX_AUTOCLOSE
-	end
 
 Route118_Text_StevenQuestions:
 	.string "STEVEN: Hi, {PLAYER}{KUN}!\p"

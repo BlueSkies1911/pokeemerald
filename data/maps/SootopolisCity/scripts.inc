@@ -19,15 +19,13 @@
 SootopolisCity_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, SootopolisCity_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, SootopolisCity_OnTransition
-	map_script MAP_SCRIPT_ON_RESUME, SootopolisCity_OnResume
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, SootopolisCity_OnFrame
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, SootopolisCity_OnWarp
 	.byte 0
 
 SootopolisCity_OnLoad:
-	call_if_unset FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_LockGymDoor
-	goto_if_unset FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN, SootopolisCity_EventScript_LegendariesNotArrived
-	call_if_unset FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_LockHouseDoors
+	call_if_unset FLAG_DID_TANGENY_TRADE, SootopolisCity_EventScript_LockGymDoor
+	call_if_unset FLAG_DID_TANGENY_TRADE, SootopolisCity_EventScript_LockHouseDoors
 	end
 
 SootopolisCity_EventScript_LegendariesNotArrived::
@@ -50,7 +48,7 @@ SootopolisCity_EventScript_LockGymDoor::
 	return
 
 SootopolisCity_OnTransition:
-	setflag FLAG_VISITED_SOOTOPOLIS_CITY
+	setflag FLAG_WORLD_MAP_FIVE_ISLAND
 	call_if_eq VAR_SOOTOPOLIS_CITY_STATE, 1, SootopolisCity_EventScript_HideMapNamePopup
 	call_if_eq VAR_SKY_PILLAR_STATE, 1, SootopolisCity_EventScript_HideMapNamePopup
 	call SootopolisCity_EventScript_SetWeather
@@ -175,10 +173,6 @@ SootopolisCity_EventScript_PlayerFaceLegendaries2::
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_NORTH
 	setvar VAR_SKY_PILLAR_STATE, 3
 	return
-
-SootopolisCity_OnResume:
-	setdivewarp MAP_UNDERWATER_SOOTOPOLIS_CITY, 9, 6
-	end
 
 SootopolisCity_OnFrame:
 	map_script_2 VAR_SOOTOPOLIS_CITY_STATE, 1, SootopolisCity_EventScript_StartLegendariesScene
@@ -528,7 +522,6 @@ SootopolisCity_EventScript_RayquazaSceneFromPokeCenter::
 	waitstate
 	clearflag FLAG_SYS_WEATHER_CTRL
 	setvar VAR_SKY_PILLAR_STATE, 3
-	clearflag FLAG_LEGENDARIES_IN_SOOTOPOLIS
 	fadenewbgm MUS_SOOTOPOLIS
 	delay 120
 	clearflag FLAG_HIDE_MAP_NAME_POPUP
@@ -581,7 +574,6 @@ SootopolisCity_EventScript_RayquazaSceneFromDive::
 	waitstate
 	clearflag FLAG_SYS_WEATHER_CTRL
 	setvar VAR_SKY_PILLAR_STATE, 2
-	clearflag FLAG_LEGENDARIES_IN_SOOTOPOLIS
 	fadenewbgm MUS_SURF
 	delay 120
 	clearflag FLAG_HIDE_MAP_NAME_POPUP
@@ -901,7 +893,7 @@ SootopolisCity_EventScript_Steven::
 	goto_if_eq VAR_SOOTOPOLIS_CITY_STATE, 2, SootopolisCity_EventScript_StevenHelpWallace
 	goto_if_eq VAR_SOOTOPOLIS_CITY_STATE, 3, SootopolisCity_EventScript_StevenHelpedWallace
 	goto_if_eq VAR_SOOTOPOLIS_CITY_STATE, 4, SootopolisCity_EventScript_StevenHelpedWallace
-	goto_if_set FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_StevenMaxieArchieLeft
+	goto_if_set FLAG_DID_TANGENY_TRADE, SootopolisCity_EventScript_StevenMaxieArchieLeft
 	msgbox SootopolisCity_Text_SoThatsRayquaza, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -942,7 +934,6 @@ SootopolisCity_EventScript_StevenLeadPlayerCaveOfOrigin::
 	setflag FLAG_STEVEN_GUIDES_TO_CAVE_OF_ORIGIN
 	applymovement OBJ_EVENT_ID_PLAYER, SootopolisCity_Movement_PlayerEnterCaveOfOrigin
 	waitmovement 0
-	warp MAP_CAVE_OF_ORIGIN_ENTRANCE, 9, 20
 	waitstate
 	end
 
@@ -1301,7 +1292,7 @@ SootopolisCity_EventScript_Wallace::
 	faceplayer
 	goto_if_eq VAR_SOOTOPOLIS_CITY_STATE, 4, SootopolisCity_EventScript_GoToSkyPillar
 	goto_if_set FLAG_RECEIVED_HM07, SootopolisCity_EventScript_GoToGym
-	goto_if_set FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE, SootopolisCity_EventScript_GiveWaterfall
+	goto_if_set FLAG_DID_TANGENY_TRADE, SootopolisCity_EventScript_GiveWaterfall
 	msgbox SootopolisCity_Text_AquaMagmaDidntMeanHarm, MSGBOX_DEFAULT
 	release
 	end
@@ -1385,7 +1376,7 @@ SootopolisCity_EventScript_ArchieRayquaza::
 SootopolisCity_EventScript_MaxieArchieLeave::
 	setflag FLAG_HIDE_SOOTOPOLIS_CITY_MAXIE
 	setflag FLAG_HIDE_SOOTOPOLIS_CITY_ARCHIE
-	setflag FLAG_SOOTOPOLIS_ARCHIE_MAXIE_LEAVE
+	setflag FLAG_DID_TANGENY_TRADE
 	clearflag FLAG_HIDE_MT_PYRE_SUMMIT_MAXIE
 	clearflag FLAG_HIDE_MT_PYRE_SUMMIT_ARCHIE
 	setvar VAR_MT_PYRE_STATE, 2

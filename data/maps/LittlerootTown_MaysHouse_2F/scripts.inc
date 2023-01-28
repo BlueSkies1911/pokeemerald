@@ -72,7 +72,7 @@ LittlerootTown_MaysHouse_2F_EventScript_MeetMay::
 	call_if_eq VAR_FACING, DIR_EAST, LittlerootTown_MaysHouse_2F_EventScript_MeetMayEast
 	setvar VAR_LITTLEROOT_RIVAL_STATE, 3
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_POKE_BALL
-	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM
+	clearflag FLAG_HIDE_CREDITS_RIVAL
 	setvar VAR_LITTLEROOT_TOWN_STATE, 1
 	savebgm MUS_DUMMY
 	fadedefaultbgm
@@ -294,7 +294,7 @@ LittlerootTown_MaysHouse_2F_EventScript_CheckRivalsPC::
 	end
 
 LittlerootTown_MaysHouse_2F_EventScript_CheckPlayersPC::
-	setvar VAR_0x8004, PC_LOCATION_MAYS_HOUSE
+	setvar VAR_0x8004, PC_LOCATION_PLAYERS_HOUSE
 	special DoPCTurnOnEffect
 	playse SE_PC_ON
 	msgbox gText_PlayerHouseBootPC, MSGBOX_DEFAULT
@@ -304,7 +304,7 @@ LittlerootTown_MaysHouse_2F_EventScript_CheckPlayersPC::
 	end
 
 LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC::
-	setvar VAR_0x8004, PC_LOCATION_MAYS_HOUSE
+	setvar VAR_0x8004, PC_LOCATION_PLAYERS_HOUSE
 	playse SE_PC_OFF
 	special DoPCTurnOffEffect
 	releaseall

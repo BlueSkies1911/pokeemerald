@@ -10,7 +10,7 @@ PetalburgCity_MapScripts::
 	.byte 0
 
 PetalburgCity_OnTransition:
-	setflag FLAG_VISITED_PETALBURG_CITY
+	setflag FLAG_WORLD_MAP_FUCHSIA_CITY
 	call_if_eq VAR_PETALBURG_CITY_STATE, 0, PetalburgCity_EventScript_MoveGymBoyToWestEntrance
 	call_if_eq VAR_PETALBURG_CITY_STATE, 2, PetalburgCity_EventScript_DisableMapNameAndMusic
 	call_if_eq VAR_PETALBURG_CITY_STATE, 4, PetalburgCity_EventScript_DisableMapNameAndMusic
@@ -42,13 +42,10 @@ PetalburgCity_EventScript_WallyTutorial::
 	applymovement LOCALID_WALLY, PetalburgCity_Movement_WallyTutorialWally
 	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_WallyTutorialPlayer
 	waitmovement 0
-	msgbox Route102_Text_WatchMeCatchPokemon, MSGBOX_DEFAULT
-	special StartWallyTutorialBattle
+	special StartOldManTutorialBattle
 	waitstate
-	msgbox Route102_Text_WallyIDidIt, MSGBOX_DEFAULT
 	applymovement LOCALID_WALLY, Common_Movement_WalkInPlaceFasterLeft, MAP_PETALBURG_CITY
 	waitmovement LOCALID_WALLY, MAP_PETALBURG_CITY
-	msgbox Route102_Text_LetsGoBack, MSGBOX_DEFAULT
 	closemessage
 	clearflag FLAG_HIDE_MAP_NAME_POPUP
 	setvar VAR_PETALBURG_CITY_STATE, 3
@@ -74,7 +71,6 @@ PetalburgCity_EventScript_WalkToWallyHouse::
 	applymovement LOCALID_WALLYS_DAD, PetalburgCity_Movement_WalkInsideHouseWallysDad
 	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_WalkInsideHousePlayer
 	waitmovement 0
-	setflag FLAG_HIDE_PETALBURG_CITY_WALLYS_DAD
 	hideobjectat OBJ_EVENT_ID_PLAYER, MAP_PETALBURG_CITY
 	closedoor VAR_0x8004, VAR_0x8005
 	waitdooranim

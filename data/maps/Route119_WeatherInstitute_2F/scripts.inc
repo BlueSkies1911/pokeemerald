@@ -30,26 +30,6 @@ Route119_WeatherInstitute_2F_EventScript_SetScientistPosGameClear::
 	setobjectmovementtype LOCALID_SCIENTIST, MOVEMENT_TYPE_FACE_UP
 	return
 
-Route119_WeatherInstitute_2F_EventScript_Grunt5::
-	trainerbattle_single TRAINER_GRUNT_WEATHER_INST_5, Route119_WeatherInstitute_2F_Text_Grunt5Intro, Route119_WeatherInstitute_2F_Text_Grunt5Defeat
-	msgbox Route119_WeatherInstitute_2F_Text_Grunt5PostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route119_WeatherInstitute_2F_EventScript_Grunt2::
-	trainerbattle_single TRAINER_GRUNT_WEATHER_INST_2, Route119_WeatherInstitute_2F_Text_Grunt2Intro, Route119_WeatherInstitute_2F_Text_Grunt2Defeat
-	msgbox Route119_WeatherInstitute_2F_Text_Grunt2PostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route119_WeatherInstitute_2F_EventScript_Grunt3::
-	trainerbattle_single TRAINER_GRUNT_WEATHER_INST_3, Route119_WeatherInstitute_2F_Text_Grunt3Intro, Route119_WeatherInstitute_2F_Text_Grunt3Defeat
-	msgbox Route119_WeatherInstitute_2F_Text_Grunt3PostBattle, MSGBOX_AUTOCLOSE
-	end
-
-Route119_WeatherInstitute_2F_EventScript_Shelly::
-	trainerbattle_single TRAINER_SHELLY_WEATHER_INSTITUTE, Route119_WeatherInstitute_2F_Text_ShellyIntro, Route119_WeatherInstitute_2F_Text_ShellyDefeat, Route119_WeatherInstitute_2F_EventScript_ShellyDefeated
-	msgbox Route119_WeatherInstitute_2F_Text_ShellyPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 Route119_WeatherInstitute_2F_EventScript_ShellyDefeated::
 	msgbox Route119_WeatherInstitute_2F_Text_ShellyPostBattle, MSGBOX_DEFAULT
 	closemessage
@@ -98,9 +78,6 @@ Route119_WeatherInstitute_2F_EventScript_ReceiveCastform::
 Route119_WeatherInstitute_2F_EventScript_ReceiveCastformParty::
 	call Route119_WeatherInstitute_2F_EventScript_ReceivedCastformFanfare
 	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, NO, Route119_WeatherInstitute_2F_EventScript_ExplainCastform
-	call Common_EventScript_GetGiftMonPartySlot
-	call Common_EventScript_NameReceivedPartyMon
 	goto Route119_WeatherInstitute_2F_EventScript_ExplainCastform
 	end
 
@@ -127,7 +104,6 @@ Route119_WeatherInstitute_2F_EventScript_ReceivedCastformFanfare::
 
 Route119_WeatherInstitute_2F_EventScript_ExplainCastform::
 	msgbox Route119_WeatherInstitute_2F_Text_PokemonChangesWithWeather, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_CASTFORM
 	release
 	end
 
@@ -206,7 +182,6 @@ Route119_WeatherInstitute_2F_Movement_ScientistApproachPlayer:
 Route119_WeatherInstitute_2F_EventScript_WeatherScientist::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_CASTFORM, Route119_WeatherInstitute_2F_EventScript_ScientistMentionWeather
 	goto Route119_WeatherInstitute_2F_EventScript_ReceiveCastform
 	end
 

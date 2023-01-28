@@ -35,7 +35,7 @@ GiddyText_ISoWantToGoOnAVacation::
 	.string "Would you happen to know a nice place?$"
 
 GiddyText_IBoughtCrayonsWith120Colors::
-	.string "I bought crayons with 120 colors!\n"
+	.string "I bought crayons with 120 colours!\n"
 	.string "Don't you think that's nice?$"
 
 GiddyText_WouldntItBeNiceIfWeCouldFloat::

@@ -68,7 +68,6 @@ SlateportCity_Harbor_EventScript_AquaEscapeScene::
 	removeobject LOCALID_ARCHIE
 	removeobject LOCALID_SUBMARINE
 	setvar VAR_SLATEPORT_HARBOR_STATE, 2
-	setflag FLAG_MET_TEAM_AQUA_HARBOR
 	setflag FLAG_HIDE_LILYCOVE_MOTEL_SCOTT
 	call_if_eq VAR_0x8008, 0, SlateportCity_Harbor_EventScript_SternApproachPlayer0
 	call_if_eq VAR_0x8008, 1, SlateportCity_Harbor_EventScript_SternApproachPlayer1
@@ -293,7 +292,7 @@ SlateportCity_Harbor_EventScript_CaptStern::
 	faceplayer
 	goto_if_set FLAG_BADGE07_GET, SlateportCity_Harbor_EventScript_CaptSternFerryOrScannerComment
 	goto_if_set FLAG_EVIL_TEAM_ESCAPED_STERN_SPOKE, SlateportCity_Harbor_EventScript_NeedDive
-	goto_if_set FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE, SlateportCity_Harbor_EventScript_TeamAquaLeftNeedDive
+	goto_if_set FLAG_HIDE_ZAPDOS, SlateportCity_Harbor_EventScript_TeamAquaLeftNeedDive
 	goto_if_eq VAR_SLATEPORT_HARBOR_STATE, 2, SlateportCity_Harbor_EventScript_WhyStealSubmarine
 	msgbox SlateportCity_Harbor_Text_SameThugsTriedToRobAtMuseum, MSGBOX_DEFAULT
 	closemessage

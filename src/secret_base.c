@@ -95,11 +95,6 @@ static u8 GetSecretBaseOwnerType(u8);
 
 static const struct SecretBaseEntranceMetatiles sSecretBaseEntranceMetatiles[] =
 {
-    {.closedMetatileId = METATILE_General_SecretBase_TreeLeft,  .openMetatileId = METATILE_General_SecretBase_VineLeft},
-    {.closedMetatileId = METATILE_General_SecretBase_TreeRight, .openMetatileId = METATILE_General_SecretBase_VineRight},
-    {.closedMetatileId = METATILE_General_RedCaveIndent,        .openMetatileId = METATILE_General_RedCaveOpen},
-    {.closedMetatileId = METATILE_General_YellowCaveIndent,     .openMetatileId = METATILE_General_YellowCaveOpen},
-    {.closedMetatileId = METATILE_General_BlueCaveIndent,       .openMetatileId = METATILE_General_BlueCaveOpen},
     {.closedMetatileId = METATILE_Fallarbor_BrownCaveIndent,    .openMetatileId = METATILE_Fallarbor_BrownCaveOpen},
     {.closedMetatileId = METATILE_Fortree_SecretBase_Shrub,     .openMetatileId = METATILE_Fortree_SecretBase_ShrubOpen},
 };
@@ -162,12 +157,12 @@ static const u8 sSecretBaseOwnerGfxIds[10] =
     // Male
     OBJ_EVENT_GFX_YOUNGSTER,
     OBJ_EVENT_GFX_BUG_CATCHER,
-    OBJ_EVENT_GFX_RICH_BOY,
+    OBJ_EVENT_GFX_RUBY,
     OBJ_EVENT_GFX_CAMPER,
-    OBJ_EVENT_GFX_MAN_3,
+    OBJ_EVENT_GFX_OLD_MAN_2,
     // Female
     OBJ_EVENT_GFX_LASS,
-    OBJ_EVENT_GFX_GIRL_3,
+    OBJ_EVENT_GFX_SWIMMER_F_LAND,
     OBJ_EVENT_GFX_WOMAN_2,
     OBJ_EVENT_GFX_PICNICKER,
     OBJ_EVENT_GFX_WOMAN_5,

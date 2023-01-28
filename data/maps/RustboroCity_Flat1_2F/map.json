@@ -15,7 +15,7 @@
   "connections": null,
   "object_events": [
     {
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_F",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_F",
       "x": 4,
       "y": 6,
       "elevation": 3,
@@ -28,7 +28,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_TWIN",
+      "graphics_id": "OBJ_EVENT_GFX_SWIMMER_M_WATER",
       "x": 9,
       "y": 5,
       "elevation": 3,
@@ -80,7 +80,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_1",
+      "graphics_id": "OBJ_EVENT_GFX_MAN",
       "x": 8,
       "y": 5,
       "elevation": 3,
@@ -106,7 +106,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PIKACHU_DOLL",
+      "graphics_id": "OBJ_EVENT_GFX_MUDKIP_DOLL",
       "x": 9,
       "y": 7,
       "elevation": 3,

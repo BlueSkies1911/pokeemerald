@@ -53,7 +53,7 @@
 #define BATTLE_TYPE_MULTI              (1 << 6)
 #define BATTLE_TYPE_SAFARI             (1 << 7)
 #define BATTLE_TYPE_BATTLE_TOWER       (1 << 8)
-#define BATTLE_TYPE_WALLY_TUTORIAL     (1 << 9)
+#define BATTLE_TYPE_OLD_MAN_TUTORIAL   (1 << 9)
 #define BATTLE_TYPE_ROAMER             (1 << 10)
 #define BATTLE_TYPE_EREADER_TRAINER    (1 << 11)
 #define BATTLE_TYPE_KYOGRE_GROUDON     (1 << 12)
@@ -72,12 +72,18 @@
 #define BATTLE_TYPE_RECORDED_LINK      (1 << 25)
 #define BATTLE_TYPE_TRAINER_HILL       (1 << 26)
 #define BATTLE_TYPE_SECRET_BASE        (1 << 27)
-#define BATTLE_TYPE_GROUDON            (1 << 28)
-#define BATTLE_TYPE_KYOGRE             (1 << 29)
+#define BATTLE_TYPE_GHOST              (1 << 28)
+#define BATTLE_TYPE_GHOST_UNVEILED     (1 << 29)
 #define BATTLE_TYPE_RAYQUAZA           (1 << 30)
 #define BATTLE_TYPE_RECORDED_IS_MASTER (1 << 31)
 #define BATTLE_TYPE_FRONTIER                (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_DOME | BATTLE_TYPE_PALACE | BATTLE_TYPE_ARENA | BATTLE_TYPE_FACTORY | BATTLE_TYPE_PIKE | BATTLE_TYPE_PYRAMID)
 #define BATTLE_TYPE_FRONTIER_NO_PYRAMID     (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_DOME | BATTLE_TYPE_PALACE | BATTLE_TYPE_ARENA | BATTLE_TYPE_FACTORY | BATTLE_TYPE_PIKE)
+
+#define IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(flags) ((flags) & BATTLE_TYPE_GHOST && !((flags) & BATTLE_TYPE_GHOST_UNVEILED))
+#define IS_BATTLE_TYPE_GHOST_WITH_SCOPE(flags) ((flags) & BATTLE_TYPE_GHOST && (flags) & BATTLE_TYPE_GHOST_UNVEILED)
+
+#define RIVAL_BATTLE_HEAL_AFTER  1
+#define RIVAL_BATTLE_TUTORIAL    3
 
 // Battle Outcome defines
 #define B_OUTCOME_WON                  1
@@ -344,6 +350,7 @@
 #define B_WIN_VS_OUTCOME_DRAW    21
 #define B_WIN_VS_OUTCOME_LEFT    22
 #define B_WIN_VS_OUTCOME_RIGHT   23
+#define B_WIN_OAK_TUTORIAL       24
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
 #define ARENA_WIN_PLAYER_NAME      15

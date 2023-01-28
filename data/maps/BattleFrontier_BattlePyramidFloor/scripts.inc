@@ -105,13 +105,13 @@ BattlePyramid_WarpToTop::
 
 @ TRAINER_PHILLIP is used as a placeholder
 BattlePyramid_TrainerBattle::
-	trainerbattle TRAINER_BATTLE_PYRAMID, TRAINER_PHILLIP, 0, BattleFacility_TrainerBattle_PlaceholderText, BattleFacility_TrainerBattle_PlaceholderText
-	pyramid_showhint
-	waitmessage
-	waitbuttonpress
-	closemessage
-	releaseall
-	end
+    trainerbattle TRAINER_BATTLE_PYRAMID, TRAINER_SCIENTIST_TAYLOR, 0, BattleFacility_TrainerBattle_PlaceholderText, BattleFacility_TrainerBattle_PlaceholderText
+    pyramid_showhint
+    waitmessage
+    waitbuttonpress
+    closemessage
+    releaseall
+    end
 
 BattlePyramid_FindItemBall::
 	pyramid_setitem

@@ -243,7 +243,7 @@ LittlerootTown_BrendansHouse_2F_EventScript_PC::
 	end
 
 LittlerootTown_BrendansHouse_2F_EventScript_CheckPlayersPC::
-	setvar VAR_0x8004, PC_LOCATION_BRENDANS_HOUSE
+	setvar VAR_0x8004, PC_LOCATION_PLAYERS_HOUSE
 	special DoPCTurnOnEffect
 	playse SE_PC_ON
 	msgbox gText_PlayerHouseBootPC, MSGBOX_DEFAULT
@@ -253,7 +253,7 @@ LittlerootTown_BrendansHouse_2F_EventScript_CheckPlayersPC::
 	end
 
 LittlerootTown_BrendansHouse_2F_EventScript_TurnOffPlayerPC::
-	setvar VAR_0x8004, PC_LOCATION_BRENDANS_HOUSE
+	setvar VAR_0x8004, PC_LOCATION_PLAYERS_HOUSE
 	playse SE_PC_OFF
 	special DoPCTurnOffEffect
 	releaseall
@@ -272,10 +272,6 @@ PlayersHouse_2F_EventScript_GameCube::
 	msgbox PlayersHouse_2F_Text_ItsAGameCube, MSGBOX_SIGN
 	end
 
-PlayersHouse_2F_Text_ClockIsStopped:
-	.string "The clock is stopped…\p"
-	.string "Better set it and start it!$"
-
 PlayersHouse_2F_Text_HowDoYouLikeYourRoom:
 	.string "MOM: {PLAYER}, how do you like your\n"
 	.string "new room?\p"
@@ -293,10 +289,6 @@ PlayersHouse_2F_Text_Notebook:
 	.string "ADVENTURE RULE NO. 2\n"
 	.string "Record your progress with SAVE.\p"
 	.string "The remaining pages are blank…$"
-
-Common_Text_LookCloserAtMap:
-	.string "{PLAYER} took a closer look at the\n"
-	.string "HOENN region map.$"
 
 PlayersHouse_2F_Text_ItsAGameCube:
 	.string "It's a Nintendo GameCube.\p"

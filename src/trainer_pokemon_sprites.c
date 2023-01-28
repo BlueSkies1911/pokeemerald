@@ -333,10 +333,9 @@ u16 FreeAndDestroyMonPicSprite(u16 spriteId)
     return FreeAndDestroyPicSpriteInternal(spriteId);
 }
 
-// Unused
-static u16 LoadMonPicInWindow(u16 species, u32 otId, u32 personality, bool8 isFrontPic, u8 paletteSlot, u8 windowId)
+u16 LoadMonPicInWindow(u16 species, u32 otId, u32 personality, bool8 isFrontPic, u8 paletteSlot, u8 windowId)
 {
-    return LoadPicSpriteInWindow(species, otId, personality, isFrontPic, paletteSlot, windowId, FALSE);
+    return CreateTrainerCardSprite(species, otId, personality, isFrontPic, 0, 0, paletteSlot, windowId, FALSE);
 }
 
 // Unused, FRLG only
@@ -371,9 +370,9 @@ u16 PlayerGenderToFrontTrainerPicId_Debug(u8 gender, bool8 getClass)
     if (getClass == TRUE)
     {
         if (gender != MALE)
-            return gFacilityClassToPicIndex[FACILITY_CLASS_MAY];
+            return gFacilityClassToPicIndex[FACILITY_CLASS_LEAF];
         else
-            return gFacilityClassToPicIndex[FACILITY_CLASS_BRENDAN];
+            return gFacilityClassToPicIndex[FACILITY_CLASS_RED];
     }
     return gender;
 }

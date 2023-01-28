@@ -435,11 +435,15 @@ u8 GetOpposingLinkMultiBattlerId(bool8 rightSide, u8 multiplayerId);
 u16 FacilityClassToPicIndex(u16 facilityClass);
 u16 PlayerGenderToFrontTrainerPicId(u8 playerGender);
 void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality);
+bool8 CheckBattleTypeGhost(struct Pokemon *mon, u8 bank);
 const u8 *GetTrainerClassNameFromId(u16 trainerId);
 const u8 *GetTrainerNameFromId(u16 trainerId);
 bool8 HasTwoFramesAnimation(u16 species);
 struct MonSpritesGfxManager *CreateMonSpritesGfxManager(u8 managerId, u8 mode);
 void DestroyMonSpritesGfxManager(u8 managerId);
 u8 *MonSpritesGfxManager_GetSpritePtr(u8 managerId, u8 spriteNum);
+struct OakSpeechNidoranFStruct *OakSpeechNidoranFSetup(u8 battlePosition, bool8 enable);
+void OakSpeechNidoranFFreeResources(void);
+void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 
 #endif // GUARD_POKEMON_H

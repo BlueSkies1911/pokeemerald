@@ -13,19 +13,19 @@ EverGrandeCity_GlaciasRoom_EventScript_PlayerTurnNorth::
 	end
 
 EverGrandeCity_GlaciasRoom_OnFrame:
-	map_script_2 VAR_ELITE_4_STATE, 2, EverGrandeCity_GlaciasRoom_EventScript_WalkInCloseDoor
+	map_script_2 VAR_MAP_SCENE_POKEMON_LEAGUE, 2, EverGrandeCity_GlaciasRoom_EventScript_WalkInCloseDoor
 	.2byte 0
 
 EverGrandeCity_GlaciasRoom_EventScript_WalkInCloseDoor::
 	lockall
 	call PokemonLeague_EliteFour_EventScript_WalkInCloseDoor
-	setvar VAR_ELITE_4_STATE, 3
+	setvar VAR_MAP_SCENE_POKEMON_LEAGUE, 3
 	releaseall
 	end
 
 EverGrandeCity_GlaciasRoom_OnLoad:
-	call_if_set FLAG_DEFEATED_ELITE_4_GLACIA, EverGrandeCity_GlaciasRoom_EventScript_ResetAdvanceToNextRoom
-	call_if_eq VAR_ELITE_4_STATE, 3, EverGrandeCity_GlaciasRoom_EventScript_CloseDoor
+	call_if_set FLAG_DEFEATED_AGATHA, EverGrandeCity_GlaciasRoom_EventScript_ResetAdvanceToNextRoom
+	call_if_eq VAR_MAP_SCENE_POKEMON_LEAGUE, 3, EverGrandeCity_GlaciasRoom_EventScript_CloseDoor
 	end
 
 EverGrandeCity_GlaciasRoom_EventScript_ResetAdvanceToNextRoom::
@@ -39,10 +39,10 @@ EverGrandeCity_GlaciasRoom_EventScript_CloseDoor::
 EverGrandeCity_GlaciasRoom_EventScript_Glacia::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_ELITE_4_GLACIA, EverGrandeCity_GlaciasRoom_EventScript_PostBattleSpeech
+	goto_if_set FLAG_DEFEATED_AGATHA, EverGrandeCity_GlaciasRoom_EventScript_PostBattleSpeech
 	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
 	msgbox EverGrandeCity_GlaciasRoom_Text_IntroSpeech, MSGBOX_DEFAULT
-	trainerbattle_no_intro TRAINER_GLACIA, EverGrandeCity_GlaciasRoom_Text_Defeat
+	trainerbattle_no_intro TRAINER_ELITE_FOUR_AGATHA, EverGrandeCity_GlaciasRoom_Text_Defeat
 	goto EverGrandeCity_GlaciasRoom_EventScript_Defeated
 	end
 
@@ -52,7 +52,7 @@ EverGrandeCity_GlaciasRoom_EventScript_PostBattleSpeech::
 	end
 
 EverGrandeCity_GlaciasRoom_EventScript_Defeated::
-	setflag FLAG_DEFEATED_ELITE_4_GLACIA
+	setflag FLAG_DEFEATED_AGATHA
 	call PokemonLeague_EliteFour_SetAdvanceToNextRoomMetatiles
 	msgbox EverGrandeCity_GlaciasRoom_Text_PostBattleSpeech, MSGBOX_DEFAULT
 	release

@@ -53,6 +53,20 @@ struct SpeciesItem
     u16 item;
 };
 
+struct OakSpeechNidoranFStruct
+{
+    u8 spriteCount:4;
+    u8 battlePosition:4;
+    u8 frameCount;
+    u8 enable;
+    bool8 enable2;
+    u32 sizePerSprite;
+    u8 *dataBuffer;
+    u8 **bufferPtrs;
+    struct SpriteTemplate *templates;
+    struct SpriteFrameImage *frameImages;
+};
+
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
 static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType);
 static void EncryptBoxMon(struct BoxPokemon *boxMon);
@@ -70,6 +84,7 @@ EWRAM_DATA struct Pokemon gPlayerParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct Pokemon gEnemyParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct SpriteTemplate gMultiuseSpriteTemplate = {0};
 EWRAM_DATA static struct MonSpritesGfxManager *sMonSpritesGfxManagers[MON_SPR_GFX_MANAGERS_COUNT] = {NULL};
+static EWRAM_DATA struct OakSpeechNidoranFStruct *sOakSpeechNidoranResources = NULL;
 
 #include "data/battle_moves.h"
 
@@ -1969,24 +1984,6 @@ const struct SpriteTemplate gBattlerSpriteTemplates[MAX_BATTLERS_COUNT] =
 
 static const struct SpriteTemplate sTrainerBackSpriteTemplates[] =
 {
-    [TRAINER_BACK_PIC_BRENDAN] = {
-        .tileTag = TAG_NONE,
-        .paletteTag = 0,
-        .oam = &gOamData_BattleSpritePlayerSide,
-        .anims = NULL,
-        .images = gTrainerBackPicTable_Brendan,
-        .affineAnims = gAffineAnims_BattleSpritePlayerSide,
-        .callback = SpriteCB_BattleSpriteStartSlideLeft,
-    },
-    [TRAINER_BACK_PIC_MAY] = {
-        .tileTag = TAG_NONE,
-        .paletteTag = 0,
-        .oam = &gOamData_BattleSpritePlayerSide,
-        .anims = NULL,
-        .images = gTrainerBackPicTable_May,
-        .affineAnims = gAffineAnims_BattleSpritePlayerSide,
-        .callback = SpriteCB_BattleSpriteStartSlideLeft,
-    },
     [TRAINER_BACK_PIC_RED] = {
         .tileTag = TAG_NONE,
         .paletteTag = 0,
@@ -2002,6 +1999,24 @@ static const struct SpriteTemplate sTrainerBackSpriteTemplates[] =
         .oam = &gOamData_BattleSpritePlayerSide,
         .anims = NULL,
         .images = gTrainerBackPicTable_Leaf,
+        .affineAnims = gAffineAnims_BattleSpritePlayerSide,
+        .callback = SpriteCB_BattleSpriteStartSlideLeft,
+    },
+    [TRAINER_BACK_PIC_BRENDAN] = {
+        .tileTag = TAG_NONE,
+        .paletteTag = 0,
+        .oam = &gOamData_BattleSpritePlayerSide,
+        .anims = NULL,
+        .images = gTrainerBackPicTable_Brendan,
+        .affineAnims = gAffineAnims_BattleSpritePlayerSide,
+        .callback = SpriteCB_BattleSpriteStartSlideLeft,
+    },
+    [TRAINER_BACK_PIC_MAY] = {
+        .tileTag = TAG_NONE,
+        .paletteTag = 0,
+        .oam = &gOamData_BattleSpritePlayerSide,
+        .anims = NULL,
+        .images = gTrainerBackPicTable_May,
         .affineAnims = gAffineAnims_BattleSpritePlayerSide,
         .callback = SpriteCB_BattleSpriteStartSlideLeft,
     },
@@ -2038,6 +2053,15 @@ static const struct SpriteTemplate sTrainerBackSpriteTemplates[] =
         .oam = &gOamData_BattleSpritePlayerSide,
         .anims = NULL,
         .images = gTrainerBackPicTable_Steven,
+        .affineAnims = gAffineAnims_BattleSpritePlayerSide,
+        .callback = SpriteCB_BattleSpriteStartSlideLeft,
+    },
+    [TRAINER_BACK_PIC_OLDMAN] = {
+        .tileTag = TAG_NONE,
+        .paletteTag = 0,
+        .oam = &gOamData_BattleSpritePlayerSide,
+        .anims = NULL,
+        .images = gTrainerBackPicTable_OldMan,
         .affineAnims = gAffineAnims_BattleSpritePlayerSide,
         .callback = SpriteCB_BattleSpriteStartSlideLeft,
     },
@@ -2088,6 +2112,7 @@ static const s8 sFriendshipEventModifiers[][3] =
     [FRIENDSHIP_EVENT_LEAGUE_BATTLE]   = { 3,  2,  1},
     [FRIENDSHIP_EVENT_LEARN_TMHM]      = { 1,  1,  0},
     [FRIENDSHIP_EVENT_WALKING]         = { 1,  1,  1},
+    [FRIENDSHIP_EVENT_MASSAGE]         = { 3,  3,  3 },
     [FRIENDSHIP_EVENT_FAINT_SMALL]     = {-1, -1, -1},
     [FRIENDSHIP_EVENT_FAINT_FIELD_PSN] = {-5, -5, -10},
     [FRIENDSHIP_EVENT_FAINT_LARGE]     = {-5, -5, -10},
@@ -2135,6 +2160,33 @@ static const struct SpriteTemplate sSpriteTemplate_64x64 =
     .paletteTag = TAG_NONE,
     .oam = &sOamData_64x64,
     .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+
+static const struct OamData sOakSpeechNidoranFDummyOamData = 
+{
+    .y = 0,
+    .affineMode = 0,
+    .objMode = 0,
+    .mosaic = 0,
+    .bpp = 0,
+    .shape = 0,
+    .x = 0,
+    .matrixNum = 0,
+    .size = 3,
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+};
+
+static const struct SpriteTemplate sOakSpeechNidoranFDummyTemplate = 
+{
+    .tileTag = TAG_NONE,
+    .paletteTag = TAG_NONE,
+    .oam = &sOakSpeechNidoranFDummyOamData,
+    .anims = gDummySpriteAnimTable, 
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,
@@ -6385,6 +6437,9 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_PIKE_QUEEN:
         case TRAINER_CLASS_PYRAMID_KING:
             return MUS_VS_FRONTIER_BRAIN;
+        case TRAINER_CLASS_BOSS:
+        case TRAINER_CLASS_TEAM_ROCKET:
+        case TRAINER_CLASS_RIVAL_LATE:
         default:
             return MUS_VS_TRAINER;
         }
@@ -6858,9 +6913,9 @@ u16 FacilityClassToPicIndex(u16 facilityClass)
 u16 PlayerGenderToFrontTrainerPicId(u8 playerGender)
 {
     if (playerGender != MALE)
-        return FacilityClassToPicIndex(FACILITY_CLASS_MAY);
+        return FacilityClassToPicIndex(FACILITY_CLASS_LEAF);
     else
-        return FacilityClassToPicIndex(FACILITY_CLASS_BRENDAN);
+        return FacilityClassToPicIndex(FACILITY_CLASS_RED);
 }
 
 void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality)
@@ -6874,6 +6929,20 @@ void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality)
         if (NationalPokedexNumToSpecies(nationalNum) == SPECIES_SPINDA)
             gSaveBlock2Ptr->pokedex.spindaPersonality = personality;
     }
+}
+
+bool8 CheckBattleTypeGhost(struct Pokemon *mon, u8 battlerId)
+{
+    u8 buffer[12];
+
+    if (gBattleTypeFlags & BATTLE_TYPE_GHOST && GetBattlerSide(battlerId) != B_SIDE_PLAYER)
+    {
+        GetMonData(mon, MON_DATA_NICKNAME, buffer);
+        StringGet_Nickname(buffer);
+        if (!StringCompare(buffer, gText_Ghost))
+            return TRUE;
+    }
+    return FALSE;
 }
 
 const u8 *GetTrainerClassNameFromId(u16 trainerId)
@@ -7088,5 +7157,194 @@ u8 *MonSpritesGfxManager_GetSpritePtr(u8 managerId, u8 spriteNum)
             spriteNum = 0;
 
         return gfx->spritePointers[spriteNum];
+    }
+}
+
+static void OakSpeechNidoranFSetupTemplate(struct OakSpeechNidoranFStruct *structPtr, u8 battlePosition)
+{
+    u16 i = 0, j = 0;
+
+    if (battlePosition > 3)
+    {
+        for (i = 0; i < (s8)structPtr->spriteCount; ++i)
+        {
+            structPtr->templates[i] = gBattlerSpriteTemplates[i];
+            for (j = 0; j < structPtr->frameCount; ++j)
+                structPtr->frameImages[i * structPtr->frameCount + j].data = &structPtr->bufferPtrs[i][j * 0x800];
+            structPtr->templates[i].images = &structPtr->frameImages[i * structPtr->frameCount];
+        }
+    }
+    else
+    {
+        const struct SpriteTemplate *template = &gBattlerSpriteTemplates[battlePosition];
+        
+        structPtr->templates[0] = *template;
+        for (j = 0; j < structPtr->frameCount; ++j)
+                structPtr->frameImages[j].data = &structPtr->bufferPtrs[0][j * 0x800];
+        structPtr->templates[0].images = structPtr->frameImages;
+    }
+}
+
+// not used
+static void OakSpeechNidoranFSetupTemplateDummy(struct OakSpeechNidoranFStruct *structPtr)
+{
+    u16 i, j;
+
+    for (i = 0; i < (s8)structPtr->spriteCount; ++i)
+    {
+        structPtr->templates[i] = sOakSpeechNidoranFDummyTemplate;
+        for (j = 0; j < structPtr->frameCount; ++j)
+            structPtr->frameImages[i * structPtr->spriteCount + j].data = &structPtr->bufferPtrs[i][j * 0x800];
+        structPtr->templates[i].images = &structPtr->frameImages[i * structPtr->spriteCount]; // should be frameCount logically
+        structPtr->templates[i].anims = gAnims_MonPic;
+        structPtr->templates[i].paletteTag = i;
+    }
+}
+
+struct OakSpeechNidoranFStruct *OakSpeechNidoranFSetup(u8 battlePosition, bool8 enable)
+{
+    s32 size;
+    u8 i, flags = 0;
+
+    if (sOakSpeechNidoranResources != NULL)
+    {
+        if (sOakSpeechNidoranResources->enable == 0xA3)
+            return NULL;
+        memset(sOakSpeechNidoranResources, 0, sizeof(struct OakSpeechNidoranFStruct));
+        sOakSpeechNidoranResources = NULL;
+    }
+    sOakSpeechNidoranResources = AllocZeroed(0x18);
+    if (sOakSpeechNidoranResources == NULL)
+        return NULL;
+    switch (enable)
+    {
+    case TRUE:
+        if (battlePosition == 4)
+        {
+            sOakSpeechNidoranResources->spriteCount = 4;
+            sOakSpeechNidoranResources->battlePosition = 4;
+        }
+        else
+        {
+            if (battlePosition > 4)
+                battlePosition = 0;
+            sOakSpeechNidoranResources->spriteCount = 1;
+            sOakSpeechNidoranResources->battlePosition = 1;
+        }
+        sOakSpeechNidoranResources->frameCount = 4;
+        sOakSpeechNidoranResources->enable2 = TRUE;
+        break;
+    case FALSE:
+    default:
+        if (!battlePosition)
+            battlePosition = 1;
+        if (battlePosition > 8)
+            battlePosition = 8;
+        sOakSpeechNidoranResources->spriteCount = (battlePosition << 16) >> 16;
+        sOakSpeechNidoranResources->battlePosition = battlePosition;
+        sOakSpeechNidoranResources->frameCount = 4;
+        sOakSpeechNidoranResources->enable2 = FALSE;
+        break;
+    }
+    size = sOakSpeechNidoranResources->frameCount * 0x800;
+    sOakSpeechNidoranResources->sizePerSprite = size;
+    sOakSpeechNidoranResources->dataBuffer = AllocZeroed(sOakSpeechNidoranResources->spriteCount * size);
+    sOakSpeechNidoranResources->bufferPtrs = AllocZeroed(sOakSpeechNidoranResources->spriteCount * 0x20);
+    if (sOakSpeechNidoranResources->dataBuffer == NULL ||  sOakSpeechNidoranResources->bufferPtrs == NULL)
+    {
+        flags |= 1;
+    }
+    else
+    {
+        do
+        {
+            for (i = 0; i < (s8)sOakSpeechNidoranResources->spriteCount; ++i)
+                sOakSpeechNidoranResources->bufferPtrs[i] = &sOakSpeechNidoranResources->dataBuffer[sOakSpeechNidoranResources->sizePerSprite * i];
+        } while (0);
+    }
+    sOakSpeechNidoranResources->templates = AllocZeroed(sizeof(struct SpriteTemplate) * sOakSpeechNidoranResources->spriteCount);
+    sOakSpeechNidoranResources->frameImages = AllocZeroed(sOakSpeechNidoranResources->spriteCount * sizeof(struct SpriteFrameImage) * sOakSpeechNidoranResources->frameCount);
+    if (sOakSpeechNidoranResources->templates == NULL || sOakSpeechNidoranResources->frameImages == NULL)
+    {
+        flags |= 2;
+    }
+    else
+    {
+        for (i = 0; i < sOakSpeechNidoranResources->frameCount * sOakSpeechNidoranResources->spriteCount; ++i)
+                sOakSpeechNidoranResources->frameImages[i].size = 0x800;
+        switch (sOakSpeechNidoranResources->enable2)
+        {
+        case TRUE:
+            OakSpeechNidoranFSetupTemplate(sOakSpeechNidoranResources, battlePosition);
+            break;
+        case FALSE:
+        default:
+            OakSpeechNidoranFSetupTemplateDummy(sOakSpeechNidoranResources);
+            break;
+        }
+    }
+    if (flags & 2)
+    {
+        if (sOakSpeechNidoranResources->frameImages != NULL)
+            FREE_AND_SET_NULL(sOakSpeechNidoranResources->frameImages);
+        if (sOakSpeechNidoranResources->templates != NULL)
+            FREE_AND_SET_NULL(sOakSpeechNidoranResources->templates);
+    }
+    if (flags & 1)
+    {
+        if (sOakSpeechNidoranResources->bufferPtrs != NULL)
+            FREE_AND_SET_NULL(sOakSpeechNidoranResources->bufferPtrs);
+        if (sOakSpeechNidoranResources->dataBuffer != NULL)
+            FREE_AND_SET_NULL(sOakSpeechNidoranResources->dataBuffer);
+    }
+    if (flags)
+    {
+        memset(sOakSpeechNidoranResources, 0, sizeof(struct OakSpeechNidoranFStruct));
+        FREE_AND_SET_NULL(sOakSpeechNidoranResources);
+    }
+    else
+    {
+        sOakSpeechNidoranResources->enable = 0xA3;
+    }
+    return sOakSpeechNidoranResources;
+}
+
+void OakSpeechNidoranFFreeResources(void)
+{
+    if (sOakSpeechNidoranResources != NULL)
+    {
+        if (sOakSpeechNidoranResources->enable != 0xA3)
+        {
+            memset(sOakSpeechNidoranResources, 0, sizeof(struct OakSpeechNidoranFStruct));
+            sOakSpeechNidoranResources = NULL;
+        }
+        else
+        {
+            if (sOakSpeechNidoranResources->frameImages != NULL)
+                FREE_AND_SET_NULL(sOakSpeechNidoranResources->frameImages);
+            if (sOakSpeechNidoranResources->templates != NULL)
+                FREE_AND_SET_NULL(sOakSpeechNidoranResources->templates);
+            if (sOakSpeechNidoranResources->bufferPtrs != NULL)
+                FREE_AND_SET_NULL(sOakSpeechNidoranResources->bufferPtrs);                    
+            if (sOakSpeechNidoranResources->dataBuffer != NULL)
+                FREE_AND_SET_NULL(sOakSpeechNidoranResources->dataBuffer);
+            memset(sOakSpeechNidoranResources, 0, sizeof(struct OakSpeechNidoranFStruct));
+            FREE_AND_SET_NULL(sOakSpeechNidoranResources);
+        }
+
+    }
+}
+
+void *OakSpeechNidoranFGetBuffer(u8 bufferId)
+{
+    if (sOakSpeechNidoranResources->enable != 0xA3)
+    {
+        return NULL;
+    }
+    else
+    {
+        if (bufferId >= (s8)sOakSpeechNidoranResources->spriteCount)
+            bufferId = 0;
+        return sOakSpeechNidoranResources->bufferPtrs[bufferId];
     }
 }

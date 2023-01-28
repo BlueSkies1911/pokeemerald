@@ -4,7 +4,7 @@ FortreeCity_MapScripts::
 	.byte 0
 
 FortreeCity_OnTransition:
-	setflag FLAG_VISITED_FORTREE_CITY
+	setflag FLAG_WORLD_MAP_TWO_ISLAND
 	end
 
 FortreeCity_OnResume:

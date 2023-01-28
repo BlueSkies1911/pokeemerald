@@ -45,7 +45,6 @@ SlateportCity_OceanicMuseum_1F_EventScript_CheckMoneyForFee::
 	end
 
 SlateportCity_OceanicMuseum_1F_EventScript_NotEnoughMoney::
-	goto_if_unset FLAG_DELIVERED_DEVON_GOODS, SlateportCity_OceanicMuseum_1F_EventScript_AllowEntranceAnyway
 	msgbox SlateportCity_OceanicMuseum_1F_Text_NotEnoughMoney, MSGBOX_DEFAULT
 	closemessage
 	hidemoneybox
@@ -339,11 +338,11 @@ SlateportCity_OceanicMuseum_1F_Text_BeachSandDisplay:
 SlateportCity_OceanicMuseum_1F_Text_OceanicMinifact1:
 	.string "“OCEANIC MINIFACT 1\n"
 	.string "Why is seawater blue?\p"
-	.string "“Light is composed of many colors.\p"
+	.string "“Light is composed of many colours.\p"
 	.string "“When light passes through water,\n"
-	.string "most kinds of light lose color.\p"
+	.string "most kinds of light lose colour.\p"
 	.string "“However, blue light retains its\n"
-	.string "color, making the sea appear blue.”$"
+	.string "colour, making the sea appear blue.”$"
 
 SlateportCity_OceanicMuseum_1F_Text_OceanicMinifact2:
 	.string "“OCEANIC MINIFACT 2\n"
