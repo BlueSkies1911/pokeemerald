@@ -33,6 +33,13 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 
+// In this file only the values normally associated with Battle Pike and Factory are swapped.
+// Note that this is *not* a bug, because they are properly swapped consistently in this file.
+// There would only be an issue if anything in this file interacted with something expecting
+// the usual value order, or vice versa.
+#define MATCH_CALL_FACTORY  FRONTIER_FACILITY_PIKE
+#define MATCH_CALL_PIKE     FRONTIER_FACILITY_FACTORY
+
 // Each match call message has variables that can be populated randomly or
 // dependent on the trainer. The below are IDs for how to populate the vars
 // in a given message.
@@ -1311,7 +1318,7 @@ static void StartMatchCall(void)
 {
     if (!sMatchCallState.triggeredFromScript)
     {
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         FreezeObjectEvents();
         PlayerFreeze();
         StopPlayerAvatar();
@@ -1395,8 +1402,8 @@ static bool32 MatchCall_LoadGfx(u8 taskId)
     }
 
     FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
-    LoadPalette(sMatchCallWindow_Pal, 0xE0, sizeof(sMatchCallWindow_Pal));
-    LoadPalette(sPokenavIcon_Pal, 0xF0, sizeof(sPokenavIcon_Pal));
+    LoadPalette(sMatchCallWindow_Pal, BG_PLTT_ID(14), sizeof(sMatchCallWindow_Pal));
+    LoadPalette(sPokenavIcon_Pal, BG_PLTT_ID(15), sizeof(sPokenavIcon_Pal));
     ChangeBgY(0, -0x2000, BG_COORD_SET);
     return TRUE;
 }
@@ -1499,7 +1506,7 @@ static bool32 MatchCall_EndCall(u8 taskId)
             ObjectEventClearHeldMovementIfFinished(&gObjectEvents[playerObjectId]);
             ScriptMovement_UnfreezeObjectEvents();
             UnfreezeObjectEvents();
-            ScriptContext2_Disable();
+            UnlockPlayerFieldControls();
         }
 
         return TRUE;
@@ -1725,6 +1732,7 @@ static const struct MatchCallText *GetGeneralMatchCallText(int matchCallId, u8 *
     rand = Random();
     if (!(rand & 1))
     {
+        // Count the number of facilities with a win streak
         for (count = 0, i = 0; i < NUM_FRONTIER_FACILITIES; i++)
         {
             if (GetFrontierStreakInfo(i, &topic) > 1)
@@ -1733,6 +1741,8 @@ static const struct MatchCallText *GetGeneralMatchCallText(int matchCallId, u8 *
 
         if (count)
         {
+            // At least one facility with a win streak
+            // Randomly choose one to have a call about
             count = Random() % count;
             for (i = 0; i < NUM_FRONTIER_FACILITIES; i++)
             {
@@ -1942,15 +1952,15 @@ static void PopulateSpeciesFromTrainerParty(int matchCallId, u8 *destStr)
     StringCopy(destStr, speciesName);
 }
 
-static const u8 *const sBattleFrontierFacilityNames[] =
+static const u8 *const sBattleFrontierFacilityNames[NUM_FRONTIER_FACILITIES] =
 {
-    gText_BattleTower2,
-    gText_BattleDome,
-    gText_BattlePalace,
-    gText_BattleArena,
-    gText_BattlePike,
-    gText_BattleFactory,
-    gText_BattlePyramid,
+    [FRONTIER_FACILITY_TOWER]   = gText_BattleTower2,
+    [FRONTIER_FACILITY_DOME]    = gText_BattleDome,
+    [FRONTIER_FACILITY_PALACE]  = gText_BattlePalace,
+    [FRONTIER_FACILITY_ARENA]   = gText_BattleArena,
+    [MATCH_CALL_PIKE]           = gText_BattlePike,
+    [MATCH_CALL_FACTORY]        = gText_BattleFactory,
+    [FRONTIER_FACILITY_PYRAMID] = gText_BattlePyramid,
 };
 
 static void PopulateBattleFrontierFacilityName(int matchCallId, u8 *destStr)
@@ -2034,7 +2044,7 @@ static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
     switch (facilityId)
     {
     case FRONTIER_FACILITY_DOME:
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.domeRecordWinStreaks); i++)
         {
             for (j = 0; j < FRONTIER_LVL_MODE_COUNT; j++)
             {
@@ -2044,11 +2054,7 @@ static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
         }
         *topicTextId = GEN_TOPIC_B_DOME - 1;
         break;
-    #ifdef BUGFIX
-    case FRONTIER_FACILITY_PIKE:
-    #else
-    case FRONTIER_FACILITY_FACTORY:
-    #endif
+    case MATCH_CALL_PIKE:
         for (i = 0; i < FRONTIER_LVL_MODE_COUNT; i++)
         {
             if (streak < gSaveBlock2Ptr->frontier.pikeRecordStreaks[i])
@@ -2057,7 +2063,7 @@ static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
         *topicTextId = GEN_TOPIC_B_PIKE - 1;
         break;
     case FRONTIER_FACILITY_TOWER:
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.towerRecordWinStreaks); i++)
         {
             for (j = 0; j < FRONTIER_LVL_MODE_COUNT; j++)
             {
@@ -2068,7 +2074,7 @@ static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
         *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
         break;
     case FRONTIER_FACILITY_PALACE:
-        for (i = 0; i < 2; i++)
+        for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.palaceRecordWinStreaks); i++)
         {
             for (j = 0; j < FRONTIER_LVL_MODE_COUNT; j++)
             {
@@ -2078,12 +2084,8 @@ static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
         }
         *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
         break;
-    #ifdef BUGFIX
-    case FRONTIER_FACILITY_FACTORY:
-    #else
-    case FRONTIER_FACILITY_PIKE:
-    #endif
-        for (i = 0; i < 2; i++)
+    case MATCH_CALL_FACTORY:
+        for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.factoryRecordWinStreaks); i++)
         {
             for (j = 0; j < FRONTIER_LVL_MODE_COUNT; j++)
             {
@@ -2220,7 +2222,7 @@ void LoadMatchCallWindowGfx(u32 windowId, u32 destOffset, u32 paletteId)
 {
     u8 bg = GetWindowAttribute(windowId, WINDOW_BG);
     LoadBgTiles(bg, sMatchCallWindow_Gfx, 0x100, destOffset);
-    LoadPalette(sMatchCallWindow_Pal, paletteId << 4, sizeof(sMatchCallWindow_Pal));
+    LoadPalette(sMatchCallWindow_Pal, BG_PLTT_ID(paletteId), sizeof(sMatchCallWindow_Pal));
 }
 
 void DrawMatchCallTextBoxBorder(u32 windowId, u32 tileOffset, u32 paletteId)

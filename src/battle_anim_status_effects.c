@@ -316,7 +316,7 @@ static void Task_UpdateFlashingCircleImpacts(u8 taskId)
     if (gTasks[taskId].data[2] == 2)
     {
         gTasks[taskId].data[2] = 0;
-        BlendPalette(0x100 + gTasks[taskId].data[0] * 16, 16, gTasks[taskId].data[4], gTasks[taskId].data[1]);
+        BlendPalette(OBJ_PLTT_ID(gTasks[taskId].data[0]), 16, gTasks[taskId].data[4], gTasks[taskId].data[1]);
         if (gTasks[taskId].data[5] == 0)
         {
             gTasks[taskId].data[4]++;
@@ -549,7 +549,7 @@ void LaunchStatusAnimation(u8 battlerId, u8 statusAnimId)
 
     gBattleAnimAttacker = battlerId;
     gBattleAnimTarget = battlerId;
-    LaunchBattleAnimation(gBattleAnims_StatusConditions, statusAnimId, 0);
+    LaunchBattleAnimation(gBattleAnims_StatusConditions, statusAnimId, FALSE);
     taskId = CreateTask(Task_DoStatusAnimation, 10);
     gTasks[taskId].data[0] = battlerId;
 }
