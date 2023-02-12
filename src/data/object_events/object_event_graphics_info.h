@@ -165,6 +165,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BaltoyDoll = {TAG_
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KecleonDoll = {
     .tileTag = TAG_NONE,
     .paletteTag = OBJ_EVENT_PAL_TAG_NPC_3,
+    .textColor = OBJ_EVENT_PAL_TAG_NONE,
     .size = 128,
     .width = 16,
     .height = 16,
