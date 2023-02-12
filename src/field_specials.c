@@ -1072,7 +1072,7 @@ static void PCTurnOffEffect(void)
         metatileId = METATILE_Building_PC_Off;
     else if (gSpecialVar_0x8004 == PC_LOCATION_PLAYERS_HOUSE)
         metatileId = METATILE_GenericBuilding1_PlayersPCOff;
-    MapGridSetMetatileIdAt(gSaveBlock1Ptr->pos.x + dx + MAP_OFFSET, gSaveBlock1Ptr->pos.y + dy + MAP_OFFSET, tileId | MAPGRID_COLLISION_MASK);
+    MapGridSetMetatileIdAt(gSaveBlock1Ptr->pos.x + dx + MAP_OFFSET, gSaveBlock1Ptr->pos.y + dy + MAP_OFFSET, metatileId | MAPGRID_COLLISION_MASK);
     DrawWholeMapView();
 }
 
