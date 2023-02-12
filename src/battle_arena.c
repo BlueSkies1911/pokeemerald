@@ -418,7 +418,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
             BattlePutTextOnWindow(gText_Skill, ARENA_WIN_SKILL);
             BattlePutTextOnWindow(gText_Body, ARENA_WIN_BODY);
             BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-            BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+            BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
             (*state)++;
         }
         break;
@@ -442,7 +442,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 40, ARENA_CATEGORY_MIND, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 40, ARENA_CATEGORY_MIND, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;
@@ -451,7 +451,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 56, ARENA_CATEGORY_SKILL, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 56, ARENA_CATEGORY_SKILL, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;
@@ -460,7 +460,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 72, ARENA_CATEGORY_BODY, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 72, ARENA_CATEGORY_BODY, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;

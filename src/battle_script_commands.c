@@ -6424,12 +6424,12 @@ static void Cmd_various(void)
     case VARIOUS_ERASE_ARENA_REF_TEXT_BOX:
         EraseArenaRefereeTextBox();
         break;
-    case VARIOUS_ARENA_JUDGMENT_STRING:
+    case VARIOUS_ARENA_JUDGEMENT_STRING:
         BattleStringExpandPlaceholdersToDisplayedString(gRefereeStringsTable[gBattlescriptCurrInstr[1]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TEXT);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TEXT);
         break;
     case VARIOUS_ARENA_WAIT_STRING:
-        if (IsTextPrinterActive(ARENA_WIN_JUDGMENT_TEXT))
+        if (IsTextPrinterActive(ARENA_WIN_JUDGEMENT_TEXT))
             return;
         break;
     case VARIOUS_WAIT_CRY:

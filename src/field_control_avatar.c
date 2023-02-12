@@ -379,8 +379,6 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         return EventScript_PC;
     if (MetatileBehavior_IsClosedSootopolisDoor(metatileBehavior) == TRUE)
         return EventScript_ClosedSootopolisDoor;
-    if (MetatileBehavior_IsSkyPillarClosedDoor(metatileBehavior) == TRUE)
-        return SkyPillar_Outside_EventScript_ClosedDoor;
     if (MetatileBehavior_IsPokeblockFeeder(metatileBehavior) == TRUE)
         return EventScript_PokeBlockFeeder;
     if (MetatileBehavior_IsTrickHousePuzzleDoor(metatileBehavior) == TRUE)
@@ -620,7 +618,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         }
         if (ShouldDoDaisyCall() == TRUE)
         {
-            ScriptContext1_SetupScript(CeruleanCity_EventScript_RegisterDaisyCall);
+            ScriptContext_SetupScript(CeruleanCity_EventScript_RegisterDaisyCall);
             return TRUE;
         }
         if (ShouldDoScottBattleFrontierCall() == TRUE)
@@ -630,12 +628,12 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         }
         if (ShouldDoOakCall() == TRUE)
         {
-            ScriptContext1_SetupScript(PewterCity_EventScript_RegisterOak);
+            ScriptContext_SetupScript(PewterCity_EventScript_RegisterOak);
             return TRUE;
         }
         if (ShouldDoBrockCall() == TRUE)
         {
-            ScriptContext1_SetupScript(CeruleanCity_EventScript_RegisterBrock);
+            ScriptContext_SetupScript(CeruleanCity_EventScript_RegisterBrock);
             return TRUE;
         }
     }
@@ -809,7 +807,7 @@ static bool8 TryStartWarpEventScript(struct MapPosition *position, u16 metatileB
         if (MetatileBehavior_IsFallWarp(metatileBehavior) == TRUE)
         {
             ResetInitialPlayerAvatarState();
-            ScriptContext1_SetupScript(EventScript_FallDownHoleMtPyre);
+            ScriptContext_SetupScript(EventScript_FallDownHoleMtPyre);
             return TRUE;
         }
         DoWarp();
@@ -1030,8 +1028,8 @@ void HandleBoulderActivateVictoryRoadSwitch(u16 x, u16 y)
         {
             if (events[i].x + 7 == x && events[i].y + 7 == y)
             {
-                ScriptContext1_SetupScript(events[i].script);
-                ScriptContext2_Enable();
+                ScriptContext_SetupScript(events[i].script);
+                LockPlayerFieldControls();
             }
         }
     }

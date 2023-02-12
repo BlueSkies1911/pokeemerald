@@ -1347,7 +1347,7 @@ static void SpriteCB_Confetti(struct Sprite *sprite)
 
 static bool8 Hof_SpawnConfetti(void)
 {
-    u8 spriteID;
+    u8 spriteId;
     struct Sprite *sprite;
 
     s16 posX = Random() % DISPLAY_WIDTH;

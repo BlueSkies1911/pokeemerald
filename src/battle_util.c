@@ -523,7 +523,7 @@ void HandleAction_WatchesCarefully(void)
         --gBattleStruct->safariGoNearCounter;
         if (gBattleStruct->safariGoNearCounter == 0)
         {
-            *(&gBattleStruct->safariCatchFactor) = gBaseStats[GetMonData(gEnemyParty, MON_DATA_SPECIES)].catchRate * 100 / 1275;
+            *(&gBattleStruct->safariCatchFactor) = gSpeciesInfo[GetMonData(gEnemyParty, MON_DATA_SPECIES)].catchRate * 100 / 1275;
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         }
         else

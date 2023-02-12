@@ -526,7 +526,7 @@ const u16 DecorGfx_BALTOY_DOLL[] = {
 };
 
 const u16 DecorGfx_KECLEON_DOLL[] = {
-    OBJ_EVENT_GFX_LAPRAS_DOLL
+    OBJ_EVENT_GFX_KECLEON_DOLL
 };
 
 const u16 DecorGfx_AZURILL_DOLL[] = {

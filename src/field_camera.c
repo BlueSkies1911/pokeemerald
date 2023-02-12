@@ -237,11 +237,7 @@ static void DrawMetatileAt(const struct MapLayout *mapLayout, u16 offset, int x,
         metatiles = mapLayout->secondaryTileset->metatiles;
         metatileId -= NUM_METATILES_IN_PRIMARY;
     }
-<<<<<<< HEAD
     DrawMetatile(MapGridGetMetatileLayerTypeAt(x, y), metatiles + metatileId * 12, offset);
-=======
-    DrawMetatile(MapGridGetMetatileLayerTypeAt(x, y), metatiles + metatileId * NUM_TILES_PER_METATILE, offset);
->>>>>>> f4cb6d229f9c0130f763fa711c8a1f7ef59ac2c9
 }
 
 static void DrawMetatile(s32 metatileLayerType, const u16 *tiles, u16 offset)

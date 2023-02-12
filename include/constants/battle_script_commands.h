@@ -94,7 +94,7 @@
 #define VARIOUS_EMIT_YESNOBOX                   13
 #define VARIOUS_DRAW_ARENA_REF_TEXT_BOX         14
 #define VARIOUS_ERASE_ARENA_REF_TEXT_BOX        15
-#define VARIOUS_ARENA_JUDGMENT_STRING           16
+#define VARIOUS_ARENA_JUDGEMENT_STRING          16
 #define VARIOUS_ARENA_WAIT_STRING               17
 #define VARIOUS_WAIT_CRY                        18
 #define VARIOUS_RETURN_OPPONENT_MON1            19

@@ -18,10 +18,6 @@
 #include "task.h"
 #include "constants/battle_anim.h"
 
-// Defines
-#define TAG_HEALTHBOX_PALS_1      55049
-#define TAG_HEALTHBOX_PALS_2      55050
-
 /*
     This file handles the commands for the macros defined in
     battle_anim_script.inc and used in battle_anim_scripts.s

@@ -997,7 +997,7 @@
 #define FLAG_ITEM_ROUTE_123_ELIXIR                                  0x3B7
 #define FLAG_ITEM_NEW_MAUVILLE_THUNDER_STONE                        0x3B8
 #define FLAG_ITEM_FIERY_PATH_FIRE_STONE                             0x3B9
-#define FLAG_ITEM_SHOAL_CAVE_ICE_ROOM_TM_07                         0x3BA
+#define FLAG_ITEM_SHOAL_CAVE_ICE_ROOM_TM07                          0x3BA
 #define FLAG_ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE                0x3BB
 #define FLAG_ITEM_ROUTE_104_X_ACCURACY                              0x3BC
 #define FLAG_ITEM_MAUVILLE_CITY_X_SPEED                             0x3BD

@@ -1319,7 +1319,7 @@
 	.endm
 
 	.macro arenajudgmentstring id:req
-	various \id, VARIOUS_ARENA_JUDGMENT_STRING
+	various \id, VARIOUS_ARENA_JUDGEMENT_STRING
 	.endm
 
 	.macro arenawaitmessage id:req

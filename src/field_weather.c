@@ -262,7 +262,7 @@ static u8 None_Finish(void)
 // this function always builds the same two tables.
 static void BuildColorMaps(void)
 {
-    u16 i;
+    u16 v0;
     u8 (*colorMaps)[32];
     u16 colorVal;
     u16 curBrightness;
@@ -274,12 +274,12 @@ static void BuildColorMaps(void)
     u8 i;
 
     for (i = 0; i <= 12; i++)
-        sBasePaletteGammaTypes[i] = GAMMA_NORMAL;
+        sBasePaletteColorMapTypes[i] = COLOR_MAP_DARK_CONTRAST;
 
     sPaletteColorMapTypes = sBasePaletteColorMapTypes;
-    for (i = 0; i < 2; i++)
+    for (v0 = 0; v0 < 2; v0++)
     {
-        if (i == 0)
+        if (v0 == 0)
             colorMaps = gWeatherPtr->darkenedContrastColorMaps;
         else
             colorMaps = gWeatherPtr->contrastColorMaps;
@@ -287,7 +287,7 @@ static void BuildColorMaps(void)
         for (colorVal = 0; colorVal < 32; colorVal++)
         {
             curBrightness = colorVal << 8;
-            if (i == 0)
+            if (v0 == 0)
                 brightnessDelta = (colorVal << 8) / 16;
             else
                 brightnessDelta = 0;
@@ -1177,6 +1177,6 @@ void ResetPreservedPalettesInWeather(void)
 void UpdatePaletteGammaType(u8 index, u8 gammaType)
 {
     if (index != 0xFF)
-        sBasePaletteGammaTypes[index + 16] = gammaType;
+        sBasePaletteColorMapTypes[index + 16] = gammaType;
 }
 
