@@ -187,7 +187,7 @@ const u8 gNidorinaPokedexText[] = _(
 const u8 gNidoqueenPokedexText[] = _(
     "It is adept at sending foes flying with\n"
     "harsh tackles using its tough, scaly body.\n"
-    "This POKéMON is at its strongest when\n"
+    "This Pokémon is at its strongest when\n"
     "it is defending its young.");
 
 const u8 gNidoranMPokedexText[] = _(
@@ -317,7 +317,7 @@ const u8 gMeowthPokedexText[] = _(
     "shiny coins that glitter with light.");
 
 const u8 gPersianPokedexText[] = _(
-    "A Pesian's six bold whiskers sense air\n"
+    "A Persian's six bold whiskers sense air\n"
     "movements to determine what is in its\n"
     "vicinity. It becomes docile if grabbed\n"
     "by the whiskers.");

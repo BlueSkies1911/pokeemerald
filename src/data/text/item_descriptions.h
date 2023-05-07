@@ -48,7 +48,7 @@ static const u8 sRepeatBallDesc[] = _(
     "caught before.");
 
 static const u8 sTimerBallDesc[] = _(
-    "A BALL that gains\n"
+    "A Ball that gains\n"
     "power in battles\n"
     "taking many turns.");
 
@@ -474,7 +474,7 @@ static const u8 sBeadMailDesc[] = _(
 static const u8 sShadowMailDesc[] = _(
     "A Duskull-print\n"
     "Mail to be held by\n"
-    "a Pokémon");
+    "a Pokémon.");
 
 static const u8 sTropicMailDesc[] = _(
     "A Bellossom-print\n"
@@ -1039,7 +1039,7 @@ static const u8 sAcroBikeDesc[] = _(
 
 static const u8 sPokeblockCaseDesc[] = _(
     "A case for holding\n"
-    "{POKEBLOCK}S made with\n"
+    "{POKEBLOCK}s made with\n"
     "a Berry Blender.");
 
 static const u8 sLetterDesc[] = _(
@@ -1084,7 +1084,7 @@ static const u8 sRoom1KeyDesc[] = _(
 static const u8 sRoom2KeyDesc[] = _(
     "A key that opens a\n"
     "door inside the\n"
-    "ABANDONED SHIP.");
+    "Abandoned Ship.");
 
 static const u8 sRoom4KeyDesc[] = _(
     "A key that opens a\n"

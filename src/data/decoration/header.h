@@ -924,6 +924,18 @@ const struct Decoration gDecorations[] =
         .tiles = DecorGfx_PICHU_DOLL,
     },
 
+    [DECOR_PIKACHU_DOLL] =
+    {
+        .id = DECOR_PIKACHU_DOLL,
+        .name = _("Pikachu Doll"),
+        .permission = DECORPERM_SPRITE,
+        .shape = DECORSHAPE_1x1,
+        .category = DECORCAT_DOLL,
+        .price = 3000,
+        .description = DecorDesc_PIKACHU_DOLL,
+        .tiles = DecorGfx_PIKACHU_DOLL,
+    },
+
     [DECOR_MARILL_DOLL] =
     {
         .id = DECOR_MARILL_DOLL,

@@ -2397,10 +2397,10 @@ MatchCall_Text_Lance::
 MatchCall_Text_MayRayquazaCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "MAY: Hi, {PLAYER}{KUN}!\p"
-	.string "I was just in PACIFIDLOG a little\n"
+	.string "May: Hi, {PLAYER}{KUN}!\p"
+	.string "I was just in Pacifidlog a little\n"
 	.string "while ago.\p"
-	.string "I saw a giant green POKéMON\n"
+	.string "I saw a giant green Pokémon\n"
 	.string "flying high in the sky.\p"
 	.string "I…\n"
 	.string "I've never seen anything like it.\p"
@@ -2412,9 +2412,9 @@ MatchCall_Text_MayRayquazaCall:
 MatchCall_Text_BrendanRayquazaCall:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "BRENDAN: Hey, {PLAYER}!\n"
-	.string "I was in PACIFIDLOG just now.\p"
-	.string "I saw this huge green POKéMON\n"
+	.string "Brendan: Hey, {PLAYER}!\n"
+	.string "I was in Pacifidlog just now.\p"
+	.string "I saw this huge green Pokémon\n"
 	.string "flying across the sky.\p"
 	.string "I've never seen anything that\n"
 	.string "amazing before.\p"
@@ -2610,28 +2610,92 @@ MatchCall_Text_Scott7::
 	.string "Scott appears to be out of\n"
 	.string "the Pokénav's service area…$"
 
+MatchCall_Text_Norman1::
+	.string "DAD: In RUSTBORO, there's a man\n"
+	.string "that goes by the odd name of\l"
+	.string "the CUTTER.\p"
+	.string "If you're in the area, you should\n"
+	.string "pay him a visit.$"
+
+MatchCall_Text_Norman2::
+	.string "DAD: Hm… Little by little, but also\n"
+	.string "very surely, you're getting\l"
+	.string "tougher, {PLAYER}.\p"
+	.string "The stronger you get, the farther\n"
+	.string "and higher you soar from Mother\l"
+	.string "and me…\p"
+	.string "This feeling is hard to explain.$"
+
+MatchCall_Text_Norman3::
+	.string "DAD: I see…\n"
+	.string "You've collected four GYM BADGES…\p"
+	.string "There's no avoiding it now.\n"
+	.string "We will battle like I promised.\p"
+	.string "Come anytime.\n"
+	.string "We'll all be waiting for you!$"
+
+MatchCall_Text_Norman4::
+	.string "DAD: {PLAYER}! You'd better go visit\n"
+	.string "Mother every so often.\p"
+	.string "I'm going to remain here and\n"
+	.string "redouble my training.\p"
+	.string "The way of battling is deep\n"
+	.string "and unforgiving!$"
+
+MatchCall_Text_Norman5::
+	.string "DAD: Oh, hi, {PLAYER}!\p"
+	.string "What's that? MAGMA EMBLEM?\n"
+	.string "I don't know what that's about.\p"
+	.string "But with a name like that, it may\n"
+	.string "be somehow linked to a volcano!$"
+
+MatchCall_Text_Norman6::
+	.string "DAD: Hiyah! Haah! Dwah!\p"
+	.string "…Oh? {PLAYER}!\p"
+	.string "You caught me right in the middle\n"
+	.string "of a POKéMON training session!$"
+
+MatchCall_Text_Norman7::
+	.string "DAD: {PLAYER}!\p"
+	.string "Who would've thought you'd become\n"
+	.string "the POKéMON LEAGUE CHAMPION…\p"
+	.string "Okay!\n"
+	.string "I won't be left behind!$"
+
+MatchCall_Text_Norman8::
+	.string "DAD: Hm? {PLAYER}?\n"
+	.string "What good timing!\p"
+	.string "This time, I'm going to challenge\n"
+	.string "you to battle.\p"
+	.string "I'm waiting in the PETALBURG GYM.\n"
+	.string "Accept my challenge anytime!$"
+
+MatchCall_Text_Norman9::
+	.string "DAD: …You amaze me, {PLAYER}.\n"
+	.string "How much higher will you soar?$"
+
 MatchCall_Text_Steven1::
-	.string "STEVEN: Hi, {PLAYER}{KUN}!\p"
-	.string "Have you been to MAUVILLE\n"
+	.string "Steven: Hi, {PLAYER}{KUN}!\p"
+	.string "Have you been to Mauville\n"
 	.string "already?\p"
-	.string "You should visit the BIKE SHOP\n"
-	.string "and get a MACH BIKE.\p"
-	.string "Then, try exploring the GRANITE\n"
-	.string "CAVE thoroughly.\p"
+	.string "You should visit the Bike Shop\n"
+	.string "and get a Mach Bike.\p"
+	.string "Then, try exploring the Granite\n"
+	.string "Cave thoroughly.\p"
 	.string "You may make a new discovery\n"
 	.string "there.$"
 
-MatchCall_Text_Steven2::
-	.string "STEVEN: Hi, {PLAYER}{KUN}!\p"
+MatchCall_Text_Steven2:: @ 82B5C53
+	.string "Steven: Hi, {PLAYER}{KUN}!\p"
 	.string "I've met a lot of different\n"
-	.string "TRAINERS so far.\p"
+	.string "Trainers so far.\p"
 	.string "But you're one of a kind.\n"
 	.string "You're not like anyone else.$"
 
-MatchCall_Text_Steven3::
-	.string "STEVEN: Hi, {PLAYER}{KUN}!\p"
+MatchCall_Text_Steven3:: @ 82B5CC9
+	.string "Steven: Hi, {PLAYER}{KUN}!\p"
 	.string "When you're on an adventure with\n"
-	.string "your POKéMON, what do you think?\p"
+	.string "your Pokémon, what do you think?\p"
 	.string "Do you consider them to be strong\n"
 	.string "partners?\p"
 	.string "Do you think of them as fun\n"
@@ -2639,16 +2703,16 @@ MatchCall_Text_Steven3::
 	.string "Depending on how you think, your\n"
 	.string "adventure's significance changes.$"
 
-MatchCall_Text_Steven4::
-	.string "STEVEN: Hello?\n"
+MatchCall_Text_Steven4:: @ 82B5DB4
+	.string "Steven: Hello?\n"
 	.string "{PLAYER}{KUN}?\p"
 	.string "I'm involved in a spot of trouble\n"
-	.string "at the SPACE CENTER.\p"
+	.string "at the Space Center.\p"
 	.string "I'm sorry, but I can't talk now.\n"
 	.string "Bye!$"
 
-MatchCall_Text_Steven5::
-	.string "STEVEN: Oh!\n"
+MatchCall_Text_Steven5:: @ 82B5E26
+	.string "Steven: Oh!\n"
 	.string "{PLAYER}{KUN}!\p"
 	.string "There's no need to talk.\n"
 	.string "It's past time for talking.\p"
@@ -2657,33 +2721,33 @@ MatchCall_Text_Steven5::
 
 MatchCall_Text_Steven6::
 	.string "… … … … … …\p"
-	.string "STEVEN appears not to be getting\n"
+	.string "Steven appears not to be getting\n"
 	.string "the call…$"
 
-MatchCall_Text_Steven7::
-	.string "STEVEN: {PLAYER}{KUN}… Congratulations\n"
-	.string "for entering the HALL OF FAME.\p"
+MatchCall_Text_Steven7:: @ 82B5ED9
+	.string "Steven: {PLAYER}{KUN}… Congratulations\n"
+	.string "for entering the Hall of Fame.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … …\p"
 	.string "I hope we can meet again\n"
 	.string "somewhere!$"
 
-MatchCall_Text_BirchRegisterCall:
-	.string "PROF. BIRCH: Oh, {PLAYER}{KUN}!\n"
+MatchCall_Text_BirchRegisterCall: @ 82B5F52
+	.string "Prof. Birch: Oh, {PLAYER}{KUN}!\n"
 	.string "I've already heard about you!\p"
-	.string "It seems your POKéNAV's been\n"
-	.string "upgraded with MATCH CALL.\p"
+	.string "It seems your Pokénav's been\n"
+	.string "upgraded with Match Call.\p"
 	.string "Well, I should register, too!\p"
 	.string "That way, I'd be able to examine\n"
-	.string "your POKéDEX even while you're\l"
+	.string "your Pokédex even while you're\l"
 	.string "out in the field.\p"
 	.string "… … … … … …$"
 
-MatchCall_Text_RegisteredBirch:
-	.string "Registered PROF. BIRCH\n"
-	.string "in the POKéNAV.$"
-
+MatchCall_Text_RegisteredBirch: @ 82B603A
+	.string "Registered Prof. Birch\n"
+	.string "in the Pokénav.$"
+	
 MatchCall_Text_UnusedProfBirch:
-	.string "PROF. BIRCH: When one has both\n"
-	.string "the POKéDEX and POKéNAV, studying\l"
-	.string "POKéMON becomes more fun, eh?$"
+	.string "Prof. Birch: When one has both\n"
+	.string "the Pokédex and Pokénav, studying\l"
+	.string "Pokémon becomes more fun, eh?$"

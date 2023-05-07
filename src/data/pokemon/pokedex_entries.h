@@ -4010,7 +4010,7 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_ALTARIA] =
     {
-        .categoryName = _("Hummer"),
+        .categoryName = _("Humming"),
         .height = 11,
         .weight = 206,
         .description = gAltariaPokedexText,
