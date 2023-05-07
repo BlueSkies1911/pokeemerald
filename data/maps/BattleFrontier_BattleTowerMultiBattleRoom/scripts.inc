@@ -137,7 +137,7 @@ BattleFrontier_BattleTowerMultiBattleRoom_EventScript_RestoreParty::
 	special LoadPlayerParty
 	frontier_setpartyorder FRONTIER_MULTI_PARTY_SIZE
 	call_if_eq VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_LINK_MULTIS, BattleFrontier_BattleTowerMultiBattleRoom_EventScript_ReconnectLink
-	playfanfare MUS_HEAL
+	playfanfare MUS_RG_HEAL
 	waitfanfare
 	special HealPlayerParty
 BattleFrontier_BattleTowerMultiBattleRoom_EventScript_AskReadyForOpponents::
@@ -503,5 +503,5 @@ gText_LinkStandby3::
 
 gText_YourPartnerHasRetired::
 	.string "Your partner has retired.\p"
-	.string "Your BATTLE ROOM challenge\n"
-	.string "will be canceled.$"
+	.string "Your Battle Room challenge\n"
+	.string "will be cancelled.$"

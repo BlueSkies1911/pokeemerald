@@ -45,6 +45,14 @@ PlayersHouse_1F_EventScript_MomOakLookingForYouFemale::
     msgbox PlayersHouse_1F_Text_AllGirlsLeaveOakLookingForYou, MSGBOX_DEFAULT
     return
 
+PlayersHouse_1F_EventScript_TVScreenMale::
+	msgbox PlayersHouse_1F_Text_MovieOnTVFourBoysOnRailroad, MSGBOX_DEFAULT
+	return
+
+PlayersHouse_1F_EventScript_TVScreenFemale::
+	msgbox PlayersHouse_1F_Text_MovieOnTVGirlOnBrickRoad, MSGBOX_DEFAULT
+	return
+
 PlayersHouse_1F_Text_YouShouldTakeQuickRest::
     .string "Mom: {PLAYER}!\n"
     .string "You should take a quick rest.$"
@@ -70,3 +78,26 @@ PlayersHouse_1F_Text_AllGirlsLeaveOakLookingForYou:
     .string "It said so on TV.\p"
     .string "Oh, yes. Prof. Oak, next door, was\n"
     .string "looking for you.$"
+
+PlayersHouse_1F_Text_MovieOnTVFourBoysOnRailroad::
+    .string "There's a movie on TV.\n"
+    .string "Four boys are walking on railroad\l"
+    .string "tracks.\p"
+    .string "…I better go, too.$"
+
+PlayersHouse_1F_Text_MovieOnTVGirlOnBrickRoad::
+    .string "There's a movie on TV.\n"
+    .string "A girl with her hair in pigtails is\l"
+    .string "walking up a brick road.\p"
+    .string "…I better go, too.$"
+
+PlayersHouse_1F_Text_LatiEmergencyNewsFlash:
+	.string "We bring you this emergency\n"
+	.string "news flash!\p"
+	.string "In various Kanto locales, there have\n"
+	.string "been reports of a BZZT…coloured\l"
+	.string "Pokémon in flight.\p"
+	.string "The identity of this Pokémon is\n"
+	.string "currently unknown.\p"
+	.string "We now return you to your\n"
+	.string "regular program.$"

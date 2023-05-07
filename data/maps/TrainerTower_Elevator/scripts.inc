@@ -1,10 +1,10 @@
 .set LOCALID_ATTENDANT, 1
 
 TrainerTower_Elevator_MapScripts::
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, TrainerTower_Elevator_OnFrame
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, TrainerHill_Elevator_OnFrame
 	.byte 0
 
-TrainerTower_Elevator_OnFrame:
+TrainerHill_Elevator_OnFrame:
 	map_script_2 VAR_TEMP_4, 0, TrainerHill_Elevator_EventScript_EnterElevator
 	.2byte 0
 
@@ -87,8 +87,4 @@ TrainerHill_Elevator_Movement_AttendantFacePlayer:
 TrainerHill_Elevator_Movement_AttendantFaceDown:
 	face_down
 	step_end
-
-TrainerHill_Elevator_Text_ReturnToReception:
-    .string "Would you like to return to\n"
-    .string "the reception counter?$"
 

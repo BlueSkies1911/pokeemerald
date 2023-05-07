@@ -393,7 +393,7 @@ static bool8 InitHallOfFameScreen(void)
         if (!gPaletteFade.active)
         {
             SetMainCallback2(CB2_HofIdle);
-            PlayBGM(MUS_HALL_OF_FAME);
+            PlayBGM(MUS_RG_HALL_OF_FAME);
             return FALSE;
         }
         break;

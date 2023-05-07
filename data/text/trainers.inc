@@ -3773,7 +3773,7 @@ Route120_Text_JenniferPostBattle:
 Route120_Text_ChipIntro:
 	.string "Who might you be?\p"
 	.string "Are you perhaps searching for ancient\n"
-	.string "ruins that are rumored to possibly\l"
+	.string "ruins that are rumoured to possibly\l"
 	.string "exist according to legend?$"
 
 Route120_Text_ChipDefeat:

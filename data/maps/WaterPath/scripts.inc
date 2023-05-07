@@ -81,5 +81,5 @@ WaterPath_Text_WantedUltimateHorn::
     .string "The Ultimate Horn!$"
 
 WaterPath_Text_RouteSign::
-    .string "WATER PATH\n"
+    .string "Water Path\n"
     .string "Leads to Ruin Valley$"

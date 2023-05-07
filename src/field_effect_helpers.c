@@ -855,57 +855,6 @@ void UpdateHotSpringsWaterFieldEffect(struct Sprite *sprite)
     }
 }
 
-u32 FldEff_UnusedGrass(void)
-{
-    u8 spriteId;
-    struct Sprite *sprite;
-
-    SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
-    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_UNUSED_GRASS], gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
-    if (spriteId != MAX_SPRITES)
-    {
-        sprite = &gSprites[spriteId];
-        sprite->coordOffsetEnabled = TRUE;
-        sprite->oam.priority = gFieldEffectArguments[3];
-        sprite->data[0] = FLDEFF_UNUSED_GRASS;
-    }
-    return 0;
-}
-
-u32 FldEff_UnusedGrass2(void)
-{
-    u8 spriteId;
-    struct Sprite *sprite;
-
-    SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
-    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_UNUSED_GRASS_2], gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
-    if (spriteId != MAX_SPRITES)
-    {
-        sprite = &gSprites[spriteId];
-        sprite->coordOffsetEnabled = TRUE;
-        sprite->oam.priority = gFieldEffectArguments[3];
-        sprite->data[0] = FLDEFF_UNUSED_GRASS_2;
-    }
-    return 0;
-}
-
-u32 FldEff_UnusedSand(void)
-{
-    u8 spriteId;
-    struct Sprite *sprite;
-
-    SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
-    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_UNUSED_SAND], gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
-    if (spriteId != MAX_SPRITES)
-    {
-        sprite = &gSprites[spriteId];
-        sprite->coordOffsetEnabled = TRUE;
-        sprite->oam.priority = gFieldEffectArguments[3];
-        sprite->data[0] = FLDEFF_UNUSED_SAND;
-    }
-    return 0;
-}
-
 u32 FldEff_WaterSurfacing(void)
 {
     u8 spriteId;
@@ -1312,7 +1261,7 @@ u32 FldEff_BerryTreeGrowthSparkle(void)
     return 0;
 }
 
-// Sprite data for FLDEFF_TREE_DISGUISE / FLDEFF_MOUNTAIN_DISGUISE / FLDEFF_SAND_DISGUISE
+// Sprite data for FLDEFF_TREE_DISGUISE / FLDEFF_MOUNTAIN_DISGUISE
 #define sState      data[0]
 #define sLocalId    data[2]
 #define sMapNum     data[3]
@@ -1327,11 +1276,6 @@ u32 ShowTreeDisguiseFieldEffect(void)
 u32 ShowMountainDisguiseFieldEffect(void)
 {
     return ShowDisguiseFieldEffect(FLDEFF_MOUNTAIN_DISGUISE, FLDEFFOBJ_MOUNTAIN_DISGUISE);
-}
-
-u32 ShowSandDisguiseFieldEffect(void)
-{
-    return ShowDisguiseFieldEffect(FLDEFF_SAND_DISGUISE, FLDEFFOBJ_SAND_DISGUISE);
 }
 
 static u32 ShowDisguiseFieldEffect(u8 fldEff, u8 templateIdx)

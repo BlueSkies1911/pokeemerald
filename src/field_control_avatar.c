@@ -19,6 +19,7 @@
 #include "match_call.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
+#include "renewable_hidden_items.h"
 #include "pokemon.h"
 #include "safari_zone.h"
 #include "script.h"
@@ -97,14 +98,17 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
     {
         if (GetPlayerSpeed() != PLAYER_SPEED_FASTEST)
         {
-            if (newKeys & START_BUTTON)
-                input->pressedStartButton = TRUE;
-            if (newKeys & SELECT_BUTTON)
-                input->pressedSelectButton = TRUE;
-            if (newKeys & A_BUTTON)
-                input->pressedAButton = TRUE;
-            if (newKeys & B_BUTTON)
-                input->pressedBButton = TRUE;
+            if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FORCED_MOVE))
+                {
+                    if (newKeys & START_BUTTON)
+                        input->pressedStartButton = TRUE;
+                    if (newKeys & SELECT_BUTTON)
+                        input->pressedSelectButton = TRUE;
+                    if (newKeys & A_BUTTON)
+                        input->pressedAButton = TRUE;
+                    if (newKeys & B_BUTTON)
+                        input->pressedBButton = TRUE;
+                }
         }
 
         if (heldKeys & (DPAD_UP | DPAD_DOWN | DPAD_LEFT | DPAD_RIGHT))
@@ -158,6 +162,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (input->tookStep)
     {
         IncrementGameStat(GAME_STAT_STEPS);
+        IncrementRenewableHiddenItemStepCounter();
         RunMassageCooldownStepCounter();
         IncrementBirthIslandRockStepCount();
         if (TryStartStepBasedScript(&position, metatileBehavior, playerDirection) == TRUE)
@@ -229,9 +234,7 @@ static bool8 TryStartInteractionScript(struct MapPosition *position, u16 metatil
         return FALSE;
 
     // Don't play interaction sound for certain scripts.
-    if (script != LittlerootTown_BrendansHouse_2F_EventScript_PC
-     && script != LittlerootTown_MaysHouse_2F_EventScript_PC
-     && script != SecretBase_EventScript_PC
+    if (script != SecretBase_EventScript_PC
      && script != SecretBase_EventScript_RecordMixingPC
      && script != SecretBase_EventScript_DollInteract
      && script != SecretBase_EventScript_CushionInteract
@@ -377,16 +380,12 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         return EventScript_TV;
     if (MetatileBehavior_IsPC(metatileBehavior) == TRUE)
         return EventScript_PC;
-    if (MetatileBehavior_IsClosedSootopolisDoor(metatileBehavior) == TRUE)
-        return EventScript_ClosedSootopolisDoor;
     if (MetatileBehavior_IsPokeblockFeeder(metatileBehavior) == TRUE)
         return EventScript_PokeBlockFeeder;
     if (MetatileBehavior_IsTrickHousePuzzleDoor(metatileBehavior) == TRUE)
         return Route110_TrickHousePuzzle_EventScript_Door;
     if (MetatileBehavior_IsRegionMap(metatileBehavior) == TRUE)
         return EventScript_RegionMap;
-    if (MetatileBehavior_IsRunningShoesManual(metatileBehavior) == TRUE)
-        return EventScript_RunningShoesManual;
     if (MetatileBehavior_IsPictureBookShelf(metatileBehavior) == TRUE)
         return EventScript_PictureBookShelf;
     if (MetatileBehavior_IsBookShelf(metatileBehavior) == TRUE)
@@ -539,7 +538,7 @@ static bool8 TryStartStepBasedScript(struct MapPosition *position, u16 metatileB
         return TRUE;
     if (TryStartStepCountScript(metatileBehavior) == TRUE)
         return TRUE;
-    if (UpdateRepelCounter() == TRUE)
+    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FORCED_MOVE) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior) && UpdateRepelCounter() == TRUE)
         return TRUE;
     return FALSE;
 }
@@ -558,12 +557,7 @@ static bool8 TryStartMiscWalkingScripts(u16 metatileBehavior)
 {
     s16 x, y;
 
-    if (MetatileBehavior_IsCrackedFloorHole(metatileBehavior))
-    {
-        ScriptContext_SetupScript(EventScript_FallDownHole);
-        return TRUE;
-    }
-    else if (MetatileBehavior_IsBattlePyramidWarp(metatileBehavior))
+    if (MetatileBehavior_IsBattlePyramidWarp(metatileBehavior))
     {
         ScriptContext_SetupScript(BattlePyramid_WarpToNextFloor);
         return TRUE;
@@ -606,24 +600,9 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
             ScriptContext_SetupScript(EventScript_EggHatch);
             return TRUE;
         }
-        if (AbnormalWeatherHasExpired() == TRUE)
-        {
-            ScriptContext_SetupScript(AbnormalWeather_EventScript_EndEventAndCleanup_1);
-            return TRUE;
-        }
-        if (ShouldDoBrailleRegicePuzzle() == TRUE)
-        {
-            ScriptContext_SetupScript(IslandCave_EventScript_OpenRegiEntrance);
-            return TRUE;
-        }
         if (ShouldDoDaisyCall() == TRUE)
         {
             ScriptContext_SetupScript(CeruleanCity_EventScript_RegisterDaisyCall);
-            return TRUE;
-        }
-        if (ShouldDoScottBattleFrontierCall() == TRUE)
-        {
-            ScriptContext_SetupScript(LittlerootTown_ProfessorBirchsLab_EventScript_ScottAboardSSTidalCall);
             return TRUE;
         }
         if (ShouldDoOakCall() == TRUE)
@@ -640,11 +619,6 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
 
     if (SafariZoneTakeStep() == TRUE)
         return TRUE;
-    if (CountSSTidalStep(1) == TRUE)
-    {
-        ScriptContext_SetupScript(SSTidalCorridor_EventScript_ReachedStepCount);
-        return TRUE;
-    }
     if (TryStartMatchCall())
         return TRUE;
     return FALSE;

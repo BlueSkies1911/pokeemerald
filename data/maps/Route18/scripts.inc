@@ -60,9 +60,9 @@ Route18_EventScript_CyclingRoadSign::
     end
 
 Route18_Text_RouteSign::
-    .string "ROUTE 18\n"
+    .string "Route 18\n"
     .string "Celadon City - Fuchsia City$"
 
 Route18_Text_CyclingRoadSign::
-    .string "CYCLING ROAD\n"
+    .string "Cycling Road\n"
     .string "No pedestrians permitted!$"

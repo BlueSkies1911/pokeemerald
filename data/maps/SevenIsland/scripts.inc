@@ -3,7 +3,7 @@ SevenIsland_MapScripts::
     .byte 0
 
 SevenIsland_OnTransition:
-    setworldmapflag FLAG_WORLD_MAP_SEVEN_ISLAND
+    setflag FLAG_WORLD_MAP_SEVEN_ISLAND
     end
 
 SevenIsland_EventScript_OldWoman::
@@ -34,5 +34,5 @@ SevenIsland_Text_IslandVirtuallyUntouched::
     .string "hike around because of that.$"
 
 SevenIsland_Text_IslandSign::
-    .string "SEVEN ISLAND\n"
+    .string "Seven Island\n"
     .string "Quest Island of Infinity$"

@@ -31,5 +31,5 @@ FiveIsland_Text_BeenGettingBusierAroundHere::
     .string "fish lately, either.$"
 
 FiveIsland_Text_IslandSign::
-    .string "FIVE ISLAND\n"
+    .string "Five Island\n"
     .string "Chrono Island: Where Time Goes$"

@@ -154,7 +154,7 @@ FuchsiaCity_Text_MyFatherIsGymLeader::
     .string "as well as my father.$"
 
 FuchsiaCity_Text_CitySign::
-    .string "FUCHSIA CITY\n"
+    .string "Fuchsia City\n"
     .string "Behold! It's Passion Pink!$"
 
 FuchsiaCity_Text_SafariZoneSign::

@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_SEVAULT_CANYON_ENTRANCE",
       "offset": -20,
-      "map": "MAP_SEVAULT_CANYON_ENTRANCE"
+      "direction": "left"
     },
     {
-      "direction": "down",
+      "map": "MAP_TANOBY_RUINS",
       "offset": -48,
-      "map": "MAP_TANOBY_RUINS"
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -292,14 +292,14 @@
       "y": 17,
       "elevation": 0,
       "dest_map": "MAP_SEVAULT_CANYON_TANOBY_KEY",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 14,
       "y": 61,
       "elevation": 0,
       "dest_map": "MAP_SEVAULT_CANYON_HOUSE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

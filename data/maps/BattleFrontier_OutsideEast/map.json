@@ -21,7 +21,7 @@
   ],
   "object_events": [
     {
-      "graphics_id": "OBJ_EVENT_GFX_SEAGALLOP",
+      "graphics_id": "OBJ_EVENT_GFX_LITTLE_BOY",
       "x": 20,
       "y": 17,
       "elevation": 0,
@@ -34,7 +34,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2",
+      "graphics_id": "OBJ_EVENT_GFX_WORKER_M",
       "x": 42,
       "y": 15,
       "elevation": 0,
@@ -112,7 +112,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_FISHER",
+      "graphics_id": "OBJ_EVENT_GFX_SWIMMER_M_LAND",
       "x": 34,
       "y": 41,
       "elevation": 0,
@@ -125,7 +125,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_RUBY",
+      "graphics_id": "OBJ_EVENT_GFX_BOY",
       "x": 45,
       "y": 47,
       "elevation": 3,
@@ -138,7 +138,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_CAPTAIN",
+      "graphics_id": "OBJ_EVENT_GFX_BIKER",
       "x": 59,
       "y": 35,
       "elevation": 0,
@@ -151,7 +151,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SWIMMER_M_WATER",
+      "graphics_id": "OBJ_EVENT_GFX_LITTLE_GIRL",
       "x": 18,
       "y": 40,
       "elevation": 0,
@@ -164,7 +164,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN",
+      "graphics_id": "OBJ_EVENT_GFX_BALDING_MAN",
       "x": 17,
       "y": 40,
       "elevation": 0,
@@ -177,7 +177,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SNORLAX",
+      "graphics_id": "OBJ_EVENT_GFX_MEOWTH",
       "x": 40,
       "y": 56,
       "elevation": 3,
@@ -216,7 +216,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SWIMMER_F_LAND",
+      "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
       "x": 51,
       "y": 53,
       "elevation": 3,
@@ -242,7 +242,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2",
+      "graphics_id": "OBJ_EVENT_GFX_WORKER_M",
       "x": 11,
       "y": 21,
       "elevation": 0,
@@ -307,7 +307,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BATTLE_GIRL",
+      "graphics_id": "OBJ_EVENT_GFX_WOMAN_3",
       "x": 54,
       "y": 32,
       "elevation": 0,

@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "down",
+      "map": "MAP_GREEN_PATH",
       "offset": 0,
-      "map": "MAP_GREEN_PATH"
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -118,7 +118,7 @@
       "y": 21,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

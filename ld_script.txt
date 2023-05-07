@@ -233,7 +233,7 @@ SECTIONS {
         src/fldeff_flash.o(.text);
         src/post_battle_event_funcs.o(.text);
         src/time_events.o(.text);
-        src/birch_pc.o(.text);
+        src/prof_pc.o(.text);
         src/hof_pc.o(.text);
         src/field_specials.o(.text);
         src/battle_records.o(.text);
@@ -315,7 +315,6 @@ SECTIONS {
         src/multiboot.o(.text);
         src/berry_fix_graphics.o(.text);
         src/battle_controller_player_partner.o(.text);
-        src/mirage_tower.o(.text);
         src/berry_fix_program.o(.text);
         src/pokemon_summary_screen.o(.text);
         src/pokedex_area_region_map.o(.text);
@@ -346,6 +345,7 @@ SECTIONS {
         src/battle_transition_frontier.o(.text);
         src/international_string_util.o(.text);
         src/oak_speech.o(.text);
+        src/renewable_hidden_items.o(.text);
     } =0
 
     script_data :
@@ -676,7 +676,6 @@ SECTIONS {
         src/multiboot.o(.rodata);
         src/berry_fix_graphics.o(.rodata);
         src/battle_controller_player_partner.o(.rodata);
-        src/mirage_tower.o(.rodata);
         src/berry_fix_program.o(.rodata);
         src/pokemon_summary_screen.o(.rodata);
         src/pokedex_area_region_map.o(.rodata);
@@ -711,6 +710,7 @@ SECTIONS {
         src/m4a_tables.o(.rodata);
         data/sound_data.o(.rodata);
         src/oak_speech.o(.rodata);
+        src/renewable_hidden_items.o(.rodata);
     } =0
 
     song_data :

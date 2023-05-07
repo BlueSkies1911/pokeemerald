@@ -17,7 +17,7 @@ SevaultCanyon_Entrance_EventScript_Jon::
     end
 
 SevaultCanyon_Entrance_EventScript_Mason::
-    trainerbattle_single TRAINER_JUGGLER_MASON, SevaultCanyon_Entrance_Text_MasonIntro, SevaultCanyon_Entrance_Text_MasonDefeat
+    trainerbattle_single TRAINER_JUGGLER_MASON, SevaultCanyon_Entrance_Text_MasonIntro, SevaultCanyon_Entrance_Text_MasonDefeat, SevaultCanyon_Entrance_EventScript_RegisterMason
     specialvar VAR_RESULT, ShouldTryRematchBattle
     compare VAR_RESULT, TRUE
     goto_if_eq SevaultCanyon_Entrance_EventScript_MasonRematch
@@ -84,6 +84,6 @@ SevaultCanyon_Entrance_EventScript_RouteSign::
     end
 
 SevaultCanyon_Entrance_Text_RouteSign::
-    .string "SEVAULT CANYON ENTRANCE\p"
+    .string "Sevault Canyon Entrance\p"
     .string "Trainers are asked to refrain from\n"
     .string "damaging plants in the canyon.$"

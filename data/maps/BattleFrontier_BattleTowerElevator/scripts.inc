@@ -20,6 +20,7 @@ BattleFrontier_BattleTowerElevator_EventScript_EnterElevator::
 	waitstate
 	delay 48
 	applymovement LOCALID_ATTENDANT, BattleFrontier_BattleTowerElevator_Movement_AttendantExit
+    delay 36
 	applymovement OBJ_EVENT_ID_PLAYER, BattleFrontier_BattleTowerElevator_Movement_PlayerExit
 	waitmovement 0
 	call BattleFrontier_BattleTowerElevator_EventScript_WarpToNextRoom
@@ -67,12 +68,12 @@ BattleFrontier_BattleTowerElevator_Movement_PlayerEnter:
 
 BattleFrontier_BattleTowerElevator_Movement_AttendantExit:
 	walk_down
+    walk_left
 	walk_down
 	set_invisible
 	step_end
 
 BattleFrontier_BattleTowerElevator_Movement_PlayerExit:
-	walk_right
 	walk_down
 	walk_down
 	step_end

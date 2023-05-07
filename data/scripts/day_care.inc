@@ -267,7 +267,7 @@ FourIsland_Text_DoYouWantEgg:
 	.string "Ah, it's you!\p"
 	.string "We were raising your Pokémon,\n"
 	.string "and my goodness, were we surprised!\p"
-	.string "Your Pokémon had an egg!\p"
+	.string "Your Pokémon had an Egg!\p"
 	.string "We don't know how it got there,\n"
 	.string "but your Pokémon had it.\p"
 	.string "You do want it, yes?$"
@@ -285,7 +285,7 @@ FourIsland_Text_YouHaveNoRoomForIt:
 	.string "Come back when you've made room.$"
 
 FourIsland_Text_ReceivedEgg:
-	.string "{PLAYER} received the egg from\n"
+	.string "{PLAYER} received the Egg from\n"
 	.string "the Day-Care Man.$"
 
 FourIsland_Text_TakeGoodCareOfIt:

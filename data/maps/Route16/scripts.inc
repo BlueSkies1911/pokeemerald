@@ -205,5 +205,5 @@ Route16_Text_CyclingRoadSign::
     .string "Enjoy the slope!$"
 
 Route16_Text_RouteSign::
-    .string "ROUTE 16\n"
+    .string "Route 16\n"
     .string "Celadon City - Fuchsia City$"

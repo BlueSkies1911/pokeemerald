@@ -13,7 +13,6 @@
 #include "fldeff.h"
 #include "gpu_regs.h"
 #include "main.h"
-#include "mirage_tower.h"
 #include "menu.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
@@ -1061,7 +1060,7 @@ static void PokeballGlowEffect_TryPlaySe(struct Sprite * sprite)
         sprite->data[3] = 0;
         if (sprite->data[5])
         {
-            PlayFanfare(MUS_HEAL);
+            PlayFanfare(MUS_RG_HEAL);
         }
     }
 }
@@ -2277,12 +2276,6 @@ static void TeleportWarpOutFieldEffect_End(struct Task *task)
 {
     if (!gPaletteFade.active)
     {
-        if (task->data[5] == FALSE)
-        {
-            ClearMirageTowerPulseBlendEffect();
-            task->data[5] = TRUE;
-        }
-
         if (BGMusicStopped() == TRUE)
         {
             SetWarpDestinationToLastHealLocation();
@@ -2832,8 +2825,8 @@ u8 FldEff_UseSurf(void)
     u8 taskId = CreateTask(Task_SurfFieldEffect, 0xff);
     gTasks[taskId].tMonId = gFieldEffectArguments[0];
     Overworld_ClearSavedMusic();
-    if (Overworld_MusicCanOverrideMapMusic(MUS_SURF))
-        Overworld_ChangeMusicTo(MUS_SURF);
+    if (Overworld_MusicCanOverrideMapMusic(MUS_RG_SURF))
+        Overworld_ChangeMusicTo(MUS_RG_SURF);
     return FALSE;
 }
 

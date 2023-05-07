@@ -22,5 +22,5 @@ SafariZone_East_Text_TimeDeclinesOnlyWhileYouWalk::
     .string "while you walk.$"
 
 SafariZone_East_Text_AreaSign::
-    .string "AREA 1\n"
+    .string "Area 1\n"
     .string "West: Center Area$"

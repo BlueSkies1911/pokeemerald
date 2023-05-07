@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "right",
+      "map": "MAP_WATER_PATH",
       "offset": 0,
-      "map": "MAP_WATER_PATH"
+      "direction": "right"
     },
     {
-      "direction": "up",
+      "map": "MAP_OUTCAST_ISLAND",
       "offset": 0,
-      "map": "MAP_OUTCAST_ISLAND"
+      "direction": "up"
     }
   ],
   "object_events": [
@@ -45,28 +45,28 @@
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_PATTERN_BUSH",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 64,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_PATTERN_BUSH",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 45,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_PATTERN_BUSH",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 46,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_PATTERN_BUSH",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     }
   ],
   "coord_events": [

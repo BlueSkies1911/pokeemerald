@@ -26,7 +26,7 @@ MoveTutor_Text_DreamEaterTaught::
 
 MoveTutor_Text_SeismicTossTeach::
     .string "The secrets of space…\n"
-    .string "The mysteries of earth…\p"
+    .string "The mysteries of Earth…\p"
     .string "There are so many things about\n"
     .string "which we know so little.\p"
     .string "But that should spur us to study\n"

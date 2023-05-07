@@ -62,10 +62,10 @@ VictoryRoad_3F_EventScript_Tyra::
     end
 
 VictoryRoad_3F_Text_GeorgeIntro::
-    .string "I heard rumors of a child prodigy.$"
+    .string "I heard rumours of a child prodigy.$"
 
 VictoryRoad_3F_Text_GeorgeDefeat::
-    .string "The rumors were true!$"
+    .string "The rumours were true!$"
 
 VictoryRoad_3F_Text_GeorgePostBattle::
     .string "So, it was you who beat Giovanni\n"

@@ -5,6 +5,7 @@ PlayersHouse_2F_MapScripts::
     map_script MAP_SCRIPT_ON_TRANSITION, PlayersHouse_2F_OnTransition
     map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, PlayersHouse_2F_OnWarp
     map_script MAP_SCRIPT_ON_FRAME_TABLE, PlayersHouse_2F_OnFrame
+    map_script MAP_SCRIPT_ON_LOAD, PlayersHouse_2F_OnLoad
     .byte 0
 
 PlayersHouse_2F_OnTransition:
@@ -85,13 +86,35 @@ PlayersHouse_2F_Movement_CameraPanBackFromCenter::
     walk_left
     walk_left
     step_end
+    
+PlayersHouse_2F_OnLoad::
+    call_if_eq VAR_TEMP_1, 1, PlayersHouse_2F_TVOn
+    checkplayergender
+    compare VAR_RESULT, FEMALE
+    call_if_eq PlayersHouse_2F_EventScript_ClockColourFemale
+    end
+    
+PlayersHouse_2F_TVOn::
+    setmetatile 6, 4, METATILE_Building_TV_On, TRUE
+    return
+
+PlayersHouse_2F_EventScript_ClockColourFemale::
+    setmetatile 11, 0, METATILE_GenericBuilding1_ClockTop_Female, 1
+    setmetatile 11, 1, METATILE_GenericBuilding1_ClockBottom_Female, 1
+    return
 
 PlayersHouse_2F_EventScript_GoSetTheClock::
 	msgbox PlayersHouse_2F_Text_GoSetTheClock, MSGBOX_NPC
 	end
 
 PlayersHouse_2F_EventScript_NES::
+    setvar VAR_TEMP_1, 1
+    setmetatile 6, 4, METATILE_Building_TV_On, TRUE
+    special DrawWholeMapView
     msgbox PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
+    setvar VAR_TEMP_1, 0
+    setmetatile 6, 4, METATILE_Building_TV_Off, TRUE
+    special DrawWholeMapView
     end
 
 PlayersHouse_2F_EventScript_PC::

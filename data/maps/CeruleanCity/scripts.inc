@@ -11,6 +11,7 @@ CeruleanCity_MapScripts::
 
 CeruleanCity_OnTransition:
     setflag FLAG_WORLD_MAP_CERULEAN_CITY
+	setflag FLAG_SYS_TV_START
     call_if_unset FLAG_GOT_SS_TICKET, CeruleanCity_EventScript_BlockExits
     end
 
@@ -606,7 +607,7 @@ CeruleanCity_Text_ThisIsCeruleanCave::
     .string "made a great achievement.$"
 
 CeruleanCity_Text_CitySign::
-    .string "CERULEAN CITY\n"
+    .string "Cerulean City\n"
     .string "A mysterious, blue aura surrounds it$"
 
 CeruleanCity_Text_GymSign::

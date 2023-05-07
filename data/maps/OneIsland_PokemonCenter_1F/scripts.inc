@@ -204,7 +204,7 @@ OneIsland_PokemonCenter_1F_EventScript_Celio::
     end
 
 OneIsland_PokemonCenter_1F_EventScript_CelioGiveBillFact::
-    msgbox OneIsland_PokemonCenter_1F_Text_CelioHearingRumorsAboutYou, MSGBOX_DEFAULT
+    msgbox OneIsland_PokemonCenter_1F_Text_CelioHearingRumoursAboutYou, MSGBOX_DEFAULT
     random 3
     compare VAR_RESULT, 0
     goto_if_eq OneIsland_PokemonCenter_1F_EventScript_BillFact1
@@ -651,7 +651,7 @@ OneIsland_PokemonCenter_1F_Text_BillOhHeyPlayer::
     .string "{PLAYER}!$"
 
 OneIsland_PokemonCenter_1F_Text_BillWeGotItDone::
-    .string "BILL: What kept you so long?\n"
+    .string "Bill: What kept you so long?\n"
     .string "Been out having a good time?\p"
     .string "We got it done.\n"
     .string "The PCs are up and running!$"
@@ -815,9 +815,9 @@ OneIsland_PokemonCenter_1F_Text_WishYouBestOfLuck::
     .string "looking for exotic Pokémon, right?\p"
     .string "I wish you the best of luck!$"
 
-OneIsland_PokemonCenter_1F_Text_CelioHearingRumorsAboutYou::
+OneIsland_PokemonCenter_1F_Text_CelioHearingRumoursAboutYou::
     .string "Celio: Hello!\p"
-    .string "{PLAYER}, I've been hearing rumors\n"
+    .string "{PLAYER}, I've been hearing rumours\n"
     .string "about you.$"
 
 OneIsland_PokemonCenter_1F_Text_BillsFirstMonWasAbra::

@@ -379,8 +379,7 @@ extern const u8 EventScript_UseCut[];
 extern const u8 EventScript_UseRockSmash[];
 
 //player pc
-extern const u8 LittlerootTown_BrendansHouse_2F_EventScript_TurnOffPlayerPC[];
-extern const u8 LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC[];
+extern const u8 PlayersHouse_2F_EventScript_ShutDownPC[];
 
 // Mauville Old Man (Giddy)
 extern const u8 GiddyText_Is[];
@@ -512,18 +511,14 @@ extern const u8 MauvilleCity_PokemonCenter_1F_Text_HotSpringsTitle[];
 extern const u8 MauvilleCity_PokemonCenter_1F_Text_HotSpringsAction[];
 extern const u8 MauvilleCity_PokemonCenter_1F_Text_HotSpringsStory[];
 
-extern const u8 LittlerootTown_BrendansHouse_2F_EventScript_PC[];
-extern const u8 LittlerootTown_MaysHouse_2F_EventScript_PC[];
 extern const u8 EventScript_PC[];
 extern const u8 EventScript_TestSignpostMsg[];
 extern const u8 EventScript_HiddenItemScript[];
 extern const u8 EventScript_TV[];
-extern const u8 EventScript_ClosedSootopolisDoor[];
 extern const u8 EventScript_CableBoxResults[];
 extern const u8 EventScript_PokeBlockFeeder[];
 extern const u8 Route110_TrickHousePuzzle_EventScript_Door[];
 extern const u8 EventScript_RegionMap[];
-extern const u8 EventScript_RunningShoesManual[];
 extern const u8 EventScript_PictureBookShelf[];
 extern const u8 EventScript_BookShelf[];
 extern const u8 EventScript_PokemonCenterBookShelf[];
@@ -564,16 +559,11 @@ extern const u8 EventScript_UseWaterfall[];
 extern const u8 EventScript_CannotUseWaterfall[];
 extern const u8 EventScript_UseDive[];
 extern const u8 EventScript_UseDiveUnderwater[];
-extern const u8 EventScript_FallDownHole[];
 extern const u8 EventScript_FieldPoison[];
 extern const u8 EventScript_EggHatch[];
-extern const u8 AbnormalWeather_EventScript_EndEventAndCleanup_1[];
-extern const u8 IslandCave_EventScript_OpenRegiEntrance[];
-extern const u8 LittlerootTown_ProfessorBirchsLab_EventScript_ScottAboardSSTidalCall[];
 extern const u8 PewterCity_EventScript_RegisterOak[];
 extern const u8 CeruleanCity_EventScript_RegisterDaisyCall[];
 extern const u8 CeruleanCity_EventScript_RegisterBrock[];
-extern const u8 SSTidalCorridor_EventScript_ReachedStepCount[];
 extern const u8 EventScript_FallDownHoleMtPyre[];
 
 // Secret Base
@@ -677,28 +667,21 @@ extern const u8 gNameChoice_Norie[];
 extern const u8 gNameChoice_Sai[];
 extern const u8 gNameChoice_Momo[];
 extern const u8 gNameChoice_Suzi[];
-extern const u8 gNewGame_HelpDocs1[];
-extern const u8 gNewGame_HelpDocs2[];
-extern const u8 gNewGame_HelpDocs3[];
-extern const u8 gNewGame_HelpDocs4[];
-extern const u8 gNewGame_HelpDocs5[];
-extern const u8 gNewGame_HelpDocs6[];
-extern const u8 gNewGame_HelpDocs7[];
-extern const u8 gOakText_AskPlayerGender[];
-extern const u8 gNewGameAdventureIntro1[];
-extern const u8 gNewGameAdventureIntro2[];
-extern const u8 gNewGameAdventureIntro3[];
-extern const u8 gOakText_WelcomeToTheWorld[];
-extern const u8 gOakText_WorldInhabited1[];
-extern const u8 gOakText_WorldInhabited2[];
-extern const u8 gOakText_PetsBattlingStudy[];
-extern const u8 gOakText_TellMeALittleAboutYourself[];
-extern const u8 gOakText_AskPlayerName[];
-extern const u8 gOakText_FinalizePlayerName[];
-extern const u8 gOakText_IntroduceRival[];
-extern const u8 gOakText_AskRivalName[];
-extern const u8 gOakText_ConfirmRivalName[];
-extern const u8 gOakText_RememberRivalName[];
-extern const u8 gOakText_LegendAboutToUnfold[];
+extern const u8 gOakSpeech_Text_AskPlayerGender[];
+extern const u8 gPikachuIntro_Text_Page1[];
+extern const u8 gPikachuIntro_Text_Page2[];
+extern const u8 gPikachuIntro_Text_Page3[];
+extern const u8 gOakSpeech_Text_WelcomeToTheWorld[];
+extern const u8 gOakSpeech_Text_ThisWorld[];
+extern const u8 gOakSpeech_Text_IsInhabitedFarAndWide[];
+extern const u8 gOakSpeech_Text_IStudyPokemon[];
+extern const u8 gOakSpeech_Text_TellMeALittleAboutYourself[];
+extern const u8 gOakSpeech_Text_YourNameWhatIsIt[];
+extern const u8 gOakSpeech_Text_SoYourNameIsPlayer[];
+extern const u8 gOakSpeech_Text_WhatWasHisName[];
+extern const u8 gOakSpeech_Text_YourRivalsNameWhatWasIt[];
+extern const u8 gOakSpeech_Text_ConfirmRivalName[];
+extern const u8 gOakSpeech_Text_RememberRivalsName[];
+extern const u8 gOakSpeech_Text_LetsGo[];
 
 #endif // GUARD_EVENT_SCRIPTS_H

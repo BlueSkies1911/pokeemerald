@@ -47,13 +47,26 @@ SaffronCity_PokemonTrainerFanClub_Movement_FanApproachPlayer::
     step_end
 
 SaffronCity_PokemonTrainerFanClub_OnTransition:
+    call SaffronCity_PokemonTrainerFanClub_EventScript_HideOrShowInterviewer
     compare VAR_MAP_SCENE_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB, 1
     goto_if_eq SaffronCity_PokemonTrainerFanClub_EventScript_SetMemberPosForFirstMeeting
     compare VAR_MAP_SCENE_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB, 2
     goto_if_eq SaffronCity_PokemonTrainerFanClub_EventScript_UpdateFanMemberPositions
     end
 
+SaffronCity_PokemonTrainerFanClub_EventScript_HideOrShowInterviewer::
+    specialvar VAR_RESULT, ShouldHideFanClubInterviewer
+    goto_if_eq VAR_RESULT, TRUE, SaffronCity_PokemonTrainerFanClub_EventScript_HideInterviewer
+    clearflag FLAG_HIDE_SAFFRON_FAN_CLUB_INTERVIEWER
+    clearflag FLAG_FAN_CLUB_STRENGTH_SHARED
+    return
+
+SaffronCity_PokemonTrainerFanClub_EventScript_HideInterviewer::
+    setflag FLAG_HIDE_SAFFRON_FAN_CLUB_INTERVIEWER
+    return
+
 SaffronCity_PokemonTrainerFanClub_EventScript_SetMemberPosForFirstMeeting::
+    call SaffronCity_PokemonTrainerFanClub_EventScript_CheckSetUpTVShow
     call SaffronCity_PokemonTrainerFanClub_EventScript_MoveMember4ToFarTable
     call SaffronCity_PokemonTrainerFanClub_EventScript_MoveMember5ToFarTable
     call SaffronCity_PokemonTrainerFanClub_EventScript_MoveMember6ToFarTable
@@ -125,6 +138,7 @@ SaffronCity_PokemonTrainerFanClub_EventScript_MoveMember5ToFarTable::
 
 SaffronCity_PokemonTrainerFanClub_EventScript_MoveMember6ToFarTable::
     setobjectxyperm LOCALID_WOMAN, 10, 3
+    setvar VAR_TEMP_1, 1
     setobjectmovementtype LOCALID_WOMAN, MOVEMENT_TYPE_FACE_UP
     return
 
@@ -467,6 +481,148 @@ SaffronCity_PokemonTrainerFanClub_EventScript_BlackBeltOnlyNonFan::
     release
     end
 
+SaffronCity_PokemonTrainerFanClub_EventScript_Interviewer::
+    lock
+    faceplayer
+    goto_if_set FLAG_FAN_CLUB_STRENGTH_SHARED, SaffronCity_PokemonTrainerFanClub_EventScript_AlreadyInterviewed
+    goto_if_unset FLAG_FAN_CLUB_STRENGTH_SHARED, SaffronCity_PokemonTrainerFanClub_EventScript_Interview
+    end
+
+@ The interviewer doesnt count as an individual fan club member
+@ Instead they always ask about whoever the Lass would be interested in, if not the player
+SaffronCity_PokemonTrainerFanClub_EventScript_Interview::
+    setvar VAR_0x8005, TVSHOW_FAN_CLUB_SPECIAL
+    special InterviewBefore
+    goto_if_eq VAR_RESULT, TRUE, SaffronCity_PokemonTrainerFanClub_EventScript_AlreadyInterviewed2
+    copyvar VAR_0x800A, VAR_0x8006
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_WhatsYourOpinionOfTrainer, MSGBOX_DEFAULT
+    setvar VAR_0x8004, EASY_CHAT_TYPE_FAN_QUESTION
+    copyvar VAR_0x8005, VAR_0x800A
+    call Common_ShowEasyChatScreen
+    lock
+    faceplayer
+    goto_if_eq VAR_RESULT, 1, SaffronCity_PokemonTrainerFanClub_EventScript_SubmitOpinion
+    goto_if_eq VAR_RESULT, 0, SaffronCity_PokemonTrainerFanClub_EventScript_CancelGiveOpinion
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_SubmitOpinion::
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_ThatsWhatYouThink, MSGBOX_DEFAULT
+    goto SaffronCity_PokemonTrainerFanClub_EventScript_RateTrainer
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_CancelGiveOpinion::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_HaveYouForgottenTrainer, MSGBOX_YESNO
+    goto_if_eq VAR_RESULT, YES, SaffronCity_PokemonTrainerFanClub_EventScript_ForgetTrainer
+    goto_if_eq VAR_RESULT, NO, SaffronCity_PokemonTrainerFanClub_EventScript_AskForOpinion
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_AskForOpinion::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_WhatsYourOpinionOfTrainer2, MSGBOX_DEFAULT
+    setvar VAR_0x8004, EASY_CHAT_TYPE_FAN_QUESTION
+    copyvar VAR_0x8005, VAR_0x800A
+    call Common_ShowEasyChatScreen
+    lock
+    faceplayer
+    goto_if_eq VAR_RESULT, 1, SaffronCity_PokemonTrainerFanClub_EventScript_SubmitOpinion
+    goto_if_eq VAR_RESULT, 0, SaffronCity_PokemonTrainerFanClub_EventScript_CancelGiveOpinion
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_RateTrainer::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    message SaffronCity_PokemonTrainerFanClub_Text_HowStrongRateTrainer
+    waitmessage
+    setvar VAR_0x8004, SCROLL_MULTI_POKEMON_FAN_CLUB_RATER
+    special ShowScrollableMultichoice
+    waitstate
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    switch VAR_RESULT
+    case 11, SaffronCity_PokemonTrainerFanClub_EventScript_CancelRateTrainer
+    case MULTI_B_PRESSED, SaffronCity_PokemonTrainerFanClub_EventScript_CancelRateTrainer
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    copyvar VAR_0x8006, VAR_0x800A
+    copyvar VAR_0x8005, VAR_RESULT
+    special PutFanClubSpecialOnTheAir
+    goto SaffronCity_PokemonTrainerFanClub_EventScript_CompleteInterview
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_CancelRateTrainer::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_HaveYouForgottenTrainer2, MSGBOX_YESNO
+    goto_if_eq VAR_RESULT, YES, SaffronCity_PokemonTrainerFanClub_EventScript_ForgetTrainer
+    goto_if_eq VAR_RESULT, NO, SaffronCity_PokemonTrainerFanClub_EventScript_RateTrainer
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_ForgetTrainer::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_YouShouldMeetTrainer, MSGBOX_DEFAULT
+    release
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_CompleteInterview::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_Text_ThankYouIllShareThisInfo, MSGBOX_DEFAULT
+    setflag FLAG_FAN_CLUB_STRENGTH_SHARED
+    release
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_AlreadyInterviewed::
+    setvar VAR_0x8004, FANCLUB_MEMBER1
+    special BufferFanClubTrainerName
+    msgbox SaffronCity_PokemonTrainerFanClub_HopeYouCatchTVSpecial, MSGBOX_DEFAULT
+    release
+    end
+
+@ Shouldnt be reached
+SaffronCity_PokemonTrainerFanClub_EventScript_AlreadyInterviewed2::
+    end
+
+SaffronCity_PokemonTrainerFanClub_EventScript_BlockingTV::
+	lockall
+	playse SE_PIN
+	applymovement LOCALID_WOMAN, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_WOMAN, Common_Movement_Delay48
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterDown
+	waitmovement 0
+	msgbox SaffronCity_PokemonTrainerFanClub_Text_CantSeeTheTV, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, SaffronCity_PokemonTrainerFanClub_Movement_PlayerPushFromTV
+	applymovement LOCALID_WOMAN, SaffronCity_PokemonTrainerFanClub_Movement_OwnerPushPlayer
+	waitmovement 0
+	applymovement LOCALID_WOMAN, SaffronCity_PokemonTrainerFanClub_Movement_OwnerReturn
+	waitmovement 0
+	release
+	end
+
+SaffronCity_PokemonTrainerFanClub_Movement_PlayerPushFromTV:
+	face_right
+	lock_facing_direction
+	walk_left
+	unlock_facing_direction
+	step_end
+
+SaffronCity_PokemonTrainerFanClub_Movement_OwnerPushPlayer:
+	walk_up
+	step_end
+
+SaffronCity_PokemonTrainerFanClub_Movement_OwnerReturn:
+	face_down
+	walk_down
+	face_up
+	step_end
+
 SaffronCity_PokemonTrainerFanClub_EventScript_PokemonJournalBruno::
     lockall
     msgbox PokemonJournal_Text_SpecialFeatureBruno, MSGBOX_DEFAULT
@@ -551,7 +707,7 @@ SaffronCity_PokemonTrainerFanClub_Text_BrocksMyHero::
     .string "He's a man among men!\p"
     .string "Heheh, I got my mom to do\n"
     .string "something for me.\p"
-    .string "I got her to embroider “BROCK”\n"
+    .string "I got her to embroider “Brock”\n"
     .string "on my shorts!$"
 
 SaffronCity_PokemonTrainerFanClub_Text_BrocksFanToBitterEnd::
@@ -683,7 +839,7 @@ SaffronCity_PokemonTrainerFanClub_Text_AdoreWayYouBattle::
 SaffronCity_PokemonTrainerFanClub_Text_ImYourNumberOneFan::
     .string "Oh, my goodness!\n"
     .string "If it isn't {PLAYER}!\p"
-    .string "It's so disappointing… I realized\n"
+    .string "It's so disappointing… I realised\n"
     .string "I'm your number-one-and-only fan!\p"
     .string "Well, it can't be helped!\n"
     .string "Let me cheer you on, at least!\p"
@@ -762,6 +918,10 @@ SaffronCity_PokemonTrainerFanClub_Text_NeverBeFanOfAnyoneButMaster::
     .string "I will even sneak out of the Dojo\n"
     .string "to spread word of his greatness.\p"
     .string "Hiyah!$"
+
+SaffronCity_PokemonTrainerFanClub_Text_CantSeeTheTV:
+	.string "Hey, down in front!\n"
+	.string "I can't see the TV!$"
 
 PokemonJournal_Text_SpecialFeatureBruno::
     .string "Pokémon Journal\p"

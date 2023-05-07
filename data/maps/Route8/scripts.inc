@@ -146,5 +146,5 @@ Route8_EventScript_UndergroundPathSign::
     end
 
 Route8_Text_UndergroundPathSign::
-    .string "UNDERGROUND PATH\n"
+    .string "Underground Path\n"
     .string "Celadon City - Lavender Town$"

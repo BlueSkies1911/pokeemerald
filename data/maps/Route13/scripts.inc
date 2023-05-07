@@ -122,5 +122,5 @@ Route13_Text_SelectToSwitchItems::
     .string "Items window.$"
 
 Route13_Text_RouteSign::
-    .string "ROUTE 13\n"
+    .string "Route 13\n"
     .string "North to Silence Bridge$"

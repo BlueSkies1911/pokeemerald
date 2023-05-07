@@ -22,7 +22,7 @@
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_TANOBY_RUINS",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [

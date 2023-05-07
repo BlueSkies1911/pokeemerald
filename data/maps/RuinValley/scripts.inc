@@ -30,8 +30,7 @@ RuinValley_EventScript_DottedHoleDoor::
     compare VAR_RESULT, NO
     goto_if_eq RuinValley_EventScript_IgnoreDottedHoleDoor
     msgbox RuinValley_Text_SeveralDotsOnTheDoor, MSGBOX_DEFAULT
-    braillemessage Braille_Text_Cut
-    waitbuttonpress
+    braillemsgbox Braille_Text_Cut
     releaseall
     end
 

@@ -165,5 +165,5 @@ TwoIsland_House_Text_NeedMushroomOrTwoToLearnMove::
 
 TwoIsland_House_Text_CantTeachAnEgg::
     .string "Hunh? There isn't a single move\n"
-    .string "that I can teach an egg.$"
+    .string "that I can teach an Egg.$"
 

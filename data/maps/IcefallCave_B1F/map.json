@@ -14,32 +14,32 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": 0,
   "object_events": [
-      {
-        "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-        "x": 10,
-        "y": 14,
-        "elevation": 3,
-        "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-        "movement_range_x": 1,
-        "movement_range_y": 1,
-        "trainer_type": "TRAINER_TYPE_NONE",
-        "trainer_sight_or_berry_tree_id": "0",
-        "script": "IcefallCave_B1F_EventScript_ItemFullRestore",
-        "flag": "FLAG_HIDE_ICEFALL_CAVE_B1F_FULL_RESTORE"
-      },
-      {
-        "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-        "x": 21,
-        "y": 7,
-        "elevation": 3,
-        "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-        "movement_range_x": 1,
-        "movement_range_y": 1,
-        "trainer_type": "TRAINER_TYPE_NONE",
-        "trainer_sight_or_berry_tree_id": "0",
-        "script": "IcefallCave_B1F_EventScript_ItemNeverMeltIce",
-        "flag": "FLAG_HIDE_ICEFALL_CAVE_B1F_NEVER_MELT_ICE"
-      }
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 10,
+      "y": 14,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "IcefallCave_B1F_EventScript_ItemFullRestore",
+      "flag": "FLAG_HIDE_ICEFALL_CAVE_B1F_FULL_RESTORE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 21,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "IcefallCave_B1F_EventScript_ItemNeverMeltIce",
+      "flag": "FLAG_HIDE_ICEFALL_CAVE_B1F_NEVER_MELT_ICE"
+    }
   ],
   "warp_events": [
     {
@@ -47,21 +47,21 @@
       "y": 12,
       "elevation": 0,
       "dest_map": "MAP_ICEFALL_CAVE_1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 12,
       "y": 3,
       "elevation": 0,
       "dest_map": "MAP_ICEFALL_CAVE_1F",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 15,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_ICEFALL_CAVE_1F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     }
   ],
   "coord_events": [

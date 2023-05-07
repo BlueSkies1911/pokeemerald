@@ -104,7 +104,7 @@ WaterLabyrinth_Text_TreatMonRightHaveThis::
     .string "Please, I'd like you to have this.$"
 
 WaterLabyrinth_Text_ReceivedEggFromMan::
-    .string "{PLAYER} received an egg\n"
+    .string "{PLAYER} received an Egg\n"
     .string "from the man!$"
 
 WaterLabyrinth_Text_DontHaveSpaceInYourParty::
@@ -114,7 +114,7 @@ WaterLabyrinth_Text_DontHaveSpaceInYourParty::
     .string "another time.$"
 
 WaterLabyrinth_Text_GladIMetSomeoneLikeYou::
-    .string "I received that egg while I was\n"
+    .string "I received that Egg while I was\n"
     .string "travelling.\p"
     .string "I'm glad I met someone like you.$"
 

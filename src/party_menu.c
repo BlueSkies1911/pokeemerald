@@ -3345,7 +3345,7 @@ static void CB2_ReturnToPartyMenuFromWritingMail(void)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
 
-    // Canceled writing mail
+    // Cancelled writing mail
     if (gSpecialVar_Result == FALSE)
     {
         TakeMailFromMon(mon);
@@ -5599,7 +5599,7 @@ static void CB2_ReturnToPartyOrBagMenuFromWritingMail(void)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM);
 
-    // Canceled writing mail
+    // Cancelled writing mail
     if (gSpecialVar_Result == FALSE)
     {
         TakeMailFromMon(mon);

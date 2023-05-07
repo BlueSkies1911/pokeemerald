@@ -139,7 +139,7 @@ Route17_Text_PressBToStayInPlace::
     .string "while on a slope.$"
 
 Route17_Text_RouteSign::
-    .string "ROUTE 17\n"
+    .string "Route 17\n"
     .string "Celadon City - Fuchsia City$"
 
 Route17_Text_DontThrowGameThrowBalls::
@@ -148,5 +148,5 @@ Route17_Text_DontThrowGameThrowBalls::
     .string "Pokéballs instead!$"
 
 Route17_Text_CyclingRoadSign::
-    .string "CYCLING ROAD\n"
+    .string "Cycling Road\n"
     .string "Slope ends here!$"

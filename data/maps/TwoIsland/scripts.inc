@@ -294,7 +294,7 @@ TwoIsland_Text_HaveYouTriedJumpingGame::
     .string "Boing!$"
 
 TwoIsland_Text_IslandSign::
-    .string "TWO ISLAND\n"
+    .string "Two Island\n"
     .string "Boon Island for Two$"
 
 TwoIsland_Text_GameCornerSign::

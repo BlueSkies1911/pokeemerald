@@ -112,5 +112,5 @@ Route14_EventScript_RouteSign::
     end
 
 Route14_Text_RouteSign::
-    .string "ROUTE 14\n"
+    .string "Route 14\n"
     .string "West to Fuchsia City$"

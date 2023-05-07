@@ -35,7 +35,6 @@
 #include "fldeff.h"
 #include "fldeff_misc.h"
 #include "field_control_avatar.h"
-#include "mirage_tower.h"
 #include "field_screen_effect.h"
 #include "data.h"
 #include "constants/battle_frontier.h"
@@ -387,7 +386,6 @@ static void Task_BattleStart(u8 taskId)
         if (!FldEffPoison_IsActive()) // is poison not active?
         {
             BattleTransition_StartOnField(tTransition);
-            ClearMirageTowerPulseBlendEffect();
             tState++; // go to case 1.
         }
         break;
@@ -1590,47 +1588,26 @@ void PlayTrainerEncounterMusic(void)
     {
         switch (GetTrainerEncounterMusicId(trainerId))
         {
-        case TRAINER_ENCOUNTER_MUSIC_MALE:
-            music = MUS_ENCOUNTER_MALE;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_FEMALE:
-            music = MUS_ENCOUNTER_FEMALE;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_GIRL:
-            music = MUS_ENCOUNTER_GIRL;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_INTENSE:
-            music = MUS_ENCOUNTER_INTENSE;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_COOL:
-            music = MUS_ENCOUNTER_COOL;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_AQUA:
-            music = MUS_RG_ENCOUNTER_ROCKET;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_MAGMA:
-            music = MUS_ENCOUNTER_MAGMA;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_SWIMMER:
-            music = MUS_ENCOUNTER_SWIMMER;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_TWINS:
-            music = MUS_ENCOUNTER_TWINS;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_ELITE_FOUR:
-            music = MUS_ENCOUNTER_ELITE_FOUR;
-            break;
-        case TRAINER_ENCOUNTER_MUSIC_HIKER:
-            music = MUS_ENCOUNTER_HIKER;
-            break;
         case TRAINER_ENCOUNTER_MUSIC_INTERVIEWER:
             music = MUS_ENCOUNTER_INTERVIEWER;
             break;
+        case TRAINER_ENCOUNTER_MUSIC_FEMALE:
+        case TRAINER_ENCOUNTER_MUSIC_GIRL:
+        case TRAINER_ENCOUNTER_MUSIC_TWINS:
+            music = MUS_RG_ENCOUNTER_GIRL;
+            break;
+        case TRAINER_ENCOUNTER_MUSIC_MALE:
+        case TRAINER_ENCOUNTER_MUSIC_INTENSE:
+        case TRAINER_ENCOUNTER_MUSIC_COOL:
+        case TRAINER_ENCOUNTER_MUSIC_SWIMMER:
+        case TRAINER_ENCOUNTER_MUSIC_ELITE_FOUR:
+        case TRAINER_ENCOUNTER_MUSIC_HIKER:
         case TRAINER_ENCOUNTER_MUSIC_RICH:
-            music = MUS_ENCOUNTER_RICH;
+            music = MUS_RG_ENCOUNTER_BOY;
             break;
         default:
-            music = MUS_ENCOUNTER_SUSPICIOUS;
+            music = MUS_RG_ENCOUNTER_ROCKET;
+            break;
         }
         PlayNewMapMusic(music);
     }

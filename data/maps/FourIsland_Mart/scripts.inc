@@ -1,5 +1,3 @@
-.set LOCALID_CLERK, 1
-
 FourIsland_Mart_MapScripts::
 	.byte 0
 

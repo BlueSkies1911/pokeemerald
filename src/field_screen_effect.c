@@ -18,7 +18,6 @@
 #include "load_save.h"
 #include "main.h"
 #include "menu.h"
-#include "mirage_tower.h"
 #include "metatile_behavior.h"
 #include "palette.h"
 #include "overworld.h"
@@ -657,16 +656,8 @@ static void Task_WarpAndLoadMap(u8 taskId)
         task->tState++;
         break;
     case 1:
-        if (!PaletteFadeActive())
-        {
-            if (task->data[1] == 0)
-            {
-                ClearMirageTowerPulseBlendEffect();
-                task->data[1] = 1;
-            }
-            if (BGMusicStopped())
-                task->tState++;
-        }
+        if (!PaletteFadeActive() && BGMusicStopped())        
+            task->tState++;
         break;
     case 2:
         WarpIntoMap();

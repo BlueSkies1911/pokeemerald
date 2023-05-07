@@ -42,5 +42,5 @@ Route4_Text_MtMoonEntrance::
     .string "Tunnel Entrance$"
 
 Route4_Text_RouteSign::
-    .string "ROUTE 4\n"
+    .string "Route 4\n"
     .string "Mt. Moon - Cerulean City$"

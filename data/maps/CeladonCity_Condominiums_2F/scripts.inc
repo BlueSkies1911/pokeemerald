@@ -16,6 +16,6 @@ PokemonJournal_Text_SpecialFeatureErika::
     .string "Pokémon Journal\p"
     .string "Special Feature: Celadon Gym\n"
     .string "Leader Erika!\p"
-    .string "Rumor has it that if you peek into\n"
+    .string "Rumour has it that if you peek into\n"
     .string "Celadon Gym, you can often\l"
     .string "see Erika snoozing.$"

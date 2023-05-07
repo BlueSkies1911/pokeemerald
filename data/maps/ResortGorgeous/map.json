@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "down",
+      "map": "MAP_WATER_LABYRINTH",
       "offset": -48,
-      "map": "MAP_WATER_LABYRINTH"
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -131,14 +131,14 @@
       "y": 13,
       "elevation": 0,
       "dest_map": "MAP_LOST_CAVE_ENTRANCE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 39,
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_RESORT_GORGEOUS_HOUSE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

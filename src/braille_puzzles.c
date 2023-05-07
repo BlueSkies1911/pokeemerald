@@ -60,18 +60,6 @@ static void DoBrailleRegisteelEffect(void);
 
 bool8 ShouldDoBrailleDigEffect(void)
 {
-    if (!FlagGet(FLAG_SYS_BRAILLE_DIG)
-     && (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(VERDANTURF_TOWN)
-     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(VERDANTURF_TOWN)))
-    {
-        if (gSaveBlock1Ptr->pos.x == 10 && gSaveBlock1Ptr->pos.y == 3)
-            return TRUE;
-        if (gSaveBlock1Ptr->pos.x == 9 && gSaveBlock1Ptr->pos.y == 3)
-            return TRUE;
-        if (gSaveBlock1Ptr->pos.x == 11 && gSaveBlock1Ptr->pos.y == 3)
-            return TRUE;
-    }
-
     return FALSE;
 }
 
@@ -180,7 +168,7 @@ static void DoBrailleRegirockEffect(void)
 
 bool8 ShouldDoBrailleRegisteelEffect(void)
 {
-    if (!FlagGet(FLAG_SYS_REGISTEEL_PUZZLE_COMPLETED) && (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ANCIENT_TOMB) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ANCIENT_TOMB)))
+    if (!FlagGet(FLAG_SYS_REGISTEEL_PUZZLE_COMPLETED))
     {
         if (gSaveBlock1Ptr->pos.x == 8 && gSaveBlock1Ptr->pos.y == 25)
         {
@@ -236,60 +224,5 @@ bool8 FldEff_UsePuzzleEffect(void)
 
 bool8 ShouldDoBrailleRegicePuzzle(void)
 {
-    u8 i;
-
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ISLAND_CAVE)
-        && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ISLAND_CAVE))
-    {
-        if (FlagGet(FLAG_SYS_BRAILLE_REGICE_COMPLETED))
-            return FALSE;
-        if (FlagGet(FLAG_TEMP_2) == FALSE)
-            return FALSE;
-        if (FlagGet(FLAG_TEMP_3) == TRUE)
-            return FALSE;
-
-        for (i = 0; i < ARRAY_COUNT(sRegicePathCoords); i++)
-        {
-            u8 xPos = sRegicePathCoords[i][0];
-            u8 yPos = sRegicePathCoords[i][1];
-            if (gSaveBlock1Ptr->pos.x == xPos && gSaveBlock1Ptr->pos.y == yPos)
-            {
-                u16 varValue;
-
-                if (i < 16)
-                {
-                    u16 val = VarGet(VAR_REGICE_STEPS_1);
-                    val |= 1 << i;
-                    VarSet(VAR_REGICE_STEPS_1, val);
-                }
-                else if (i < 32)
-                {
-                    u16 val = VarGet(VAR_REGICE_STEPS_2);
-                    val |= 1 << (i - 16);
-                    VarSet(VAR_REGICE_STEPS_2, val);
-                }
-                else
-                {
-                    u16 val = VarGet(VAR_REGICE_STEPS_3);
-                    val |= 1 << (i - 32);
-                    VarSet(VAR_REGICE_STEPS_3, val);
-                }
-
-                varValue = VarGet(VAR_REGICE_STEPS_1);
-                if (varValue != 0xFFFF || VarGet(VAR_REGICE_STEPS_2) != 0xFFFF || VarGet(VAR_REGICE_STEPS_3) != 0xF)
-                    return FALSE;
-
-                // This final check is redundant.
-                if (gSaveBlock1Ptr->pos.x == 8 && gSaveBlock1Ptr->pos.y == 21)
-                    return TRUE;
-                else
-                    return FALSE;
-            }
-        }
-
-        FlagSet(FLAG_TEMP_3);
-        FlagClear(FLAG_TEMP_2);
-    }
-
     return FALSE;
 }

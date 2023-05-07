@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "right",
+      "map": "MAP_ROUTE19",
       "offset": -40,
-      "map": "MAP_ROUTE19"
+      "direction": "right"
     },
     {
-      "direction": "left",
+      "map": "MAP_CINNABAR_ISLAND",
       "offset": -8,
-      "map": "MAP_CINNABAR_ISLAND"
+      "direction": "left"
     }
   ],
   "object_events": [
@@ -175,14 +175,14 @@
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_SEAFOAM_ISLANDS_1F",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 72,
       "y": 14,
       "elevation": 0,
       "dest_map": "MAP_SEAFOAM_ISLANDS_1F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     }
   ],
   "coord_events": [

@@ -364,7 +364,7 @@ static void Task_EReader(u8 taskId)
     case ER_STATE_TRY_LINK:
         if (JOY_NEW(B_BUTTON))
         {
-            // Canceled
+            // Cancelled
             PlaySE(SE_SELECT);
             CloseLink();
             ResetTimer(&data->timer);

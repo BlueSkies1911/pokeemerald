@@ -119,14 +119,12 @@ u16 MoveRotatingTileObjects(u8 puzzleNumber)
         s16 y = objectEvents[i].y + MAP_OFFSET;
         u16 metatile = MapGridGetMetatileIdAt(x, y);
 
-        if (!sRotatingTilePuzzle->isTrickHouse)
-            puzzleTileStart = METATILE_MossdeepGym_YellowArrow_Right;
-        else
+        if (sRotatingTilePuzzle->isTrickHouse)
             puzzleTileStart = METATILE_TrickHousePuzzle_Arrow_YellowOnWhite_Right;
 
         // Object is on a metatile before the puzzle tile section
         // UB: Because this is not if (metatile < puzzleTileStart), for the trick house (metatile - puzzleTileStart) below can result in casting a negative value to u8
-        if (metatile < METATILE_MossdeepGym_YellowArrow_Right)
+        if (metatile < METATILE_TrickHousePuzzle_Arrow_YellowOnWhite_Right)
             continue;
 
         // Object is on a metatile after the puzzle tile section (never occurs, in both cases the puzzle tiles are last)
@@ -196,9 +194,7 @@ void TurnRotatingTileObjects(void)
     if (sRotatingTilePuzzle == NULL)
         return;
 
-    if (!sRotatingTilePuzzle->isTrickHouse)
-        puzzleTileStart = METATILE_MossdeepGym_YellowArrow_Right;
-    else
+    if (sRotatingTilePuzzle->isTrickHouse)
         puzzleTileStart = METATILE_TrickHousePuzzle_Arrow_YellowOnWhite_Right;
 
     objectEvents = gSaveBlock1Ptr->objectEventTemplates;
@@ -322,9 +318,7 @@ static void TurnUnsavedRotatingTileObject(u8 eventTemplateId, u8 puzzleTileNum)
     s16 y = objectEvents[eventTemplateId].y + MAP_OFFSET;
     u16 metatile = MapGridGetMetatileIdAt(x, y);
 
-    if (!sRotatingTilePuzzle->isTrickHouse)
-        puzzleTileStart = METATILE_MossdeepGym_YellowArrow_Right;
-    else
+    if (sRotatingTilePuzzle->isTrickHouse)
         puzzleTileStart = METATILE_TrickHousePuzzle_Arrow_YellowOnWhite_Right;
 
     tileDifference = (u8)((metatile - puzzleTileStart) % METATILE_ROW_WIDTH);

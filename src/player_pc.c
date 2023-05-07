@@ -488,16 +488,9 @@ static void PlayerPC_Decoration(u8 taskId)
 static void PlayerPC_TurnOff(u8 taskId)
 {
     if (sTopMenuNumOptions == NUM_BEDROOM_PC_OPTIONS) // Flimsy way to determine if Bedroom PC is in use
-    {
-        if (gSaveBlock2Ptr->playerGender == MALE)
-            ScriptContext_SetupScript(LittlerootTown_BrendansHouse_2F_EventScript_TurnOffPlayerPC);
-        else
-            ScriptContext_SetupScript(LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC);
-    }
+        ScriptContext_SetupScript(PlayersHouse_2F_EventScript_ShutDownPC);
     else
-    {
         ScriptContext_Enable();
-    }
     DestroyTask(taskId);
 }
 
@@ -1308,14 +1301,14 @@ static void ItemStorage_ProcessItemSwapInput(u8 taskId)
     }
 }
 
-static void ItemStorage_FinishItemSwap(u8 taskId, bool8 canceled)
+static void ItemStorage_FinishItemSwap(u8 taskId, bool8 cancelled)
 {
     s16 *data = gTasks[taskId].data;
     u16 newPos = gPlayerPCItemPageInfo.itemsAbove + gPlayerPCItemPageInfo.cursorPos;
     PlaySE(SE_SELECT);
     DestroyListMenuTask(tListTaskId, &gPlayerPCItemPageInfo.itemsAbove, &gPlayerPCItemPageInfo.cursorPos);
 
-    if (!canceled && sItemStorageMenu->toSwapPos != newPos && sItemStorageMenu->toSwapPos != newPos - 1)
+    if (!cancelled && sItemStorageMenu->toSwapPos != newPos && sItemStorageMenu->toSwapPos != newPos - 1)
     {
         MoveItemSlotInList(gSaveBlock1Ptr->pcItems, sItemStorageMenu->toSwapPos, newPos);
         ItemStorage_RefreshListMenu();
@@ -1405,7 +1398,7 @@ static void ItemStorage_HandleQuantityRolling(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
-            // Canceled action
+            // Cancelled action
             PlaySE(SE_SELECT);
             ItemStorage_RemoveWindow(ITEMPC_WIN_QUANTITY);
             ItemStorage_PrintMessage(ItemStorage_GetMessage(gSaveBlock1Ptr->pcItems[pos].itemId));

@@ -92,6 +92,6 @@ BondBridge_Text_BerryForestAhead::
     .string "Berry Forest Ahead$"
 
 BondBridge_Text_BondBridgeSign::
-    .string "BOND BRIDGE\n"
+    .string "Bond Bridge\n"
     .string "Please be quiet when crossing.\p"
     .string "Berry Forest Ahead$"

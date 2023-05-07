@@ -187,5 +187,5 @@ KindleRoad_Text_RouteSign::
     .string "Go straight for Mt. Ember.$"
 
 KindleRoad_Text_EmberSpaSign::
-    .string "EMBER SPA\n"
+    .string "Ember Spa\n"
     .string "Light the Fire in Your Heart!$"

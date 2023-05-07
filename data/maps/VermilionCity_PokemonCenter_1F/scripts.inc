@@ -70,7 +70,7 @@ VermilionCity_PokemonJournal_Text_SpecialFeatureLtSurge::
     .string "Pokémon Journal\p"
     .string "Special Feature: Vermilion Gym\n"
     .string "Leader Lt. Surge!\p"
-    .string "Lt. Surge is rumored to have been\n"
+    .string "Lt. Surge is rumoured to have been\n"
     .string "a pilot while home in America.\p"
     .string "He used the electricity generated\n"
     .string "by Pokémon to power his plane.$"

@@ -164,7 +164,7 @@ CeladonCity_Text_ExplainXAccuracyDireHit::
     .string "Dept. Store!$"
 
 CeladonCity_Text_CitySign::
-    .string "CELADON CITY\n"
+    .string "Celadon City\n"
     .string "The City of Rainbow Dreams$"
 
 CeladonCity_Text_GymSign::

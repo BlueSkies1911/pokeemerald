@@ -1247,7 +1247,7 @@ PewterCity_EventScript_CitySign::
 
 PewterCity_Text_ClefairyCameFromMoon::
     .string "Clefairy came from the moon.\n"
-    .string "That's what the rumor is.\p"
+    .string "That's what the rumour is.\p"
     .string "They appeared after Moon Stones\n"
     .string "fell on Mt. Moon.$"
 
@@ -1383,5 +1383,5 @@ PewterCity_Text_TrainerTipsEarningEXP::
     .string "however briefly, earn Exp. Points.$"
 
 PewterCity_Text_CitySign::
-    .string "PEWTER CITY\n"
+    .string "Pewter City\n"
     .string "A Stone Gray City$"

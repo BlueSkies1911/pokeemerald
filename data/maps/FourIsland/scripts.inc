@@ -122,9 +122,9 @@ FourIsland_Text_RivalAlreadyGotEggBeSmellingYa::
     .string "You should quit copying me,\n"
     .string "you know?\p"
     .string "Anyways, I already got my Pokémon\n"
-    .string "egg, so I'm done with this island.\p"
+    .string "Egg, so I'm done with this island.\p"
     .string "Heh, I bet you don't even know\n"
-    .string "about Pokémon eggs.\p"
+    .string "about Pokémon Eggs.\p"
     .string "You'll never fill your National\n"
     .string "Pokédex that way.\p"
     .string "By the way, I saw someone we both\n"
@@ -153,5 +153,5 @@ FourIsland_Text_LoreleisHouse::
     .string "Lorelei's House$"
 
 FourIsland_Text_IslandSign::
-    .string "FOUR ISLAND\n"
+    .string "Four Island\n"
     .string "The Warm, Blue, Floe Island$"

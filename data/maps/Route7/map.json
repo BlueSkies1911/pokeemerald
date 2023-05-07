@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_CELADON_CITY",
       "offset": -10,
-      "map": "MAP_CELADON_CITY"
+      "direction": "left"
     },
     {
-      "direction": "right",
+      "map": "MAP_SAFFRON_CITY",
       "offset": -13,
-      "map": "MAP_SAFFRON_CITY"
+      "direction": "right"
     }
   ],
   "object_events": [
@@ -46,14 +46,14 @@
       "y": 14,
       "elevation": 0,
       "dest_map": "MAP_UNDERGROUND_PATH_WEST_ENTRANCE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 15,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_ROUTE7_EAST_ENTRANCE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

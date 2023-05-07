@@ -796,7 +796,7 @@ static void Task_EvolutionScene(u8 taskId)
                 else
                     gTasks[taskId].tState = EVOSTATE_LEARNED_MOVE;
             }
-            else // no move to learn, or evolution was canceled
+            else // no move to learn, or evolution was cancelled
             {
                 BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
                 gTasks[taskId].tState++;

@@ -104,5 +104,5 @@ Route3_Text_TunnelFromCeruleanTiring::
     .string "lot out of you!$"
 
 Route3_Text_RouteSign::
-    .string "ROUTE 3\n"
+    .string "Route 3\n"
     .string "Mt. Moon Ahead$"

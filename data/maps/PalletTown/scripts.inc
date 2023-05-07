@@ -526,6 +526,7 @@ PalletTown_EventScript_MomTrigger::
     waitdooranim
     setvar VAR_MAP_SCENE_PALLET_TOWN_MOM, 2
     setflag FLAG_SYS_B_DASH
+    setflag FLAG_SYS_TV_HOME
     releaseall
     end
 
@@ -727,7 +728,7 @@ PalletTown_Text_RivalsHouse::
     .string "{RIVAL}'s house$"
 
 PalletTown_Text_TownSign::
-    .string "PALLET TOWN\n"
+    .string "Pallet Town\n"
     .string "Shades of your journey await!$"
     
 PalletTown_Text_PressStartToOpenMenu::

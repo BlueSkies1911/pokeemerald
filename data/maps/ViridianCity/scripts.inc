@@ -313,7 +313,7 @@ ViridianCity_Text_MovesLimitedByPP::
     .string "Pokémon at a Pokémon Center.$"
 
 ViridianCity_Text_CitySign::
-    .string "VIRIDIAN CITY \n"
+    .string "Viridian City \n"
     .string "The Eternally Green Paradise$"
 
 ViridianCity_Text_GymDoorsAreLocked::

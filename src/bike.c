@@ -338,11 +338,7 @@ static bool8 MetatileBehaviorForbidsBiking(u8 metatileBehavior)
 {
     if (MetatileBehavior_IsRunningDisallowed(metatileBehavior))
         return TRUE;
-    if (!MetatileBehavior_IsFortreeBridge(metatileBehavior))
-        return FALSE;
-    if (PlayerGetElevation() & 1)
-        return FALSE;
-    return TRUE;
+    return FALSE;
 }
 
 static bool8 CanBikeFaceDirectionOnRail(u8 direction, u8 metatileBehavior)
@@ -397,10 +393,10 @@ void GetOnOffBike(u8 flags)
     else
     {
         SetPlayerAvatarTransitionFlags(flags);
-        if (Overworld_MusicCanOverrideMapMusic(MUS_CYCLING))
+        if (Overworld_MusicCanOverrideMapMusic(MUS_RG_CYCLING))
         {
-            Overworld_SetSavedMusic(MUS_CYCLING);
-            Overworld_ChangeMusicTo(MUS_CYCLING);
+            Overworld_SetSavedMusic(MUS_RG_CYCLING);
+            Overworld_ChangeMusicTo(MUS_RG_CYCLING);
         }
     }
 }

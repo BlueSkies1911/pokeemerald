@@ -9,7 +9,7 @@ SSAnne_CaptainsOffice_EventScript_Captain::
     msgbox SSAnne_CaptainsOffice_Text_CaptainIFeelSeasick, MSGBOX_DEFAULT
     message SSAnne_CaptainsOffice_Text_RubbedCaptainsBack
     waitmessage
-    playfanfare MUS_HEAL
+    playfanfare MUS_RG_HEAL
     waitfanfare
     delay 50
     applymovement LOCALID_CAPTAIN, Common_Movement_FacePlayer

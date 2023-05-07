@@ -1,5 +1,3 @@
-.set LOCALID_CLERK, 1
-
 SevenIsland_Mart_MapScripts::
 	.byte 0
 

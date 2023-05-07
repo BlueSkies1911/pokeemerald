@@ -89,4 +89,4 @@ FuchsiaCity_House3_Text_ComeAgainToForgetOtherMoves::
 
 FuchsiaCity_House3_Text_NoEggShouldKnowMoves::
     .string "What?\n"
-    .string "No egg should know any moves.$"
+    .string "No Egg should know any moves.$"

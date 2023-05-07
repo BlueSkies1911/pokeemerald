@@ -10,7 +10,7 @@ Route2_EventScript_DiglettsCaveSign::
     end
     
 Route2_Text_RouteSign::
-    .string "ROUTE 2\n"
+    .string "Route 2\n"
     .string "Viridian City - Pewter City$"
 
 Route2_Text_DiglettsCave::

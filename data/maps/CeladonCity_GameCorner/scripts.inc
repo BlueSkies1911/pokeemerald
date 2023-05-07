@@ -105,7 +105,7 @@ CeladonCity_GameCorner_EventScript_ClerkEnd::
 CeladonCity_GameCorner_EventScript_BaldingMan::
     lock
     faceplayer
-    msgbox CeladonCity_GameCorner_Text_RumoredTeamRocketRunsThisPlace, MSGBOX_DEFAULT
+    msgbox CeladonCity_GameCorner_Text_RumouredTeamRocketRunsThisPlace, MSGBOX_DEFAULT
     goto CeladonCity_GameCorner_EventScript_FaceSlotMachine
     end
 
@@ -568,9 +568,9 @@ CeladonCity_GameCorner_Text_HereAreYourCoins::
     .string "Thank you.\n"
     .string "Here are your Coins!$"
 
-CeladonCity_GameCorner_Text_RumoredTeamRocketRunsThisPlace::
+CeladonCity_GameCorner_Text_RumouredTeamRocketRunsThisPlace::
     .string "Keep this quiet.\p"
-    .string "It's rumored that this place is run\n"
+    .string "It's rumoured that this place is run\n"
     .string "by Team Rocket.$"
 
 CeladonCity_GameCorner_Text_ThinkMachinesHaveDifferentOdds::

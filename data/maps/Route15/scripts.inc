@@ -136,5 +136,5 @@ Route15_EventScript_RouteSign::
     end
 
 Route15_Text_RouteSign::
-    .string "ROUTE 15\n"
+    .string "Route 15\n"
     .string "West to Fuchsia City$"

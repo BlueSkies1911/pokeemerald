@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "right",
+      "map": "MAP_ROUTE20",
       "offset": 8,
-      "map": "MAP_ROUTE20"
+      "direction": "right"
     },
     {
-      "direction": "up",
+      "map": "MAP_ROUTE21",
       "offset": 0,
-      "map": "MAP_ROUTE21"
+      "direction": "up"
     }
   ],
   "object_events": [
@@ -78,11 +78,20 @@
       "flag": "FLAG_HIDE_CINNABAR_SEAGALLOP"
     },
     {
-      "type": "clone",
+      "graphics_id": "",
       "x": 15,
       "y": -4,
+      "elevation": 0,
+      "movement_type": "",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "",
+      "trainer_sight_or_berry_tree_id": "",
+      "script": "",
+      "flag": "",
       "source_id": 9,
-      "source_map": "MAP_ROUTE21"
+      "source_map": "MAP_ROUTE21",
+      "type": "clone"
     }
   ],
   "warp_events": [
@@ -91,35 +100,35 @@
       "y": 11,
       "elevation": 0,
       "dest_map": "MAP_POKEMON_MANSION_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 20,
       "y": 12,
       "elevation": 0,
       "dest_map": "MAP_CINNABAR_ISLAND_GYM",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 8,
       "y": 17,
       "elevation": 0,
       "dest_map": "MAP_POKEMON_LAB_ENTRANCE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 14,
       "y": 19,
       "elevation": 0,
       "dest_map": "MAP_CINNABAR_ISLAND_POKEMON_CENTER_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 19,
       "y": 19,
       "elevation": 0,
       "dest_map": "MAP_CINNABAR_ISLAND_MART",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

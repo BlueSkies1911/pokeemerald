@@ -412,7 +412,7 @@ CinnabarIsland_Text_ScientistsExperimentInMansion::
     .string "Pokémon Mansion.$"
 
 CinnabarIsland_Text_IslandSign::
-    .string "CINNABAR ISLAND\n"
+    .string "Cinnabar Island\n"
     .string "The Fiery Town of Burning Desire$"
 
 CinnabarIsland_Text_PokemonLab::

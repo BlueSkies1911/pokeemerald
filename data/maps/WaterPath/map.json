@@ -14,19 +14,19 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_SIX_ISLAND",
       "offset": 40,
-      "map": "MAP_SIX_ISLAND"
+      "direction": "left"
     },
     {
-      "direction": "left",
+      "map": "MAP_RUIN_VALLEY",
       "offset": 80,
-      "map": "MAP_RUIN_VALLEY"
+      "direction": "left"
     },
     {
-      "direction": "left",
+      "map": "MAP_GREEN_PATH",
       "offset": 0,
-      "map": "MAP_GREEN_PATH"
+      "direction": "left"
     }
   ],
   "object_events": [
@@ -154,14 +154,14 @@
       "y": 13,
       "elevation": 0,
       "dest_map": "MAP_WATER_PATH_HOUSE1",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 11,
       "y": 19,
       "elevation": 0,
       "dest_map": "MAP_WATER_PATH_HOUSE2",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

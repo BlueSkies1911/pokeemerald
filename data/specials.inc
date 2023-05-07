@@ -149,20 +149,13 @@ gSpecials::
 	def_special SaveMuseumContestPainting
 	def_special DoesContestCategoryHaveMuseumPainting
 	def_special CountPlayerMuseumPaintings
-	def_special ShowContestPainting  @ Unused, redundant with showcontestpainting command
-	def_special MauvilleGymSetDefaultBarriers
-	def_special MauvilleGymPressSwitch
 	def_special ShowFieldMessageStringVar4
 	def_special DrawWholeMapView
 	def_special StorePlayerCoordsInVars
-	def_special MauvilleGymDeactivatePuzzle
-	def_special PetalburgGymSlideOpenRoomDoors
-	def_special PetalburgGymUnlockRoomDoors
 	def_special GetPlayerTrainerIdOnesDigit
 	def_special GetPlayerBigGuyGirlString
 	def_special GetRivalSonDaughterString
 	def_special SetHiddenItemFlag
-	def_special CableCarWarp
 	def_special CableCar
 	def_special Overworld_PlaySpecialMapMusic
 	def_special StartWallClock
@@ -228,8 +221,6 @@ gSpecials::
 	def_special DoPCTurnOnEffect
 	def_special DoPCTurnOffEffect
 	def_special SetDeptStoreFloor
-	def_special DoLotteryCornerComputerEffect
-	def_special EndLotteryCornerComputerEffect
 	def_special ChooseMonForMoveRelearner
 	def_special MoveDeleterChooseMoveToForget
 	def_special MoveDeleterForgetMove
@@ -240,7 +231,6 @@ gSpecials::
 	def_special Special_BeginCyclingRoadChallenge
 	def_special GetPlayerAvatarBike
 	def_special FinishCyclingRoadChallenge
-	def_special UpdateCyclingRoadState
 	def_special GetLeadMonFriendshipScore
 	def_special CallFrontierUtilFunc
 	def_special CallBattleTowerFunc
@@ -418,9 +408,6 @@ gSpecials::
 	def_special ShouldTryGetTrainerScript
 	def_special ShowMapNamePopup
 	def_special ShowMapNamePopup
-	def_special DoMirageTowerCeilingCrumble
-	def_special SetMirageTowerVisibility
-	def_special StartPlayerDescendMirageTower
 	def_special BufferTMHMMoveName
 	def_special IsWirelessAdapterConnected
 	def_special TryBecomeLinkLeader
@@ -490,16 +477,11 @@ gSpecials::
 	def_special DoDeoxysRockInteraction
 	def_special SetDeoxysRockPalette
 	def_special CreateEventLegalEnemyMon
-	def_special StartMirageTowerDisintegration
-	def_special StartMirageTowerShake
-	def_special StartMirageTowerFossilFallAndSink
 	def_special ChangeBoxPokemonNickname
 	def_special GetPCBoxToSendMon
 	def_special ShouldShowBoxWasFullMessage
 	def_special SetMatchCallRegisteredFlag
 	def_special DoDomeConfetti
-	def_special CreateAbnormalWeatherEvent
-	def_special GetAbnormalWeatherMapNameAndType
 	def_special GetMartEmployeeObjectEventId
 	def_special SaveForBattleTowerLink
 	def_special Unused_SetWeatherSunny
@@ -527,7 +509,6 @@ gSpecials::
 	def_special LoadLinkContestPlayerPalettes
 	def_special ShowTrainerHillRecords
 	def_special PlayerFaceTrainerAfterBattle
-	def_special ResetHealLocationFromDewford
 	def_special IsLastMonThatKnowsSurf
 	def_special CountPartyAliveNonEggMons
 	def_special TryPrepareSecondApproachingTrainer
@@ -565,3 +546,4 @@ gSpecials::
 	def_special HasLearnedAllMovesFromCapeBrinkTutor
 	def_special UpdateLoreleiDollCollection
 	def_special SampleResortGorgeousMonAndReward
+	def_special HasAllMons

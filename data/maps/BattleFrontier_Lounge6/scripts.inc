@@ -4,8 +4,8 @@ BattleFrontier_Lounge6_MapScripts::
 BattleFrontier_Lounge6_EventScript_Trader::
 	lock
 	faceplayer
-	goto_if_set FLAG_DID_CH_DING_TRADE, BattleFrontier_Lounge6_EventScript_TradeCompleted
-	setvar VAR_0x8008, INGAME_TRADE_FARFETCHD
+	goto_if_set FLAG_BATTLE_FRONTIER_TRADE_DONE, BattleFrontier_Lounge6_EventScript_TradeCompleted
+	setvar VAR_0x8008, INGAME_TRADE_SKITTY
 	copyvar VAR_0x8004, VAR_0x8008
 	specialvar VAR_RESULT, GetInGameTradeSpeciesInfo
 	copyvar VAR_0x8009, VAR_RESULT
@@ -25,7 +25,7 @@ BattleFrontier_Lounge6_EventScript_Trader::
 	special DoInGameTradeScene
 	waitstate
 	msgbox BattleFrontier_Lounge6_Text_PromiseIllBeGoodToIt, MSGBOX_DEFAULT
-	setflag FLAG_DID_CH_DING_TRADE
+	setflag FLAG_BATTLE_FRONTIER_TRADE_DONE
 	release
 	end
 
@@ -41,12 +41,12 @@ BattleFrontier_Lounge6_EventScript_NotRequestedMon::
 	end
 
 BattleFrontier_Lounge6_EventScript_TradeCompleted::
-	msgbox BattleFrontier_Lounge6_Text_SkittySoMuchCuterThanImagined, MSGBOX_DEFAULT
+	msgbox BattleFrontier_Lounge6_Text_MeowthSoMuchCuterThanImagined, MSGBOX_DEFAULT
 	release
 	end
 
 BattleFrontier_Lounge6_Text_WouldYouLikeToTrade:
-	.string "My POKéMON is a {STR_VAR_2}.\n"
+	.string "My Pokémon is a {STR_VAR_2}.\n"
 	.string "Do you know it?\l"
 	.string "It's quite cute and rather nice.\p"
 	.string "This little one, I could trade with\n"
@@ -71,7 +71,7 @@ BattleFrontier_Lounge6_Text_WellThatsFineToo:
 	.string "Well, that's fine, too.\l"
 	.string "Please come visit us again.$"
 
-BattleFrontier_Lounge6_Text_SkittySoMuchCuterThanImagined:
+BattleFrontier_Lounge6_Text_MeowthSoMuchCuterThanImagined:
 	.string "Giggle!\n"
-	.string "A SKITTY is so much cuter than I had\l"
+	.string "A Meowth is so much cuter than I had\l"
 	.string "imagined. I'm delighted!$"

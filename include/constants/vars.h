@@ -271,7 +271,7 @@
 #define VAR_RESORT_GORGEOUS_REWARD           0x40FC
 #define VAR_MAP_SCENE_LOST_CAVE_ROOM10       0x40FD
 #define VAR_MAP_SCENE_SIX_ISLAND_POKEMON_CENTER_1F 0x40FE
-#define VAR_UNUSED_0x40FF                    0x40FF // Unused Var
+#define VAR_RENEWABLE_ITEM_STEP_COUNTER      0x40FF
 
 #define VARS_END                                         0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

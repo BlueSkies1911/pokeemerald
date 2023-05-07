@@ -135,7 +135,7 @@ PokemonLeague_LancesRoom_EventScript_PostBattle::
     end
 
 PokemonLeague_LancesRoom_EventScript_DefeatedLance::
-    setvar VAR_0x8004, 0
+    setvar VAR_0x8004, FANCOUNTER_DEFEATED_LANCE
     special Script_TryGainNewFanFromCounter
     setflag FLAG_DEFEATED_LANCE
     call PokemonLeague_EventScript_OpenDoorLance

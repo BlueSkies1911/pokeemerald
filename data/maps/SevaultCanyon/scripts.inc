@@ -107,6 +107,6 @@ SevaultCanyon_Text_BrunoTrainedWithBrawly::
     .string "name of Brawly before.$"
 
 SevaultCanyon_Text_RouteSign::
-    .string "SEVAULT CANYON\n"
+    .string "Sevault Canyon\n"
     .string "Tanoby Ruins Ahead$"
 

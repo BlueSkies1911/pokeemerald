@@ -75,7 +75,6 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_WEST_ARROW_WARP]                 = TILE_FLAG_UNUSED,
     [MB_NORTH_ARROW_WARP]                = TILE_FLAG_UNUSED,
     [MB_SOUTH_ARROW_WARP]                = TILE_FLAG_UNUSED,
-    [MB_CRACKED_FLOOR_HOLE]              = TILE_FLAG_UNUSED,
     [MB_CYCLING_ROAD_POND]               = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
     [MB_LAVARIDGE_GYM_1F_WARP]           = TILE_FLAG_UNUSED,
     [MB_ANIMATED_DOOR]                   = TILE_FLAG_UNUSED,
@@ -87,11 +86,6 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_BRIDGE_OVER_POND_LOW]            = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_MED]            = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_HIGH]           = TILE_FLAG_UNUSED,
-    [MB_PACIFIDLOG_VERTICAL_LOG_TOP]     = TILE_FLAG_UNUSED,
-    [MB_PACIFIDLOG_VERTICAL_LOG_BOTTOM]  = TILE_FLAG_UNUSED,
-    [MB_PACIFIDLOG_HORIZONTAL_LOG_LEFT]  = TILE_FLAG_UNUSED,
-    [MB_PACIFIDLOG_HORIZONTAL_LOG_RIGHT] = TILE_FLAG_UNUSED,
-    [MB_FORTREE_BRIDGE]                  = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_MED_EDGE_1]     = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_MED_EDGE_2]     = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_HIGH_EDGE_1]    = TILE_FLAG_UNUSED,
@@ -116,7 +110,6 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_PLAYER_ROOM_PC_ON]               = TILE_FLAG_UNUSED,
     [MB_MUDDY_SLOPE]                     = TILE_FLAG_UNUSED,
     [MB_BUMPY_SLOPE]                     = TILE_FLAG_UNUSED,
-    [MB_CRACKED_FLOOR]                   = TILE_FLAG_UNUSED,
     [MB_ISOLATED_VERTICAL_RAIL]          = TILE_FLAG_UNUSED,
     [MB_ISOLATED_HORIZONTAL_RAIL]        = TILE_FLAG_UNUSED,
     [MB_VERTICAL_RAIL]                   = TILE_FLAG_UNUSED,
@@ -376,7 +369,6 @@ bool8 MetatileBehavior_IsForcedMovementTile(u8 metatileBehavior)
     if ((metatileBehavior >= MB_WALK_EAST && metatileBehavior <= MB_TRICK_HOUSE_PUZZLE_8_FLOOR)
      || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT)
      || metatileBehavior == MB_MUDDY_SLOPE
-     || metatileBehavior == MB_CRACKED_FLOOR
      || metatileBehavior == MB_WATERFALL
      || metatileBehavior == MB_ICE
      || metatileBehavior == MB_SECRET_BASE_JUMP_MAT
@@ -1032,57 +1024,6 @@ bool8 MetatileBehavior_IsCyclingRoadPullDownTileGrass(u8 metatileBehavior)
     return metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS;
 }
 
-bool8 MetatileBehavior_IsFortreeBridge(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_FORTREE_BRIDGE)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsPacifidlogVerticalLogTop(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_PACIFIDLOG_VERTICAL_LOG_TOP)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsPacifidlogVerticalLogBottom(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_PACIFIDLOG_VERTICAL_LOG_BOTTOM)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsPacifidlogHorizontalLogLeft(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_PACIFIDLOG_HORIZONTAL_LOG_LEFT)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsPacifidlogHorizontalLogRight(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_PACIFIDLOG_HORIZONTAL_LOG_RIGHT)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsPacifidlogLog(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_PACIFIDLOG_VERTICAL_LOG_TOP
-     || metatileBehavior == MB_PACIFIDLOG_VERTICAL_LOG_BOTTOM
-     || metatileBehavior == MB_PACIFIDLOG_HORIZONTAL_LOG_LEFT
-     || metatileBehavior == MB_PACIFIDLOG_HORIZONTAL_LOG_RIGHT)
-        return TRUE;
-    else
-        return FALSE;
-}
-
 bool8 MetatileBehavior_IsTrickHousePuzzleDoor(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_TRICK_HOUSE_PUZZLE_DOOR)
@@ -1215,22 +1156,6 @@ bool8 MetatileBehavior_IsMtPyreHole(u8 metatileBehavior)
         return FALSE;
 }
 
-bool8 MetatileBehavior_IsCrackedFloorHole(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_CRACKED_FLOOR_HOLE)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-bool8 MetatileBehavior_IsCrackedFloor(u8 metatileBehavior)
-{
-    if (metatileBehavior == MB_CRACKED_FLOOR)
-        return TRUE;
-    else
-        return FALSE;
-}
-
 bool8 MetatileBehavior_IsMuddySlope(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_MUDDY_SLOPE)
@@ -1291,8 +1216,7 @@ bool8 MetatileBehavior_IsRunningDisallowed(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_NO_RUNNING
      || metatileBehavior == MB_LONG_GRASS
-     || metatileBehavior == MB_HOT_SPRINGS
-     || MetatileBehavior_IsPacifidlogLog(metatileBehavior) != FALSE)
+     || metatileBehavior == MB_HOT_SPRINGS)
         return TRUE;
     else
         return FALSE;

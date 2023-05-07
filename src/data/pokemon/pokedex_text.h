@@ -383,7 +383,7 @@ const u8 gAbraPokedexText[] = _(
     "every hour.");
 
 const u8 gKadabraPokedexText[] = _(
-    "It is rumored that a boy with psychic\n"
+    "It is rumoured that a boy with psychic\n"
     "abilities suddenly transformed into\n"
     "Kadabra while he was assisting research\n"
     "into extrasensory powers.");
@@ -978,7 +978,7 @@ const u8 gFurretPokedexText[] = _(
 
 const u8 gHoothootPokedexText[] = _(
     "It has an internal organ that senses\n"
-    "the earth's rotation. Using this special\n"
+    "the Earth's rotation. Using this special\n"
     "organ, a Hoothoot begins hooting at\n"
     "precisely the same time every day.");
 
@@ -1249,7 +1249,7 @@ const u8 gGligarPokedexText[] = _(
 const u8 gSteelixPokedexText[] = _(
     "Steelix live even further underground\n"
     "than Onix. This Pokémon is known to dig\n"
-    "toward the earth's core, reaching a depth\n"
+    "toward the Earth's core, reaching a depth\n"
     "of over six-tenths of a mile underground.");
 
 const u8 gSnubbullPokedexText[] = _(

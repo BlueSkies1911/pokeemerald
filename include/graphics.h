@@ -5125,11 +5125,11 @@ extern const u16 gGraphics_TitleScreen_FireOrLeafPals[];
 extern const u32 gGraphics_TitleScreen_BlankObjTiles[];
 
 // credits
-extern const u32 gCreditsPokeballBgGfxTiles[];
-extern const u32 gCreditsPokeballBgGfxMap[];
-extern const u16 gCreditsMonBackdropPals[][16];
-extern const u16 gCreditsAllRightsReservedGfxPal[];
-extern const u8 gCreditsAllRightsReservedGfxTiles[];
-extern const u8 gCreditsAllRightsReservedGfxMap[];
+extern const u32 gCreditsMonPokeball_Tiles[];
+extern const u32 gCreditsMonPokeball_Tilemap[];
+extern const u16 gCreditsMonPokeball_Pals[][16];
+extern const u16 gCreditsCopyright_Pal[];
+extern const u8 gCreditsCopyright_Tiles[];
+extern const u8 gCreditsCopyright_Tilemap[];
 
 #endif //GUARD_GRAPHICS_H

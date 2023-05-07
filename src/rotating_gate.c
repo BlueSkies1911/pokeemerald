@@ -177,7 +177,6 @@ enum
 enum
 {
     PUZZLE_NONE,
-    PUZZLE_FORTREE_CITY_GYM,
     PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6,
 };
 
@@ -191,18 +190,6 @@ struct RotatingGatePuzzle
 };
 
 // .rodata
-// Fortree
-static const struct RotatingGatePuzzle sRotatingGate_FortreePuzzleConfig[] =
-{
-    { 6,  7, GATE_SHAPE_T2, GATE_ORIENTATION_90},
-    { 9, 15, GATE_SHAPE_T2, GATE_ORIENTATION_180},
-    { 3, 19, GATE_SHAPE_T2, GATE_ORIENTATION_90},
-    { 2,  6, GATE_SHAPE_T1, GATE_ORIENTATION_90},
-    { 9, 12, GATE_SHAPE_T1, GATE_ORIENTATION_0},
-    { 6, 23, GATE_SHAPE_T1, GATE_ORIENTATION_0},
-    {12, 22, GATE_SHAPE_T1, GATE_ORIENTATION_0},
-    { 6,  3, GATE_SHAPE_L4, GATE_ORIENTATION_180},
-};
 
 // Trickhouse
 static const struct RotatingGatePuzzle sRotatingGate_TrickHousePuzzleConfig[] =
@@ -617,14 +604,8 @@ static EWRAM_DATA u8 sRotatingGate_PuzzleCount = 0;
 
 static s32 GetCurrentMapRotatingGatePuzzleType(void)
 {
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(FORTREE_CITY_GYM) &&
-        gSaveBlock1Ptr->location.mapNum == MAP_NUM(FORTREE_CITY_GYM))
-    {
-        return PUZZLE_FORTREE_CITY_GYM;
-    }
-
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE110_TRICK_HOUSE_PUZZLE6) &&
-        gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE110_TRICK_HOUSE_PUZZLE6))
+    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRICK_HOUSE_PUZZLE6) &&
+        gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRICK_HOUSE_PUZZLE6))
     {
         return PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6;
     }
@@ -679,10 +660,6 @@ static void RotatingGate_LoadPuzzleConfig(void)
 
     switch (puzzleType)
     {
-    case PUZZLE_FORTREE_CITY_GYM:
-        sRotatingGate_PuzzleConfig = sRotatingGate_FortreePuzzleConfig;
-        sRotatingGate_PuzzleCount = ARRAY_COUNT(sRotatingGate_FortreePuzzleConfig);
-        break;
     case PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6:
         sRotatingGate_PuzzleConfig = sRotatingGate_TrickHousePuzzleConfig;
         sRotatingGate_PuzzleCount = ARRAY_COUNT(sRotatingGate_TrickHousePuzzleConfig);

@@ -274,7 +274,7 @@ VermilionCity_Text_BoardSeagallopRainbowPass::
     .string "a Seagallop ferry?$"
 
 VermilionCity_Text_CitySign::
-    .string "VERMILION CITY\n"
+    .string "Vermilion City\n"
     .string "The Port of Exquisite Sunsets$"
 
 VermilionCity_Text_PokemonFanClubSign::

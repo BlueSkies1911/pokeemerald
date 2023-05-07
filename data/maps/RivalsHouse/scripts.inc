@@ -51,7 +51,7 @@ RivalsHouse_EventScript_GroomMon::
 	msgbox RivalsHouse_Text_LookingNiceInNoTime, MSGBOX_DEFAULT
 	closemessage
 	fadescreen FADE_TO_BLACK
-	playfanfare MUS_HEAL
+	playfanfare MUS_RG_HEAL
 	waitfanfare
 	special DaisyMassageServices
 	fadescreen FADE_FROM_BLACK
@@ -199,7 +199,7 @@ RivalsHouse_Text_ThereYouGoAllDone:
 
 RivalsHouse_Text_CantGroomAnEgg:
     .string "Oh, sorry. I honestly can't\n"
-    .string "groom an egg.$"
+    .string "groom an Egg.$"
 
 RivalsHouse_Text_MayISeeFirstMon:
     .string "Daisy: Your Pokémon grow to love\n"

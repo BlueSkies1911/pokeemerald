@@ -199,7 +199,7 @@ SaffronCity_Text_HowCanClubNotRecognizeLance::
     .string "He's the greatest, Lance!$"
 
 SaffronCity_Text_CitySign::
-    .string "SAFFRON CITY\n"
+    .string "Saffron City\n"
     .string "Shining, Golden Land of Commerce$"
 
 SaffronCity_Text_FightingDojo::

@@ -1,5 +1,3 @@
-.set LOCALID_CLERK, 1
-
 ViridianCity_Mart_MapScripts::
     map_script MAP_SCRIPT_ON_LOAD, ViridianCity_Mart_OnLoad
     map_script MAP_SCRIPT_ON_FRAME_TABLE, ViridianCity_Mart_OnFrame
@@ -20,11 +18,11 @@ ViridianCity_Mart_OnFrame:
 
 ViridianCity_Mart_EventScript_ParcelScene::
     lockall
-    applymovement LOCALID_CLERK, Common_Movement_WalkInPlaceFasterDown
+    applymovement LOCALID_VIRIDIAN_MART_CLERK, Common_Movement_WalkInPlaceFasterDown
     waitmovement 0
     msgbox ViridianCity_Mart_Text_YouCameFromPallet, MSGBOX_DEFAULT
     closemessage
-    applymovement LOCALID_CLERK, ViridianCity_Mart_Movement_FacePlayer
+    applymovement LOCALID_VIRIDIAN_MART_CLERK, ViridianCity_Mart_Movement_FacePlayer
     applymovement OBJ_EVENT_ID_PLAYER, ViridianCity_Mart_Movement_ApproachCounter
     waitmovement 0
     msgbox ViridianCity_Mart_Text_TakeThisToProfOak

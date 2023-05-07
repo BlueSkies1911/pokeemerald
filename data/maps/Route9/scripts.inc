@@ -99,5 +99,5 @@ Route9_EventScript_RouteSign::
     end
 
 Route9_Text_RouteSign::
-    .string "ROUTE 9\n"
+    .string "Route 9\n"
     .string "Cerulean City - Rock Tunnel$"

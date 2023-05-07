@@ -170,7 +170,7 @@ Route12_Text_MonSprawledOutInSlumber::
     .string "a deep and comfortable slumber.$"
 
 Route12_Text_RouteSign::
-    .string "ROUTE 12 \n"
+    .string "Route 12 \n"
     .string "North to Lavender$"
 
 Route12_Text_SportfishingArea::

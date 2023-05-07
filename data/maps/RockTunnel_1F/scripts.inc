@@ -126,5 +126,5 @@ RockTunnel_1F_Text_ArianaPostBattle::
     .string "I'm all sweaty now.$"
 
 RockTunnel_1F_Text_RouteSign::
-    .string "ROCK TUNNEL\n"
+    .string "Rock Tunnel\n"
     .string "Cerulean City - Lavender Town$"

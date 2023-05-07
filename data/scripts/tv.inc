@@ -30,7 +30,9 @@ EventScript_MomDadMightLikeThis1::
 	end
 
 EventScript_PlayersHouseMovie::
-	msgbox PlayersHouse_1F_Text_TheresAMovieOnTV, MSGBOX_DEFAULT
+	checkplayergender
+	call_if_eq VAR_RESULT, MALE, PlayersHouse_1F_EventScript_TVScreenMale
+	call_if_eq VAR_RESULT, FEMALE, PlayersHouse_1F_EventScript_TVScreenFemale
 	releaseall
 	end
 

@@ -114,5 +114,5 @@ Route19_EventScript_RouteSign::
     end
 
 Route19_Text_RouteSign::
-    .string "SEA ROUTE 19\n"
+    .string "Sea Route 19\n"
     .string "Fuchsia City - Seafoam Islands$"

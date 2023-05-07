@@ -34,11 +34,19 @@
       "y": 7,
       "elevation": 0,
       "dest_map": "MAP_CERULEAN_CITY",
-      "dest_warp_id": 11
+      "dest_warp_id": "11"
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 2,
+      "elevation": 3,
+      "var": "VAR_TEMP_1",
+      "var_value": "0",
+      "script": "CeruleanCity_House4_EventScript_BlockingTV"
+    }
   ],
   "bg_events": [
 

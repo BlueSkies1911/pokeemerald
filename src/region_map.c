@@ -85,8 +85,6 @@ static void InitMapBasedOnPlayerLocation(void);
 static void RegionMap_InitializeStateBasedOnSSTidalLocation(void);
 static u8 GetMapsecType(u16 mapSecId);
 static u16 CorrectSpecialMapSecId_Internal(u16 mapSecId);
-static u16 GetTerraOrMarineCaveMapSecId(void);
-static void GetMarineCaveCoords(u16 *x, u16 *y);
 static bool32 IsPlayerInAquaHideout(u8 mapSecId);
 static void GetPositionOfCursorWithinMapSec(void);
 static bool8 RegionMap_IsMapSecIdInNextRow(u16 y);
@@ -153,47 +151,6 @@ static const u16 sRegionMap_SpecialPlaceLocations[][2] =
     {MAPSEC_ARTISAN_CAVE,               MAPSEC_ROUTE_103},
     {MAPSEC_ABANDONED_SHIP,             MAPSEC_ROUTE_108},
     {MAPSEC_NONE,                       MAPSEC_NONE}
-};
-
-static const u16 sMarineCaveMapSecIds[] =
-{
-    MAPSEC_MARINE_CAVE,
-    MAPSEC_UNDERWATER_MARINE_CAVE,
-    MAPSEC_UNDERWATER_MARINE_CAVE
-};
-
-static const u16 sTerraOrMarineCaveMapSecIds[ABNORMAL_WEATHER_LOCATIONS] =
-{
-    [ABNORMAL_WEATHER_ROUTE_114_NORTH - 1] = MAPSEC_ROUTE_114,
-    [ABNORMAL_WEATHER_ROUTE_114_SOUTH - 1] = MAPSEC_ROUTE_114,
-    [ABNORMAL_WEATHER_ROUTE_115_WEST  - 1] = MAPSEC_ROUTE_115,
-    [ABNORMAL_WEATHER_ROUTE_115_EAST  - 1] = MAPSEC_ROUTE_115,
-    [ABNORMAL_WEATHER_ROUTE_116_NORTH - 1] = MAPSEC_ROUTE_116,
-    [ABNORMAL_WEATHER_ROUTE_116_SOUTH - 1] = MAPSEC_ROUTE_116,
-    [ABNORMAL_WEATHER_ROUTE_118_EAST  - 1] = MAPSEC_ROUTE_118,
-    [ABNORMAL_WEATHER_ROUTE_118_WEST  - 1] = MAPSEC_ROUTE_118,
-    [ABNORMAL_WEATHER_ROUTE_105_NORTH - 1] = MAPSEC_ROUTE_105,
-    [ABNORMAL_WEATHER_ROUTE_105_SOUTH - 1] = MAPSEC_ROUTE_105,
-    [ABNORMAL_WEATHER_ROUTE_125_WEST  - 1] = MAPSEC_ROUTE_125,
-    [ABNORMAL_WEATHER_ROUTE_125_EAST  - 1] = MAPSEC_ROUTE_125,
-    [ABNORMAL_WEATHER_ROUTE_127_NORTH - 1] = MAPSEC_ROUTE_127,
-    [ABNORMAL_WEATHER_ROUTE_127_SOUTH - 1] = MAPSEC_ROUTE_127,
-    [ABNORMAL_WEATHER_ROUTE_129_WEST  - 1] = MAPSEC_ROUTE_11,
-    [ABNORMAL_WEATHER_ROUTE_129_EAST  - 1] = MAPSEC_ROUTE_11
-};
-
-#define MARINE_CAVE_COORD(location)(ABNORMAL_WEATHER_##location - MARINE_CAVE_LOCATIONS_START)
-
-static const struct UCoords16 sMarineCaveLocationCoords[MARINE_CAVE_LOCATIONS] =
-{
-    [MARINE_CAVE_COORD(ROUTE_105_NORTH)] = {0, 10},
-    [MARINE_CAVE_COORD(ROUTE_105_SOUTH)] = {0, 12},
-    [MARINE_CAVE_COORD(ROUTE_125_WEST)]  = {24, 3},
-    [MARINE_CAVE_COORD(ROUTE_125_EAST)]  = {25, 4},
-    [MARINE_CAVE_COORD(ROUTE_127_NORTH)] = {25, 6},
-    [MARINE_CAVE_COORD(ROUTE_127_SOUTH)] = {25, 7},
-    [MARINE_CAVE_COORD(ROUTE_129_WEST)]  = {24, 10},
-    [MARINE_CAVE_COORD(ROUTE_129_EAST)]  = {24, 10}
 };
 
 static const u8 sMapSecAquaHideoutOld[] =
@@ -318,21 +275,29 @@ static const u8 sMapHealLocations[][3] =
     [MAPSEC_ROUTE_17] = {MAP_GROUP(ROUTE17), MAP_NUM(ROUTE17), 0},
     [MAPSEC_ROUTE_18] = {MAP_GROUP(ROUTE18), MAP_NUM(ROUTE18), 0},
     [MAPSEC_ROUTE_19] = {MAP_GROUP(ROUTE19), MAP_NUM(ROUTE19), 0},
-    [MAPSEC_ROUTE_120] = {MAP_GROUP(ROUTE120), MAP_NUM(ROUTE120), 0},
-    [MAPSEC_ROUTE_121] = {MAP_GROUP(ROUTE121), MAP_NUM(ROUTE121), 0},
-    [MAPSEC_ROUTE_122] = {MAP_GROUP(ROUTE122), MAP_NUM(ROUTE122), 0},
-    [MAPSEC_ROUTE_123] = {MAP_GROUP(ROUTE123), MAP_NUM(ROUTE123), 0},
-    [MAPSEC_ROUTE_124] = {MAP_GROUP(ROUTE124), MAP_NUM(ROUTE124), 0},
-    [MAPSEC_ROUTE_125] = {MAP_GROUP(ROUTE125), MAP_NUM(ROUTE125), 0},
-    [MAPSEC_ROUTE_126] = {MAP_GROUP(ROUTE126), MAP_NUM(ROUTE126), 0},
+    [MAPSEC_ROUTE_20] = {MAP_GROUP(ROUTE20), MAP_NUM(ROUTE20), 0},
     [MAPSEC_ROUTE_21] = {MAP_GROUP(ROUTE21), MAP_NUM(ROUTE21), 0},
     [MAPSEC_ROUTE_22] = {MAP_GROUP(ROUTE22), MAP_NUM(ROUTE22), 0},
     [MAPSEC_ROUTE_23] = {MAP_GROUP(ROUTE23), MAP_NUM(ROUTE23), 0},
-    [MAPSEC_ROUTE_130] = {MAP_GROUP(ROUTE130), MAP_NUM(ROUTE130), 0},
-    [MAPSEC_ROUTE_131] = {MAP_GROUP(ROUTE131), MAP_NUM(ROUTE131), 0},
-    [MAPSEC_ROUTE_132] = {MAP_GROUP(ROUTE132), MAP_NUM(ROUTE132), 0},
-    [MAPSEC_ROUTE_133] = {MAP_GROUP(ROUTE133), MAP_NUM(ROUTE133), 0},
-    [MAPSEC_ROUTE_24] = {MAP_GROUP(ROUTE24), MAP_NUM(ROUTE24), 0}
+    [MAPSEC_ROUTE_24] = {MAP_GROUP(ROUTE24), MAP_NUM(ROUTE24), 0},
+    [MAPSEC_ROUTE_25] = {MAP_GROUP(ROUTE25), MAP_NUM(ROUTE25), 0},
+    [MAPSEC_TREASURE_BEACH] = {MAP_GROUP(TREASURE_BEACH), MAP_NUM(TREASURE_BEACH), 0},
+    [MAPSEC_KINDLE_ROAD] = {MAP_GROUP(KINDLE_ROAD), MAP_NUM(KINDLE_ROAD), 0},
+    [MAPSEC_CAPE_BRINK] = {MAP_GROUP(CAPE_BRINK), MAP_NUM(CAPE_BRINK), 0},
+    [MAPSEC_THREE_ISLE_PORT] = {MAP_GROUP(THREE_ISLAND_PORT), MAP_NUM(THREE_ISLAND_PORT), 0},
+    [MAPSEC_BOND_BRIDGE] = {MAP_GROUP(BOND_BRIDGE), MAP_NUM(BOND_BRIDGE), 0},
+    [MAPSEC_FIVE_ISLE_MEADOW] = {MAP_GROUP(FIVE_ISLAND_MEADOW), MAP_NUM(FIVE_ISLAND_MEADOW), 0},
+    [MAPSEC_MEMORIAL_PILLAR] = {MAP_GROUP(MEMORIAL_PILLAR), MAP_NUM(MEMORIAL_PILLAR), 0},
+    [MAPSEC_WATER_LABYRINTH] = {MAP_GROUP(WATER_LABYRINTH), MAP_NUM(WATER_LABYRINTH), 0},
+    [MAPSEC_RESORT_GORGEOUS] = {MAP_GROUP(RESORT_GORGEOUS), MAP_NUM(RESORT_GORGEOUS), 0},
+    [MAPSEC_WATER_PATH] = {MAP_GROUP(WATER_PATH), MAP_NUM(WATER_PATH), 0},
+    [MAPSEC_RUIN_VALLEY] = {MAP_GROUP(RUIN_VALLEY), MAP_NUM(RUIN_VALLEY), 0},
+    [MAPSEC_GREEN_PATH] = {MAP_GROUP(GREEN_PATH), MAP_NUM(GREEN_PATH), 0},
+    [MAPSEC_OUTCAST_ISLAND] = {MAP_GROUP(OUTCAST_ISLAND), MAP_NUM(OUTCAST_ISLAND), 0},
+    [MAPSEC_TRAINER_TOWER] = {MAP_GROUP(TRAINER_TOWER_EXTERIOR), MAP_NUM(TRAINER_TOWER_EXTERIOR), 0},
+    [MAPSEC_CANYON_ENTRANCE] = {MAP_GROUP(SEVAULT_CANYON_ENTRANCE), MAP_NUM(SEVAULT_CANYON_ENTRANCE), 0},
+    [MAPSEC_SEVAULT_CANYON] = {MAP_GROUP(SEVAULT_CANYON), MAP_NUM(SEVAULT_CANYON), 0},
+    [MAPSEC_TANOBY_RUINS] = {MAP_GROUP(TANOBY_RUINS), MAP_NUM(TANOBY_RUINS), 0},
 };
 
 static const u8 *const sEverGrandeCityNames[] =
@@ -971,15 +936,6 @@ static void InitMapBasedOnPlayerLocation(void)
     u16 xOnMap;
     struct WarpData *warp;
 
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SS_TIDAL_CORRIDOR)
-        && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(SS_TIDAL_CORRIDOR)
-            || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SS_TIDAL_LOWER_DECK)
-            || gSaveBlock1Ptr->location.mapNum == MAP_NUM(SS_TIDAL_ROOMS)))
-    {
-        RegionMap_InitializeStateBasedOnSSTidalLocation();
-        return;
-    }
-
     switch (GetMapTypeByGroupAndId(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum))
     {
     default:
@@ -1107,62 +1063,7 @@ static void InitMapBasedOnPlayerLocation(void)
         if (xOnMap > 54)
             x++;
         break;
-    case MAPSEC_UNDERWATER_MARINE_CAVE:
-        GetMarineCaveCoords(&sRegionMap->cursorPosX, &sRegionMap->cursorPosY);
-        return;
     }
-    sRegionMap->cursorPosX = gRegionMapEntries[sRegionMap->mapSecId].x + x + MAPCURSOR_X_MIN;
-    sRegionMap->cursorPosY = gRegionMapEntries[sRegionMap->mapSecId].y + y + MAPCURSOR_Y_MIN;
-}
-
-static void RegionMap_InitializeStateBasedOnSSTidalLocation(void)
-{
-    u16 y;
-    u16 x;
-    u8 mapGroup;
-    u8 mapNum;
-    u16 dimensionScale;
-    s16 xOnMap;
-    s16 yOnMap;
-    const struct MapHeader *mapHeader;
-
-    y = 0;
-    x = 0;
-    switch (GetSSTidalLocation(&mapGroup, &mapNum, &xOnMap, &yOnMap))
-    {
-    case SS_TIDAL_LOCATION_SLATEPORT:
-        sRegionMap->mapSecId = MAPSEC_SLATEPORT_CITY;
-        break;
-    case SS_TIDAL_LOCATION_LILYCOVE:
-        sRegionMap->mapSecId = MAPSEC_LILYCOVE_CITY;
-        break;
-    case SS_TIDAL_LOCATION_ROUTE124:
-        sRegionMap->mapSecId = MAPSEC_ROUTE_124;
-        break;
-    case SS_TIDAL_LOCATION_ROUTE131:
-        sRegionMap->mapSecId = MAPSEC_ROUTE_131;
-        break;
-    default:
-    case SS_TIDAL_LOCATION_CURRENTS:
-        mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
-
-        sRegionMap->mapSecId = mapHeader->regionMapSectionId;
-        dimensionScale = mapHeader->mapLayout->width / gRegionMapEntries[sRegionMap->mapSecId].width;
-        if (dimensionScale == 0)
-            dimensionScale = 1;
-        x = xOnMap / dimensionScale;
-        if (x >= gRegionMapEntries[sRegionMap->mapSecId].width)
-            x = gRegionMapEntries[sRegionMap->mapSecId].width - 1;
-
-        dimensionScale = mapHeader->mapLayout->height / gRegionMapEntries[sRegionMap->mapSecId].height;
-        if (dimensionScale == 0)
-            dimensionScale = 1;
-        y = yOnMap / dimensionScale;
-        if (y >= gRegionMapEntries[sRegionMap->mapSecId].height)
-            y = gRegionMapEntries[sRegionMap->mapSecId].height - 1;
-        break;
-    }
-    sRegionMap->playerIsInCave = FALSE;
     sRegionMap->cursorPosX = gRegionMapEntries[sRegionMap->mapSecId].x + x + MAPCURSOR_X_MIN;
     sRegionMap->cursorPosY = gRegionMapEntries[sRegionMap->mapSecId].y + y + MAPCURSOR_Y_MIN;
 }
@@ -1227,13 +1128,6 @@ static u16 CorrectSpecialMapSecId_Internal(u16 mapSecId)
 {
     u32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sMarineCaveMapSecIds); i++)
-    {
-        if (sMarineCaveMapSecIds[i] == mapSecId)
-        {
-            return GetTerraOrMarineCaveMapSecId();
-        }
-    }
     for (i = 0; sRegionMap_SpecialPlaceLocations[i][0] != MAPSEC_NONE; i++)
     {
         if (sRegionMap_SpecialPlaceLocations[i][0] == mapSecId)
@@ -1242,33 +1136,6 @@ static u16 CorrectSpecialMapSecId_Internal(u16 mapSecId)
         }
     }
     return mapSecId;
-}
-
-static u16 GetTerraOrMarineCaveMapSecId(void)
-{
-    s16 idx;
-
-    idx = VarGet(VAR_ABNORMAL_WEATHER_LOCATION) - 1;
-
-    if (idx < 0 || idx > ABNORMAL_WEATHER_LOCATIONS - 1)
-        idx = 0;
-
-    return sTerraOrMarineCaveMapSecIds[idx];
-}
-
-static void GetMarineCaveCoords(u16 *x, u16 *y)
-{
-    u16 idx;
-
-    idx = VarGet(VAR_ABNORMAL_WEATHER_LOCATION);
-    if (idx < MARINE_CAVE_LOCATIONS_START || idx > ABNORMAL_WEATHER_LOCATIONS)
-    {
-        idx = MARINE_CAVE_LOCATIONS_START;
-    }
-    idx -= MARINE_CAVE_LOCATIONS_START;
-
-    *x = sMarineCaveLocationCoords[idx].x + MAPCURSOR_X_MIN;
-    *y = sMarineCaveLocationCoords[idx].y + MAPCURSOR_Y_MIN;
 }
 
 // Probably meant to be an "IsPlayerInIndoorDungeon" function, but in practice it only has the one mapsec

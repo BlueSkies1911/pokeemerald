@@ -140,4 +140,4 @@ Route20_Text_MistyTrainsHere::
     .string "Cerulean Gym trains here.$"
 
 Route20_Text_SeafoamIslands::
-    .string "SEAFOAM ISLANDS$"
+    .string "Seafoam Islands$"

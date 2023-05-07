@@ -31,9 +31,9 @@ GreenPath_EventScript_LeftRouteSign::
     end
 
 GreenPath_Text_RightRouteSign::
-    .string "GREEN PATH\n"
+    .string "Green Path\n"
     .string "Think Green, Keep Nature Clean!$"
 
 GreenPath_Text_LeftRouteSign::
-    .string "GREEN PATH\n"
+    .string "Green Path\n"
     .string "Pattern Bush Ahead$"

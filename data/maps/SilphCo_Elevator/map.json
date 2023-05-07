@@ -1,7 +1,7 @@
 {
   "id": "MAP_SILPH_CO_ELEVATOR",
   "name": "SilphCo_Elevator",
-  "layout": "LAYOUT_SILPH_CO_ELEVATOR",
+  "layout": "LAYOUT_SILPHCO_ELEVATOR",
   "music": "MUS_RG_SILPH",
   "region_map_section": "MAPSEC_SILPH_CO",
   "requires_flash": false,
@@ -29,13 +29,13 @@
 
   ],
   "bg_events": [
-      {
-        "type": "sign",
-        "x": 0,
-        "y": 2,
-        "elevation": 3,
-        "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-        "script": "SilphCo_Elevator_EventScript_FloorSelect"
-      }
+    {
+      "type": "sign",
+      "x": 0,
+      "y": 2,
+      "elevation": 3,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "SilphCo_Elevator_EventScript_FloorSelect"
+    }
   ]
 }

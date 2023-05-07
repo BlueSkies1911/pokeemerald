@@ -1574,16 +1574,16 @@ static const u8 sEmpty5[0x3242]  = {0};
 static const u8 sUnused3[]       = {0x40};
 static const u8 sEmpty6[0x13]    = {0};
 
-const u16 gCreditsMonBackdropPals[][16] =
+const u16 gCreditsMonPokeball_Pals[][16] =
 {
-    INCBIN_U16("graphics/credits/charizard.gbapal"),
-    INCBIN_U16("graphics/credits/venusaur.gbapal"),
-    INCBIN_U16("graphics/credits/blastoise.gbapal"),
-    INCBIN_U16("graphics/credits/pikachu.gbapal"),
+    INCBIN_U16("graphics/credits/pokeball_charizard.gbapal"),
+    INCBIN_U16("graphics/credits/pokeball_venusaur.gbapal"),
+    INCBIN_U16("graphics/credits/pokeball_blastoise.gbapal"),
+    INCBIN_U16("graphics/credits/pokeball_pikachu.gbapal"),
 };
 
-const u32 gCreditsPokeballBgGfxTiles[] = INCBIN_U32("graphics/credits/unk_8EAAB98.4bpp.lz");
-const u32 gCreditsPokeballBgGfxMap[] = INCBIN_U32("graphics/credits/unk_8EAB30C.bin.lz");
+const u32 gCreditsMonPokeball_Tiles[] = INCBIN_U32("graphics/credits/pokeball.4bpp.lz");
+const u32 gCreditsMonPokeball_Tilemap[] = INCBIN_U32("graphics/credits/pokeball.bin.lz");
 
 const u16 gGraphics_TitleScreen_GameTitleLogoPals[] = INCBIN_U16("graphics/title_screen/game_title_logo.gbapal");
 const u8 gGraphics_TitleScreen_GameTitleLogoTiles[] = INCBIN_U8("graphics/title_screen/game_title_logo.8bpp.lz");
@@ -1597,6 +1597,6 @@ const u8 gGraphics_TitleScreen_CopyrightPressStartMap[] = INCBIN_U8("graphics/ti
 const u16 gGraphics_TitleScreen_FireOrLeafPals[] = INCBIN_U16("graphics/title_screen/fire_sprite.gbapal");
 const u32 gGraphics_TitleScreen_BlankObjTiles[] = INCBIN_U32("graphics/title_screen/blank_obj.4bpp.lz");
 
-const u16 gCreditsAllRightsReservedGfxPal[] = INCBIN_U16("graphics/credits/unk_8EAE548.gbapal");
-const u8 gCreditsAllRightsReservedGfxTiles[] = INCBIN_U8("graphics/credits/unk_8EAE548.4bpp.lz");
-const u8 gCreditsAllRightsReservedGfxMap[] = INCBIN_U8("graphics/credits/unk_8EAE548.bin.lz");
+const u16 gCreditsCopyright_Pal[] = INCBIN_U16("graphics/credits/copyright.gbapal");
+const u8 gCreditsCopyright_Tiles[] = INCBIN_U8("graphics/credits/copyright.4bpp.lz");
+const u8 gCreditsCopyright_Tilemap[] = INCBIN_U8("graphics/credits/copyright.bin.lz");
