@@ -145,7 +145,7 @@ Route17_Text_RouteSign::
 Route17_Text_DontThrowGameThrowBalls::
     .string "It's a notice!\p"
     .string "Don't throw the game, throw\n"
-    .string "Pokéballs instead!$"
+    .string "Poké Balls instead!$"
 
 Route17_Text_CyclingRoadSign::
     .string "Cycling Road\n"

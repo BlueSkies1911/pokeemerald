@@ -22,7 +22,7 @@
 #include "text.h"
 #include "intro.h"
 #include "main.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "constants/rgb.h"
 
 static void VBlankIntr(void);
@@ -173,7 +173,7 @@ static void UpdateLinkAndCallCallbacks(void)
 static void InitMainCallbacks(void)
 {
     gMain.vblankCounter1 = 0;
-    gTrainerHillVBlankCounter = NULL;
+    gTrainerTowerVBlankCounter = NULL;
     gMain.vblankCounter2 = 0;
     gMain.callback1 = NULL;
     SetMainCallback2(CB2_InitCopyrightScreenAfterBootup);
@@ -339,8 +339,8 @@ static void VBlankIntr(void)
 
     gMain.vblankCounter1++;
 
-    if (gTrainerHillVBlankCounter && *gTrainerHillVBlankCounter < 0xFFFFFFFF)
-        (*gTrainerHillVBlankCounter)++;
+    if (gTrainerTowerVBlankCounter && *gTrainerTowerVBlankCounter < 0xFFFFFFFF)
+        (*gTrainerTowerVBlankCounter)++;
 
     if (gMain.vblankCallback)
         gMain.vblankCallback();
@@ -406,14 +406,14 @@ static void WaitForVBlank(void)
     asm("swi 0x5");
 }
 
-void SetTrainerHillVBlankCounter(u32 *counter)
+void SetTrainerTowerVBlankCounter(u32 *counter)
 {
-    gTrainerHillVBlankCounter = counter;
+    gTrainerTowerVBlankCounter = counter;
 }
 
-void ClearTrainerHillVBlankCounter(void)
+void ClearTrainerTowerVBlankCounter(void)
 {
-    gTrainerHillVBlankCounter = NULL;
+    gTrainerTowerVBlankCounter = NULL;
 }
 
 void DoSoftReset(void)

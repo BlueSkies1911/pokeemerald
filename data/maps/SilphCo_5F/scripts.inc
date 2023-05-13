@@ -74,7 +74,7 @@ SilphCo_5F_Text_Grunt1PostBattle::
     .string "Team Rocket!$"
 
 SilphCo_5F_Text_BeauIntro::
-    .string "We study Pokéball technology on\n"
+    .string "We study Poké Ball technology on\n"
     .string "this floor.$"
 
 SilphCo_5F_Text_BeauDefeat::
@@ -82,7 +82,7 @@ SilphCo_5F_Text_BeauDefeat::
     .string "Blast it!$"
 
 SilphCo_5F_Text_BeauPostBattle::
-    .string "We worked on the ultimate Pokéball\n"
+    .string "We worked on the ultimate Poké Ball\n"
     .string "which would catch anything.$"
 
 SilphCo_5F_Text_DaltonIntro::

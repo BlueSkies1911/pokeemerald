@@ -1,5 +1,10 @@
 Route22_NorthEntrance_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, Route22_NorthEntrance_OnTransition
 	.byte 0
+
+Route22_NorthEntrance_OnTransition:
+    setflag FLAG_LANDMARK_RECEPTION_GATE
+    end
 
 Route22_NorthEntrance_EventScript_BoulderBadgeGuard::
     lock

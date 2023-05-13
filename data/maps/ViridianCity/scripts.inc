@@ -290,7 +290,7 @@ ViridianCity_Text_OhOkayThen::
     .string "Oh, okay then!$"
 
 ViridianCity_Text_CanCarryMonsAnywhere::
-    .string "Those Pokéballs at your waist!\n"
+    .string "Those Poké Balls at your waist!\n"
     .string "You have Pokémon, don't you?\p"
     .string "It's great that you can carry and\n"
     .string "use Pokémon anytime, anywhere.$"

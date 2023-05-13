@@ -1,14 +1,9 @@
 RocketHideout_B1F_MapScripts::
     map_script MAP_SCRIPT_ON_LOAD, RocketHideout_B1F_OnLoad
-    map_script MAP_SCRIPT_ON_TRANSITION, RocketHideout_B1F_OnTransition
     .byte 0
 
 RocketHideout_B1F_OnLoad:
     call_if_not_defeated TRAINER_TEAM_ROCKET_GRUNT_12 RocketHideout_B1F_EventScript_SetBarrier
-    end
-
-RocketHideout_B1F_OnTransition:
-    setflag FLAG_WORLD_MAP_ROCKET_HIDEOUT_B1F
     end
 
 RocketHideout_B1F_EventScript_Grunt1::

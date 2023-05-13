@@ -1,10 +1,5 @@
 ViridianForest_MapScripts::
-    map_script MAP_SCRIPT_ON_TRANSITION, ViridianForest_OnTransition
     .byte 0
-
-ViridianForest_OnTransition:
-    setflag FLAG_WORLD_MAP_VIRIDIAN_FOREST
-    end
 
 ViridianForest_EventScript_Youngster::
     msgbox ViridianForest_Text_FriendsItchingToBattle, MSGBOX_NPC
@@ -131,10 +126,10 @@ ViridianForest_Text_CharliePostBattle::
     .string "They're a lot of fun!$"
 
 ViridianForest_Text_RanOutOfPokeBalls::
-    .string "I was throwing Pokéballs to\n"
+    .string "I was throwing Poké Balls to\n"
     .string "catch Pokémon, and I ran out.\p"
     .string "That's why you can never have too\n"
-    .string "many Pokéballs.$"
+    .string "many Poké Balls.$"
 
 ViridianForest_Text_AvoidGrassyAreasWhenWeak::
     .string "Trainer Tips\p"
@@ -155,7 +150,7 @@ ViridianForest_Text_CantCatchOwnedMons::
     .string "Trainer Tips\p"
     .string "You can't catch a Pokémon that\n"
     .string "belongs to someone else.\p"
-    .string "Throw Pokéballs only at wild\n"
+    .string "Throw Poké Balls only at wild\n"
     .string "Pokémon to catch them!$"
 
 ViridianForest_Text_WeakenMonsBeforeCapture::

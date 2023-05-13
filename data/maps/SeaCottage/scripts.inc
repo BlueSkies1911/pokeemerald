@@ -9,6 +9,7 @@ SeaCottage_MapScripts::
     .byte 0
 
 SeaCottage_OnTransition:
+    setflag FLAG_LANDMARK_SEA_COTTAGE
     call_if_unset FLAG_HELPED_BILL_IN_SEA_COTTAGE, SeaCottage_EventScript_HideClefairyBill
     call_if_set FLAG_GOT_SS_TICKET, SeaCottage_EventScript_SetReturnedAfterSSTicket
     end

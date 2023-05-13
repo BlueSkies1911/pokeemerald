@@ -3,7 +3,7 @@ MtMoon_1F_MapScripts::
     .byte 0
 
 MtMoon_1F_OnTransition:
-    setflag FLAG_WORLD_MAP_MT_MOON_1F
+    setflag FLAG_LANDMARK_MT_MOON
     end
 
 MtMoon_1F_EventScript_Marcos::

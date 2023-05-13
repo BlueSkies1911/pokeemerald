@@ -1,10 +1,5 @@
 PokemonTower_1F_MapScripts::
-    map_script MAP_SCRIPT_ON_TRANSITION, PokemonTower_1F_OnTransition
     .byte 0
-
-PokemonTower_1F_OnTransition::
-    setflag FLAG_WORLD_MAP_POKEMON_TOWER_1F
-    end
 
 PokemonTower_1F_EventScript_Channeler::
     msgbox PokemonTower_1F_Text_SenseSpiritsUpToMischief, MSGBOX_NPC

@@ -11,7 +11,7 @@
 #include "sprite.h"
 #include "task.h"
 #include "trainer_see.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "util.h"
 #include "battle_pyramid.h"
 #include "constants/battle_setup.h"
@@ -264,8 +264,8 @@ static u8 CheckTrainer(u8 objectEventId)
     u8 numTrainers = 1;
     u8 approachDistance;
 
-    if (InTrainerHill() == TRUE)
-        scriptPtr = GetTrainerHillTrainerScript();
+    if (InTrainerTower() == TRUE)
+        scriptPtr = GetTrainerTowerTrainerScript();
     else
         scriptPtr = GetObjectEventScriptPointerByObjectEventId(objectEventId);
 
@@ -274,9 +274,9 @@ static u8 CheckTrainer(u8 objectEventId)
         if (GetBattlePyramidTrainerFlag(objectEventId))
             return 0;
     }
-    else if (InTrainerHill() == TRUE)
+    else if (InTrainerTower() == TRUE)
     {
-        if (GetHillTrainerFlag(objectEventId))
+        if (GetTowerTrainerFlag(objectEventId))
             return 0;
     }
     else

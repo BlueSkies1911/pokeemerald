@@ -156,7 +156,7 @@ extern const u8 gText_Cushion[];
 extern const u8 gText_Decorate[];
 extern const u8 gText_PutAway[];
 extern const u8 gText_Toss2[];
-extern const u8 gText_Hoenn[];
+extern const u8 gText_KantoRegion[];
 extern const u8 gText_Ferry[];
 extern const u8 gText_SecretBase[];
 extern const u8 gText_Hideout[];
@@ -1334,10 +1334,10 @@ extern const u8 gText_ExpertTagMatch[];
 extern const u8 gText_TimeBoard[];
 extern const u8 gText_TimeCleared[];
 extern const u8 gText_XMinYDotZSec[];
-extern const u8 gText_TrainerHill1F[];
-extern const u8 gText_TrainerHill2F[];
-extern const u8 gText_TrainerHill3F[];
-extern const u8 gText_TrainerHill4F[];
+extern const u8 gText_TrainerTower1F[];
+extern const u8 gText_TrainerTower2F[];
+extern const u8 gText_TrainerTower3F[];
+extern const u8 gText_TrainerTower4F[];
 
 // Cable Club multichoice text
 extern const u8 CableClub_Text_TradeUsingLinkCable[];

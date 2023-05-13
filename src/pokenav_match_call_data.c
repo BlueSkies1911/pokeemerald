@@ -207,9 +207,9 @@ static const match_call_text_data_t sRivalTextScripts[] = {
     { MatchCall_Text_Rival5,  FLAG_GOT_HM03,                       0xFFFF },
     { MatchCall_Text_Rival6,  FLAG_HIDE_SAFFRON_ROCKETS,           0xFFFF },
     { MatchCall_Text_Rival7,  FLAG_WORLD_MAP_CINNABAR_ISLAND,      0xFFFF },
-    { MatchCall_Text_Rival8,  FLAG_DEFEATED_BLAINE,                0xFFFF },
+    { MatchCall_Text_Rival8,  FLAG_COLLECTED_SEVEN_BADGES,         0xFFFF },
     { MatchCall_Text_Rival9,  FLAG_DEFEATED_LEADER_GIOVANNI,       0xFFFF },
-    { MatchCall_Text_Rival10, FLAG_WORLD_MAP_VICTORY_ROAD_1F,      0xFFFF },
+    { MatchCall_Text_Rival10, FLAG_LANDMARK_VICTORY_ROAD,          0xFFFF },
     { NULL,                   0xFFFF,                              0xFFFF }
 };
 

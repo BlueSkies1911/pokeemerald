@@ -14,6 +14,6 @@
 #define TRAINER_BATTLE_PYRAMID                          10
 #define TRAINER_BATTLE_SET_TRAINER_A                    11
 #define TRAINER_BATTLE_SET_TRAINER_B                    12
-#define TRAINER_BATTLE_HILL                             13
+#define TRAINER_BATTLE_TOWER                            13
 
 #endif // GUARD_CONSTANTS_BATTLE_SETUP_H

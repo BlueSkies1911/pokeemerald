@@ -27,14 +27,14 @@
 #include "sound.h"
 #include "start_menu.h"
 #include "trainer_see.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "wild_encounter.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
 #include "constants/map_types.h"
 #include "constants/songs.h"
-#include "constants/trainer_hill.h"
+#include "constants/trainer_tower.h"
 #include "constants/metatile_behaviors.h"
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
@@ -312,8 +312,8 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
     gSpecialVar_LastTalked = gObjectEvents[objectEventId].localId;
     gSpecialVar_Facing = direction;
 
-    if (InTrainerHill() == TRUE)
-        script = GetTrainerHillTrainerScript();
+    if (InTrainerTower() == TRUE)
+        script = GetTrainerTowerTrainerScript();
     else
         script = GetObjectEventScriptPointerByObjectEventId(objectEventId);
 
@@ -832,20 +832,20 @@ static void SetupWarp(struct MapHeader *unused, s8 warpEventId, struct MapPositi
 {
     const struct WarpEvent *warpEvent;
 
-    u8 trainerHillMapId = GetCurrentTrainerHillMapId();
+    u8 trainerTowerMapId = GetCurrentTrainerTowerMapId();
 
-    if (trainerHillMapId)
+    if (trainerTowerMapId)
     {
-        if (trainerHillMapId == GetNumFloorsInTrainerHillChallenge())
+        if (trainerTowerMapId == GetNumFloorsInTrainerTowerChallenge())
         {
             if (warpEventId == 0)
                 warpEvent = &gMapHeader.events->warps[0];
             else
-                warpEvent = SetWarpDestinationTrainerHill4F();
+                warpEvent = SetWarpDestinationTrainerTower4F();
         }
-        else if (trainerHillMapId == TRAINER_TOWER_ROOF)
+        else if (trainerTowerMapId == TRAINER_TOWER_ROOF)
         {
-            warpEvent = SetWarpDestinationTrainerHillFinalFloor(warpEventId);
+            warpEvent = SetWarpDestinationTrainerTowerFinalFloor(warpEventId);
         }
         else
         {

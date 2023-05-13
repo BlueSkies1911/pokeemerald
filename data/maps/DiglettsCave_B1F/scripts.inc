@@ -3,5 +3,5 @@ DiglettsCave_B1F_MapScripts::
     .byte 0
 
 DiglettsCave_B1F_OnTransition:
-    setflag FLAG_WORLD_MAP_DIGLETTS_CAVE_B1F
+    setflag FLAG_LANDMARK_DIGLETTS_CAVE
     end

@@ -124,7 +124,7 @@ BattlePyramid_FindItemBallEnd::
 BattlePyramid_Retire::
 	goto BattleFrontier_BattlePyramid_EventScript_WarpToLobbyLost
 
-@ Also used by Trainer Hill
+@ Also used by Trainer Tower
 BattleFacility_TrainerBattle_PlaceholderText:
 	.string "This is a sample message.$"
 

@@ -68,21 +68,21 @@ static const struct WindowTemplate sFieldRegionMapWindowTemplates[] =
 {
     {
         .bg = 0,
-        .tilemapLeft = 17,
+        .tilemapLeft = 18,
         .tilemapTop = 17,
-        .width = 12,
+        .width = 11,
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 1
     },
     {
         .bg = 0,
-        .tilemapLeft = 22,
+        .tilemapLeft = 1,
         .tilemapTop = 1,
-        .width = 7,
+        .width = 9,
         .height = 2,
         .paletteNum = 15,
-        .baseBlock = 25
+        .baseBlock = 48
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -139,8 +139,6 @@ static void MCB2_FieldUpdateRegionMap(void)
 
 static void FieldUpdateRegionMap(void)
 {
-    u8 offset;
-
     switch (sFieldRegionMapHandler->state)
     {
         case 0:
@@ -151,8 +149,7 @@ static void FieldUpdateRegionMap(void)
             break;
         case 1:
             DrawStdFrameWithCustomTileAndPalette(1, FALSE, 0x27, 0xd);
-            offset = GetStringCenterAlignXOffset(FONT_NORMAL, gText_Hoenn, 0x38);
-            AddTextPrinterParameterized(1, FONT_NORMAL, gText_Hoenn, offset, 1, 0, NULL);
+            AddTextPrinterParameterized(1, FONT_NORMAL, gText_KantoRegion, 2, 1, 0, NULL);
             ScheduleBgCopyTilemapToVram(0);
             DrawStdFrameWithCustomTileAndPalette(0, FALSE, 0x27, 0xd);
             PrintRegionMapSecName();

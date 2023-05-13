@@ -3,5 +3,5 @@ UndergroundPath_EastWestTunnel_MapScripts::
     .byte 0
 
 UndergroundPath_EastWestTunnel_OnTransition:
-    setflag FLAG_WORLD_MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL
+    setflag FLAG_LANDMARK_UNDERGROUND_PATH_EAST_WEST_TUNNEL
     end

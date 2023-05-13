@@ -197,7 +197,7 @@ Route4_PokemonCenter_1F_Text_TeamRocketAttacksCerulean::
     .string "Rocket being in the news.$"
 
 Route4_PokemonCenter_1F_Text_CanHaveSixMonsWithYou::
-    .string "Okay, set six Pokéballs in my\n"
+    .string "Okay, set six Poké Balls in my\n"
     .string "belt…\p"
     .string "Yeah, that'll do it. At most, you\n"
     .string "can have six Pokémon with you.$"

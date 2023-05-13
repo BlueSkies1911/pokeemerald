@@ -39,7 +39,7 @@ Route1_Text_WorkAtPokeMartTakeSample::
 
 Route1_Text_ComeSeeUsIfYouNeedPokeBalls::
     .string "Please come see us if you need\n"
-    .string "Pokéballs for catching Pokémon.$"
+    .string "Poké Balls for catching Pokémon.$"
 
 Route1_Text_CanJumpFromLedges::
     .string "See those ledges along the road?\p"

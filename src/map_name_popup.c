@@ -137,6 +137,7 @@ static const u8 sRegionMapSectionId_To_PopUpThemeIdMapping[] =
     [MAPSEC_MT_MOON] = MAPPOPUP_THEME_STONE,
     [MAPSEC_S_S_ANNE] = MAPPOPUP_THEME_MARBLE,
     [MAPSEC_DIGLETTS_CAVE] = MAPPOPUP_THEME_STONE,
+    [MAPSEC_DIGLETTS_CAVE2] = MAPPOPUP_THEME_STONE,
     [MAPSEC_ROCK_TUNNEL] = MAPPOPUP_THEME_STONE,
     [MAPSEC_POKEMON_TOWER] = MAPPOPUP_THEME_MARBLE,
     [MAPSEC_UNDERGROUND_PATH] = MAPPOPUP_THEME_MARBLE,
@@ -375,7 +376,7 @@ static void LoadMapNamePopUpWindowBg(void)
         if (regionMapSectionId > HOENN_MAPSEC_END)
             regionMapSectionId -= HOENN_MAPSEC_COUNT;
         else
-            regionMapSectionId = 0; // Discard kanto region sections;
+            regionMapSectionId = 0; // Discard hoenn region sections;
     }
     popUpThemeId = sRegionMapSectionId_To_PopUpThemeIdMapping[regionMapSectionId];
 

@@ -442,6 +442,40 @@
           }
         },
         {
+          "map": "MAP_DIGLETTS_CAVE_NORTH_ENTRANCE",
+          "base_label": "gDiglettsCave_NorthEntrance",
+          "rock_smash_mons": {
+            "encounter_rate": 0,
+            "mons": [
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_DIGLETT"
+              },
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_DIGLETT"
+              },
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_DIGLETT"
+              },
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_DUGTRIO"
+              },
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_DUGTRIO"
+              }
+            ]
+          }
+        },
+        {
           "map": "MAP_DIGLETTS_CAVE_B1F",
           "base_label": "gDiglettsCaveB1F",
           "land_mons": {

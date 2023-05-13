@@ -3,5 +3,5 @@ SeafoamIslands_1F_MapScripts::
     .byte 0
 
 SeafoamIslands_1F_OnTransition:
-    setflag FLAG_WORLD_MAP_SEAFOAM_ISLANDS_1F
+    setflag FLAG_LANDMARK_SEAFOAM_ISLANDS
     end

@@ -1,5 +1,10 @@
 Route12_FishingHouse_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, Route12_FishingHouse_OnTransition
 	.byte 0
+
+Route12_FishingHouse_OnTransition:
+    setflag FLAG_LANDMARK_FISHERMANS_HOUSE
+    end
 
 Route12_FishingHouse_EventScript_FishingGuruBrother::
     lock

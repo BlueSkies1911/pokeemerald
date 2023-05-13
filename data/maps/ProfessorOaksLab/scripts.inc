@@ -1260,7 +1260,7 @@ ProfessorOaksLab_Text_OakThreeMonsChooseOne::
     .string "There are three Pokémon here.\p"
     .string "Haha!\p"
     .string "The Pokémon are held inside\n"
-    .string "these Pokéballs.\p"
+    .string "these Poké Balls.\p"
     .string "When I was young, I was a serious\n"
     .string "Pokémon Trainer.\p"
     .string "But now, in my old age, I have\n"
@@ -1388,7 +1388,7 @@ ProfessorOaksLab_Text_DeliveredOaksParcel::
 
 ProfessorOaksLab_Text_OakCustomBallIOrdered::
     .string "Ah! \n"
-    .string "It's the custom Pokéball!\p"
+    .string "It's the custom Poké Ball!\p"
     .string "I had it on order.\n"
     .string "Thank you!$"
 
@@ -1427,12 +1427,12 @@ ProfessorOaksLab_Text_OakCatchMonsForDataTakeThese::
     .string "catching wild Pokémon.$"
 
 ProfessorOaksLab_Text_ReceivedFivePokeBalls::
-    .string "{PLAYER} received five Pokéballs.$"
+    .string "{PLAYER} received five Poké Balls.$"
 
 ProfessorOaksLab_Text_OakExplainCatching:
     .string "When a wild Pokémon appears,\n"
     .string "it's fair game.\p"
-    .string "Just throw a Pokéball at it and\n"
+    .string "Just throw a Poké Ball at it and\n"
     .string "try to catch it!\p"
     .string "This won't always work, however.\p"
     .string "A healthy Pokémon can escape.\n"
@@ -1477,7 +1477,7 @@ ProfessorOaksLab_Text_OakCanReachNextTownWithMon::
 
 ProfessorOaksLab_Text_OakWhichOneWillYouChoose::
     .string "Oak: Now, {PLAYER}.\p"
-    .string "Inside those three Pokéballs are\n"
+    .string "Inside those three Poké Balls are\n"
     .string "Pokémon.\p"
     .string "Which one will you choose for\n"
     .string "yourself?$"
@@ -1539,7 +1539,7 @@ ProfessorOaksLab_Text_RivalGoToughenMyMon::
     .string "Smell you later!$"
 
 ProfessorOaksLab_Text_ThoseArePokeBalls::
-    .string "Those are Pokéballs.\n"
+    .string "Those are Poké Balls.\n"
     .string "They contain Pokémon!$"
 
 ProfessorOaksLab_Text_OaksLastMon::

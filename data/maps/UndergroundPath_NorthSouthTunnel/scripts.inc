@@ -3,5 +3,5 @@ UndergroundPath_NorthSouthTunnel_MapScripts::
     .byte 0
 
 UndergroundPath_NorthSouthTunnel_OnTransition:
-    setflag FLAG_WORLD_MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL
+    setflag FLAG_LANDMARK_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL
     end

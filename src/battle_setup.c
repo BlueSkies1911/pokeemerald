@@ -23,7 +23,7 @@
 #include "field_message_box.h"
 #include "sound.h"
 #include "strings.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "secret_base.h"
 #include "string_util.h"
 #include "overworld.h"
@@ -44,7 +44,7 @@
 #include "constants/songs.h"
 #include "constants/map_types.h"
 #include "constants/trainers.h"
-#include "constants/trainer_hill.h"
+#include "constants/trainer_tower.h"
 #include "constants/weather.h"
 
 enum {
@@ -522,12 +522,12 @@ static void DoTrainerBattle(void)
     TryUpdateGymLeaderRematchFromTrainer();
 }
 
-static void DoBattlePyramidTrainerHillBattle(void)
+static void DoBattlePyramidTrainerTowerBattle(void)
 {
     if (InBattlePyramid())
         CreateBattleStartTask(GetSpecialBattleTransition(B_TRANSITION_GROUP_B_PYRAMID), 0);
     else
-        CreateBattleStartTask(GetSpecialBattleTransition(B_TRANSITION_GROUP_TRAINER_HILL), 0);
+        CreateBattleStartTask(GetSpecialBattleTransition(B_TRANSITION_GROUP_TRAINER_TOWER), 0);
 
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_TRAINER_BATTLES);
@@ -968,7 +968,7 @@ u8 GetSpecialBattleTransition(s32 id)
     {
         switch (id)
         {
-        case B_TRANSITION_GROUP_TRAINER_HILL:
+        case B_TRANSITION_GROUP_TRAINER_TOWER:
         case B_TRANSITION_GROUP_SECRET_BASE:
         case B_TRANSITION_GROUP_E_READER:
             return B_TRANSITION_POKEBALLS_TRAIL;
@@ -985,7 +985,7 @@ u8 GetSpecialBattleTransition(s32 id)
     {
         switch (id)
         {
-        case B_TRANSITION_GROUP_TRAINER_HILL:
+        case B_TRANSITION_GROUP_TRAINER_TOWER:
         case B_TRANSITION_GROUP_SECRET_BASE:
         case B_TRANSITION_GROUP_E_READER:
             return B_TRANSITION_BIG_POKEBALL;
@@ -1264,17 +1264,17 @@ const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data)
     case TRAINER_BATTLE_SET_TRAINER_B:
         TrainerBattleLoadArgs(sTrainerBOrdinaryBattleParams, data);
         return NULL;
-    case TRAINER_BATTLE_HILL:
+    case TRAINER_BATTLE_TOWER:
         if (gApproachingTrainerId == 0)
         {
             TrainerBattleLoadArgs(sOrdinaryBattleParams, data);
             SetMapVarsToTrainer();
-            gTrainerBattleOpponent_A = LocalIdToHillTrainerId(gSpecialVar_LastTalked);
+            gTrainerBattleOpponent_A = LocalIdToTowerTrainerId(gSpecialVar_LastTalked);
         }
         else
         {
             TrainerBattleLoadArgs(sTrainerBOrdinaryBattleParams, data);
-            gTrainerBattleOpponent_B = LocalIdToHillTrainerId(gSpecialVar_LastTalked);
+            gTrainerBattleOpponent_B = LocalIdToTowerTrainerId(gSpecialVar_LastTalked);
         }
         return EventScript_TryDoNormalTrainerBattle;
     default:
@@ -1342,8 +1342,8 @@ bool8 GetTrainerFlag(void)
 {
     if (InBattlePyramid())
         return GetBattlePyramidTrainerFlag(gSelectedObjectEvent);
-    else if (InTrainerHill())
-        return GetHillTrainerFlag(gSelectedObjectEvent);
+    else if (InTrainerTower())
+        return GetTowerTrainerFlag(gSelectedObjectEvent);
     else
         return FlagGet(GetTrainerAFlag());
 }
@@ -1406,16 +1406,16 @@ void BattleSetup_StartTrainerBattle(void)
 
         MarkApproachingPyramidTrainersAsBattled();
     }
-    else if (InTrainerHillChallenge())
+    else if (InTrainerTowerChallenge())
     {
-        gBattleTypeFlags |= BATTLE_TYPE_TRAINER_HILL;
+        gBattleTypeFlags |= BATTLE_TYPE_TRAINER_TOWER;
 
         if (gNoOfApproachingTrainers == 2)
-            FillHillTrainersParties();
+            FillTowerTrainersParties();
         else
-            FillHillTrainerParty();
+            FillTowerTrainerParty();
 
-        SetHillTrainerFlag();
+        SetTowerTrainerFlag();
     }
 
     sNoOfPossibleTrainerRetScripts = gNoOfApproachingTrainers;
@@ -1424,8 +1424,8 @@ void BattleSetup_StartTrainerBattle(void)
     gWhichTrainerToFaceAfterBattle = 0;
     gMain.savedCallback = CB2_EndTrainerBattle;
 
-    if (InBattlePyramid() || InTrainerHillChallenge())
-        DoBattlePyramidTrainerHillBattle();
+    if (InBattlePyramid() || InTrainerTowerChallenge())
+        DoBattlePyramidTrainerTowerBattle();
     else
         DoTrainerBattle();
 
@@ -1467,7 +1467,7 @@ static void CB2_EndTrainerBattle(void)
         }
         else if (IsPlayerDefeated(gBattleOutcome) == TRUE)
         {
-            if (InBattlePyramid() || InTrainerHillChallenge())
+            if (InBattlePyramid() || InTrainerTowerChallenge())
                 SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
             else
                 SetMainCallback2(CB2_WhiteOut);
@@ -1475,7 +1475,7 @@ static void CB2_EndTrainerBattle(void)
         else
         {
             SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
-            if (!InBattlePyramid() && !InTrainerHillChallenge())
+            if (!InBattlePyramid() && !InTrainerTowerChallenge())
             {
                 RegisterTrainerInMatchCall();
                 SetBattledTrainersFlags();
@@ -1522,12 +1522,12 @@ void ShowTrainerIntroSpeech(void)
 
         ShowFieldMessageFromBuffer();
     }
-    else if (InTrainerHillChallenge())
+    else if (InTrainerTowerChallenge())
     {
         if (gNoOfApproachingTrainers == 0 || gNoOfApproachingTrainers == 1)
-            CopyTrainerHillTrainerText(TRAINER_HILL_TEXT_INTRO, LocalIdToHillTrainerId(gSpecialVar_LastTalked));
+            CopyTrainerTowerTrainerText(TRAINER_TOWER_TEXT_INTRO, LocalIdToTowerTrainerId(gSpecialVar_LastTalked));
         else
-            CopyTrainerHillTrainerText(TRAINER_HILL_TEXT_INTRO, LocalIdToHillTrainerId(gObjectEvents[gApproachingTrainers[gApproachingTrainerId].objectEventId].localId));
+            CopyTrainerTowerTrainerText(TRAINER_TOWER_TEXT_INTRO, LocalIdToTowerTrainerId(gObjectEvents[gApproachingTrainers[gApproachingTrainerId].objectEventId].localId));
 
         ShowFieldMessageFromBuffer();
     }
@@ -1886,7 +1886,7 @@ static bool8 WasSecondRematchWon(const struct RematchTrainer *table, u16 firstBa
     return TRUE;
 }
 
-static bool32 HasAtLeastFiveBadges(void)
+static bool32 HasAtLeastThreeBadges(void)
 {
     s32 i, count;
 
@@ -1894,7 +1894,7 @@ static bool32 HasAtLeastFiveBadges(void)
     {
         if (FlagGet(sBadgeFlags[i]) == TRUE)
         {
-            if (++count >= 5)
+            if (++count >= 3)
                 return TRUE;
         }
     }
@@ -1902,11 +1902,33 @@ static bool32 HasAtLeastFiveBadges(void)
     return FALSE;
 }
 
+static bool32 HasAtLeastSevenBadges(void)
+{
+    s32 i, count;
+
+    for (count = 0, i = 0; i < ARRAY_COUNT(sBadgeFlags); i++)
+    {
+        if (FlagGet(sBadgeFlags[i]) == TRUE)
+        {
+            if (++count >= 7)
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+void SetCollectedSevenBadgesFlag(void)
+{
+    if (HasAtLeastSevenBadges())
+        FlagSet(FLAG_COLLECTED_SEVEN_BADGES);
+}
+
 #define STEP_COUNTER_MAX 255
 
 void IncrementRematchStepCounter(void)
 {
-    if (HasAtLeastFiveBadges())
+    if (HasAtLeastThreeBadges())
     {
         if (gSaveBlock1Ptr->trainerRematchStepCounter >= STEP_COUNTER_MAX)
             gSaveBlock1Ptr->trainerRematchStepCounter = STEP_COUNTER_MAX;
@@ -1917,7 +1939,7 @@ void IncrementRematchStepCounter(void)
 
 static bool32 IsRematchStepCounterMaxed(void)
 {
-    if (HasAtLeastFiveBadges() && gSaveBlock1Ptr->trainerRematchStepCounter >= STEP_COUNTER_MAX)
+    if (HasAtLeastThreeBadges() && gSaveBlock1Ptr->trainerRematchStepCounter >= STEP_COUNTER_MAX)
         return TRUE;
     else
         return FALSE;

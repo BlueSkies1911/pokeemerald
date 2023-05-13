@@ -14,7 +14,7 @@ VictoryRoad_1F_EventScript_SetRockBarrier::
     return
 
 VictoryRoad_1F_OnTransition:
-    setflag FLAG_WORLD_MAP_VICTORY_ROAD_1F
+    setflag FLAG_LANDMARK_VICTORY_ROAD
     end
 
 VictoryRoad_1F_EventScript_FloorSwitch::

@@ -11,7 +11,7 @@
 #include "pokenav.h"
 #include "script.h"
 #include "secret_base.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "tv.h"
 #include "constants/rgb.h"
 #include "constants/metatile_behaviors.h"
@@ -98,10 +98,10 @@ void InitBattlePyramidMap(bool8 setPlayerPosition)
     GenerateBattlePyramidFloorLayout(sBackupMapData, setPlayerPosition);
 }
 
-void InitTrainerHillMap(void)
+void InitTrainerTowerMap(void)
 {
     CpuFastFill16(MAPGRID_UNDEFINED, sBackupMapData, sizeof(sBackupMapData));
-    GenerateTrainerHillFloorLayout(sBackupMapData);
+    GenerateTrainerTowerFloorLayout(sBackupMapData);
 }
 
 static void InitMapLayoutData(struct MapHeader *mapHeader)

@@ -4,7 +4,7 @@ RockTunnel_1F_MapScripts::
     .byte 0
 
 RockTunnel_1F_OnTransition:
-    setflag FLAG_WORLD_MAP_ROCK_TUNNEL_1F
+    setflag FLAG_LANDMARK_ROCK_TUNNEL
     end
 
 RockTunnel_1F_EventScript_Lenny::

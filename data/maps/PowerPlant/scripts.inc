@@ -15,7 +15,7 @@ PowerPlant_EventScript_TryRemoveZapdos::
     return
 
 PowerPlant_OnTransition:
-    setflag FLAG_WORLD_MAP_POWER_PLANT
+    setflag FLAG_LANDMARK_POWER_PLANT
     call_if_unset FLAG_FOUGHT_ZAPDOS, PowerPlant_EventScript_ShowZapdos
     call_if_unset FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1, PowerPlant_EventScript_ShowElectrode1
     call_if_unset FLAG_FOUGHT_POWER_PLANT_ELECTRODE_2, PowerPlant_EventScript_ShowElectrode2

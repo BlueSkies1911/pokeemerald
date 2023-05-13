@@ -117,7 +117,7 @@ ViridianCity_House2_Text_ReadBlackboardCarefully::
 ViridianCity_House2_Text_NotebookFirstPage::
     .string "Let's check out the notebook.\p"
     .string "First page…\p"
-    .string "Pokéballs are used to catch\n"
+    .string "Poké Balls are used to catch\n"
     .string "Pokémon.\p"
     .string "Up to six Pokémon can be carried\n"
     .string "in your party.\p"

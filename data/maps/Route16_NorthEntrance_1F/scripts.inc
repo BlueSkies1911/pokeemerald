@@ -3,6 +3,7 @@ Route16_NorthEntrance_1F_MapScripts::
 	.byte 0
 
 Route16_NorthEntrance_1F_OnTransition:
+    setflag FLAG_LANDMARK_CYCLING_ROAD
     clearflag FLAG_SYS_CYCLING_ROAD
     call_if_set FLAG_GOT_BICYCLE, Route16_NorthEntrance_1F_EventScript_DisableNeedBikeTrigger
     end

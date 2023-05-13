@@ -53,4 +53,4 @@ SevenIsland_Mart_Text_NeedToFishOnSevenIsland::
     .string "That will complete my fishing tour\n"
     .string "of the Sevii Islands.\p"
     .string "I'd better stock up on some\n"
-    .string "Pokéballs first, though.$"
+    .string "Poké Balls first, though.$"

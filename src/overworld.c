@@ -54,7 +54,7 @@
 #include "task.h"
 #include "tileset_anims.h"
 #include "time_events.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "trainer_pokemon_sprites.h"
 #include "tv.h"
 #include "scanline_effect.h"
@@ -66,7 +66,7 @@
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
-#include "constants/trainer_hill.h"
+#include "constants/trainer_tower.h"
 #include "constants/weather.h"
 
 struct CableClubPlayer
@@ -845,6 +845,7 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     Overworld_ClearSavedMusic();
     RunOnTransitionMapScript();
     TryRegenerateRenewableHiddenItems();
+    SetCollectedSevenBadgesFlag();
     InitMap();
     CopySecondaryTilesetToVramUsingHeap(gMapHeader.mapLayout);
     LoadSecondaryTilesetPalette(gMapHeader.mapLayout);
@@ -874,8 +875,8 @@ static void LoadMapFromWarp(bool32 a1)
     {
         if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
             LoadBattlePyramidObjectEventTemplates();
-        else if (InTrainerHill())
-            LoadTrainerHillObjectEventTemplates();
+        else if (InTrainerTower())
+            LoadTrainerTowerObjectEventTemplates();
         else
             LoadObjEventTemplatesFromHeader();
     }
@@ -899,12 +900,13 @@ static void LoadMapFromWarp(bool32 a1)
     Overworld_ClearSavedMusic();
     RunOnTransitionMapScript();
     TryRegenerateRenewableHiddenItems();
+    SetCollectedSevenBadgesFlag();
     UpdateLocationHistoryForRoamer();
     RoamerMoveToOtherLocationSet();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
         InitBattlePyramidMap(FALSE);
-    else if (InTrainerHill())
-        InitTrainerHillMap();
+    else if (InTrainerTower())
+        InitTrainerTowerMap();
     else
         InitMap();
 
@@ -1704,7 +1706,7 @@ static void FieldCB_FadeTryShowMapPopup(void)
 
 void CB2_ContinueSavedGame(void)
 {
-    u8 trainerHillMapId;
+    u8 trainerTowerMapId;
 
     FieldClearVBlankHBlankCallbacks();
     StopMapMusic();
@@ -1714,11 +1716,11 @@ void CB2_ContinueSavedGame(void)
 
     LoadSaveblockMapHeader();
     ClearDiveAndHoleWarps();
-    trainerHillMapId = GetCurrentTrainerHillMapId();
+    trainerTowerMapId = GetCurrentTrainerTowerMapId();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
         LoadBattlePyramidFloorObjectEventScripts();
-    else if (trainerHillMapId != 0 && trainerHillMapId != TRAINER_TOWER_LOBBY)
-        LoadTrainerHillFloorObjectEventScripts();
+    else if (trainerTowerMapId != 0 && trainerTowerMapId != TRAINER_TOWER_LOBBY)
+        LoadTrainerTowerFloorObjectEventScripts();
     else
         LoadSaveblockObjEventScripts();
 
@@ -1727,8 +1729,8 @@ void CB2_ContinueSavedGame(void)
     UpdateMiscOverworldStates();
     if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
         InitBattlePyramidMap(TRUE);
-    else if (trainerHillMapId != 0)
-        InitTrainerHillMap();
+    else if (trainerTowerMapId != 0)
+        InitTrainerTowerMap();
     else
         InitMapFromSavedGame();
 
@@ -1972,7 +1974,7 @@ static bool32 ReturnToFieldLocal(u8 *state)
         break;
     case 1:
         InitViewGraphics();
-        TryLoadTrainerHillEReaderPalette();
+        TryLoadTrainerTowerEReaderPalette();
         (*state)++;
         break;
     case 2:
