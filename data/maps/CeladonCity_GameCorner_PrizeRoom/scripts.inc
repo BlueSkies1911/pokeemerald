@@ -241,10 +241,10 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_TM13::
     end
 
 CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM13::
+    checkitem ITEM_TM13
+    goto_if_eq VAR_RESULT, TRUE, CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis
     checkcoins VAR_TEMP_2
     goto_if_lt VAR_TEMP_2, TM13_COINS, CeladonCity_GameCorner_PrizeRoom_EventScript_NotEnoughCoins
-    checkitemspace ITEM_TM13
-    goto_if_eq VAR_RESULT, FALSE, CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull
     removecoins TM13_COINS
     additem ITEM_TM13
     updatecoinsbox 1, 1
@@ -254,10 +254,10 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM13::
     end
 
 CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM23::
+    checkitem ITEM_TM23
+    goto_if_eq VAR_RESULT, TRUE, CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis
     checkcoins VAR_TEMP_2
     goto_if_lt VAR_TEMP_2, TM23_COINS, CeladonCity_GameCorner_PrizeRoom_EventScript_NotEnoughCoins
-    checkitemspace ITEM_TM23
-    goto_if_eq VAR_RESULT, FALSE, CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull
     removecoins TM23_COINS
     additem ITEM_TM23
     updatecoinsbox 1, 1
@@ -267,10 +267,10 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM23::
     end
 
 CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM24::
+    checkitem ITEM_TM24
+    goto_if_eq VAR_RESULT, TRUE, CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis
     checkcoins VAR_TEMP_2
     goto_if_lt VAR_TEMP_2, TM24_COINS, CeladonCity_GameCorner_PrizeRoom_EventScript_NotEnoughCoins
-    checkitemspace ITEM_TM24
-    goto_if_eq VAR_RESULT, FALSE, CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull
     removecoins TM24_COINS
     additem ITEM_TM24
     updatecoinsbox 1, 1
@@ -280,10 +280,10 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM24::
     end
 
 CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM30::
+    checkitem ITEM_TM30
+    goto_if_eq VAR_RESULT, TRUE, CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis
     checkcoins VAR_TEMP_2
     goto_if_lt VAR_TEMP_2, TM30_COINS, CeladonCity_GameCorner_PrizeRoom_EventScript_NotEnoughCoins
-    checkitemspace ITEM_TM30
-    goto_if_eq VAR_RESULT, FALSE, CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull
     removecoins TM30_COINS
     additem ITEM_TM30
     updatecoinsbox 1, 1
@@ -293,10 +293,10 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM30::
     end
 
 CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM35::
+    checkitem ITEM_TM35
+    goto_if_eq VAR_RESULT, TRUE, CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis
     checkcoins VAR_TEMP_2
     goto_if_lt VAR_TEMP_2, TM35_COINS, CeladonCity_GameCorner_PrizeRoom_EventScript_NotEnoughCoins
-    checkitemspace ITEM_TM35
-    goto_if_eq VAR_RESULT, FALSE, CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull
     removecoins TM35_COINS
     additem ITEM_TM35
     updatecoinsbox 1, 1
@@ -305,8 +305,8 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_BuyTM35::
     goto CeladonCity_GameCorner_PrizeRoom_EventScript_EndPrizeExchange
     end
 
-CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull::
-    call Common_EventScript_BagIsFull
+CeladonCity_GameCorner_PrizeRoom_EventScript_YouAlreadyHaveThis::
+    msgbox gText_YouAlreadyHaveThis, MSGBOX_DEFAULT
     hidecoinsbox 0, 0
     release
     end
@@ -384,6 +384,12 @@ CeladonCity_GameCorner_PrizeRoom_EventScript_TryGivePrize::
     updatecoinsbox 0, 5
     giveitem VAR_TEMP_1
     goto CeladonCity_GameCorner_PrizeRoom_EventScript_EndPrizeExchange
+    end
+
+CeladonCity_GameCorner_PrizeRoom_EventScript_BagFull::
+    call Common_EventScript_BagIsFull
+    hidecoinsbox 0, 0
+    release
     end
 
 CeladonCity_GameCorner_PrizeRoom_Text_FancyThatPorygon::

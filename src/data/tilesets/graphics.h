@@ -948,6 +948,25 @@ const u16 gTilesetPalettes_PalletTown[][16] =
 	INCBIN_U16("data/tilesets/secondary/pallet_town/palettes/15.gbapal"),
 };
 
+const u32 gTilesetTiles_PrettyPetalFlower[] = INCBIN_U32("data/tilesets/secondary/pretty_petal_flower/tiles.4bpp.lz");
+
+const u16 gTilesetPalettes_PrettyPetalFlower[][16] =
+{
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/00.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/01.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/02.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/03.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/04.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/05.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/06.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/07.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/08.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/09.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/10.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/11.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/palettes/12.gbapal"),
+};
+
 const u32 gTilesetTiles_PewterCity[] = INCBIN_U32("data/tilesets/secondary/pewter_city/tiles.4bpp.lz");
 
 const u16 gTilesetPalettes_PewterCity[][16] =

@@ -188,6 +188,45 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route25_EventScript_Man",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 38,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_25_BLUK_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 39,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_25_ORAN",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 40,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_25_BLUK_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -217,9 +256,7 @@
       "y": 2,
       "elevation": 3,
       "item": "ITEM_ELIXIR",
-      "flag": "HIDDEN_ITEM_ROUTE25_ELIXIR",
-      "quantity": "",
-      "underfoot": ""
+      "flag": "HIDDEN_ITEM_ROUTE25_ELIXIR"
     },
     {
       "type": "hidden_item",
@@ -227,29 +264,15 @@
       "y": 6,
       "elevation": 3,
       "item": "ITEM_ETHER",
-      "flag": "HIDDEN_ITEM_ROUTE25_ETHER",
-      "quantity": "",
-      "underfoot": ""
+      "flag": "HIDDEN_ITEM_ROUTE25_ETHER"
     },
     {
       "type": "hidden_item",
       "x": 33,
       "y": 8,
       "elevation": 3,
-      "item": "ITEM_ORAN_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE25_ORAN_BERRY",
-      "quantity": "",
-      "underfoot": ""
-    },
-    {
-      "type": "hidden_item",
-      "x": 40,
-      "y": 3,
-      "elevation": 3,
-      "item": "ITEM_BLUK_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE25_BLUK_BERRY",
-      "quantity": "",
-      "underfoot": ""
+      "item": "ITEM_POTION",
+      "flag": "HIDDEN_ITEM_ROUTE25_POTION"
     }
   ]
 }

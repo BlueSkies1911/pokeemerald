@@ -425,18 +425,14 @@ static bool8 TryUpdatePlayerSpinDirection(void)
 {
     if ((gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FORCED_MOVE) && MetatileBehavior_IsSpinTile(gPlayerAvatar.lastSpinTile))
     {
-        sPlayerObjectPtr = &gObjectEvents[gPlayerAvatar.objectEventId];
-        if (sPlayerObjectPtr->heldMovementFinished)
+        struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+        if (playerObjEvent->heldMovementFinished)
         {
-            if (MetatileBehavior_IsStopSpinning(sPlayerObjectPtr->currentMetatileBehavior))
-            {
+            if (MetatileBehavior_IsStopSpinning(playerObjEvent->currentMetatileBehavior))
                 return FALSE;
-            }
-            if (MetatileBehavior_IsSpinTile(sPlayerObjectPtr->currentMetatileBehavior))
-            {
-                gPlayerAvatar.lastSpinTile = sPlayerObjectPtr->currentMetatileBehavior;
-            }
-            ObjectEventClearHeldMovement(sPlayerObjectPtr);
+            if (MetatileBehavior_IsSpinTile(playerObjEvent->currentMetatileBehavior))
+                gPlayerAvatar.lastSpinTile = playerObjEvent->currentMetatileBehavior;
+            ObjectEventClearHeldMovement(playerObjEvent);
             PlayerApplyTileForcedMovement(gPlayerAvatar.lastSpinTile);
         }
         return TRUE;
@@ -460,7 +456,10 @@ static u8 GetForcedMovementByMetatileBehavior(void)
         for (i = 0; i < NUM_FORCED_MOVEMENTS; i++)
         {
             if (sForcedMovementTestFuncs[i](metatileBehavior))
+            {
+                gPlayerAvatar.lastSpinTile = metatileBehavior;
                 return i + 1;
+            }
         }
     }
     return 0;
@@ -1142,12 +1141,12 @@ static void PlayerGoSpin(u8 direction)
 
 static void PlayerApplyTileForcedMovement(u8 metatileBehavior)
 {
-    int i;
+    u32 i;
 
     for (i = 0; i < NUM_FORCED_MOVEMENTS; i++)
     {
         if (sForcedMovementTestFuncs[i](metatileBehavior))
-            i + 1;
+            sForcedMovementFuncs[i + 1]();
     }
 }
 

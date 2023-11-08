@@ -1,167 +1,167 @@
-@ Verdanturf Tent
+@ Fuchsia Tent
 
-	@ Initialize the Verdanturf Battle Tent challenge
-	.macro verdanturftent_init
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_INIT
-	special CallVerdanturfTentFunction
+	@ Initialize the Fuchsia Battle Tent challenge
+	.macro fuchsiatent_init
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_INIT
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Get the current prize item id
-	.macro verdanturftent_getprize
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_GET_PRIZE
-	special CallVerdanturfTentFunction
+	.macro fuchsiatent_getprize
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_GET_PRIZE
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Unused. Set the prize item to be given
-	.macro verdanturftent_setprize unusedArg:req, itemId:req
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_SET_PRIZE
+	.macro fuchsiatent_setprize unusedArg:req, itemId:req
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_SET_PRIZE
 	setvar VAR_0x8005, \unusedArg
 	setvar VAR_0x8006, \itemId
-	special CallVerdanturfTentFunction
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Unused. Set the opponent trainer and gfx. SetNextBattleTentOpponent is used through tower_setopponent instead
-	.macro verdanturftent_setopponentgfx
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_SET_OPPONENT_GFX
-	special CallVerdanturfTentFunction
+	.macro fuchsiatent_setopponentgfx
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_SET_OPPONENT_GFX
+	special CallFuchsiaTentFunction
 	.endm
 
-	@ Buffers the opponents intro speech to STR_VAR_4. Despite being a Verdanturf Tent function, it serves the same purpose for all 3 tents.
+	@ Buffers the opponents intro speech to STR_VAR_4. Despite being a Fuchsia Tent function, it serves the same purpose for all 3 tents.
 	.macro battletent_getopponentintro
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_GET_OPPONENT_INTRO
-	special CallVerdanturfTentFunction
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_GET_OPPONENT_INTRO
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Save the game and set the challenge status
-	.macro verdanturftent_save challengeStatus:req
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_SAVE
+	.macro fuchsiatent_save challengeStatus:req
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_SAVE
 	setvar VAR_0x8005, \challengeStatus
-	special CallVerdanturfTentFunction
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Set the prize item as randomly selected from a list. Randomness unnecessary, as the list is only 1 item
-	.macro verdanturftent_setrandomprize
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_SET_RANDOM_PRIZE
-	special CallVerdanturfTentFunction
+	.macro fuchsiatent_setrandomprize
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_SET_RANDOM_PRIZE
+	special CallFuchsiaTentFunction
 	.endm
 
 	@ Give the current prize item. FALSE if no room for prize
-	.macro verdanturftent_giveprize
-	setvar VAR_0x8004, VERDANTURF_TENT_FUNC_GIVE_PRIZE
-	special CallVerdanturfTentFunction
+	.macro fuchsiatent_giveprize
+	setvar VAR_0x8004, FUCHSIA_TENT_FUNC_GIVE_PRIZE
+	special CallFuchsiaTentFunction
 	.endm
 
 
-@ Fallarbor Tent
+@ Saffron Tent
 
-	@ Initialize the Fallarbor Battle Tent challenge
-	.macro fallarbortent_init
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_INIT
-	special CallFallarborTentFunction
+	@ Initialize the Saffron Battle Tent challenge
+	.macro saffrontent_init
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_INIT
+	special CallSaffronTentFunction
 	.endm
 
 	@ Get the current prize item id
-	.macro fallarbortent_getprize
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_GET_PRIZE
-	special CallFallarborTentFunction
+	.macro saffrontent_getprize
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_GET_PRIZE
+	special CallSaffronTentFunction
 	.endm
 
 	@ Unused. Set the prize item to be given
-	.macro fallarbortent_setprize unusedArg:req, itemId:req
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_SET_PRIZE
+	.macro saffrontent_setprize unusedArg:req, itemId:req
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_SET_PRIZE
 	setvar VAR_0x8005, \unusedArg
 	setvar VAR_0x8006, \itemId
-	special CallFallarborTentFunction
+	special CallSaffronTentFunction
 	.endm
 
 	@ Save the game and set the challenge status
-	.macro fallarbortent_save challengeStatus:req
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_SAVE
+	.macro saffrontent_save challengeStatus:req
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_SAVE
 	setvar VAR_0x8005, \challengeStatus
-	special CallFallarborTentFunction
+	special CallSaffronTentFunction
 	.endm
 
 	@ Set the prize item as randomly selected from a list. Randomness unnecessary, as the list is only 1 item
-	.macro fallarbortent_setrandomprize
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_SET_RANDOM_PRIZE
-	special CallFallarborTentFunction
+	.macro saffrontent_setrandomprize
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_SET_RANDOM_PRIZE
+	special CallSaffronTentFunction
 	.endm
 
 	@ Give the current prize item. FALSE if no room for prize
-	.macro fallarbortent_giveprize
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_GIVE_PRIZE
-	special CallFallarborTentFunction
+	.macro saffrontent_giveprize
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_GIVE_PRIZE
+	special CallSaffronTentFunction
 	.endm
 
 	@ Buffer the opponent trainers name to STR_VAR_1
-	.macro fallarbortent_getopponentname
-	setvar VAR_0x8004, FALLARBOR_TENT_FUNC_GET_OPPONENT_NAME
-	special CallFallarborTentFunction
+	.macro saffrontent_getopponentname
+	setvar VAR_0x8004, SAFFRON_TENT_FUNC_GET_OPPONENT_NAME
+	special CallSaffronTentFunction
 	.endm
 
 
-@ Slateport Tent
+@ Cerulean Tent
 
-	@ Initialize the Slateport Battle Tent challenge
-	.macro slateporttent_init
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_INIT
-	special CallSlateportTentFunction
+	@ Initialize the Cerulean Battle Tent challenge
+	.macro ceruleantent_init
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_INIT
+	special CallCeruleanTentFunction
 	.endm
 
 	@ Get the current prize item id
-	.macro slateporttent_getprize
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_GET_PRIZE
-	special CallSlateportTentFunction
+	.macro ceruleantent_getprize
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_GET_PRIZE
+	special CallCeruleanTentFunction
 	.endm
 
 	@ Unused. Set the prize item to be given
-	.macro slateporttent_setprize unusedArg:req, itemId:req
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_SET_PRIZE
+	.macro ceruleantent_setprize unusedArg:req, itemId:req
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_SET_PRIZE
 	setvar VAR_0x8005, \unusedArg
 	setvar VAR_0x8006, \itemId
-	special CallSlateportTentFunction
+	special CallCeruleanTentFunction
 	.endm
 
 	@ Save the game and set the challenge status
-	.macro slateporttent_save challengeStatus:req
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_SAVE
+	.macro ceruleantent_save challengeStatus:req
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_SAVE
 	setvar VAR_0x8005, \challengeStatus
-	special CallSlateportTentFunction
+	special CallCeruleanTentFunction
 	.endm
 
 	@ Set the prize item as randomly selected from a list. Randomness unnecessary, as the list is only 1 item
-	.macro slateporttent_setrandomprize
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_SET_RANDOM_PRIZE
-	special CallSlateportTentFunction
+	.macro ceruleantent_setrandomprize
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_SET_RANDOM_PRIZE
+	special CallCeruleanTentFunction
 	.endm
 
 	@ Give the current prize item. FALSE if no room for prize
-	.macro slateporttent_giveprize
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_GIVE_PRIZE
-	special CallSlateportTentFunction
+	.macro ceruleantent_giveprize
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_GIVE_PRIZE
+	special CallCeruleanTentFunction
 	.endm
 
-	@ Slateport Tent's version of factory_rentmons
-	.macro slateporttent_rentmons
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_SELECT_RENT_MONS
-	special CallSlateportTentFunction
+	@ Cerulean Tent's version of factory_rentmons
+	.macro ceruleantent_rentmons
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_SELECT_RENT_MONS
+	special CallCeruleanTentFunction
 	.endm
 
-	@ Slateport Tent's version of factory_swapmons
-	.macro slateporttent_swapmons
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_SWAP_RENT_MONS
-	special CallSlateportTentFunction
+	@ Cerulean Tent's version of factory_swapmons
+	.macro ceruleantent_swapmons
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_SWAP_RENT_MONS
+	special CallCeruleanTentFunction
 	.endm
 
-	@ Slateport Tent's version of factory_generateopponentmons
-	.macro slateporttent_generateopponentmons
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_GENERATE_OPPONENT_MONS
-	special CallSlateportTentFunction
+	@ Cerulean Tent's version of factory_generateopponentmons
+	.macro ceruleantent_generateopponentmons
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_GENERATE_OPPONENT_MONS
+	special CallCeruleanTentFunction
 	.endm
 
-	@ Slateport Tent's version of factory_generaterentalmons
-	.macro slateporttent_generaterentalmons
-	setvar VAR_0x8004, SLATEPORT_TENT_FUNC_GENERATE_RENTAL_MONS
-	special CallSlateportTentFunction
+	@ Cerulean Tent's version of factory_generaterentalmons
+	.macro ceruleantent_generaterentalmons
+	setvar VAR_0x8004, CERULEAN_TENT_FUNC_GENERATE_RENTAL_MONS
+	special CallCeruleanTentFunction
 	.endm
 

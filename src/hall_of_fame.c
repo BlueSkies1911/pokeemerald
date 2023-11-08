@@ -567,7 +567,7 @@ static void Task_Hof_DisplayMon(u8 taskId)
         dstY = sHallOfFame_MonHalfTeamPositions[currMonId][3];
     }
 
-    spriteId = CreateMonPicSprite_HandleDeoxys(currMon->species, currMon->tid, currMon->personality, MON_PIC_AFFINE_FRONT, srcX, srcY, currMonId, TAG_NONE);
+    spriteId = CreateMonPicSprite(currMon->species, currMon->tid, currMon->personality, MON_PIC_AFFINE_FRONT, srcX, srcY, currMonId, TAG_NONE);
     gSprites[spriteId].tDestinationX = dstX;
     gSprites[spriteId].tDestinationY = dstY;
     gSprites[spriteId].data[0] = 0;
@@ -897,7 +897,7 @@ static void Task_HofPC_DrawSpritesPrintText(u8 taskId)
                 posY = sHallOfFame_MonHalfTeamPositions[i][3];
             }
 
-            spriteId = CreateMonPicSprite_HandleDeoxys(currMon->species, currMon->tid, currMon->personality, TRUE, posX, posY, i, TAG_NONE);
+            spriteId = CreateMonPicSprite(currMon->species, currMon->tid, currMon->personality, TRUE, posX, posY, i, TAG_NONE);
             gSprites[spriteId].oam.priority = 1;
             gTasks[taskId].tMonSpriteId(i) = spriteId;
         }

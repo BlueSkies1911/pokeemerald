@@ -270,6 +270,50 @@
 	.macro stopsound
 	.byte 0x2f
 	.endm
+	
+	@ same as createvisualtask except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+	.macro createvisualtaskontargets addr:req, priority:req, battlerargindex:req, argv:vararg
+	.byte 0x30
+	.4byte \addr
+	.byte \priority
+	.byte \battlerargindex
+	.byte (.Lcreatetask_\@_2 - .Lcreatetask_\@_1) / 2	@ num_args
+.Lcreatetask_\@_1:
+	.2byte \argv
+.Lcreatetask_\@_2:
+	.endm
+	
+	@ same as createsprite except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+	.macro createspriteontargets template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x31
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte 0x80 | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
+	
+	@ does not overwrite gBattleAnimArgs[battlerargindex], some sprite templates are too dependent on the value (e.g. heal block)
+	.macro createspriteontargets_onpos template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x32
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte 0x80 | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
 
 @ useful macros
 	.macro jumpreteq value:req, ptr:req
@@ -282,4 +326,21 @@
 
 	.macro jumpretfalse ptr:req
 	jumpreteq FALSE, \ptr
+	.endm
+
+@ keep CFRU macros cause I'm lazy. todo: update to createsprite and createvisualtask, respectively
+.macro launchtask launchtaskPtr launchtaskPriority launchtaskArgsNo launchtaskarg0 launchtaskarg1 launchtaskarg2 launchtaskarg3 launchtaskarg4 launchtaskarg5 launchtaskarg6 launchtaskarg7 launchtaskarg8
+	.byte 0x3
+	.word \launchtaskPtr
+	.byte \launchtaskPriority
+	.byte \launchtaskArgsNo
+	.hword \launchtaskarg0
+	.hword \launchtaskarg1
+	.hword \launchtaskarg2
+	.hword \launchtaskarg3
+	.hword \launchtaskarg4
+	.hword \launchtaskarg5
+	.hword \launchtaskarg6
+	.hword \launchtaskarg7
+	.hword \launchtaskarg8
 	.endm

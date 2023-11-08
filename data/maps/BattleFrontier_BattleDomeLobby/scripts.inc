@@ -518,7 +518,7 @@ BattleFrontier_BattleDomeLobby_Text_HereIsYourPrize:
 	.string "Here is your prize for your Battle\n"
 	.string "Tournament victory.$"
 
-@ Used by Verdanturf Tent
+@ Used by Fuchsia Tent
 BattleFrontier_BattleDomeLobby_Text_ReceivedPrize:
 	.string "{PLAYER} received the prize\n"
 	.string "{STR_VAR_1}.$"

@@ -55,10 +55,10 @@ Route11_EastEntrance_2F_EventScript_Aide::
     compare VAR_0x8006, REQUIRED_CAUGHT_MONS
     goto_if_lt Aide_EventScript_HaventCaughtEnough
     msgbox Route11_EastEntrance_2F_Text_GreatHereYouGo, MSGBOX_DEFAULT
-    checkitemspace ITEM_ITEMFINDER, 1
+    checkitemspace ITEM_DOWSING_MACHINE, 1
     compare VAR_RESULT, FALSE
     goto_if_eq Aide_EventScript_NoRoomForItem
-    giveitem_msg Route11_EastEntrance_2F_Text_ReceivedItemfinderFromAide, ITEM_ITEMFINDER
+    giveitem_msg Route11_EastEntrance_2F_Text_ReceivedItemfinderFromAide, ITEM_DOWSING_MACHINE
     setflag FLAG_GOT_ITEMFINDER
     msgbox Route11_EastEntrance_2F_Text_ExplainItemfinder, MSGBOX_DEFAULT
     release
@@ -66,7 +66,7 @@ Route11_EastEntrance_2F_EventScript_Aide::
 
 Route11_EastEntrance_2F_EventScript_GetAideRequestInfo::
     buffernumberstring 0, REQUIRED_CAUGHT_MONS
-    bufferitemname 1, ITEM_ITEMFINDER
+    bufferitemname 1, ITEM_DOWSING_MACHINE
     return
 
 Route11_EastEntrance_2F_EventScript_AlreadyGotItemfinder::
@@ -115,7 +115,7 @@ Route11_EastEntrance_2F_Text_ReceivedItemfinderFromAide::
 Route11_EastEntrance_2F_Text_ExplainItemfinder::
     .string "There are items on the ground that\n"
     .string "may be hidden from view.\p"
-    .string "Use the Itemfinder to detect any\n"
+    .string "Use the Dowsing MCHN to detect any\n"
     .string "hidden items close to you.\p"
     .string "The machine is a bit limited.\n"
     .string "It can't pinpoint item locations.\p"

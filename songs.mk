@@ -1203,7 +1203,7 @@ $(MID_SUBDIR)/se_m_fire_punch.s: %.s: %.mid
 $(MID_SUBDIR)/se_m_scratch.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G128 -V110 -P4
 
-$(MID_SUBDIR)/se_m_vicegrip.s: %.s: %.mid
+$(MID_SUBDIR)/se_m_visegrip.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G128 -V110 -P4
 
 $(MID_SUBDIR)/se_m_razor_wind.s: %.s: %.mid

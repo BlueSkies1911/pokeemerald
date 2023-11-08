@@ -296,6 +296,31 @@
 #define ANIM_TAG_SLASH_2                    (ANIM_SPRITES_START + 286)
 #define ANIM_TAG_WHIP_HIT                   (ANIM_SPRITES_START + 287)
 #define ANIM_TAG_BLUE_RING_2                (ANIM_SPRITES_START + 288)
+//new particles
+#define ANIM_TAG_WHITE_STREAK               (ANIM_SPRITES_START + 289)
+#define ANIM_TAG_PURPLE_JAB                 (ANIM_SPRITES_START + 290)
+#define ANIM_TAG_TOXIC_SPIKES               (ANIM_SPRITES_START + 291)
+#define ANIM_TAG_ENERGY_BALL                (ANIM_SPRITES_START + 292)
+#define ANIM_TAG_SEED_BROWN                 (ANIM_SPRITES_START + 293)
+#define ANIM_TAG_FEINT                      (ANIM_SPRITES_START + 294)
+#define ANIM_TAG_TRUMP_CARD                 (ANIM_SPRITES_START + 295)
+#define ANIM_TAG_TRUMP_CARD_PARTICLES       (ANIM_SPRITES_START + 296)
+#define ANIM_TAG_ACUPRESSURE                (ANIM_SPRITES_START + 297)
+#define ANIM_TAG_WRING_OUT                  (ANIM_SPRITES_START + 298)
+#define ANIM_TAG_COLORED_ORBS               (ANIM_SPRITES_START + 299)
+#define ANIM_TAG_WORRY_SEED                 (ANIM_SPRITES_START + 300)
+#define ANIM_TAG_SMALL_CLOUD                (ANIM_SPRITES_START + 301)
+#define ANIM_TAG_DRAGON_PULSE               (ANIM_SPRITES_START + 302)
+#define ANIM_TAG_PSYCHO_CUT                 (ANIM_SPRITES_START + 303)
+#define ANIM_TAG_POWER_GEM                  (ANIM_SPRITES_START + 304)
+#define ANIM_TAG_STONE_EDGE                 (ANIM_SPRITES_START + 305)
+#define ANIM_TAG_STEALTH_ROCK               (ANIM_SPRITES_START + 306)
+#define ANIM_TAG_POISON_JAB                 (ANIM_SPRITES_START + 307)
+#define ANIM_TAG_GREEN_POISON_BUBBLE        (ANIM_SPRITES_START + 308)
+#define ANIM_TAG_FLASH_CANNON_BALL          (ANIM_SPRITES_START + 309)
+#define ANIM_TAG_QUICK_GUARD_HAND           (ANIM_SPRITES_START + 310)
+
+#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 311)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -352,6 +377,14 @@
 #define BG_SOLAR_BEAM_OPPONENT 24
 #define BG_SOLAR_BEAM_PLAYER 25
 #define BG_SOLAR_BEAM_CONTESTS 26
+#define BG_GIGA_IMPACT_OPPONENT 27
+#define BG_GIGA_IMPACT_PLAYER 28
+#define BG_GIGA_IMPACT_CONTEST 29
+#define BG_TRICK_ROOM 30
+#define BG_ROCK_WRECKER 31
+#define BG_FOCUS_BLAST 32
+#define BG_GUNK_SHOT 33
+#define BG_AURA_SPHERE 34
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_CASTFORM_CHANGE          0
@@ -363,7 +396,7 @@
 #define B_ANIM_TURN_TRAP                6
 #define B_ANIM_HELD_ITEM_EFFECT         7
 #define B_ANIM_SMOKEBALL_ESCAPE         8
-#define B_ANIM_FOCUS_BAND               9
+#define B_ANIM_HANGED_ON                9
 #define B_ANIM_RAIN_CONTINUES           10
 #define B_ANIM_SUN_CONTINUES            11
 #define B_ANIM_SANDSTORM_CONTINUES      12
@@ -377,11 +410,12 @@
 #define B_ANIM_FOCUS_PUNCH_SETUP        20
 #define B_ANIM_INGRAIN_HEAL             21
 #define B_ANIM_WISH_HEAL                22
-#define B_ANIM_MON_SCARED               23
-#define B_ANIM_GHOST_GET_OUT            24
-#define B_ANIM_SILPH_SCOPED             25
-#define B_ANIM_ROCK_THROW               26
-#define B_ANIM_SAFARI_REACTION          27
+#define B_ANIM_AQUA_RING_HEAL           23
+#define B_ANIM_MON_SCARED               24
+#define B_ANIM_GHOST_GET_OUT            25
+#define B_ANIM_SILPH_SCOPED             26
+#define B_ANIM_ROCK_THROW               27
+#define B_ANIM_SAFARI_REACTION          28
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
@@ -391,6 +425,7 @@
 #define B_ANIM_BALL_THROW_WITH_TRAINER  4
 #define B_ANIM_SUBSTITUTE_TO_MON        5
 #define B_ANIM_MON_TO_SUBSTITUTE        6
+#define B_ANIM_CRITICAL_CAPTURE_THROW   7
 
 // status animation table (gBattleAnims_StatusConditions)
 #define B_ANIM_STATUS_PSN               0
@@ -424,6 +459,11 @@
 #define ANIM_WEATHER_RAIN 2
 #define ANIM_WEATHER_SANDSTORM 3
 #define ANIM_WEATHER_HAIL 4
+
+// mon pal blend
+#define ANIM_PAL_BG             0x1
+#define ANIM_PAL_ATK            0x2
+#define ANIM_PAL_DEF            0x4
 
 // Flags given to various functions to indicate which palettes to consider.
 // Handled by UnpackSelectedBattlePalettes

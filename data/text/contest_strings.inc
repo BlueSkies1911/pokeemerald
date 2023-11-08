@@ -223,8 +223,8 @@ gText_SunnyDay::
 gText_Rest2::
 	.string "Rest$"
 
-gText_Vicegrip::
-	.string "Vicegrip$"
+gText_Visegrip::
+	.string "Visegrip$"
 
 gText_DefenseCurl::
 	.string "Defense Curl$"

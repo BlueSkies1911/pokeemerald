@@ -43,7 +43,7 @@ const u8 gCharizardPokedexText[] = _(
 const u8 gSquirtlePokedexText[] = _(
     "Its shell is not just for protection.\n"
     "Its rounded shape and the grooves on its\n"
-    "surface minimize resistance in water,\n"
+    "surface minimise resistance in water,\n"
     "enabling Squirtle to swim at high speeds.");
 
 const u8 gWartortlePokedexText[] = _(
@@ -730,7 +730,7 @@ const u8 gStarmiePokedexText[] = _(
     "reflections of stars that twinkled on\n"
     "gentle waves at night.");
 
-const u8 gMrmimePokedexText[] = _(
+const u8 gMrMimePokedexText[] = _(
     "A Mr. Mime is a master of pantomime. It can\n"
     "convince others that something unseeable\n"
     "actually exists. Once believed, the\n"
@@ -1145,7 +1145,7 @@ const u8 gAipomPokedexText[] = _(
     "become rather clumsy.");
 
 const u8 gSunkernPokedexText[] = _(
-    "Sunkern try to minimize movement to\n"
+    "Sunkern try to minimise movement to\n"
     "conserve the nutrients they have stored\n"
     "in their bodies for evolution. They will\n"
     "not eat, subsisting only on morning dew.");
@@ -1914,7 +1914,7 @@ const u8 gCarvanhaPokedexText[] = _(
 
 const u8 gSharpedoPokedexText[] = _(
     "The vicious and sly gangster of the sea.\n"
-    "Its skin is specially textured to minimize\n"
+    "Its skin is specially textured to minimise\n"
     "drag in water. Its speed tops out at over\n"
     "75 miles per hour.");
 

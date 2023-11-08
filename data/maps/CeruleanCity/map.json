@@ -89,7 +89,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SLOWBRO",
-      "x": 32,
+      "x": 31,
       "y": 29,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
@@ -102,7 +102,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_LASS",
-      "x": 33,
+      "x": 32,
       "y": 29,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
@@ -197,8 +197,8 @@
   ],
   "warp_events": [
     {
-      "x": 10,
-      "y": 11,
+      "x": 23,
+      "y": 28,
       "elevation": 0,
       "dest_map": "MAP_CERULEAN_CITY_HOUSE1",
       "dest_warp_id": "0"
@@ -253,13 +253,6 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 10,
-      "y": 8,
-      "elevation": 0,
-      "dest_map": "MAP_CERULEAN_CITY_HOUSE1",
-      "dest_warp_id": "1"
-    },
-    {
       "x": 31,
       "y": 8,
       "elevation": 0,
@@ -274,17 +267,17 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 23,
-      "y": 28,
+      "x": 14,
+      "y": 8,
       "elevation": 0,
-      "dest_map": "MAP_CERULEAN_CITY_HOUSE4",
+      "dest_map": "MAP_CERULEAN_CITY_BATTLE_TENT_LOBBY",
       "dest_warp_id": "0"
     },
     {
-      "x": 17,
-      "y": 11,
+      "x": 33,
+      "y": 28,
       "elevation": 0,
-      "dest_map": "MAP_CERULEAN_CITY_HOUSE5",
+      "dest_map": "MAP_CERULEAN_CITY_HOUSE4",
       "dest_warp_id": "0"
     }
   ],

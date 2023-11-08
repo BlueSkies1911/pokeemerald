@@ -29,8 +29,8 @@ gPokedexRating_Text_LessThan30::
 gPokedexRating_Text_LessThan40::
     .string "Good, it's apparent that you're\n"
     .string "trying hard!\p"
-    .string "I've given one of my Aides an\n"
-    .string "Itemfinder. Be sure to collect it!$"
+    .string "I've given one of my Aides a\n"
+    .string "Dowsing MCHN. Be sure to collect it!$"
 
 gPokedexRating_Text_LessThan50::
     .string "Your Pokédex is coming along quite\n"

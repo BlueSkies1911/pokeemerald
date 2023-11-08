@@ -178,7 +178,7 @@ TwoIsland_Items_ShopExpanded3::
     .2byte ITEM_SODA_POP
     .2byte ITEM_FRESH_WATER
     .2byte ITEM_MOOMOO_MILK
-    .2byte ITEM_LAVA_COOKIE
+    .2byte ITEM_PEWTER_CRUNCHIES
     .2byte ITEM_NONE
     release
     end

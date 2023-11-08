@@ -115,6 +115,45 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route23_EventScript_EarthBadgeGuard",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 14,
+      "y": 42,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_23_SITRUS_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 15,
+      "y": 42,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_23_RAWST",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 16,
+      "y": 42,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_23_SITRUS_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -316,32 +355,32 @@
       "x": 3,
       "y": 18,
       "elevation": 3,
-      "item": "ITEM_LUM_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE23_LUM_BERRY"
+      "item": "ITEM_FULL_HEAL",
+      "flag": "HIDDEN_ITEM_ROUTE23_FULL_HEAL"
     },
     {
       "type": "hidden_item",
       "x": 2,
       "y": 29,
       "elevation": 3,
-      "item": "ITEM_SITRUS_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE23_SITRUS_BERRY"
+      "item": "ITEM_HYPER_POTION",
+      "flag": "HIDDEN_ITEM_ROUTE23_HYPER_POTION"
     },
     {
       "type": "hidden_item",
       "x": 10,
       "y": 67,
       "elevation": 3,
-      "item": "ITEM_ASPEAR_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE23_ASPEAR_BERRY"
+      "item": "ITEM_ICE_HEAL",
+      "flag": "HIDDEN_ITEM_ROUTE23_ICE_HEAL"
     },
     {
       "type": "hidden_item",
       "x": 3,
       "y": 128,
       "elevation": 3,
-      "item": "ITEM_LEPPA_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE23_LEPPA_BERRY"
+      "item": "ITEM_MAX_REVIVE",
+      "flag": "HIDDEN_ITEM_ROUTE23_MAX_REVIVE"
     },
     {
       "type": "hidden_item",

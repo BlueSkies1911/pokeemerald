@@ -177,7 +177,7 @@ enum
 enum
 {
     PUZZLE_NONE,
-    PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6,
+    PUZZLE_TRICK_HOUSE_PUZZLE6,
 };
 
 // structure
@@ -607,7 +607,7 @@ static s32 GetCurrentMapRotatingGatePuzzleType(void)
     if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(TRICK_HOUSE_PUZZLE6) &&
         gSaveBlock1Ptr->location.mapNum == MAP_NUM(TRICK_HOUSE_PUZZLE6))
     {
-        return PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6;
+        return PUZZLE_TRICK_HOUSE_PUZZLE6;
     }
 
     return PUZZLE_NONE;
@@ -660,7 +660,7 @@ static void RotatingGate_LoadPuzzleConfig(void)
 
     switch (puzzleType)
     {
-    case PUZZLE_ROUTE110_TRICK_HOUSE_PUZZLE6:
+    case PUZZLE_TRICK_HOUSE_PUZZLE6:
         sRotatingGate_PuzzleConfig = sRotatingGate_TrickHousePuzzleConfig;
         sRotatingGate_PuzzleCount = ARRAY_COUNT(sRotatingGate_TrickHousePuzzleConfig);
         break;

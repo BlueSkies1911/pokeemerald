@@ -126,6 +126,10 @@ FuchsiaCity_EventScript_OmanyteSign::
     releaseall
     end
 
+FuchsiaCity_EventScript_BattleTentSign::
+	msgbox FuchsiaCity_Text_BattleTentSign, MSGBOX_SIGN
+	end
+
 FuchsiaCity_Text_DidYouTrySafariGame::
     .string "Did you try the Safari Game?\p"
     .string "There are some rare Pokémon that\n"
@@ -209,3 +213,7 @@ FuchsiaCity_Text_KabutoSign::
     .string "Name: Kabuto\n"
     .string "An extremely rare Pokémon that was\l"
     .string "regenerated from a fossil.$"
+
+FuchsiaCity_Text_BattleTentSign:
+	.string "Battle Tent Fuchsia Site\n"
+	.string "“Feast Your Eyes on Battles!”$"

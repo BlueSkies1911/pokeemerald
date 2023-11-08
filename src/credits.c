@@ -343,20 +343,25 @@ static const u16 sCreditsMonCircle_Pal[] = INCBIN_U16("graphics/credits/white_ci
 static const u32 sCreditsMonCircle_Tiles[] = INCBIN_U32("graphics/credits/white_circle.8bpp.lz");
 static const u32 sCreditsMonCircle_Tilemap[] = INCBIN_U32("graphics/credits/white_circle.bin.lz");
 
+static const u16 sCharizard_Pal[] = INCBIN_U16("graphics/credits/charizard.gbapal");
+static const u32 sCharizard_Tiles[] = INCBIN_U32("graphics/credits/charizard.4bpp.lz");
 static const u32 sCharizard1_Tiles[] = INCBIN_U32("graphics/credits/charizard_1.4bpp.lz");
 static const u32 sCharizard2_Tiles[] = INCBIN_U32("graphics/credits/charizard_2.4bpp.lz");
 
-static const u32 sVenusaurUnused_Tiles[] = INCBIN_U32("graphics/credits/venusaur_unused.4bpp.lz");
+static const u16 sVenusaur_Pal[] = INCBIN_U16("graphics/credits/venusaur.gbapal");
+static const u32 sVenusaur_Tiles[] = INCBIN_U32("graphics/credits/venusaur.4bpp.lz");
 static const u32 sVenusaur1_Tiles[] = INCBIN_U32("graphics/credits/venusaur_1.4bpp.lz");
 static const u32 sVenusaur2_Tiles[] = INCBIN_U32("graphics/credits/venusaur_2.4bpp.lz");
 
+static const u16 sBlastoise_Pal[] = INCBIN_U16("graphics/credits/blastoise.gbapal");
+static const u32 sBlastoise_Tiles[] = INCBIN_U32("graphics/credits/blastoise.4bpp.lz");
 static const u32 sBlastoise1_Tiles[] = INCBIN_U32("graphics/credits/blastoise_1.4bpp.lz");
 static const u32 sBlastoise2_Tiles[] = INCBIN_U32("graphics/credits/blastoise_2.4bpp.lz");
 
+static const u16 sPikachu_Pal[] = INCBIN_U16("graphics/credits/pikachu.gbapal");
+static const u32 sPikachu_Tiles[] = INCBIN_U32("graphics/credits/pikachu.4bpp.lz");
 static const u32 sPikachu1_Tiles[] = INCBIN_U32("graphics/credits/pikachu_1.4bpp.lz");
 static const u32 sPikachu2_Tiles[] = INCBIN_U32("graphics/credits/pikachu_2.4bpp.lz");
-
-static const u32 sUnused = 0xF0;
 
 static const u16 sTheEnd_Pal[] = INCBIN_U16("graphics/credits/the_end.gbapal");
 static const u8 sTheEnd_Tiles[] = INCBIN_U8("graphics/credits/the_end.4bpp.lz");
@@ -450,7 +455,6 @@ static const struct CreditsScrcmd sCreditsScript[] = {
     CREDITS_WAITBUTTON(600)
 };
 
-static const ALIGNED(4) u8 sTextColor_Unused[3] = {0, 1, 2};
 static const ALIGNED(4) u8 sTextColor_Header[3] = {0, 5, 2};
 static const ALIGNED(4) u8 sTextColor_Regular[3] = {0, 1, 2};
 
@@ -1051,28 +1055,32 @@ static void LoadCreditsMonPic(u8 whichMon)
     case CREDITSMON_CHARIZARD:
         InitWindows(sWindowTemplates_Charizard);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
-        LoadMonPicInWindow(SPECIES_CHARIZARD, SHINY_ODDS, 0, TRUE, 10, 0);
+        LoadPalette(sCharizard_Pal, 10 * 0x10, 0x20);
+        CopyToWindowPixelBuffer(0, (const void *)sCharizard_Tiles, 0, 0);
         CopyToWindowPixelBuffer(1, (const void *)sCharizard1_Tiles, 0, 0);
         CopyToWindowPixelBuffer(2, (const void *)sCharizard2_Tiles, 0, 0);
         break;
     case CREDITSMON_VENUSAUR:
         InitWindows(sWindowTemplates_Venusaur);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
-        LoadMonPicInWindow(SPECIES_VENUSAUR, SHINY_ODDS, 0, TRUE, 10, 0);
+        LoadPalette(sVenusaur_Pal, 10 * 0x10, 0x20);
+        CopyToWindowPixelBuffer(0, (const void *)sVenusaur_Tiles, 0, 0);
         CopyToWindowPixelBuffer(1, (const void *)sVenusaur1_Tiles, 0, 0);
         CopyToWindowPixelBuffer(2, (const void *)sVenusaur2_Tiles, 0, 0);
         break;
     case CREDITSMON_BLASTOISE:
         InitWindows(sWindowTemplates_Blastoise);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
-        LoadMonPicInWindow(SPECIES_BLASTOISE, SHINY_ODDS, 0, TRUE, 10, 0);
+        LoadPalette(sBlastoise_Pal, 10 * 0x10, 0x20);
+        CopyToWindowPixelBuffer(0, (const void *)sBlastoise_Tiles, 0, 0);
         CopyToWindowPixelBuffer(1, (const void *)sBlastoise1_Tiles, 0, 0);
         CopyToWindowPixelBuffer(2, (const void *)sBlastoise2_Tiles, 0, 0);
         break;
     case CREDITSMON_PIKACHU:
         InitWindows(sWindowTemplates_Pikachu);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
-        LoadMonPicInWindow(SPECIES_PIKACHU, SHINY_ODDS, 0, TRUE, 10, 0);
+        LoadPalette(sPikachu_Pal, 10 * 0x10, 0x20);
+        CopyToWindowPixelBuffer(0, (const void *)sPikachu_Tiles, 0, 0);
         CopyToWindowPixelBuffer(1, (const void *)sPikachu1_Tiles, 0, 0);
         CopyToWindowPixelBuffer(2, (const void *)sPikachu2_Tiles, 0, 0);
         break;

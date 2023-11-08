@@ -1,77 +1,77 @@
 TrickHousePuzzle1_MapScripts::
-	map_script MAP_SCRIPT_ON_LOAD, Route110_TrickHousePuzzle1_OnLoad
+	map_script MAP_SCRIPT_ON_LOAD, TrickHousePuzzle1_OnLoad
 	.byte 0
 
-Route110_TrickHousePuzzle1_OnLoad:
-	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_1_STATE, 2, Route110_TrickHousePuzzle1_EventScript_OpenDoor
+TrickHousePuzzle1_OnLoad:
+	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_1_STATE, 2, TrickHousePuzzle1_EventScript_OpenDoor
 	end
 
-Route110_TrickHousePuzzle1_EventScript_OpenDoor::
+TrickHousePuzzle1_EventScript_OpenDoor::
 	setmetatile 13, 1, METATILE_TrickHousePuzzle_Stairs_Down, FALSE
 	end
 
-Route110_TrickHousePuzzle1_EventScript_Scroll::
+TrickHousePuzzle1_EventScript_Scroll::
 	lockall
-	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_1_STATE, 0, Route110_TrickHousePuzzle1_EventScript_FoundScroll
-	goto Route110_TrickHousePuzzle_EventScript_ReadScrollAgain
+	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_1_STATE, 0, TrickHousePuzzle1_EventScript_FoundScroll
+	goto TrickHousePuzzle_EventScript_ReadScrollAgain
 	end
 
-Route110_TrickHousePuzzle1_EventScript_FoundScroll::
+TrickHousePuzzle1_EventScript_FoundScroll::
 	setvar VAR_TRICK_HOUSE_PUZZLE_1_STATE, 1
-	goto Route110_TrickHousePuzzle_EventScript_FoundScroll
+	goto TrickHousePuzzle_EventScript_FoundScroll
 	end
 
-Route110_TrickHousePuzzle1_EventScript_Sally::
-	trainerbattle_single TRAINER_LASS_KRISE, Route110_TrickHousePuzzle1_Text_SallyIntro, Route110_TrickHousePuzzle1_Text_SallyDefeat
-	msgbox Route110_TrickHousePuzzle1_Text_SallyPostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle1_EventScript_Krise::
+	trainerbattle_single TRAINER_LASS_KRISE, TrickHousePuzzle1_Text_KriseIntro, TrickHousePuzzle1_Text_KriseDefeat
+	msgbox TrickHousePuzzle1_Text_KrisePostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle1_EventScript_Eddie::
-	trainerbattle_single TRAINER_YOUNGSTER_ALLEN, Route110_TrickHousePuzzle1_Text_EddieIntro, Route110_TrickHousePuzzle1_Text_EddieDefeat
-	msgbox Route110_TrickHousePuzzle1_Text_EddiePostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle1_EventScript_Allen::
+	trainerbattle_single TRAINER_YOUNGSTER_ALLEN, TrickHousePuzzle1_Text_AllenIntro, TrickHousePuzzle1_Text_AllenDefeat
+	msgbox TrickHousePuzzle1_Text_AllenPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle1_EventScript_Robin::
-	trainerbattle_single TRAINER_LASS_TIANA, Route110_TrickHousePuzzle1_Text_RobinIntro, Route110_TrickHousePuzzle1_Text_RobinDefeat
-	msgbox Route110_TrickHousePuzzle1_Text_RobinPostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle1_EventScript_Tiana::
+	trainerbattle_single TRAINER_LASS_TIANA, TrickHousePuzzle1_Text_TianaIntro, TrickHousePuzzle1_Text_TianaDefeat
+	msgbox TrickHousePuzzle1_Text_TianaPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle1_Text_WroteSecretCodeLockOpened::
+TrickHousePuzzle1_Text_WroteSecretCodeLockOpened::
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
 	.string "“Trick Master is fabulous.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
-Route110_TrickHousePuzzle1_Text_SallyIntro:
+TrickHousePuzzle1_Text_KriseIntro:
 	.string "I'll hack and slash my way to victory\n"
 	.string "with the Cut we just learned!$"
 
-Route110_TrickHousePuzzle1_Text_SallyDefeat:
+TrickHousePuzzle1_Text_KriseDefeat:
 	.string "Why are you so serious?$"
 
-Route110_TrickHousePuzzle1_Text_SallyPostBattle:
+TrickHousePuzzle1_Text_KrisePostBattle:
 	.string "I never get tired of hacking\n"
 	.string "and slashing!$"
 
-Route110_TrickHousePuzzle1_Text_EddieIntro:
+TrickHousePuzzle1_Text_AllenIntro:
 	.string "I wandered into this weird house\n"
 	.string "by accident…$"
 
-Route110_TrickHousePuzzle1_Text_EddieDefeat:
+TrickHousePuzzle1_Text_AllenDefeat:
 	.string "And now I've lost…$"
 
-Route110_TrickHousePuzzle1_Text_EddiePostBattle:
+TrickHousePuzzle1_Text_AllenPostBattle:
 	.string "I lost my way, I lost a battle, and I'm\n"
 	.string "now even more lost… I can't get out…$"
 
-Route110_TrickHousePuzzle1_Text_RobinIntro:
+TrickHousePuzzle1_Text_TianaIntro:
 	.string "Just who is the Trick Master?$"
 
-Route110_TrickHousePuzzle1_Text_RobinDefeat:
+TrickHousePuzzle1_Text_TianaDefeat:
 	.string "I lost while I was lost in thought!$"
 
-Route110_TrickHousePuzzle1_Text_RobinPostBattle:
+TrickHousePuzzle1_Text_TianaPostBattle:
 	.string "You're strong!\n"
 	.string "Just who are you?$"
 

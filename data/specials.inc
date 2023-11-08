@@ -243,9 +243,9 @@ gSpecials::
 	def_special CallBattlePikeFunction
 	def_special CallBattlePyramidFunction
 	def_special StopMapMusic
-	def_special CallVerdanturfTentFunction
-	def_special CallFallarborTentFunction
-	def_special CallSlateportTentFunction
+	def_special CallFuchsiaTentFunction
+	def_special CallSaffronTentFunction
+	def_special CallCeruleanTentFunction
 	def_special ChoosePartyForBattleFrontier
 	def_special ValidateEReaderTrainer
 	def_special GetBattleTowerSinglesStreak

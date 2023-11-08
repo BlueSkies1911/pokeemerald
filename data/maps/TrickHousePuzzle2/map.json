@@ -24,7 +24,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Ted",
+      "script": "TrickHousePuzzle2_EventScript_Ted",
       "flag": "0"
     },
     {
@@ -37,7 +37,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Paul",
+      "script": "TrickHousePuzzle2_EventScript_Paul",
       "flag": "0"
     },
     {
@@ -50,7 +50,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Georgia",
+      "script": "TrickHousePuzzle2_EventScript_Georgia",
       "flag": "0"
     },
     {
@@ -63,7 +63,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_ItemWaveMail",
+      "script": "TrickHousePuzzle2_EventScript_ItemWaveMail",
       "flag": "FLAG_ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL"
     },
     {
@@ -76,7 +76,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_ItemHarborMail",
+      "script": "TrickHousePuzzle2_EventScript_ItemHarborMail",
       "flag": "FLAG_ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL"
     }
   ],
@@ -111,7 +111,7 @@
       "elevation": 3,
       "var": "VAR_TEMP_1",
       "var_value": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Button1"
+      "script": "TrickHousePuzzle2_EventScript_Button1"
     },
     {
       "type": "trigger",
@@ -120,7 +120,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_2",
       "var_value": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Button2"
+      "script": "TrickHousePuzzle2_EventScript_Button2"
     },
     {
       "type": "trigger",
@@ -129,7 +129,7 @@
       "elevation": 3,
       "var": "VAR_TEMP_3",
       "var_value": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Button3"
+      "script": "TrickHousePuzzle2_EventScript_Button3"
     },
     {
       "type": "trigger",
@@ -138,7 +138,7 @@
       "elevation": 3,
       "var": "VAR_TEMP_4",
       "var_value": "0",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Button4"
+      "script": "TrickHousePuzzle2_EventScript_Button4"
     }
   ],
   "bg_events": [
@@ -148,7 +148,7 @@
       "y": 14,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "Route110_TrickHousePuzzle2_EventScript_Scroll"
+      "script": "TrickHousePuzzle2_EventScript_Scroll"
     }
   ]
 }

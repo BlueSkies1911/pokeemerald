@@ -555,32 +555,6 @@ Movement_JumpInPlaceRight:
 	jump_in_place_right
 	step_end
 
-SlateportCity_PokemonFanClub_EventScript_SwaggerTutor::
-	lock
-	faceplayer
-	goto_if_set FLAG_MOVE_TUTOR_TAUGHT_SWAGGER, MoveTutor_EventScript_SwaggerTaught
-	msgbox MoveTutor_Text_SwaggerTeach, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, NO, MoveTutor_EventScript_SwaggerDeclined
-	call MoveTutor_EventScript_CanOnlyBeLearnedOnce
-	goto_if_eq VAR_RESULT, NO, MoveTutor_EventScript_SwaggerDeclined
-	msgbox MoveTutor_Text_SwaggerWhichMon, MSGBOX_DEFAULT
-	setvar VAR_0x8005, TUTOR_MOVE_SWAGGER
-	call MoveTutor_EventScript_OpenPartyMenu
-	goto_if_eq VAR_RESULT, 0, MoveTutor_EventScript_SwaggerDeclined
-	setflag FLAG_MOVE_TUTOR_TAUGHT_SWAGGER
-	goto MoveTutor_EventScript_SwaggerTaught
-	end
-
-MoveTutor_EventScript_SwaggerDeclined::
-	msgbox MoveTutor_Text_SwaggerDeclined, MSGBOX_DEFAULT
-	release
-	end
-
-MoveTutor_EventScript_SwaggerTaught::
-	msgbox MoveTutor_Text_SwaggerTaught, MSGBOX_DEFAULT
-	release
-	end
-
 MauvilleCity_EventScript_RolloutTutor::
 	lock
 	faceplayer

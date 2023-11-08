@@ -145,6 +145,14 @@ Route8_EventScript_UndergroundPathSign::
     msgbox Route8_Text_UndergroundPathSign, MSGBOX_SIGN
     end
 
+Route8_EventScript_TrickHouseSign::
+	msgbox Route8_Text_TrickHouseSign, MSGBOX_SIGN
+	end
+
 Route8_Text_UndergroundPathSign::
     .string "Underground Path\n"
     .string "Celadon City - Lavender Town$"
+
+Route8_Text_TrickHouseSign:
+	.string "“Four steps {LEFT_ARROW} and four steps {UP_ARROW}\n"
+	.string "to reach the wondrous Trick House.”$"

@@ -611,7 +611,7 @@ static const struct TrainerTowerFloor sFloors_Normal[] =
                     {
                         .species = SPECIES_PINSIR,
                         .heldItem = ITEM_QUICK_CLAW,
-                        .moves = {MOVE_GUILLOTINE, MOVE_BRICK_BREAK, MOVE_SWAGGER, MOVE_FAINT_ATTACK},
+                        .moves = {MOVE_GUILLOTINE, MOVE_BRICK_BREAK, MOVE_SWAGGER, MOVE_FEINT_ATTACK},
                         .hpEV = 200,
                         .defenseEV = 155,
                         .spDefenseEV = 155,
@@ -1642,7 +1642,7 @@ static const struct TrainerTowerFloor sFloors_Variety[] = {
                                         {
                                             .species = SPECIES_SABLEYE,
                                             .heldItem = ITEM_SILK_SCARF,
-                                            .moves = {MOVE_ASTONISH, MOVE_FAINT_ATTACK, MOVE_DETECT, MOVE_CONFUSE_RAY},
+                                            .moves = {MOVE_ASTONISH, MOVE_FEINT_ATTACK, MOVE_DETECT, MOVE_CONFUSE_RAY},
                                             .hpEV = 255,
                                             .speedEV = 255,
                                             .otId = TRAINER_TOWER_OTID,
@@ -2768,7 +2768,7 @@ static const struct TrainerTowerFloor sFloors_Unique[] = {
                                     [1] =
                                         {
                                             .species = SPECIES_GOLDUCK,
-                                            .heldItem = ITEM_LAX_INCENSE,
+                                            .heldItem = ITEM_FULL_INCENSE,
                                             .moves = {MOVE_SURF, MOVE_PSYBEAM, MOVE_BRICK_BREAK, MOVE_RAIN_DANCE},
                                             .speedEV = 255,
                                             .spAttackEV = 255,
@@ -4237,7 +4237,7 @@ static const struct TrainerTowerFloor sFloors_Expert[] = {
                                         {
                                             .species = SPECIES_BANETTE,
                                             .heldItem = ITEM_FOCUS_BAND,
-                                            .moves = {MOVE_SHADOW_BALL, MOVE_FAINT_ATTACK, MOVE_ATTRACT, MOVE_WILL_O_WISP},
+                                            .moves = {MOVE_SHADOW_BALL, MOVE_FEINT_ATTACK, MOVE_ATTRACT, MOVE_WILL_O_WISP},
                                             .hpEV = 252,
                                             .defenseEV = 252,
                                             .spDefenseEV = 6,

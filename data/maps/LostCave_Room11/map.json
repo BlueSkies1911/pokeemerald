@@ -24,8 +24,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "LostCave_Room11_EventScript_ItemLaxIncense",
-      "flag": "FLAG_HIDE_LOST_CAVE_ROOM11_LAX_INCENSE"
+      "script": "LostCave_Room11_EventScript_ItemFullIncense",
+      "flag": "FLAG_HIDE_LOST_CAVE_ROOM11_FULL_INCENSE"
     }
   ],
   "warp_events": [

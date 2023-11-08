@@ -1,0 +1,242 @@
+.set LOCALID_PLAYER, 1
+.set LOCALID_ATTENDANT, 2
+.set LOCALID_OPPONENT, 3
+
+SaffronCity_BattleTentBattleRoom_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SaffronCity_BattleTentBattleRoom_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, SaffronCity_BattleTentBattleRoom_OnFrame
+	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, SaffronCity_BattleTentBattleRoom_OnWarp
+	.byte 0
+
+	@ On this map the player (OBJ_EVENT_ID_PLAYER) is hidden
+	@ The player is represented instead by object event 1, which has the gfx id VAR_OBJ_GFX_ID_1
+	@ The opponent is represented by object event 3, which has the gfx id VAR_OBJ_GFX_ID_0
+
+SaffronCity_BattleTentBattleRoom_OnTransition:
+	call SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfx
+	end
+
+SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfx::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfxMale
+	goto_if_eq VAR_RESULT, FEMALE, SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfxFemale
+	return
+
+SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfxMale::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_RED_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RED_NORMAL
+	return
+
+SaffronCity_BattleTentBattleRoom_EventScript_SetPlayerGfxFemale::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_GREEN_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_GREEN_NORMAL
+	return
+
+SaffronCity_BattleTentBattleRoom_OnFrame:
+	map_script_2 VAR_TEMP_0, 0, SaffronCity_BattleTentBattleRoom_EventScript_EnterRoom
+	.2byte 0
+
+SaffronCity_BattleTentBattleRoom_EventScript_EnterRoom::
+	lockall
+	showobjectat LOCALID_PLAYER, MAP_SAFFRON_CITY_BATTLE_TENT_BATTLE_ROOM
+	applymovement LOCALID_PLAYER, SaffronCity_BattleTentBattleRoom_Movement_PlayerEnter
+	waitmovement 0
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	goto_if_ne VAR_RESULT, 0, SaffronCity_BattleTentBattleRoom_EventScript_ResumeChallenge
+SaffronCity_BattleTentBattleRoom_EventScript_NextOpponentEnter::
+	tower_setopponent
+	addobject LOCALID_OPPONENT
+	applymovement LOCALID_OPPONENT, SaffronCity_BattleTentBattleRoom_Movement_OpponentEnter
+	waitmovement 0
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantJump
+	playse SE_M_BELLY_DRUM
+	waitse
+	waitmovement 0
+	msgbox BattleFrontier_BattleArenaBattleRoom_Text_SetKOTourneyBegin, MSGBOX_DEFAULT
+	battletent_getopponentintro
+	msgbox gStringVar4, MSGBOX_DEFAULT
+	waitmessage
+	call BattleFrontier_BattleArenaBattleRoom_EventScript_DoArenaBattle
+	switch VAR_RESULT
+	case 1, SaffronCity_BattleTentBattleRoom_EventScript_DefeatedOpponent
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantJump
+	playse SE_M_SNORE
+	waitse
+	waitmovement 0
+	saffrontent_getopponentname
+	msgbox BattleFrontier_BattleArenaBattleRoom_Text_WinnerIsOpponent, MSGBOX_DEFAULT
+SaffronCity_BattleTentBattleRoom_EventScript_WarpToLobbyLost::
+	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_LOST
+	special LoadPlayerParty
+	warp MAP_SAFFRON_CITY_BATTLE_TENT_LOBBY, 6, 6
+	waitstate
+
+SaffronCity_BattleTentBattleRoom_EventScript_DefeatedOpponent::
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantJump
+	playse SE_BANG
+	waitse
+	waitmovement 0
+	msgbox BattleFrontier_BattleArenaBattleRoom_Text_WinnerIsPlayer, MSGBOX_DEFAULT
+	closemessage
+SaffronCity_BattleTentBattleRoom_EventScript_IncrementBattleNum::
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	addvar VAR_RESULT, 1
+	frontier_set FRONTIER_DATA_BATTLE_NUM, VAR_RESULT
+	switch VAR_RESULT
+	case 3, SaffronCity_BattleTentBattleRoom_EventScript_WarpToLobbyWon
+	applymovement LOCALID_OPPONENT, SaffronCity_BattleTentBattleRoom_Movement_OpponentExit
+	waitmovement 0
+	removeobject LOCALID_OPPONENT
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantApproachPlayer
+	waitmovement 0
+	applymovement LOCALID_PLAYER, SaffronCity_BattleTentBattleRoom_Movement_PlayerFaceAttendant
+	waitmovement 0
+	msgbox BattleFrontier_BattleArenaBattleRoom_Text_MonsWillBeRestored, MSGBOX_DEFAULT
+	special LoadPlayerParty
+	special SavePlayerParty
+	frontier_setpartyorder FRONTIER_PARTY_SIZE
+	playfanfare MUS_RG_HEAL
+	waitfanfare
+	special HealPlayerParty
+SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge::
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	call_if_eq VAR_RESULT, 1, SaffronCity_BattleTentBattleRoom_EventScript_ReadyFor2ndOpponent
+	call_if_eq VAR_RESULT, 2, SaffronCity_BattleTentBattleRoom_EventScript_ReadyFor3rdOpponent
+	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, TRUE
+	switch VAR_RESULT
+	case 0, SaffronCity_BattleTentBattleRoom_EventScript_ContinueChallenge
+	case 1, SaffronCity_BattleTentBattleRoom_EventScript_AskPauseChallenge
+	case 2, SaffronCity_BattleTentBattleRoom_EventScript_AskRetireChallenge
+
+SaffronCity_BattleTentBattleRoom_EventScript_AskPauseChallenge::
+	msgbox BattleFrontier_BattleArenaBattleRoom_Text_SaveAndShutDown, MSGBOX_YESNO
+	switch VAR_RESULT
+	case NO, SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+	case YES, SaffronCity_BattleTentBattleRoom_EventScript_PauseChallenge
+	case MULTI_B_PRESSED, SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+
+SaffronCity_BattleTentBattleRoom_EventScript_AskRetireChallenge::
+	message BattleFrontier_BattleArenaBattleRoom_Text_RetireFromChallenge
+	waitmessage
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
+	switch VAR_RESULT
+	case 1, SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+	case 0, SaffronCity_BattleTentBattleRoom_EventScript_WarpToLobbyLost
+	case MULTI_B_PRESSED, SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+
+SaffronCity_BattleTentBattleRoom_EventScript_ContinueChallenge::
+	closemessage
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantReturnToPos
+	waitmovement 0
+	applymovement LOCALID_PLAYER, SaffronCity_BattleTentBattleRoom_Movement_PlayerFaceBattle
+	waitmovement 0
+	goto SaffronCity_BattleTentBattleRoom_EventScript_NextOpponentEnter
+	waitstate
+
+SaffronCity_BattleTentBattleRoom_EventScript_WarpToLobbyWon::
+	delay 60
+	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_WON
+	special LoadPlayerParty
+	warp MAP_SAFFRON_CITY_BATTLE_TENT_LOBBY, 6, 6
+	waitstate
+
+@ Unreachable code block? The flow into the next block also doesnt make sense
+	arena_get ARENA_DATA_WIN_STREAK
+	goto_if_eq VAR_RESULT, MAX_STREAK, SaffronCity_BattleTentBattleRoom_EventScript_IncrementBattleNum
+	addvar VAR_RESULT, 1
+	arena_set ARENA_DATA_WIN_STREAK, VAR_RESULT
+@ See above
+
+SaffronCity_BattleTentBattleRoom_EventScript_ReadyFor2ndOpponent::
+	message BattleFrontier_BattleArenaBattleRoom_Text_ReadyFor2ndOpponent
+	waitmessage
+	return
+
+SaffronCity_BattleTentBattleRoom_EventScript_ReadyFor3rdOpponent::
+	message BattleFrontier_BattleArenaBattleRoom_Text_ReadyFor3rdOpponent
+	waitmessage
+	return
+
+SaffronCity_BattleTentBattleRoom_EventScript_PauseChallenge::
+	message BattleFrontier_BattleArenaBattleRoom_Text_SavingPleaseWait
+	waitmessage
+	saffrontent_save CHALLENGE_STATUS_PAUSED
+	playse SE_SAVE
+	waitse
+	fadescreen FADE_TO_BLACK
+	frontier_reset
+	end
+
+SaffronCity_BattleTentBattleRoom_EventScript_ResumeChallenge::
+	applymovement LOCALID_ATTENDANT, SaffronCity_BattleTentBattleRoom_Movement_AttendantApproachPlayer
+	waitmovement 0
+	applymovement LOCALID_PLAYER, SaffronCity_BattleTentBattleRoom_Movement_PlayerFaceAttendant
+	waitmovement 0
+	goto SaffronCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+	end
+
+SaffronCity_BattleTentBattleRoom_Movement_PlayerEnter:
+	walk_up
+	walk_up
+	walk_up
+	walk_in_place_faster_right
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_PlayerFaceBattle:
+	walk_in_place_faster_right
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_PlayerFaceAttendant:
+	walk_in_place_faster_left
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_OpponentEnter:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_in_place_faster_left
+	step_end
+
+@ Unused
+SaffronCity_BattleTentBattleRoom_Movement_OpponentStepForward:
+	walk_left
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_OpponentExit:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_AttendantJump:
+	disable_jump_landing_ground_effect
+	jump_in_place_down
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_AttendantApproachPlayer:
+	walk_down
+	walk_down
+	walk_down
+	walk_in_place_faster_right
+	step_end
+
+SaffronCity_BattleTentBattleRoom_Movement_AttendantReturnToPos:
+	walk_up
+	walk_up
+	walk_up
+	walk_in_place_faster_down
+	step_end
+
+SaffronCity_BattleTentBattleRoom_OnWarp:
+	map_script_2 VAR_TEMP_1, 0, SaffronCity_BattleTentBattleRoom_EventScript_SetUpObjects
+	.2byte 0
+
+SaffronCity_BattleTentBattleRoom_EventScript_SetUpObjects::
+	hideobjectat OBJ_EVENT_ID_PLAYER, MAP_SAFFRON_CITY_BATTLE_TENT_BATTLE_ROOM
+	hideobjectat LOCALID_PLAYER, MAP_SAFFRON_CITY_BATTLE_TENT_BATTLE_ROOM
+	removeobject LOCALID_OPPONENT
+	setvar VAR_TEMP_1, 1
+	end
+

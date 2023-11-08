@@ -203,12 +203,30 @@
 #define EV_ITEM_RAISE_LIMIT 100
 
 // Battle move flags
-#define FLAG_MAKES_CONTACT          (1 << 0)
-#define FLAG_PROTECT_AFFECTED       (1 << 1)
-#define FLAG_MAGIC_COAT_AFFECTED    (1 << 2)
-#define FLAG_SNATCH_AFFECTED        (1 << 3)
-#define FLAG_MIRROR_MOVE_AFFECTED   (1 << 4)
-#define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
+#define FLAG_MAKES_CONTACT                        (1 << 0)
+#define FLAG_PROTECT_AFFECTED                     (1 << 1)
+#define FLAG_MAGIC_COAT_AFFECTED                  (1 << 2)
+#define FLAG_SNATCH_AFFECTED                      (1 << 3)
+#define FLAG_MIRROR_MOVE_AFFECTED                 (1 << 4)
+#define FLAG_KINGS_ROCK_AFFECTED                  (1 << 5)
+#define FLAG_HIGH_CRIT                            (1 << 6)
+#define FLAG_RECKLESS_BOOST                       (1 << 7)
+#define FLAG_IRON_FIST_BOOST                      (1 << 8)
+#define FLAG_DMG_MINIMISE                         (1 << 9)
+#define FLAG_DMG_UNDERGROUND                      (1 << 10)
+#define FLAG_DMG_UNDERWATER                       (1 << 11)
+#define FLAG_SOUND                                (1 << 12)
+#define FLAG_PROTECTION_MOVE                      (1 << 13)
+#define FLAG_POWDER                               (1 << 14)
+#define FLAG_DMG_2X_IN_AIR                        (1 << 15) // If target is in the air, can hit and deal double damage.
+#define FLAG_DMG_IN_AIR                           (1 << 16) // If target is in the air, can hit.
+#define FLAG_THAW_USER                            (1 << 17)
+#define FLAG_TWO_STRIKES                          (1 << 18) // A move with this flag will strike twice, and may apply its effect on each hit
+
+// Split defines.
+#define SPLIT_PHYSICAL  0x0
+#define SPLIT_SPECIAL   0x1
+#define SPLIT_STATUS    0x2
 
 // Growth rates
 #define GROWTH_MEDIUM_FAST  0
@@ -266,5 +284,9 @@
 #define BATTLE_ALIVE_DEF_SIDE       2
 
 #define SKIP_FRONT_ANIM (1 << 7)
+
+#define NUM_ABILITY_SLOTS (NUM_NORMAL_ABILITY_SLOTS + NUM_HIDDEN_ABILITY_SLOTS)
+#define NUM_NORMAL_ABILITY_SLOTS 2
+#define NUM_HIDDEN_ABILITY_SLOTS 1
 
 #endif // GUARD_CONSTANTS_POKEMON_H

@@ -102,6 +102,10 @@ CeladonCity_EventScript_GameCornerSign::
     msgbox CeladonCity_Text_GameCornerSign, MSGBOX_SIGN
     end
 
+CeladonCity_EventScript_ContestHallSign::
+	msgbox CeladonCity_Text_ContestHallSign, MSGBOX_SIGN
+	end
+
 CeladonCity_Text_GotMyKoffingInCinnabar::
     .string "I got my Koffing in Cinnabar.\p"
     .string "It's usually nice, but it breathes\n"
@@ -194,3 +198,7 @@ CeladonCity_Text_PrizeExchangeSign::
 CeladonCity_Text_GameCornerSign::
     .string "Rocket Game Corner\n"
     .string "The playground for grown-ups!$"
+
+CeladonCity_Text_ContestHallSign:
+	.string "Pokémon Contest Hall\n"
+	.string "“The gathering place for Trainers!”$"

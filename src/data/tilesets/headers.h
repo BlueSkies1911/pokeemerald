@@ -505,6 +505,17 @@ const struct Tileset gTileset_PalletTown =
     .callback = NULL,
 };
 
+const struct Tileset gTileset_PrettyPetalFlower =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_PrettyPetalFlower,
+    .palettes = gTilesetPalettes_PrettyPetalFlower,
+    .metatiles = gMetatiles_PrettyPetalFlower,
+    .metatileAttributes = gMetatileAttributes_PrettyPetalFlower,
+    .callback = NULL,
+};
+
 const struct Tileset gTileset_PewterCity =
 {
     .isCompressed = TRUE,

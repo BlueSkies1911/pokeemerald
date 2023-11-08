@@ -1,4 +1,4 @@
-@ Note: local IDs shared with scripts.inc for LilycoveCity_ContestLobby
+@ Note: local IDs shared with scripts.inc for CeladonCity_ContestLobby
 .set LOCALID_MAN, 3
 .set LOCALID_BOY, 9
 .set LOCALID_TWIN, 10
@@ -244,7 +244,7 @@ BerryBlender_Text_DontHaveAnyBerriesNoneToSpare:
 
 BerryBlender_EventScript_BerryBlender1::
 	lockall
-	goto_if_unset FLAG_HIDE_LILYCOVE_CONTEST_HALL_BLEND_MASTER, BerryBlender_EventScript_BlendMasterPresent
+	goto_if_unset FLAG_HIDE_CELADON_CONTEST_HALL_BLEND_MASTER, BerryBlender_EventScript_BlendMasterPresent
 	setvar NUM_OPPONENTS, 1
 	applymovement LOCALID_EXPERT_M, BerryBlender_Movement_BlendLeaderWalkInPlace
 	waitmovement 0
@@ -669,7 +669,7 @@ BerryBlender_EventScript_StartDecideLinkLeader:
 	end
 
 BerryBlender_EventScript_DecideLinkLeader:
-	message LilycoveCity_ContestLobby_Text_PleaseDecideLinkLeader
+	message CeladonCity_ContestLobby_Text_PleaseDecideLinkLeader
 	waitmessage
 	multichoice 16, 6, MULTI_LINK_LEADER, FALSE
 	switch VAR_RESULT

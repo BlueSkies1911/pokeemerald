@@ -125,6 +125,10 @@ SaffronCity_EventScript_TrainerFanClubSign::
     msgbox SaffronCity_Text_TrainerFanClubSign, MSGBOX_SIGN
     end
 
+SaffronCity_EventScript_BattleTentSign::
+	msgbox SaffronCity_Text_BattleTentSign, MSGBOX_SIGN
+	end
+
 SaffronCity_Text_WhatDoYouWantGetLost::
     .string "What do you want?\n"
     .string "Get lost!$"
@@ -239,3 +243,7 @@ SaffronCity_Text_TrainerFanClubSign::
     .string "Pokémon Trainer Fan Club\p"
     .string "Many Trainers have scribbled their\n"
     .string "names on this sign.$"
+
+SaffronCity_Text_BattleTentSign:
+	.string "Battle Tent Saffron Site\n"
+	.string "“May the Greatest Teams Gather!”$"

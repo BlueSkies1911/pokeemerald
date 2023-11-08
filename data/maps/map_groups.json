@@ -299,17 +299,17 @@
     "SouthernIsland_Interior"
   ],
   "gMapGroup_DynamicArea": [
-    "SlateportCity_BattleTentLobby",
-    "SlateportCity_BattleTentCorridor",
-    "SlateportCity_BattleTentBattleRoom",
-    "VerdanturfTown_BattleTentLobby",
-    "VerdanturfTown_BattleTentCorridor",
-    "VerdanturfTown_BattleTentBattleRoom",
-    "FallarborTown_BattleTentLobby",
-    "FallarborTown_BattleTentCorridor",
-    "FallarborTown_BattleTentBattleRoom",
-    "LilycoveCity_ContestLobby",
-    "LilycoveCity_ContestHall",
+    "CeruleanCity_BattleTentLobby",
+    "CeruleanCity_BattleTentCorridor",
+    "CeruleanCity_BattleTentBattleRoom",
+    "FuchsiaCity_BattleTentLobby",
+    "FuchsiaCity_BattleTentCorridor",
+    "FuchsiaCity_BattleTentBattleRoom",
+    "SaffronCity_BattleTentLobby",
+    "SaffronCity_BattleTentCorridor",
+    "SaffronCity_BattleTentBattleRoom",
+    "CeladonCity_ContestLobby",
+    "CeladonCity_ContestHall",
     "ContestHall",
     "ContestHallBeauty",
     "ContestHallTough",
@@ -449,8 +449,7 @@
     "CeruleanCity_House1",
     "CeruleanCity_House2",
     "CeruleanCity_House3",
-    "CeruleanCity_House4",
-    "CeruleanCity_House5"
+    "CeruleanCity_House4"
   ],
   "gMapGroup_IndoorVermilion": [
     "VermilionCity_PokemonCenter_1F",
@@ -596,7 +595,8 @@
     "ViridianForest_NorthEntrance",
     "ViridianForest_SouthEntrance",
     "Route2_EastBuilding",
-    "Route2_House1"
+    "Route2_House1",
+    "PrettyPetalFlowerShop"
   ],
   "gMapGroup_IndoorRoute4": [
     "Route4_PokemonCenter_1F",

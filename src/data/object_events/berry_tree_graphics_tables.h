@@ -390,7 +390,6 @@ static const struct SpriteFrameImage sPicTable_DurinBerryTree[] = {
 
 const u16 gBerryTreePaletteTagTable_Durin[] = {OBJ_EVENT_PAL_TAG_NPC_2, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3};
 
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
 static const struct SpriteFrameImage sPicTable_OccaBerryTree[] = {
     overworld_frame(gObjectEventPic_BerryTreeDirtPile, 2, 2, 0),
     overworld_frame(gObjectEventPic_BerryTreeSprout, 2, 2, 0),
@@ -544,7 +543,6 @@ static const struct SpriteFrameImage sPicTable_RoseliBerryTree[] = {
 };
 
 const u16 gBerryTreePaletteTagTable_Roseli[] = {OBJ_EVENT_PAL_TAG_NPC_2, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_3};
-#endif
 
 static const struct SpriteFrameImage sPicTable_LiechiBerryTree[] = {
     overworld_frame(gObjectEventPic_BerryTreeDirtPile, 2, 2, 0),
@@ -574,7 +572,6 @@ static const struct SpriteFrameImage sPicTable_LansatBerryTree[] = {
 
 const u16 gBerryTreePaletteTagTable_Lansat[] = {OBJ_EVENT_PAL_TAG_NPC_2, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_1, OBJ_EVENT_PAL_TAG_NPC_1, OBJ_EVENT_PAL_TAG_NPC_1};
 
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
 const struct SpriteFrameImage sPicTable_MicleBerryTree[] = {
     overworld_frame(gObjectEventPic_BerryTreeDirtPile, 2, 2, 0),
     overworld_frame(gObjectEventPic_BerryTreeSprout, 2, 2, 0),
@@ -630,7 +627,6 @@ const struct SpriteFrameImage sPicTable_RowapBerryTree[] = {
 };
 
 const u16 gBerryTreePaletteTagTable_Rowap[] = {OBJ_EVENT_PAL_TAG_NPC_2, OBJ_EVENT_PAL_TAG_NPC_3, OBJ_EVENT_PAL_TAG_NPC_4, OBJ_EVENT_PAL_TAG_NPC_4, OBJ_EVENT_PAL_TAG_NPC_4};
-#endif
 
 const u16 gDeadBerryTreeObjectEventGraphicsIdTable[] = {OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES, OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES, OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES, OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES, OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES};
 
@@ -672,7 +668,6 @@ const struct SpriteFrameImage *const gBerryTreePicTablePointers[] = {
     [ITEM_WATMEL_BERRY - FIRST_BERRY_INDEX]           = sPicTable_RabutaBerryTree,
     [ITEM_DURIN_BERRY - FIRST_BERRY_INDEX]            = sPicTable_DurinBerryTree,
     [ITEM_BELUE_BERRY - FIRST_BERRY_INDEX]            = sPicTable_HondewBerryTree,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
     [ITEM_CHILAN_BERRY - FIRST_BERRY_INDEX]           = sPicTable_GrepaBerryTree,
     [ITEM_OCCA_BERRY - FIRST_BERRY_INDEX]             = sPicTable_OccaBerryTree,
     [ITEM_PASSHO_BERRY - FIRST_BERRY_INDEX]           = sPicTable_CornnBerryTree,
@@ -691,7 +686,6 @@ const struct SpriteFrameImage *const gBerryTreePicTablePointers[] = {
     [ITEM_COLBUR_BERRY - FIRST_BERRY_INDEX]           = sPicTable_ColburBerryTree,
     [ITEM_BABIRI_BERRY - FIRST_BERRY_INDEX]           = sPicTable_LiechiBerryTree,
     [ITEM_ROSELI_BERRY - FIRST_BERRY_INDEX]           = sPicTable_RoseliBerryTree,
-#endif
     [ITEM_LIECHI_BERRY - FIRST_BERRY_INDEX]           = sPicTable_LiechiBerryTree,
     [ITEM_GANLON_BERRY - FIRST_BERRY_INDEX]           = sPicTable_HondewBerryTree,
     [ITEM_SALAC_BERRY - FIRST_BERRY_INDEX]            = sPicTable_AguavBerryTree,
@@ -699,7 +693,7 @@ const struct SpriteFrameImage *const gBerryTreePicTablePointers[] = {
     [ITEM_APICOT_BERRY - FIRST_BERRY_INDEX]           = sPicTable_GrepaBerryTree,
     [ITEM_LANSAT_BERRY - FIRST_BERRY_INDEX]           = sPicTable_LansatBerryTree,
     [ITEM_STARF_BERRY - FIRST_BERRY_INDEX]            = sPicTable_CornnBerryTree,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
+    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX]           = sPicTable_DurinBerryTree,
     [ITEM_MICLE_BERRY - FIRST_BERRY_INDEX]            = sPicTable_MicleBerryTree,
     [ITEM_CUSTAP_BERRY - FIRST_BERRY_INDEX]           = sPicTable_CustapBerryTree,
     [ITEM_JABOCA_BERRY - FIRST_BERRY_INDEX]           = sPicTable_JabocaBerryTree,
@@ -707,9 +701,6 @@ const struct SpriteFrameImage *const gBerryTreePicTablePointers[] = {
     [ITEM_KEE_BERRY - FIRST_BERRY_INDEX]              = sPicTable_PechaBerryTree,
     [ITEM_MARANGA_BERRY - FIRST_BERRY_INDEX]          = sPicTable_OccaBerryTree,
     [ITEM_ENIGMA_BERRY_E_READER - FIRST_BERRY_INDEX]  = sPicTable_DurinBerryTree,
-#else
-    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX]           = sPicTable_DurinBerryTree,
-#endif
 };
 
 const u16 *const gBerryTreePaletteTagTablePointers[] = {
@@ -748,7 +739,6 @@ const u16 *const gBerryTreePaletteTagTablePointers[] = {
     [ITEM_WATMEL_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Rabuta,
     [ITEM_DURIN_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Durin,
     [ITEM_BELUE_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Hondew,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
     [ITEM_CHILAN_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Grepa,
     [ITEM_OCCA_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Occa,
     [ITEM_PASSHO_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Cornn,
@@ -767,7 +757,6 @@ const u16 *const gBerryTreePaletteTagTablePointers[] = {
     [ITEM_COLBUR_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Colbur,
     [ITEM_BABIRI_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Liechi,
     [ITEM_ROSELI_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Roseli,
-#endif
     [ITEM_LIECHI_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Liechi,
     [ITEM_GANLON_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Hondew,
     [ITEM_SALAC_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Aguav,
@@ -775,7 +764,7 @@ const u16 *const gBerryTreePaletteTagTablePointers[] = {
     [ITEM_APICOT_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Grepa,
     [ITEM_LANSAT_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Lansat,
     [ITEM_STARF_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Cornn,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
+    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Durin,
     [ITEM_MICLE_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Micle,
     [ITEM_CUSTAP_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Custap,
     [ITEM_JABOCA_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Jaboca,
@@ -783,9 +772,6 @@ const u16 *const gBerryTreePaletteTagTablePointers[] = {
     [ITEM_KEE_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Pecha,
     [ITEM_MARANGA_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Occa,
     [ITEM_ENIGMA_BERRY_E_READER - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Durin,
-#else
-    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX] = gBerryTreePaletteTagTable_Durin,
-#endif
 };
 
 const u16 *const gBerryTreeObjectEventGraphicsIdTablePointers[] = {
@@ -824,7 +810,6 @@ const u16 *const gBerryTreeObjectEventGraphicsIdTablePointers[] = {
     [ITEM_WATMEL_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_DURIN_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_BELUE_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
     [ITEM_CHILAN_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_OCCA_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_PASSHO_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
@@ -843,7 +828,6 @@ const u16 *const gBerryTreeObjectEventGraphicsIdTablePointers[] = {
     [ITEM_COLBUR_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_BABIRI_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_ROSELI_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
-#endif
     [ITEM_LIECHI_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_GANLON_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_SALAC_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
@@ -851,7 +835,7 @@ const u16 *const gBerryTreeObjectEventGraphicsIdTablePointers[] = {
     [ITEM_APICOT_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_LANSAT_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_STARF_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
-#if defined(RHH_EXPANSION) || defined(ITEM_EXPANSION)
+    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_MICLE_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_CUSTAP_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_JABOCA_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
@@ -859,7 +843,4 @@ const u16 *const gBerryTreeObjectEventGraphicsIdTablePointers[] = {
     [ITEM_KEE_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_MARANGA_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
     [ITEM_ENIGMA_BERRY_E_READER - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
-#else
-    [ITEM_ENIGMA_BERRY - FIRST_BERRY_INDEX] = gBerryTreeObjectEventGraphicsIdTable,
-#endif
 };

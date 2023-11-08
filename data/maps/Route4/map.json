@@ -54,7 +54,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 67,
-      "y": 5,
+      "y": 17,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 1,
@@ -118,6 +118,58 @@
       "source_id": 12,
       "source_map": "MAP_CERULEAN_CITY",
       "type": "clone"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 66,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_4_CHERI_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 67,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_4_CHERI_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 87,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_4_LEPPA_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 88,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_4_LEPPA_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -169,29 +221,15 @@
       "y": 2,
       "elevation": 3,
       "item": "ITEM_GREAT_BALL",
-      "flag": "HIDDEN_ITEM_ROUTE4_GREAT_BALL",
-      "quantity": "",
-      "underfoot": ""
+      "flag": "HIDDEN_ITEM_ROUTE4_GREAT_BALL"
     },
     {
       "type": "hidden_item",
       "x": 5,
       "y": 4,
       "elevation": 3,
-      "item": "ITEM_PERSIM_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE4_PERSIM_BERRY",
-      "quantity": "",
-      "underfoot": ""
-    },
-    {
-      "type": "hidden_item",
-      "x": 67,
-      "y": 17,
-      "elevation": 3,
-      "item": "ITEM_RAZZ_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE4_RAZZ_BERRY",
-      "quantity": "",
-      "underfoot": ""
+      "item": "ITEM_REPEL",
+      "flag": "HIDDEN_ITEM_ROUTE4_REPEL"
     }
   ]
 }

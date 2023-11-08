@@ -431,6 +431,7 @@
 #define TRAINER_CLASS_COOL_COUPLE    0x52
 #define TRAINER_CLASS_CRUSH_GIRL     0x53
 #define TRAINER_CLASS_PAINTER        0x54
+#define TRAINER_CLASS_COUNT          0x55
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

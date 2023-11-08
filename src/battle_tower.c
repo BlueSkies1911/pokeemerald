@@ -93,13 +93,10 @@ const u16 gBattleFrontierHeldItems[] =
     [BATTLE_FRONTIER_ITEM_CHERI_BERRY]    = ITEM_CHERI_BERRY,
     [BATTLE_FRONTIER_ITEM_BLACK_GLASSES]  = ITEM_BLACK_GLASSES,
     [BATTLE_FRONTIER_ITEM_BLACK_BELT]     = ITEM_BLACK_BELT,
-    [BATTLE_FRONTIER_ITEM_SOUL_DEW]       = ITEM_SOUL_DEW,
     [BATTLE_FRONTIER_ITEM_CHOICE_BAND]    = ITEM_CHOICE_BAND,
     [BATTLE_FRONTIER_ITEM_MAGNET]         = ITEM_MAGNET,
     [BATTLE_FRONTIER_ITEM_SILK_SCARF]     = ITEM_SILK_SCARF,
     [BATTLE_FRONTIER_ITEM_WHITE_HERB]     = ITEM_WHITE_HERB,
-    [BATTLE_FRONTIER_ITEM_DEEP_SEA_SCALE] = ITEM_DEEP_SEA_SCALE,
-    [BATTLE_FRONTIER_ITEM_DEEP_SEA_TOOTH] = ITEM_DEEP_SEA_TOOTH,
     [BATTLE_FRONTIER_ITEM_MYSTIC_WATER]   = ITEM_MYSTIC_WATER,
     [BATTLE_FRONTIER_ITEM_SHARP_BEAK]     = ITEM_SHARP_BEAK,
     [BATTLE_FRONTIER_ITEM_QUICK_CLAW]     = ITEM_QUICK_CLAW,
@@ -124,15 +121,13 @@ const u16 gBattleFrontierHeldItems[] =
     [BATTLE_FRONTIER_ITEM_DRAGON_FANG]    = ITEM_DRAGON_FANG,
     [BATTLE_FRONTIER_ITEM_IAPAPA_BERRY]   = ITEM_IAPAPA_BERRY,
     [BATTLE_FRONTIER_ITEM_WIKI_BERRY]     = ITEM_WIKI_BERRY,
-    [BATTLE_FRONTIER_ITEM_SEA_INCENSE]    = ITEM_SEA_INCENSE,
     [BATTLE_FRONTIER_ITEM_SHELL_BELL]     = ITEM_SHELL_BELL,
     [BATTLE_FRONTIER_ITEM_SALAC_BERRY]    = ITEM_SALAC_BERRY,
     [BATTLE_FRONTIER_ITEM_LANSAT_BERRY]   = ITEM_LANSAT_BERRY,
     [BATTLE_FRONTIER_ITEM_APICOT_BERRY]   = ITEM_APICOT_BERRY,
     [BATTLE_FRONTIER_ITEM_STARF_BERRY]    = ITEM_STARF_BERRY,
     [BATTLE_FRONTIER_ITEM_LIECHI_BERRY]   = ITEM_LIECHI_BERRY,
-    [BATTLE_FRONTIER_ITEM_STICK]          = ITEM_STICK,
-    [BATTLE_FRONTIER_ITEM_LAX_INCENSE]    = ITEM_LAX_INCENSE,
+    [BATTLE_FRONTIER_ITEM_LEEK]           = ITEM_LEEK,
     [BATTLE_FRONTIER_ITEM_AGUAV_BERRY]    = ITEM_AGUAV_BERRY,
     [BATTLE_FRONTIER_ITEM_FIGY_BERRY]     = ITEM_FIGY_BERRY,
     [BATTLE_FRONTIER_ITEM_THICK_CLUB]     = ITEM_THICK_CLUB,
@@ -3367,11 +3362,11 @@ static u16 GetBattleTentTrainerId(void)
 {
     u32 facility = VarGet(VAR_FRONTIER_FACILITY);
 
-    if (facility == FRONTIER_FACILITY_PALACE)       // Verdanturf Tent; uses Palace mechanics
+    if (facility == FRONTIER_FACILITY_PALACE)       // Fuchsia Tent; uses Palace mechanics
         return Random() % NUM_BATTLE_TENT_TRAINERS;
-    else if (facility == FRONTIER_FACILITY_ARENA)   // Fallarbor Tent; uses Arena mechanics
+    else if (facility == FRONTIER_FACILITY_ARENA)   // Saffron Tent; uses Arena mechanics
         return Random() % NUM_BATTLE_TENT_TRAINERS;
-    else if (facility == FRONTIER_FACILITY_FACTORY) // Slateport Tent; uses Factory mechanics
+    else if (facility == FRONTIER_FACILITY_FACTORY) // Cerulean Tent; uses Factory mechanics
         return Random() % NUM_BATTLE_TENT_TRAINERS;
     else if (facility == FRONTIER_FACILITY_TOWER)
         return 0;
@@ -3386,18 +3381,18 @@ static u8 SetTentPtrsGetLevel(void)
 
     if (facility == FRONTIER_FACILITY_FACTORY)
     {
-        gFacilityTrainers = gSlateportBattleTentTrainers;
-        gFacilityTrainerMons = gSlateportBattleTentMons;
+        gFacilityTrainers = gCeruleanBattleTentTrainers;
+        gFacilityTrainerMons = gCeruleanBattleTentMons;
     }
     else if (facility == FRONTIER_FACILITY_PALACE)
     {
-        gFacilityTrainers = gVerdanturfBattleTentTrainers;
-        gFacilityTrainerMons = gVerdanturfBattleTentMons;
+        gFacilityTrainers = gFuchsiaBattleTentTrainers;
+        gFacilityTrainerMons = gFuchsiaBattleTentMons;
     }
     else if (facility == FRONTIER_FACILITY_ARENA)
     {
-        gFacilityTrainers = gFallarborBattleTentTrainers;
-        gFacilityTrainerMons = gFallarborBattleTentMons;
+        gFacilityTrainers = gSaffronBattleTentTrainers;
+        gFacilityTrainerMons = gSaffronBattleTentMons;
     }
     else
     {

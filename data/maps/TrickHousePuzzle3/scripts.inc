@@ -1,15 +1,15 @@
 TrickHousePuzzle3_MapScripts::
-	map_script MAP_SCRIPT_ON_RESUME, Route110_TrickHousePuzzle3_OnResume
-	map_script MAP_SCRIPT_ON_TRANSITION, Route110_TrickHousePuzzle3_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, TrickHousePuzzle3_OnResume
+	map_script MAP_SCRIPT_ON_TRANSITION, TrickHousePuzzle3_OnTransition
 	.byte 0
 
-Route110_TrickHousePuzzle3_OnResume:
-	call Route110_TrickHousePuzzle3_EventScript_UpdateButtonMetatiles
-	call_if_eq VAR_TEMP_9, 0, Route110_TrickHousePuzzle3_EventScript_SetDoorsState0
-	call_if_eq VAR_TEMP_9, 1, Route110_TrickHousePuzzle3_EventScript_SetDoorsState1
+TrickHousePuzzle3_OnResume:
+	call TrickHousePuzzle3_EventScript_UpdateButtonMetatiles
+	call_if_eq VAR_TEMP_9, 0, TrickHousePuzzle3_EventScript_SetDoorsState0
+	call_if_eq VAR_TEMP_9, 1, TrickHousePuzzle3_EventScript_SetDoorsState1
 	end
 
-Route110_TrickHousePuzzle3_OnTransition:
+TrickHousePuzzle3_OnTransition:
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
 	setvar VAR_TEMP_3, 0
@@ -18,34 +18,34 @@ Route110_TrickHousePuzzle3_OnTransition:
 	setvar VAR_TEMP_9, 0
 	end
 
-Route110_TrickHousePuzzle3_EventScript_UpdateButtonMetatiles::
+TrickHousePuzzle3_EventScript_UpdateButtonMetatiles::
 	setmetatile 4, 14, METATILE_TrickHousePuzzle_Button_Up, FALSE
 	setmetatile 3, 11, METATILE_TrickHousePuzzle_Button_Up, FALSE
 	setmetatile 12, 5, METATILE_TrickHousePuzzle_Button_Up, FALSE
 	setmetatile 8, 2, METATILE_TrickHousePuzzle_Button_Up, FALSE
-	call_if_eq VAR_TEMP_8, 1, Route110_TrickHousePuzzle3_EventScript_PressedButton1Metatile
-	call_if_eq VAR_TEMP_8, 2, Route110_TrickHousePuzzle3_EventScript_PressedButton2Metatile
-	call_if_eq VAR_TEMP_8, 3, Route110_TrickHousePuzzle3_EventScript_PressedButton3Metatile
-	call_if_eq VAR_TEMP_8, 4, Route110_TrickHousePuzzle3_EventScript_PressedButton4Metatile
+	call_if_eq VAR_TEMP_8, 1, TrickHousePuzzle3_EventScript_PressedButton1Metatile
+	call_if_eq VAR_TEMP_8, 2, TrickHousePuzzle3_EventScript_PressedButton2Metatile
+	call_if_eq VAR_TEMP_8, 3, TrickHousePuzzle3_EventScript_PressedButton3Metatile
+	call_if_eq VAR_TEMP_8, 4, TrickHousePuzzle3_EventScript_PressedButton4Metatile
 	return
 
-Route110_TrickHousePuzzle3_EventScript_PressedButton1Metatile::
+TrickHousePuzzle3_EventScript_PressedButton1Metatile::
 	setmetatile 4, 14, METATILE_TrickHousePuzzle_Button_Pressed, FALSE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_PressedButton2Metatile::
+TrickHousePuzzle3_EventScript_PressedButton2Metatile::
 	setmetatile 3, 11, METATILE_TrickHousePuzzle_Button_Pressed, FALSE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_PressedButton3Metatile::
+TrickHousePuzzle3_EventScript_PressedButton3Metatile::
 	setmetatile 12, 5, METATILE_TrickHousePuzzle_Button_Pressed, FALSE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_PressedButton4Metatile::
+TrickHousePuzzle3_EventScript_PressedButton4Metatile::
 	setmetatile 8, 2, METATILE_TrickHousePuzzle_Button_Pressed, FALSE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetDoorsState0::
+TrickHousePuzzle3_EventScript_SetDoorsState0::
 	setmetatile 1, 6, METATILE_TrickHousePuzzle_BlueDoorH_Open_Tile0, FALSE
 	setmetatile 2, 6, METATILE_TrickHousePuzzle_BlueDoorH_Open_Tile1, FALSE
 	setmetatile 1, 7, METATILE_TrickHousePuzzle_BlueDoorH_Open_Tile2, FALSE
@@ -122,7 +122,7 @@ Route110_TrickHousePuzzle3_EventScript_SetDoorsState0::
 	setmetatile 9, 5, METATILE_TrickHousePuzzle_RedDoorV_Open1, TRUE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetDoorsState1::
+TrickHousePuzzle3_EventScript_SetDoorsState1::
 	setmetatile 1, 6, METATILE_TrickHousePuzzle_BlueDoorH_Closed_Tile0, FALSE
 	setmetatile 2, 6, METATILE_TrickHousePuzzle_BlueDoorH_Closed_Tile1, FALSE
 	setmetatile 1, 7, METATILE_TrickHousePuzzle_BlueDoorH_Closed_Tile2, TRUE
@@ -199,146 +199,146 @@ Route110_TrickHousePuzzle3_EventScript_SetDoorsState1::
 	setmetatile 9, 5, METATILE_TrickHousePuzzle_Floor_ShadowTop_Alt, FALSE
 	return
 
-Route110_TrickHousePuzzle3_EventScript_Button1::
+TrickHousePuzzle3_EventScript_Button1::
 	lockall
 	setvar VAR_TEMP_8, 1
-	goto Route110_TrickHousePuzzle3_EventScript_PressButton
+	goto TrickHousePuzzle3_EventScript_PressButton
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Button2::
+TrickHousePuzzle3_EventScript_Button2::
 	lockall
 	setvar VAR_TEMP_8, 2
-	goto Route110_TrickHousePuzzle3_EventScript_PressButton
+	goto TrickHousePuzzle3_EventScript_PressButton
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Button3::
+TrickHousePuzzle3_EventScript_Button3::
 	lockall
 	setvar VAR_TEMP_8, 3
-	goto Route110_TrickHousePuzzle3_EventScript_PressButton
+	goto TrickHousePuzzle3_EventScript_PressButton
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Button4::
+TrickHousePuzzle3_EventScript_Button4::
 	lockall
 	setvar VAR_TEMP_8, 4
-	goto Route110_TrickHousePuzzle3_EventScript_PressButton
+	goto TrickHousePuzzle3_EventScript_PressButton
 	end
 
-Route110_TrickHousePuzzle3_EventScript_PressButton::
-	call Route110_TrickHousePuzzle3_EventScript_SetButton
+TrickHousePuzzle3_EventScript_PressButton::
+	call TrickHousePuzzle3_EventScript_SetButton
 	playse SE_PIN
-	call Route110_TrickHousePuzzle3_EventScript_UpdateButtonMetatiles
-	goto Route110_TrickHousePuzzle3_EventScript_AlternateDoors
+	call TrickHousePuzzle3_EventScript_UpdateButtonMetatiles
+	goto TrickHousePuzzle3_EventScript_AlternateDoors
 	end
 
-Route110_TrickHousePuzzle3_EventScript_SetButton::
+TrickHousePuzzle3_EventScript_SetButton::
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
 	setvar VAR_TEMP_3, 0
 	setvar VAR_TEMP_4, 0
-	call_if_eq VAR_TEMP_8, 1, Route110_TrickHousePuzzle3_EventScript_SetButton1
-	call_if_eq VAR_TEMP_8, 2, Route110_TrickHousePuzzle3_EventScript_SetButton2
-	call_if_eq VAR_TEMP_8, 3, Route110_TrickHousePuzzle3_EventScript_SetButton3
-	call_if_eq VAR_TEMP_8, 4, Route110_TrickHousePuzzle3_EventScript_SetButton4
+	call_if_eq VAR_TEMP_8, 1, TrickHousePuzzle3_EventScript_SetButton1
+	call_if_eq VAR_TEMP_8, 2, TrickHousePuzzle3_EventScript_SetButton2
+	call_if_eq VAR_TEMP_8, 3, TrickHousePuzzle3_EventScript_SetButton3
+	call_if_eq VAR_TEMP_8, 4, TrickHousePuzzle3_EventScript_SetButton4
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetButton1::
+TrickHousePuzzle3_EventScript_SetButton1::
 	setvar VAR_TEMP_1, 1
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetButton2::
+TrickHousePuzzle3_EventScript_SetButton2::
 	setvar VAR_TEMP_2, 1
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetButton3::
+TrickHousePuzzle3_EventScript_SetButton3::
 	setvar VAR_TEMP_3, 1
 	return
 
-Route110_TrickHousePuzzle3_EventScript_SetButton4::
+TrickHousePuzzle3_EventScript_SetButton4::
 	setvar VAR_TEMP_4, 1
 	return
 
-Route110_TrickHousePuzzle3_EventScript_AlternateDoors::
-	call_if_eq VAR_TEMP_9, 1, Route110_TrickHousePuzzle3_EventScript_SetDoorsState0
-	call_if_eq VAR_TEMP_9, 0, Route110_TrickHousePuzzle3_EventScript_SetDoorsState1
+TrickHousePuzzle3_EventScript_AlternateDoors::
+	call_if_eq VAR_TEMP_9, 1, TrickHousePuzzle3_EventScript_SetDoorsState0
+	call_if_eq VAR_TEMP_9, 0, TrickHousePuzzle3_EventScript_SetDoorsState1
 	special DrawWholeMapView
-	goto_if_eq VAR_TEMP_9, 1, Route110_TrickHousePuzzle3_EventScript_ClearAltDoorState
-	goto_if_eq VAR_TEMP_9, 0, Route110_TrickHousePuzzle3_EventScript_SetAltDoorState
+	goto_if_eq VAR_TEMP_9, 1, TrickHousePuzzle3_EventScript_ClearAltDoorState
+	goto_if_eq VAR_TEMP_9, 0, TrickHousePuzzle3_EventScript_SetAltDoorState
 	end
 
-Route110_TrickHousePuzzle3_EventScript_ClearAltDoorState::
+TrickHousePuzzle3_EventScript_ClearAltDoorState::
 	setvar VAR_TEMP_9, 0
 	releaseall
 	end
 
-Route110_TrickHousePuzzle3_EventScript_SetAltDoorState::
+TrickHousePuzzle3_EventScript_SetAltDoorState::
 	setvar VAR_TEMP_9, 1
 	releaseall
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Scroll::
+TrickHousePuzzle3_EventScript_Scroll::
 	lockall
-	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_3_STATE, 0, Route110_TrickHousePuzzle3_EventScript_FoundScroll
-	goto Route110_TrickHousePuzzle_EventScript_ReadScrollAgain
+	goto_if_eq VAR_TRICK_HOUSE_PUZZLE_3_STATE, 0, TrickHousePuzzle3_EventScript_FoundScroll
+	goto TrickHousePuzzle_EventScript_ReadScrollAgain
 	end
 
-Route110_TrickHousePuzzle3_EventScript_FoundScroll::
+TrickHousePuzzle3_EventScript_FoundScroll::
 	setvar VAR_TRICK_HOUSE_PUZZLE_3_STATE, 1
-	goto Route110_TrickHousePuzzle_EventScript_FoundScroll
+	goto TrickHousePuzzle_EventScript_FoundScroll
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Justin::
-	trainerbattle_single TRAINER_CAMPER_LARRY, Route110_TrickHousePuzzle3_Text_JustinIntro, Route110_TrickHousePuzzle3_Text_JustinDefeat
-	msgbox Route110_TrickHousePuzzle3_Text_JustinPostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle3_EventScript_Larry::
+	trainerbattle_single TRAINER_CAMPER_LARRY, TrickHousePuzzle3_Text_LarryIntro, TrickHousePuzzle3_Text_LarryDefeat
+	msgbox TrickHousePuzzle3_Text_LarryPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Martha::
-	trainerbattle_single TRAINER_PICNICKER_CHARLOTTE, Route110_TrickHousePuzzle3_Text_MarthaIntro, Route110_TrickHousePuzzle3_Text_MarthaDefeat
-	msgbox Route110_TrickHousePuzzle3_Text_MarthaPostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle3_EventScript_Charlotte::
+	trainerbattle_single TRAINER_PICNICKER_CHARLOTTE, TrickHousePuzzle3_Text_CharlotteIntro, TrickHousePuzzle3_Text_CharlotteDefeat
+	msgbox TrickHousePuzzle3_Text_CharlottePostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle3_EventScript_Alan::
-	trainerbattle_single TRAINER_HIKER_SAWYER, Route110_TrickHousePuzzle3_Text_AlanIntro, Route110_TrickHousePuzzle3_Text_AlanDefeat
-	msgbox Route110_TrickHousePuzzle3_Text_AlanPostBattle, MSGBOX_AUTOCLOSE
+TrickHousePuzzle3_EventScript_Sawyer::
+	trainerbattle_single TRAINER_HIKER_SAWYER, TrickHousePuzzle3_Text_SawyerIntro, TrickHousePuzzle3_Text_SawyerDefeat
+	msgbox TrickHousePuzzle3_Text_SawyerPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-Route110_TrickHousePuzzle3_Text_WroteSecretCodeLockOpened:
+TrickHousePuzzle3_Text_WroteSecretCodeLockOpened:
 	.string "{PLAYER} wrote down the secret code\n"
 	.string "on the door.\p"
 	.string "“Trick Master is coveted.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
 
-Route110_TrickHousePuzzle3_Text_JustinIntro:
+TrickHousePuzzle3_Text_LarryIntro:
 	.string "I keep coming back to this same place!$"
 
-Route110_TrickHousePuzzle3_Text_JustinDefeat:
+TrickHousePuzzle3_Text_LarryDefeat:
 	.string "I'm already having trouble, and then\n"
 	.string "you have to beat me? It's not fair!$"
 
-Route110_TrickHousePuzzle3_Text_JustinPostBattle:
+TrickHousePuzzle3_Text_LarryPostBattle:
 	.string "It's full of doors here!\n"
 	.string "It's too small and dark in here! Help!$"
 
-Route110_TrickHousePuzzle3_Text_MarthaIntro:
+TrickHousePuzzle3_Text_CharlotteIntro:
 	.string "I don't know what's going on here.\n"
 	.string "I'm starting to feel sad…$"
 
-Route110_TrickHousePuzzle3_Text_MarthaDefeat:
+TrickHousePuzzle3_Text_CharlotteDefeat:
 	.string "You… You're awful!$"
 
-Route110_TrickHousePuzzle3_Text_MarthaPostBattle:
+TrickHousePuzzle3_Text_CharlottePostBattle:
 	.string "I know I'm weak!\n"
 	.string "And, I have no sense of direction!$"
 
-Route110_TrickHousePuzzle3_Text_AlanIntro:
+TrickHousePuzzle3_Text_SawyerIntro:
 	.string "I don't get it. What would anyone want\n"
 	.string "with a house this bizarre?$"
 
-Route110_TrickHousePuzzle3_Text_AlanDefeat:
+TrickHousePuzzle3_Text_SawyerDefeat:
 	.string "I don't get it.\n"
 	.string "How did I lose?$"
 
-Route110_TrickHousePuzzle3_Text_AlanPostBattle:
+TrickHousePuzzle3_Text_SawyerPostBattle:
 	.string "I don't get it.\n"
 	.string "How many traps are in this house?\p"
 	.string "You may be the one to solve that.$"

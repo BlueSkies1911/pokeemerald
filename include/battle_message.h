@@ -58,6 +58,9 @@
 #define B_TXT_PARTNER_NAME 0x33
 #define B_TXT_BUFF3 0x34
 #define B_TXT_RIVAL_NAME 0x35
+#define B_TXT_ATK_TEAM1 0x36 // Your/The opposing
+#define B_TXT_ATK_TEAM2 0x37 // your/the opposing
+#define B_TXT_DEF_TEAM2 0x38 // your/the opposing
 
 // for B_TXT_BUFF1, B_TXT_BUFF2 and B_TXT_BUFF3
 
@@ -146,7 +149,7 @@
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_STRING;                                 \
-    textVar[2] = stringId;                                      \
+    textVar[2] = stringId & 0xFF;                               \
     textVar[3] = (stringId & 0xFF00) >> 8;                      \
     textVar[4] = B_BUFF_EOS;                                    \
 }
@@ -268,6 +271,7 @@ extern const u8 gText_BattleWallyName[];
 extern const u8 gText_Win[];
 extern const u8 gText_Loss[];
 extern const u8 gText_Draw[];
+extern const u8 gText_StatSharply[];
 extern const u8 gText_StatRose[];
 extern const u8 gText_DefendersStatRose[];
 extern const u8 gText_PkmnGettingPumped[];
@@ -291,6 +295,5 @@ extern const u8 gText_BattleRecordedOnPass[];
 extern const u8 gText_BattleTourney[];
 
 extern const u16 gMissStringIds[];
-extern const u16 gTrappingMoves[];
 
 #endif // GUARD_BATTLE_MESSAGE_H

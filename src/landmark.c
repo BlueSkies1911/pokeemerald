@@ -24,6 +24,7 @@ static const u8 LandmarkName_UndergroundPath2[] = _("Underground Path");
 static const u8 LandmarkName_SeafoamIslands[] = _("Seafoam Islands");
 static const u8 LandmarkName_PowerPlant[] = _("Power Plant");
 static const u8 LandmarkName_VictoryRoad[] = _("Victory Road");
+static const u8 LandmarkName_FlowerShop[] = _("Flower Shop");
 static const u8 LandmarkName_PokemonDayCare[] = _("Pokémon Day Care");
 static const u8 LandmarkName_FishermansHouse[] = _("Fisherman's House");
 static const u8 LandmarkName_CyclingRoad[] = _("Cycling Road");
@@ -39,6 +40,7 @@ static const struct Landmark Landmark_UndergroundPath2 = {LandmarkName_Undergrou
 static const struct Landmark Landmark_SeafoamIslands = {LandmarkName_SeafoamIslands, FLAG_LANDMARK_SEAFOAM_ISLANDS};
 static const struct Landmark Landmark_PowerPlant = {LandmarkName_PowerPlant, FLAG_LANDMARK_POWER_PLANT};
 static const struct Landmark Landmark_VictoryRoad = {LandmarkName_VictoryRoad, FLAG_LANDMARK_VICTORY_ROAD};
+static const struct Landmark Landmark_FlowerShop = {LandmarkName_FlowerShop, FLAG_LANDMARK_FLOWER_SHOP};
 static const struct Landmark Landmark_PokemonDayCare = {LandmarkName_PokemonDayCare, FLAG_LANDMARK_POKEMON_DAYCARE};
 static const struct Landmark Landmark_FishermansHouse = {LandmarkName_FishermansHouse, FLAG_LANDMARK_FISHERMANS_HOUSE};
 static const struct Landmark Landmark_CyclingRoad = {LandmarkName_CyclingRoad, FLAG_LANDMARK_CYCLING_ROAD};
@@ -55,6 +57,12 @@ static const struct Landmark *const Landmarks_Route2_0[]  =
 static const struct Landmark *const Landmarks_Route2_1[]  =
 {
     &Landmark_ViridianForest,
+    NULL,
+};
+
+static const struct Landmark *const Landmarks_Route2_2[]  =
+{
+    &Landmark_FlowerShop,
     NULL,
 };
 
@@ -219,6 +227,7 @@ static const struct LandmarkList sLandmarkLists[] =
 {
     {MAPSEC_ROUTE_2, 0, Landmarks_Route2_0},
     {MAPSEC_ROUTE_2, 1, Landmarks_Route2_1},
+    {MAPSEC_ROUTE_2, 2, Landmarks_Route2_2},
     {MAPSEC_ROUTE_4, 0, Landmarks_Route4_0},
     {MAPSEC_ROUTE_4, 0, Landmarks_Route4_1},
     {MAPSEC_ROUTE_5, 0, Landmarks_Route5_0},

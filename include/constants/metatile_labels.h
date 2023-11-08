@@ -94,9 +94,11 @@
 #define METATILE_CeladonCity_CyclingRoad_Grass  0x352
 #define METATILE_CeladonCity_CyclingRoad_Mowed  0x33E
 #define METATILE_CeladonCity_DeptStoreDoor      0x294
+#define METATILE_CeladonCity_Door_Contest       0x37B
 
 // gTileset_CeruleanCity
-#define METATILE_CeruleanCity_Door  0x298
+#define METATILE_CeruleanCity_Door             0x298
+#define METATILE_CeruleanCity_Door_BattleTent  0x32A
 
 // gTileset_CinnabarGym
 #define METATILE_CinnabarGym_Floor                  0x281
@@ -122,6 +124,7 @@
 
 // gTileset_FuchsiaCity
 #define METATILE_FuchsiaCity_Door                           0x2BF
+#define METATILE_FuchsiaCity_Door_BattleTent                0x362
 #define METATILE_FuchsiaCity_SafariZoneDoor                 0x2D2
 #define METATILE_FuchsiaCity_SafariZoneTreeTopLeft_Grass    0x300
 #define METATILE_FuchsiaCity_SafariZoneTreeTopLeft_Mowed    0x310
@@ -168,7 +171,8 @@
 #define METATILE_GenericBuilding1_PlayersPCOn         0x28A
 
 // gTileset_LavenderTown
-#define METATILE_LavenderTown_Door  0x2A2
+#define METATILE_LavenderTown_Door             0x2A2
+#define METATILE_LavenderTown_TrickHouse_Door  0x366
 
 // gTileset_Mart
 #define METATILE_Mart_CounterMid_Bottom  0x2C0
@@ -178,12 +182,8 @@
 #define METATILE_MtEmber_CaveEntrance  0x346
 
 // gTileset_PalletTown
-#define METATILE_PalletTown_Door                  0x2A3
-#define METATILE_PalletTown_OaksLabDoor           0x2AC
-#define METATILE_PalletTown_SecretBase_TreeLeft   0x228
-#define METATILE_PalletTown_SecretBase_TreeRight  0x229
-#define METATILE_PalletTown_SecretBase_VineLeft   0x230
-#define METATILE_PalletTown_SecretBase_VineRight  0x231
+#define METATILE_PalletTown_Door         0x2A3
+#define METATILE_PalletTown_OaksLabDoor  0x2AC
 
 // gTileset_PewterCity
 #define METATILE_PewterCity_Door  0x2CE
@@ -266,8 +266,9 @@
 #define METATILE_SSAnne_Door  0x281
 
 // gTileset_SaffronCity
-#define METATILE_SaffronCity_Door         0x284
-#define METATILE_SaffronCity_SilphCoDoor  0x2BC
+#define METATILE_SaffronCity_Door             0x284
+#define METATILE_SaffronCity_Door_BattleTent  0x36D
+#define METATILE_SaffronCity_SilphCoDoor      0x2BC
 
 // gTileset_SeaCottage
 #define METATILE_SeaCottage_Teleporter_CableBall_Bottom  0x2BA

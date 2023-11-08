@@ -154,6 +154,84 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
       "flag": "FLAG_TEMP_15"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 13,
+      "y": 29,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_WEPEAR_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 14,
+      "y": 29,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_PERSIM_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 15,
+      "y": 29,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_PERSIM_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 16,
+      "y": 29,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_WEPEAR_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 19,
+      "y": 56,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_PINAP_1",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 20,
+      "y": 56,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_10_PINAP_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -227,9 +305,7 @@
       "y": 19,
       "elevation": 0,
       "item": "ITEM_SUPER_POTION",
-      "flag": "HIDDEN_ITEM_ROUTE10_SUPER_POTION",
-      "quantity": "",
-      "underfoot": ""
+      "flag": "HIDDEN_ITEM_ROUTE10_SUPER_POTION"
     },
     {
       "type": "hidden_item",
@@ -237,39 +313,7 @@
       "y": 40,
       "elevation": 3,
       "item": "ITEM_MAX_ETHER",
-      "flag": "HIDDEN_ITEM_ROUTE10_MAX_ETHER",
-      "quantity": "",
-      "underfoot": ""
-    },
-    {
-      "type": "hidden_item",
-      "x": 6,
-      "y": 26,
-      "elevation": 3,
-      "item": "ITEM_CHERI_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE10_CHERI_BERRY",
-      "quantity": "",
-      "underfoot": ""
-    },
-    {
-      "type": "hidden_item",
-      "x": 17,
-      "y": 29,
-      "elevation": 3,
-      "item": "ITEM_PERSIM_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE10_PERSIM_BERRY",
-      "quantity": "",
-      "underfoot": ""
-    },
-    {
-      "type": "hidden_item",
-      "x": 20,
-      "y": 57,
-      "elevation": 3,
-      "item": "ITEM_NANAB_BERRY",
-      "flag": "HIDDEN_ITEM_ROUTE10_NANAB_BERRY",
-      "quantity": "",
-      "underfoot": ""
+      "flag": "HIDDEN_ITEM_ROUTE10_MAX_ETHER"
     }
   ]
 }

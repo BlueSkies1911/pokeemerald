@@ -167,65 +167,65 @@ static const struct MenuAction MultichoiceList_LevelMode[] =
 
 static const struct MenuAction MultichoiceList_Mechadoll1_Q1[] =
 {
-    {gTrickHouse_Mechadoll_Oddish},
-    {gTrickHouse_Mechadoll_Poochyena},
-    {gTrickHouse_Mechadoll_Taillow},
+    {gTrickHouse_Mechadoll_Pidgey},
+    {gTrickHouse_Mechadoll_Meowth},
+    {gTrickHouse_Mechadoll_Rattata},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll1_Q2[] =
 {
-    {gTrickHouse_Mechadoll_Azurill},
-    {gTrickHouse_Mechadoll_Lotad},
-    {gTrickHouse_Mechadoll_Wingull},
+    {gTrickHouse_Mechadoll_Golduck},
+    {gTrickHouse_Mechadoll_Starmie},
+    {gTrickHouse_Mechadoll_Drowzee},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll1_Q3[] =
 {
-    {gTrickHouse_Mechadoll_Dustox},
+    {gTrickHouse_Mechadoll_Beedrill},
     {gTrickHouse_Mechadoll_Zubat},
-    {gTrickHouse_Mechadoll_Nincada},
+    {gTrickHouse_Mechadoll_Paras},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll2_Q1[] =
 {
-    {gTrickHouse_Mechadoll_Ralts},
-    {gTrickHouse_Mechadoll_Zigzagoon},
-    {gTrickHouse_Mechadoll_Slakoth},
+    {gTrickHouse_Mechadoll_Pidgey},
+    {gTrickHouse_Mechadoll_Weedle},
+    {gTrickHouse_Mechadoll_Caterpie},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll2_Q2[] =
 {
-    {gTrickHouse_Mechadoll_Poochyena2},
-    {gTrickHouse_Mechadoll_Shroomish},
-    {gTrickHouse_Mechadoll_Zigzagoon2},
+    {gTrickHouse_Mechadoll_Spearow},
+    {gTrickHouse_Mechadoll_Rattata},
+    {gTrickHouse_Mechadoll_Pidgey},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll2_Q3[] =
 {
-    {gTrickHouse_Mechadoll_Poochyena3},
-    {gTrickHouse_Mechadoll_Zubat2},
-    {gTrickHouse_Mechadoll_Carvanha},
+    {gTrickHouse_Mechadoll_Magikarp},
+    {gTrickHouse_Mechadoll_Abra},
+    {gTrickHouse_Mechadoll_Goldeen},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll3_Q1[] =
 {
     {gTrickHouse_Mechadoll_BurnHeal},
-    {gTrickHouse_Mechadoll_HarborMail},
+    {gTrickHouse_Mechadoll_SodaPop},
     {gTrickHouse_Mechadoll_SamePrice},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll3_Q2[] =
 {
-    {gTrickHouse_Mechadoll_60Yen},
-    {gTrickHouse_Mechadoll_55Yen},
+    {gTrickHouse_Mechadoll_50Yen},
     {gTrickHouse_Mechadoll_Nothing},
+    {gTrickHouse_Mechadoll_100Yen},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll3_Q3[] =
 {
     {gTrickHouse_Mechadoll_CostMore},
     {gTrickHouse_Mechadoll_CostLess},
-    {gTrickHouse_Mechadoll_SamePrice2},
+    {gTrickHouse_Mechadoll_SamePrice},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll4_Q1[] =
@@ -237,8 +237,8 @@ static const struct MenuAction MultichoiceList_Mechadoll4_Q1[] =
 
 static const struct MenuAction MultichoiceList_Mechadoll4_Q2[] =
 {
-    {gTrickHouse_Mechadoll_ElderlyMen},
-    {gTrickHouse_Mechadoll_ElderlyLadies},
+    {gTrickHouse_Mechadoll_Male},
+    {gTrickHouse_Mechadoll_Female},
     {gTrickHouse_Mechadoll_SameNumber},
 };
 
@@ -251,23 +251,23 @@ static const struct MenuAction MultichoiceList_Mechadoll4_Q3[] =
 
 static const struct MenuAction MultichoiceList_Mechadoll5_Q1[] =
 {
-    {gTrickHouse_Mechadoll_Two2},
+    {gTrickHouse_Mechadoll_One},
+    {gTrickHouse_Mechadoll_Two},
     {gTrickHouse_Mechadoll_Three},
-    {gTrickHouse_Mechadoll_Four},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll5_Q2[] =
 {
+    {gTrickHouse_Mechadoll_Five},
     {gTrickHouse_Mechadoll_Six},
     {gTrickHouse_Mechadoll_Seven},
-    {gTrickHouse_Mechadoll_Eight},
 };
 
 static const struct MenuAction MultichoiceList_Mechadoll5_Q3[] =
 {
-    {gTrickHouse_Mechadoll_Six2},
-    {gTrickHouse_Mechadoll_Seven2},
-    {gTrickHouse_Mechadoll_Eight2},
+    {gTrickHouse_Mechadoll_Fourteen},
+    {gTrickHouse_Mechadoll_Fifteen},
+    {gTrickHouse_Mechadoll_Sixteen},
 };
 
 static const struct MenuAction MultichoiceList_VendingMachine[] =
@@ -824,7 +824,7 @@ static const struct MenuAction MultichoiceList_WheresRayquaza[] =
     {gText_DontRemember},
 };
 
-static const struct MenuAction MultichoiceList_SlateportTentRules[] =
+static const struct MenuAction MultichoiceList_CeruleanTentRules[] =
 {
     {gText_BasicRules},
     {gText_SwapPartners},
@@ -834,7 +834,7 @@ static const struct MenuAction MultichoiceList_SlateportTentRules[] =
     {gText_Exit},
 };
 
-static const struct MenuAction MultichoiceList_FallarborTentRules[] =
+static const struct MenuAction MultichoiceList_SaffronTentRules[] =
 {
     {gText_BattleTrainers},
     {gText_BattleRules},
@@ -1056,8 +1056,8 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_TV_LATI]                    = MULTICHOICE(MultichoiceList_TVLati),
     [MULTI_BATTLE_TOWER_FEELINGS]      = MULTICHOICE(MultichoiceList_BattleTowerFeelings),
     [MULTI_WHERES_RAYQUAZA]            = MULTICHOICE(MultichoiceList_WheresRayquaza),
-    [MULTI_SLATEPORT_TENT_RULES]       = MULTICHOICE(MultichoiceList_SlateportTentRules),
-    [MULTI_FALLARBOR_TENT_RULES]       = MULTICHOICE(MultichoiceList_FallarborTentRules),
+    [MULTI_CERULEAN_TENT_RULES]        = MULTICHOICE(MultichoiceList_CeruleanTentRules),
+    [MULTI_SAFFRON_TENT_RULES]         = MULTICHOICE(MultichoiceList_SaffronTentRules),
     [MULTI_TAG_MATCH_TYPE]             = MULTICHOICE(MultichoiceList_TagMatchType),
     [MULTI_HELIX_AMBER]                = MULTICHOICE(MultichoiceList_HelixAmber),
     [MULTI_DOME_AMBER]                 = MULTICHOICE(MultichoiceList_DomeAmber),

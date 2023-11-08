@@ -32,7 +32,7 @@
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_FAT_MAN",
-      "x": 37,
+      "x": 39,
       "y": 17,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
@@ -45,7 +45,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SLOWPOKE",
-      "x": 36,
+      "x": 38,
       "y": 15,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_WANDER_AROUND_SLOWER",
@@ -188,7 +188,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
-      "x": 32,
+      "x": 34,
       "y": 16,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
@@ -201,8 +201,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
-      "x": 24,
-      "y": 22,
+      "x": 25,
+      "y": 18,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 1,
@@ -262,7 +262,7 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 28,
+      "x": 30,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_FUCHSIA_CITY_SAFARI_ZONE_OFFICE",
@@ -309,6 +309,13 @@
       "elevation": 0,
       "dest_map": "MAP_FUCHSIA_CITY_HOUSE3",
       "dest_warp_id": "0"
+    },
+    {
+      "x": 22,
+      "y": 21,
+      "elevation": 0,
+      "dest_map": "MAP_FUCHSIA_CITY_BATTLE_TENT_LOBBY",
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [
@@ -317,7 +324,7 @@
   "bg_events": [
     {
       "type": "sign",
-      "x": 31,
+      "x": 33,
       "y": 18,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -325,7 +332,7 @@
     },
     {
       "type": "sign",
-      "x": 26,
+      "x": 28,
       "y": 18,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -357,7 +364,7 @@
     },
     {
       "type": "sign",
-      "x": 38,
+      "x": 40,
       "y": 16,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -402,6 +409,14 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "FuchsiaCity_EventScript_SafariGameSign"
+    },
+    {
+      "type": "sign",
+      "x": 19,
+      "y": 22,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "FuchsiaCity_EventScript_BattleTentSign"
     },
     {
       "type": "hidden_item",

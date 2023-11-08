@@ -55,7 +55,7 @@ static const u8 sRequiredMoveCounts[FACTORY_NUM_STYLES - 1] = {
 static const u16 sMoves_TotalPreparation[] =
 {
     MOVE_SWORDS_DANCE, MOVE_GROWTH, MOVE_MEDITATE, MOVE_AGILITY, MOVE_DOUBLE_TEAM, MOVE_HARDEN,
-    MOVE_MINIMIZE, MOVE_WITHDRAW, MOVE_DEFENSE_CURL, MOVE_BARRIER, MOVE_FOCUS_ENERGY, MOVE_AMNESIA,
+    MOVE_MINIMISE, MOVE_WITHDRAW, MOVE_DEFENSE_CURL, MOVE_BARRIER, MOVE_FOCUS_ENERGY, MOVE_AMNESIA,
     MOVE_ACID_ARMOR, MOVE_SHARPEN, MOVE_CONVERSION, MOVE_CONVERSION_2, MOVE_BELLY_DRUM, MOVE_PSYCH_UP,
     MOVE_CHARGE, MOVE_SNATCH, MOVE_TAIL_GLOW, MOVE_COSMIC_POWER, MOVE_IRON_DEFENSE, MOVE_HOWL, MOVE_BULK_UP, MOVE_CALM_MIND, MOVE_DRAGON_DANCE,
     MOVE_NONE
@@ -388,7 +388,7 @@ static void SetRentalsToOpponentParty(void)
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
         gFacilityTrainerMons = gBattleFrontierMons;
     else
-        gFacilityTrainerMons = gSlateportBattleTentMons;
+        gFacilityTrainerMons = gCeruleanBattleTentMons;
 
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
     {
@@ -413,7 +413,7 @@ static void SetPlayerAndOpponentParties(void)
 
     if (gSaveBlock2Ptr->frontier.lvlMode == FRONTIER_LVL_TENT)
     {
-        gFacilityTrainerMons = gSlateportBattleTentMons;
+        gFacilityTrainerMons = gCeruleanBattleTentMons;
         monLevel = TENT_MIN_LEVEL;
     }
     else
@@ -718,7 +718,7 @@ static void RestorePlayerPartyHeldItems(void)
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
         gFacilityTrainerMons = gBattleFrontierMons;
     else
-        gFacilityTrainerMons = gSlateportBattleTentMons;
+        gFacilityTrainerMons = gCeruleanBattleTentMons;
 
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
     {
@@ -893,13 +893,13 @@ u32 GetAiScriptsInBattleFactory(void)
         int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / 7;
 
         if (gTrainerBattleOpponent_A == TRAINER_FRONTIER_BRAIN)
-            return AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY;
+            return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
         else if (challengeNum < 2)
             return 0;
         else if (challengeNum < 4)
-            return AI_SCRIPT_CHECK_BAD_MOVE;
+            return AI_FLAG_CHECK_BAD_MOVE;
         else
-            return AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY;
+            return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
     }
 }
 

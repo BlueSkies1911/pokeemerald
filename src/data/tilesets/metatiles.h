@@ -136,6 +136,9 @@ const u16 gMetatileAttributes_NavelRock[] = INCBIN_U16("data/tilesets/secondary/
 const u16 gMetatiles_PalletTown[] = INCBIN_U16("data/tilesets/secondary/pallet_town/metatiles.bin");
 const u16 gMetatileAttributes_PalletTown[] = INCBIN_U16("data/tilesets/secondary/pallet_town/metatile_attributes.bin");
 
+const u16 gMetatiles_PrettyPetalFlower[] = INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/metatiles.bin");
+const u16 gMetatileAttributes_PrettyPetalFlower[] = INCBIN_U16("data/tilesets/secondary/pretty_petal_flower/metatile_attributes.bin");
+
 const u16 gMetatiles_PewterCity[] = INCBIN_U16("data/tilesets/secondary/pewter_city/metatiles.bin");
 const u16 gMetatileAttributes_PewterCity[] = INCBIN_U16("data/tilesets/secondary/pewter_city/metatile_attributes.bin");
 

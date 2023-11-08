@@ -39,6 +39,13 @@ enum {
     BG_MOSAIC_SUB_V,
 };
 
+enum BgTileAllocMode
+{
+    BG_TILE_FIND_FREE_SPACE,
+    BG_TILE_ALLOC,
+    BG_TILE_FREE,
+};
+
 struct BgTemplate
 {
     u16 bg:2;                   // 0x1, 0x2 -> 0x3
@@ -58,7 +65,7 @@ u8 LoadBgVram(u8 bg, const void *src, u16 size, u16 destOffset, u8 mode);
 void SetTextModeAndHideBgs(void);
 bool8 IsInvalidBg(u8 bg);
 int BgTileAllocOp(int bg, int offset, int count, int mode);
-void ResetBgsAndClearDma3BusyFlags(u32 leftoverFireRedLeafGreenVariable);
+void ResetBgsAndClearDma3BusyFlags(bool32 enableWindowTileAutoAlloc);
 void InitBgsFromTemplates(u8 bgMode, const struct BgTemplate *templates, u8 numTemplates);
 void InitBgFromTemplate(const struct BgTemplate *template);
 void SetBgMode(u8 bgMode);
@@ -94,5 +101,7 @@ u32 GetTileMapIndexFromCoords(s32 x, s32 y, s32 screenSize, u32 screenWidth, u32
 void CopyTileMapEntry(const u16 *src, u16 *dest, s32 palette1, s32 tileOffset, s32 palette2);
 bool32 IsInvalidBg32(u8 bg);
 bool32 IsTileMapOutsideWram(u8 bg);
+
+extern bool32 gWindowTileAutoAllocEnabled;
 
 #endif // GUARD_BG_H

@@ -15,7 +15,7 @@
   "connections": [
     {
       "map": "MAP_VIRIDIAN_CITY",
-      "offset": -10,
+      "offset": -9,
       "direction": "right"
     },
     {
@@ -28,7 +28,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_BLUE",
       "x": 25,
-      "y": 4,
+      "y": 5,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
       "movement_range_x": 1,
@@ -37,12 +37,38 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "0x0",
       "flag": "FLAG_HIDE_ROUTE_22_RIVAL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 37,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_22_ASPEAR",
+      "script": "BerryTreeScript",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 38,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_22_CHESTO",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
     {
       "x": 8,
-      "y": 5,
+      "y": 6,
       "elevation": 0,
       "dest_map": "MAP_ROUTE22_NORTH_ENTRANCE",
       "dest_warp_id": "1"
@@ -52,7 +78,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 4,
+      "y": 5,
       "elevation": 3,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "1",
@@ -61,7 +87,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 5,
+      "y": 6,
       "elevation": 3,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "1",
@@ -70,7 +96,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 6,
+      "y": 7,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "1",
@@ -79,7 +105,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 4,
+      "y": 5,
       "elevation": 3,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "3",
@@ -88,7 +114,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 5,
+      "y": 6,
       "elevation": 3,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "3",
@@ -97,7 +123,7 @@
     {
       "type": "trigger",
       "x": 33,
-      "y": 6,
+      "y": 7,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_ROUTE22",
       "var_value": "3",
@@ -108,7 +134,7 @@
     {
       "type": "sign",
       "x": 7,
-      "y": 12,
+      "y": 13,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route22_EventScript_LeagueGateSign"
