@@ -62,7 +62,7 @@ extern const u8 gText_SwordsDance[];
 extern const u8 gText_Conversion[];
 extern const u8 gText_SunnyDay[];
 extern const u8 gText_Rest2[];
-extern const u8 gText_Vicegrip[];
+extern const u8 gText_Visegrip[];
 extern const u8 gText_DefenseCurl[];
 extern const u8 gText_LockOn[];
 
@@ -285,7 +285,7 @@ static const u8 *const sUnusedComboMoveNameTexts[] =
     gText_Conversion,
     gText_SunnyDay,
     gText_Rest2,
-    gText_Vicegrip,
+    gText_Visegrip,
     gText_DefenseCurl,
     gText_LockOn
 };

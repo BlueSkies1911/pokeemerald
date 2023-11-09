@@ -13,6 +13,8 @@
 #include "dynamic_placeholder_text_util.h"
 #include "fonts.h"
 
+extern const struct OamData gOamData_AffineOff_ObjNormal_16x16;
+
 static u16 RenderText(struct TextPrinter *);
 static u32 RenderFont(struct TextPrinter *);
 static u16 FontFunc_Small(struct TextPrinter *);
@@ -90,6 +92,30 @@ static const struct GlyphWidthFunc sGlyphWidthFuncs[] =
     { FONT_BRAILLE,      GetGlyphWidth_Braille },
     { FONT_NARROW,       GetGlyphWidth_Narrow },
     { FONT_SMALL_NARROW, GetGlyphWidth_SmallNarrow }
+};
+
+static const struct SpriteSheet sUnknown_81EA68C[] =
+{
+    {sUnusedFRLGDownArrow, sizeof(sUnusedFRLGDownArrow), 0x8000},
+    {sUnusedFRLGDownArrow, sizeof(sUnusedFRLGDownArrow), 0x8000},
+    {NULL}
+};
+
+static const struct SpritePalette sUnknown_81EA6A4[] =
+{
+    {gStandardMenuPalette, 0x8000},
+    {NULL}
+};
+
+static const struct SpriteTemplate sUnknown_81EA6B4 =
+{
+    .tileTag = 0x8000,
+    .paletteTag = 0x8000,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = sub_80062B0,
 };
 
 struct
@@ -1009,6 +1035,7 @@ static u16 RenderText(struct TextPrinter *textPrinter)
                 textPrinter->printerTemplate.currentChar++;
                 return RENDER_REPEAT;
             case EXT_CTRL_CODE_RESET_FONT:
+                subStruct->fontId = textPrinter->printerTemplate.fontId;
                 return RENDER_REPEAT;
             case EXT_CTRL_CODE_PAUSE:
                 textPrinter->delayCounter = *textPrinter->printerTemplate.currentChar;
@@ -1443,6 +1470,11 @@ s32 GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing)
                 isJapanese = 0;
                 break;
             case EXT_CTRL_CODE_RESET_FONT:
+                if (letterSpacing == -1)
+                    localLetterSpacing = GetFontAttribute(fontId, FONTATTR_LETTER_SPACING);
+                else
+                    localLetterSpacing = letterSpacing;
+                break;
             case EXT_CTRL_CODE_PAUSE_UNTIL_PRESS:
             case EXT_CTRL_CODE_WAIT_SE:
             case EXT_CTRL_CODE_FILL_WINDOW:
@@ -1606,6 +1638,35 @@ u8 RenderTextHandleBold(u8 *pixels, u8 fontId, u8 *str)
     return 1;
 }
 
+void sub_80062B0(struct Sprite *sprite)
+{
+    if(sprite->data[0])
+    {
+        sprite->data[0]--;
+    }
+    else
+    {
+        sprite->data[0] = 8;
+        switch(sprite->data[1])
+        {
+            case 0:
+                sprite->y2 = 0;
+                break;
+            case 1:
+                sprite->y2 = 1;
+                break;
+            case 2:
+                sprite->y2 = 2;
+                break;
+            case 3:
+                sprite->y2 = 1;
+                sprite->data[1] = 0;
+                return;
+        }
+        sprite->data[1]++;
+    }
+}
+
 u8 DrawKeypadIcon(u8 windowId, u8 keypadIconId, u16 x, u16 y)
 {
     BlitBitmapRectToWindow(
@@ -1678,6 +1739,25 @@ u8 GetFontAttribute(u8 fontId, u8 attributeId)
 u8 GetMenuCursorDimensionByFont(u8 fontId, u8 whichDimension)
 {
     return sMenuCursorDimensions[fontId][whichDimension];
+}
+
+u8 CreateTextCursorSpriteForOakSpeech(u8 sheetId, u16 x, u16 y, u8 priority, u8 subpriority)
+{
+    u8 spriteId;
+    LoadSpriteSheet(&sUnknown_81EA68C[sheetId & 1]);
+    LoadSpritePalette(sUnknown_81EA6A4);
+    spriteId = CreateSprite(&sUnknown_81EA6B4, x + 3, y + 4, subpriority);
+    gSprites[spriteId].oam.priority = (priority & 3);
+    gSprites[spriteId].oam.matrixNum = 0;
+    gSprites[spriteId].data[0] = 8;
+    return spriteId;
+}
+
+void DestroyTextCursorSprite(u8 spriteId)
+{
+    DestroySprite(&gSprites[spriteId]);
+    FreeSpriteTilesByTag(0x8000);
+    FreeSpritePaletteByTag(0x8000);
 }
 
 static void DecompressGlyph_Small(u16 glyphId, bool32 isJapanese)

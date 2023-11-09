@@ -21,6 +21,7 @@
 #include "util.h"
 #include "constants/songs.h"
 #include "constants/battle_arena.h"
+#include "constants/battle_move_effects.h"
 #include "constants/battle_string_ids.h"
 #include "constants/battle_frontier.h"
 #include "constants/frontier_util.h"
@@ -67,7 +68,7 @@ static const s8 sMindRatings[MOVES_COUNT] =
     [MOVE_ICE_PUNCH] = 1,
     [MOVE_THUNDER_PUNCH] = 1,
     [MOVE_SCRATCH] = 1,
-    [MOVE_VICE_GRIP] = 1,
+    [MOVE_VISE_GRIP] = 1,
     [MOVE_GUILLOTINE] = 1,
     [MOVE_RAZOR_WIND] = 1,
     [MOVE_CUT] = 1,
@@ -175,7 +176,7 @@ static const s8 sMindRatings[MOVES_COUNT] =
     [MOVE_POWDER_SNOW] = 1,
     [MOVE_PROTECT] = -1,
     [MOVE_MACH_PUNCH] = 1,
-    [MOVE_FAINT_ATTACK] = 1,
+    [MOVE_FEINT_ATTACK] = 1,
     [MOVE_SLUDGE_BOMB] = 1,
     [MOVE_MUD_SLAP] = 1,
     [MOVE_OCTAZOOKA] = 1,
@@ -418,7 +419,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
             BattlePutTextOnWindow(gText_Skill, ARENA_WIN_SKILL);
             BattlePutTextOnWindow(gText_Body, ARENA_WIN_BODY);
             BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-            BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+            BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
             (*state)++;
         }
         break;
@@ -442,7 +443,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 40, ARENA_CATEGORY_MIND, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 40, ARENA_CATEGORY_MIND, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;
@@ -451,7 +452,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 56, ARENA_CATEGORY_SKILL, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 56, ARENA_CATEGORY_SKILL, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;
@@ -460,7 +461,7 @@ u8 BattleArena_ShowJudgmentWindow(u8 *state)
         ShowJudgmentSprite(80, 72, ARENA_CATEGORY_BODY, B_POSITION_PLAYER_LEFT);
         ShowJudgmentSprite(160, 72, ARENA_CATEGORY_BODY, B_POSITION_OPPONENT_LEFT);
         BattleStringExpandPlaceholdersToDisplayedString(gText_Judgment);
-        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TITLE);
+        BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGEMENT_TITLE);
         (*state)++;
         result = ARENA_RESULT_STEP_DONE;
         break;
@@ -582,7 +583,26 @@ void BattleArena_InitPoints(void)
 
 void BattleArena_AddMindPoints(u8 battler)
 {
-    gBattleStruct->arenaMindPoints[battler] += sMindRatings[gCurrentMove];
+// All moves with power != 0 give 1 point, with the following exceptions:
+//    - Counter, Mirror Coat, and Bide give 0 points
+//    - Fake Out subtracts 1 point
+// All moves with power == 0 give 0 points, with the following exceptions:
+//    - Protect, Detect, and Endure subtract 1 point
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_FAKE_OUT
+     || gBattleMoves[gCurrentMove].effect == EFFECT_PROTECT
+     || gBattleMoves[gCurrentMove].effect == EFFECT_ENDURE)
+    {
+        gBattleStruct->arenaMindPoints[battler]--;
+    }
+    else if (gBattleMoves[gCurrentMove].power != 0
+          && gBattleMoves[gCurrentMove].effect != EFFECT_COUNTER
+          && gBattleMoves[gCurrentMove].effect != EFFECT_MIRROR_COAT
+          && gBattleMoves[gCurrentMove].effect != EFFECT_METAL_BURST
+          && gBattleMoves[gCurrentMove].effect != EFFECT_BIDE)
+    {
+        gBattleStruct->arenaMindPoints[battler]++;
+    }
 }
 
 void BattleArena_AddSkillPoints(u8 battler)

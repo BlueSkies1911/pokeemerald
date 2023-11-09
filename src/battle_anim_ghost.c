@@ -1,14 +1,18 @@
 #include "global.h"
+#include "bg.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "gpu_regs.h"
+#include "malloc.h"
 #include "palette.h"
 #include "constants/rgb.h"
 #include "scanline_effect.h"
+#include "graphics.h"
 #include "constants/songs.h"
 #include "sound.h"
 #include "trig.h"
 #include "util.h"
+#include "decompress.h"
 
 static void AnimConfuseRayBallBounce(struct Sprite *);
 static void AnimConfuseRayBallBounce_Step1(struct Sprite *);
@@ -41,6 +45,10 @@ static void AnimTask_GrudgeFlames_Step(u8 taskId);
 static void AnimGrudgeFlame(struct Sprite *);
 static void AnimMonMoveCircular(struct Sprite *);
 static void AnimMonMoveCircular_Step(struct Sprite *);
+void sub_80B6BBC(u8 taskId);
+static void sub_80B6BE4(u8 taskId);
+static void sub_80B6F30(u8 taskId);
+static void sub_80B6FC4(u8 taskId);
 
 static const union AffineAnimCmd sAffineAnim_ConfuseRayBallBounce[] =
 {
@@ -82,7 +90,7 @@ static const union AffineAnimCmd sAffineAnim_ShadowBall[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sAffineAnims_ShadowBall[] =
+static const union AffineAnimCmd *const gAffineAnims_ShadowBall[] =
 {
     sAffineAnim_ShadowBall,
 };
@@ -94,8 +102,41 @@ const struct SpriteTemplate gShadowBallSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_ShadowBall,
+    .affineAnims = gAffineAnims_ShadowBall,
     .callback = AnimShadowBall,
+};
+
+const struct SpriteTemplate gEnergyBallSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_ENERGY_BALL,
+    .paletteTag = ANIM_TAG_ENERGY_BALL,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_ShadowBall,
+    .callback = AnimShadowBall,
+};
+
+const struct SpriteTemplate gBattleAnimSpriteTemplate_LeafStorm =
+{
+    .tileTag = ANIM_TAG_RAZOR_LEAF,
+    .paletteTag = ANIM_TAG_RAZOR_LEAF,
+    .oam = &gOamData_AffineOff_ObjNormal_32x16,
+    .anims = gAffineAnims_AirWaveCrescent,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimAirWaveCrescent,
+};
+
+const struct SpriteTemplate gBattleAnimSpriteTemplate_LeafStorm2 =
+{
+    .tileTag = ANIM_TAG_LEAF,
+    .paletteTag = ANIM_TAG_LEAF,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gRazorLeafParticleAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_PoisonProjectile,
+    .callback = AnimNeedleArmSpike,
 };
 
 static const union AnimCmd sAnim_Lick[] =
@@ -215,6 +256,17 @@ static const struct SpriteTemplate sMonMoveCircularSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMonMoveCircular,
+};
+
+const struct SpriteTemplate gFlashCannonBallMovementTemplate =
+{
+    .tileTag = ANIM_TAG_FLASH_CANNON_BALL,
+    .paletteTag = ANIM_TAG_FLASH_CANNON_BALL,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_ShadowBall,
+    .callback = AnimShadowBall
 };
 
 static void AnimConfuseRayBallBounce(struct Sprite *sprite)
@@ -1333,4 +1385,191 @@ static void AnimMonMoveCircular_Step(struct Sprite *sprite)
         gSprites[sprite->data[5]].y -= 8;
         sprite->callback = DestroySpriteAndMatrix;
     }
+}
+
+void sub_80B6BBC(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    task->data[15] = 0;
+    task->func = sub_80B6BE4;
+    sub_80B6BE4(taskId);
+}
+
+static void sub_80B6BE4(u8 taskId)
+{
+    s16 y;
+    struct BattleAnimBgData animBgData;
+    struct Task *task = &gTasks[taskId];
+    u8 rank = GetBattlerSpriteBGPriorityRank(gBattleAnimAttacker);
+
+    switch (task->data[15])
+    {
+    case 0:
+        SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 2);
+        SetAnimBgAttribute(2, BG_ANIM_PRIORITY, 1);
+        task->data[1] = 0;
+        task->data[2] = 0;
+        task->data[3] = 16;
+        task->data[4] = GetAnimBattlerSpriteId(ANIM_ATTACKER);
+        task->data[5] = gSprites[task->data[4]].oam.priority;
+        task->data[6] = (gSprites[task->data[4]].oam.paletteNum + 16) << 4;
+        gSprites[task->data[4]].oam.objMode = ST_OAM_OBJ_BLEND;
+        gSprites[task->data[4]].oam.priority = 3;
+        task->data[7] = 128;
+        break;
+    case 1:
+        ++task->data[1];
+        if (task->data[1] & 1)
+            return;
+        BlendPalette(task->data[6], 0x10, task->data[2], RGB(0, 23, 25));
+        BlendPalette(task->data[7], 0x10, task->data[2], RGB(0, 23, 25));
+        if (task->data[2] <= 11)
+        {
+            ++task->data[2];
+            return;
+        }
+        task->data[1] = 0;
+        task->data[2] = 0;
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG2 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 0x10));
+        break;
+    case 2:
+        SetAnimBgAttribute(2, BG_ANIM_CHAR_BASE_BLOCK, 1);
+        SetAnimBgAttribute(2, BG_ANIM_SCREEN_SIZE, 0);
+        gBattle_BG2_X = 0;
+        gBattle_BG2_Y = 0;
+        SetGpuReg(REG_OFFSET_BG2HOFS, gBattle_BG2_X);
+        SetGpuReg(REG_OFFSET_BG2VOFS, gBattle_BG2_Y);
+        GetBattleAnimBgData(&animBgData, 2);
+        AnimLoadCompressedBgGfx(animBgData.bgId, gBattleAnimBgImage_ScaryFace, animBgData.tilesOffset);
+        LoadCompressedPalette(gBattleAnimBgPalette_ScaryFace, 16 * animBgData.paletteId, 0x20);
+        break;
+    case 3:
+        GetBattleAnimBgData(&animBgData, 2);
+        gMonSpritesGfxPtr->buffer = AllocZeroed(0x2000);
+        LZDecompressWram(gBattleAnimBgTilemap_ScaryFacePlayer, gMonSpritesGfxPtr->buffer);
+        RelocateBattleBgPal(animBgData.paletteId, gMonSpritesGfxPtr->buffer, 256, 0);
+        CopyToBgTilemapBufferRect_ChangePalette(animBgData.bgId, gMonSpritesGfxPtr->buffer, 0, 0, 0x20, 0x20, 0x11);
+        CopyBgTilemapBufferToVram(2);
+        FREE_AND_SET_NULL(gMonSpritesGfxPtr->buffer);
+        break;
+    case 4:
+        ++task->data[1];
+        if (task->data[1] & 1)
+            return;
+        ++task->data[2];
+        --task->data[3];
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(task->data[2], task->data[3]));
+        if (task->data[3])
+            return;
+        task->data[1] = 0;
+        task->data[2] = 0;
+        task->data[3] = 16;
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG1 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 0x10));
+        SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
+        SetAnimBgAttribute(2, BG_ANIM_PRIORITY, 2);
+        break;
+    case 5:
+        if (rank == 1)
+            ClearGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_BG1_ON);
+        else
+            ClearGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_BG2_ON);
+        break;
+    case 6:
+        y = gSprites[task->data[4]].y + gSprites[task->data[4]].y2 - 0x20;
+        if (y < 0)
+            y = 0;
+        if (rank == 1)
+            task->data[10] = ScanlineEffect_InitWave(y, y + 0x40, 4, 8, 0, 4, 1);
+        else
+            task->data[10] = ScanlineEffect_InitWave(y, y + 0x40, 4, 8, 0, 8, 1);
+        break;
+    case 7:
+        BlendPalette(task->data[7], 0x10, 0xC, RGB(31, 31, 29));
+        if (rank == 1)
+            SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_BG1_ON);
+        else
+            SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_BG2_ON);
+        task->func = sub_80B6F30;
+        task->data[15] = 0;
+        break;
+    }
+    ++task->data[15];
+}
+
+static void sub_80B6F30(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    ++task->data[1];
+    task->data[8] = task->data[1] & 1;
+    if (!task->data[8])
+        task->data[2] = gSineTable[task->data[1]] / 18;
+    if (task->data[8] == 1)
+        task->data[3] = 16 - gSineTable[task->data[1]] / 18;
+    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(task->data[2], task->data[3]));
+    if (task->data[1] == 128)
+    {
+        task->data[15] = 0;
+        task->func = sub_80B6FC4;
+        sub_80B6FC4(taskId);
+    }
+}
+
+static void sub_80B6FC4(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    switch (task->data[15])
+    {
+    case 0:
+        gScanlineEffect.state = 3;
+        BlendPalette(task->data[7], 0x10, 0xC, RGB(0, 23, 25));
+        break;
+    case 1:
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG2 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0x10, 0));
+        task->data[2] = 16;
+        task->data[3] = 0;
+        break;
+    case 2:
+        --task->data[2];
+        ++task->data[3];
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(task->data[2], task->data[3]));
+        if (task->data[3] <= 15)
+            return;
+        SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 2);
+        SetAnimBgAttribute(2, BG_ANIM_PRIORITY, 2);
+        break;
+    case 3:
+        ClearBattleAnimBg(2);
+        FillPalette(0, 0x90, 0x20);
+        SetAnimBgAttribute(2, BG_ANIM_CHAR_BASE_BLOCK, 0);
+        task->data[1] = 12;
+        break;
+    case 4:
+        BlendPalette(task->data[6], 0x10, task->data[1], RGB(0, 23, 25));
+        BlendPalette(task->data[7], 0x10, task->data[1], RGB(0, 23, 25));
+        if ( task->data[1] )
+        {
+            --task->data[1];
+            return;
+        }
+        task->data[1] = 0;
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG2 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 0x10));
+        break;
+    case 5:
+        gSprites[task->data[4]].oam.priority = task->data[5];
+        gSprites[task->data[4]].oam.objMode = ST_OAM_OBJ_NORMAL;
+        SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
+        SetAnimBgAttribute(2, BG_ANIM_PRIORITY, 1);
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_NONE);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+        DestroyAnimVisualTask(taskId);
+        break;
+    }
+    ++task->data[15];
 }

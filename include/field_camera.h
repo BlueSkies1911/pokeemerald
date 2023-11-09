@@ -22,6 +22,7 @@ void DrawDoorMetatileAt(int x, int y, u16 *arr);
 void ResetFieldCamera(void);
 void ResetCameraUpdateInfo(void);
 u32 InitCameraUpdateCallback(u8 trackedSpriteId);
+void CameraUpdateNoObjectRefresh(void);
 void CameraUpdate(void);
 void SetCameraPanningCallback(void (*callback)(void));
 void SetCameraPanning(s16 horizontal, s16 vertical);

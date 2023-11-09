@@ -364,7 +364,7 @@ static void Task_EReader(u8 taskId)
     case ER_STATE_TRY_LINK:
         if (JOY_NEW(B_BUTTON))
         {
-            // Canceled
+            // Cancelled
             PlaySE(SE_SELECT);
             CloseLink();
             ResetTimer(&data->timer);
@@ -471,7 +471,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_VALIDATE_CARD:
-        data->status = ValidateTrainerHillData((struct EReaderTrainerHillSet *)gDecompressionBuffer);
+        data->status = ValidateTrainerTowerData((struct EReaderTrainerTowerSet *)gDecompressionBuffer);
         SetCloseLinkCallbackAndType(data->status);
         data->state = ER_STATE_WAIT_DISCONNECT;
         break;
@@ -485,7 +485,7 @@ static void Task_EReader(u8 taskId)
         }
         break;
     case ER_STATE_SAVE:
-        if (TryWriteTrainerHill((struct EReaderTrainerHillSet *)&gDecompressionBuffer))
+        if (TryWriteTrainerTower((struct EReaderTrainerTowerSet *)&gDecompressionBuffer))
         {
             MG_AddMessageTextPrinter(gJPText_ConnectionComplete);
             ResetTimer(&data->timer);

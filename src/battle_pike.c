@@ -267,13 +267,13 @@ static const struct PikeWildMon *const *const sWildMons[2] =
 static const struct PikeRoomNPC sNPCTable[] =
 {
     {
-        .graphicsId = OBJ_EVENT_GFX_POKEFAN_F,
+        .graphicsId = OBJ_EVENT_GFX_WOMAN_3,
         .speechId1 = 3,
         .speechId2 = 5,
         .speechId3 = 6
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_NINJA_BOY,
+        .graphicsId = OBJ_EVENT_GFX_LITTLE_BOY,
         .speechId1 = 13,
         .speechId2 = 32,
         .speechId3 = 37
@@ -291,7 +291,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 33
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_EXPERT_M,
+        .graphicsId = OBJ_EVENT_GFX_OLD_MAN_1,
         .speechId1 = 0,
         .speechId2 = 0,
         .speechId3 = 0
@@ -303,7 +303,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 1
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_BLACK_BELT,
+        .graphicsId = OBJ_EVENT_GFX_BLACKBELT,
         .speechId1 = 22,
         .speechId2 = 23,
         .speechId3 = 27
@@ -315,7 +315,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 31
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_GIRL_3,
+        .graphicsId = OBJ_EVENT_GFX_WOMAN_2,
         .speechId1 = 13,
         .speechId2 = 39,
         .speechId3 = 21
@@ -327,13 +327,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 17
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_CYCLING_TRIATHLETE_M,
+        .graphicsId = OBJ_EVENT_GFX_BIKER,
         .speechId1 = 30,
         .speechId2 = 20,
         .speechId3 = 36
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_5,
+        .graphicsId = OBJ_EVENT_GFX_ROCKER,
         .speechId1 = 28,
         .speechId2 = 34,
         .speechId3 = 25
@@ -363,13 +363,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 26
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
+        .graphicsId = OBJ_EVENT_GFX_SWIMMER_M_LAND,
         .speechId1 = 37,
         .speechId2 = 12,
         .speechId3 = 32
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_3,
+        .graphicsId = OBJ_EVENT_GFX_WORKER_M,
         .speechId1 = 24,
         .speechId2 = 23,
         .speechId3 = 38
@@ -387,7 +387,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 35
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_TUBER_F,
+        .graphicsId = OBJ_EVENT_GFX_TUBER_F_LAND,
         .speechId1 = 39,
         .speechId2 = 14,
         .speechId3 = 13
@@ -405,13 +405,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 16
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+        .graphicsId = OBJ_EVENT_GFX_SWIMMER_F_LAND,
         .speechId1 = 18,
         .speechId2 = 13,
         .speechId3 = 21
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_1,
+        .graphicsId = OBJ_EVENT_GFX_BALDING_MAN,
         .speechId1 = 22,
         .speechId2 = 31,
         .speechId3 = 27
@@ -556,7 +556,7 @@ static void SetupRoomObjectEvents(void)
     u32 objGfx1;
     u16 objGfx2;
 
-    VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_LINK_RECEPTIONIST);
+    VarSet(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST);
     VarSet(VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_DUSCLOPS);
     setObjGfx1 = TRUE;
     setObjGfx2 = FALSE;
@@ -570,7 +570,7 @@ static void SetupRoomObjectEvents(void)
         setObjGfx1 = FALSE;
         break;
     case PIKE_ROOM_HEAL_FULL:
-        objGfx1 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx1 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         break;
     case PIKE_ROOM_NPC:
         objGfx1 = (u8)(GetNPCRoomGraphicsId());
@@ -591,7 +591,7 @@ static void SetupRoomObjectEvents(void)
         break;
     case PIKE_ROOM_HARD_BATTLE:
         PrepareOneTrainer(TRUE);
-        objGfx2 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx2 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         setObjGfx1 = FALSE;
         setObjGfx2 = TRUE;
         break;
@@ -601,7 +601,7 @@ static void SetupRoomObjectEvents(void)
         break;
     case PIKE_ROOM_BRAIN:
         SetFrontierBrainObjEventGfx(FRONTIER_FACILITY_PIKE);
-        objGfx2 = OBJ_EVENT_GFX_LINK_RECEPTIONIST;
+        objGfx2 = OBJ_EVENT_GFX_UNION_ROOM_RECEPTIONIST;
         setObjGfx1 = FALSE;
         setObjGfx2 = TRUE;
         break;
@@ -854,8 +854,8 @@ static bool8 DoesTypePreventStatus(u16 species, u32 status)
             ret = TRUE;
         break;
     case STATUS1_PARALYSIS:
-        if (gSpeciesInfo[species].types[0] == TYPE_GROUND || gSpeciesInfo[species].types[0] == TYPE_ELECTRIC
-            || gSpeciesInfo[species].types[1] == TYPE_GROUND || gSpeciesInfo[species].types[1] == TYPE_ELECTRIC)
+        if (gSpeciesInfo[species].types[0] == TYPE_GROUND || gSpeciesInfo[species].types[1] == TYPE_GROUND
+            || gSpeciesInfo[species].types[0] == TYPE_ELECTRIC || gSpeciesInfo[species].types[1] == TYPE_ELECTRIC)
             ret = TRUE;
         break;
     case STATUS1_BURN:
@@ -1327,8 +1327,7 @@ bool8 InBattlePike(void)
 {
     return gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_THREE_PATH_ROOM
         || gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_NORMAL
-        || gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS
-        || gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_UNUSED;
+        || gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS;
 }
 
 static void SetHintedRoom(void)

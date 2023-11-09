@@ -9,7 +9,7 @@
 #include "overworld.h"
 #include "pokemon_storage_system.h"
 #include "main.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "link.h"
 #include "constants/game_stat.h"
 
@@ -29,7 +29,7 @@ static u8 HandleReplaceSector(u16, const struct SaveSectorLocation *);
  * Sectors 0 - 13:      Save Slot 1
  * Sectors 14 - 27:     Save Slot 2
  * Sectors 28 - 29:     Hall of Fame
- * Sector 30:           Trainer Hill
+ * Sector 30:           Trainer Tower
  * Sector 31:           Recorded Battle
  *
  * There are two save slots for saving the player's game data. We alternate between
@@ -708,15 +708,15 @@ static void UpdateSaveAddresses(void)
 u8 HandleSavingData(u8 saveType)
 {
     u8 i;
-    u32 *backupVar = gTrainerHillVBlankCounter;
+    u32 *backupVar = gTrainerTowerVBlankCounter;
     u8 *tempAddr;
 
-    gTrainerHillVBlankCounter = NULL;
+    gTrainerTowerVBlankCounter = NULL;
     UpdateSaveAddresses();
     switch (saveType)
     {
     case SAVE_HALL_OF_FAME_ERASE_BEFORE:
-        // Unused. Erases the special save sectors (HOF, Trainer Hill, Recorded Battle)
+        // Unused. Erases the special save sectors (HOF, Trainer Tower, Recorded Battle)
         // before overwriting HOF.
         for (i = SECTOR_ID_HOF_1; i < SECTORS_COUNT; i++)
             EraseFlashSector(i);
@@ -759,7 +759,7 @@ u8 HandleSavingData(u8 saveType)
         WriteSaveSectorOrSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         break;
     }
-    gTrainerHillVBlankCounter = backupVar;
+    gTrainerTowerVBlankCounter = backupVar;
     return 0;
 }
 
@@ -930,7 +930,7 @@ u32 TryReadSpecialSaveSector(u8 sector, u8 *dst)
     s32 size;
     u8 *savData;
 
-    if (sector != SECTOR_ID_TRAINER_HILL && sector != SECTOR_ID_RECORDED_BATTLE)
+    if (sector != SECTOR_ID_TRAINER_TOWER && sector != SECTOR_ID_RECORDED_BATTLE)
         return SAVE_STATUS_ERROR;
 
     ReadFlash(sector, 0, (u8 *)&gSaveDataBuffer, SECTOR_SIZE);
@@ -953,7 +953,7 @@ u32 TryWriteSpecialSaveSector(u8 sector, u8 *src)
     u8 *savData;
     void *savDataBuffer;
 
-    if (sector != SECTOR_ID_TRAINER_HILL && sector != SECTOR_ID_RECORDED_BATTLE)
+    if (sector != SECTOR_ID_TRAINER_TOWER && sector != SECTOR_ID_RECORDED_BATTLE)
         return SAVE_STATUS_ERROR;
 
     savDataBuffer = &gSaveDataBuffer;

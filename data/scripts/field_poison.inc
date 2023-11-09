@@ -14,7 +14,7 @@ EventScript_FieldWhiteOut::
 	special Script_FadeOutMapMusic
 	waitstate
 	fadescreen FADE_TO_BLACK
-	call_if_set FLAG_WHITEOUT_TO_LAVARIDGE, EventScript_SetRespawnLavaridgePkmnCenter
+	call_if_set FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1, EventScript_SetRespawnLavaridgePkmnCenter
 	special SetCB2WhiteOut
 	waitstate
 	end
@@ -32,8 +32,8 @@ EventScript_FrontierFieldWhiteOut::
 	pyramid_inchallenge
 	goto_if_eq VAR_RESULT, 1, BattleFrontier_BattlePyramid_EventScript_WarpToLobbyLost  @ On Pyramid floor
 	goto_if_eq VAR_RESULT, 2, BattleFrontier_BattlePyramid_EventScript_WarpToLobbyLost  @ On Pyramid peak
-	trainerhill_inchallenge
-	goto_if_eq VAR_RESULT, TRUE, TrainerHill_1F_EventScript_Lost
+	trainertower_inchallenge
+	goto_if_eq VAR_RESULT, TRUE, TrainerTower_1F_EventScript_Lost
 	special Script_FadeOutMapMusic
 	waitstate
 	fadescreen FADE_TO_BLACK

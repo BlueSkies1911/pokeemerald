@@ -4,6 +4,7 @@
 #include "constants/rgb.h"
 #include "util.h"
 #include "event_object_movement.h"
+#include "field_camera.h"
 #include "field_weather.h"
 #include "main.h"
 #include "menu.h"
@@ -18,13 +19,6 @@
 #include "gpu_regs.h"
 
 #define DROUGHT_COLOR_INDEX(color) ((((color) >> 1) & 0xF) | (((color) >> 2) & 0xF0) | (((color) >> 3) & 0xF00))
-
-enum
-{
-    COLOR_MAP_NONE,
-    COLOR_MAP_DARK_CONTRAST,
-    COLOR_MAP_CONTRAST,
-};
 
 struct RGBColor
 {
@@ -67,7 +61,7 @@ static const u8 *sPaletteColorMapTypes;
 
 // The drought weather effect uses a precalculated color lookup table. Presumably this
 // is because the underlying color shift calculation is slow.
-static const u16 sDroughtWeatherColors[][0x1000] = {
+const u16 sDroughtWeatherColors[][0x1000] = {
     INCBIN_U16("graphics/weather/drought/colors_0.bin"),
     INCBIN_U16("graphics/weather/drought/colors_1.bin"),
     INCBIN_U16("graphics/weather/drought/colors_2.bin"),
@@ -111,7 +105,7 @@ void (*const gWeatherPalStateFuncs[])(void) =
 
 // This table specifies which of the color maps should be
 // applied to each of the background and sprite palettes.
-static const u8 ALIGNED(2) sBasePaletteColorMapTypes[32] =
+EWRAM_DATA u8 sBasePaletteColorMapTypes[32] =
 {
     // background palettes
     COLOR_MAP_DARK_CONTRAST,
@@ -155,11 +149,10 @@ void StartWeather(void)
 {
     if (!FuncIsActiveTask(Task_WeatherMain))
     {
-        u8 index = AllocSpritePalette(PALTAG_WEATHER);
+        u8 index = 15;
         CpuCopy32(gFogPalette, &gPlttBufferUnfaded[OBJ_PLTT_ID(index)], PLTT_SIZE_4BPP);
         BuildColorMaps();
         gWeatherPtr->contrastColorMapSpritePalIndex = index;
-        gWeatherPtr->weatherPicSpritePalIndex = AllocSpritePalette(PALTAG_WEATHER_2);
         gWeatherPtr->rainSpriteCount = 0;
         gWeatherPtr->curRainSpriteIndex = 0;
         gWeatherPtr->cloudSpritesCreated = 0;
@@ -219,6 +212,7 @@ static void Task_WeatherInit(u8 taskId)
     // When the screen fades in, this is set to TRUE.
     if (gWeatherPtr->readyForInit)
     {
+        UpdateCameraPanning();
         sWeatherFuncs[gWeatherPtr->currWeather].initAll();
         gTasks[taskId].func = Task_WeatherMain;
     }
@@ -270,7 +264,7 @@ static u8 None_Finish(void)
 // this function always builds the same two tables.
 static void BuildColorMaps(void)
 {
-    u16 i;
+    u16 v0;
     u8 (*colorMaps)[32];
     u16 colorVal;
     u16 curBrightness;
@@ -279,11 +273,15 @@ static void BuildColorMaps(void)
     u16 baseBrightness;
     u32 remainingBrightness;
     s16 diff;
+    u8 i;
+
+    for (i = 0; i <= 12; i++)
+        sBasePaletteColorMapTypes[i] = COLOR_MAP_DARK_CONTRAST;
 
     sPaletteColorMapTypes = sBasePaletteColorMapTypes;
-    for (i = 0; i < 2; i++)
+    for (v0 = 0; v0 < 2; v0++)
     {
-        if (i == 0)
+        if (v0 == 0)
             colorMaps = gWeatherPtr->darkenedContrastColorMaps;
         else
             colorMaps = gWeatherPtr->contrastColorMaps;
@@ -291,7 +289,7 @@ static void BuildColorMaps(void)
         for (colorVal = 0; colorVal < 32; colorVal++)
         {
             curBrightness = colorVal << 8;
-            if (i == 0)
+            if (v0 == 0)
                 brightnessDelta = (colorVal << 8) / 16;
             else
                 brightnessDelta = 0;
@@ -807,6 +805,74 @@ void FadeScreen(u8 mode, s8 delay)
     }
 }
 
+void FadeSelectedPals(u8 mode, s8 delay, u32 selectedPalettes)
+{
+    u32 fadeColor;
+    bool8 fadeOut;
+    bool8 useWeatherPal;
+
+    switch (mode)
+    {
+    case FADE_FROM_BLACK:
+        fadeColor = RGB_BLACK;
+        fadeOut = FALSE;
+        break;
+    case FADE_FROM_WHITE:
+        fadeColor = RGB_WHITEALPHA;
+        fadeOut = FALSE;
+        break;
+    case FADE_TO_BLACK:
+        fadeColor = RGB_BLACK;
+        fadeOut = TRUE;
+        break;
+    case FADE_TO_WHITE:
+        fadeColor = RGB_WHITEALPHA;
+        fadeOut = TRUE;
+        break;
+    default:
+        return;
+    }
+
+    switch (gWeatherPtr->currWeather)
+    {
+    case WEATHER_RAIN:
+    case WEATHER_RAIN_THUNDERSTORM:
+    case WEATHER_DOWNPOUR:
+    case WEATHER_SNOW:
+    case WEATHER_FOG_HORIZONTAL:
+    case WEATHER_SHADE:
+    case WEATHER_DROUGHT:
+        useWeatherPal = TRUE;
+        break;
+    default:
+        useWeatherPal = FALSE;
+        break;
+    }
+
+    if (fadeOut)
+    {
+        if (useWeatherPal)
+            CpuFastCopy(gPlttBufferFaded, gPlttBufferUnfaded, 0x400);
+
+        BeginNormalPaletteFade(selectedPalettes, delay, 0, 16, fadeColor);
+        gWeatherPtr->palProcessingState = WEATHER_PAL_STATE_SCREEN_FADING_OUT;
+    }
+    else
+    {
+        gWeatherPtr->fadeDestColor = fadeColor;
+        if (useWeatherPal)
+            gWeatherPtr->fadeScreenCounter = 0;
+        else
+            BeginNormalPaletteFade(selectedPalettes, delay, 16, 0, fadeColor);
+
+        gWeatherPtr->palProcessingState = WEATHER_PAL_STATE_SCREEN_FADING_IN;
+        gWeatherPtr->fadeInFirstFrame = 1;
+        gWeatherPtr->fadeInTimer = 0;
+        Weather_SetBlendCoeffs(gWeatherPtr->currBlendEVA, gWeatherPtr->currBlendEVB);
+        gWeatherPtr->readyForInit = TRUE;
+    }
+}
+
 bool8 IsWeatherNotFadingIn(void)
 {
     return (gWeatherPtr->palProcessingState != WEATHER_PAL_STATE_SCREEN_FADING_IN);
@@ -863,10 +929,10 @@ static bool8 UNUSED IsFirstFrameOfWeatherFadeIn(void)
         return FALSE;
 }
 
-void LoadCustomWeatherSpritePalette(const u16 *palette)
+void LoadCustomWeatherSpritePalette(const struct SpritePalette *palette)
 {
-    LoadPalette(palette, OBJ_PLTT_ID(gWeatherPtr->weatherPicSpritePalIndex), PLTT_SIZE_4BPP);
-    UpdateSpritePaletteWithWeather(gWeatherPtr->weatherPicSpritePalIndex);
+    LoadSpritePalette(palette);
+    UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(palette->tag));
 }
 
 static void LoadDroughtWeatherPalette(u8 *palsIndex, u8 *palsOffset)
@@ -1108,3 +1174,10 @@ void ResetPreservedPalettesInWeather(void)
 {
     sPaletteColorMapTypes = sBasePaletteColorMapTypes;
 }
+
+void UpdatePaletteGammaType(u8 index, u8 gammaType)
+{
+    if (index != 0xFF)
+        sBasePaletteColorMapTypes[index + 16] = gammaType;
+}
+

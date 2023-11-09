@@ -19,24 +19,30 @@
 	.4byte \script
 	.endm
 
-	@ Defines an object event template for map data, to be used by a normal object. Mirrors the struct layout of ObjectEventTemplate in include/global.fieldmap.h
-	.macro object_event index:req, gfx:req, x:req, y:req, elevation:req, movement_type:req, x_radius:req, y_radius:req, trainer_type:req, sight_radius_tree_etc:req, script:req, event_flag:req
-	.byte \index
-	.byte \gfx
-	.byte OBJ_KIND_NORMAL
-	.space 1  @ Padding
-	.2byte \x, \y
-	.byte \elevation
-	.byte \movement_type
-	.byte ((\y_radius << 4) | \x_radius)
-	.space 1  @ Padding
-	.2byte \trainer_type
-	.2byte \sight_radius_tree_etc
-	.4byte \script
-	.2byte \event_flag
-	.space 2  @ Padding
-	inc _num_npcs
-	.endm
+	@ Defines an object event template for map data. Mirrors the struct layout of ObjectEventTemplate in include/global.fieldmap.h
+    .macro object_event index:req, gfx:req, replacement:req, x:req, y:req, elevation:req, movement_type:req, x_radius:req, y_radius:req, trainer_type:req, sight_radius_tree_etc:req, script:req, event_flag:req
+    .byte \index, \gfx, \replacement, 0
+    .2byte \x
+    .2byte \y
+    .byte \elevation, \movement_type, ((\y_radius << 4) | \x_radius), 0
+    .2byte \trainer_type, \sight_radius_tree_etc
+    .4byte \script
+    .2byte \event_flag
+    .2byte 0
+    inc _num_npcs
+    .endm
+
+    .macro object_clone_event index:req, x:req, y:req, source_id:req, source_map:req
+    .byte \index, 0, 0xFF, 0
+    .2byte \x
+    .2byte \y
+    .byte \source_id, 0, 0, 0
+    .2byte \source_map & 0xFF  @ map num
+    .2byte \source_map >> 8    @ map group
+    .4byte NULL
+    .2byte 0, 0
+    inc _num_npcs
+    .endm
 
 	@ Defines an object event template for map data, to be used by a clone object. Mirrors the struct layout of ObjectEventTemplate in include/global.fieldmap.h
 	@ NOTE: The handling for this type of event does not exist in Emerald by default; it is exclusive to FRLG.

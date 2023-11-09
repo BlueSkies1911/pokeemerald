@@ -1099,3 +1099,18 @@ static void AnimTask_WaitAndRestoreVisibility(u8 taskId)
         DestroyTask(taskId);
     }
 }
+
+void AnimTask_CanBattlerSwitch(u8 taskId)
+{
+    if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        gBattleAnimArgs[ARG_RET_ID] = FALSE;
+    else
+        gBattleAnimArgs[ARG_RET_ID] = CanBattlerSwitch(GetAnimBattlerId(gBattleAnimArgs[0]));
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SetAnimTargetToAttackerOpposite(u8 taskId)
+{
+    gBattleAnimTarget = BATTLE_OPPOSITE(gBattleAnimAttacker);
+    DestroyAnimVisualTask(taskId);
+}

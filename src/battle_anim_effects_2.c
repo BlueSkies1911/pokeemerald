@@ -39,8 +39,8 @@ static void AnimBulletSeed(struct Sprite *);
 static void AnimBulletSeed_Step1(struct Sprite *);
 static void AnimBulletSeed_Step2(struct Sprite *);
 static void AnimRazorWindTornado(struct Sprite *);
-static void AnimViceGripPincer(struct Sprite *);
-static void AnimViceGripPincer_Step(struct Sprite *);
+static void AnimViseGripPincer(struct Sprite *);
+static void AnimViseGripPincer_Step(struct Sprite *);
 static void AnimGuillotinePincer(struct Sprite *);
 static void AnimGuillotinePincer_Step1(struct Sprite *);
 static void AnimGuillotinePincer_Step2(struct Sprite *);
@@ -90,8 +90,8 @@ static void AnimPerishSongMusicNote_Step2(struct Sprite *);
 static void AnimGuardRing(struct Sprite *);
 static void AnimTask_Withdraw_Step(u8);
 static void AnimTask_GrowAndGrayscale_Step(u8);
-static void AnimTask_Minimize_Step(u8);
-static void CreateMinimizeSprite(struct Task *, u8);
+static void AnimTask_Minimise_Step(u8);
+static void CreateMinimiseSprite(struct Task *, u8);
 static void ClonedMinizeSprite_Step(struct Sprite *);
 static void AnimTask_Splash_Step(u8);
 static void AnimTask_GrowAndShrink_Step(u8);
@@ -466,7 +466,7 @@ const struct SpriteTemplate gRazorWindTornadoSpriteTemplate =
     .callback = AnimRazorWindTornado,
 };
 
-const union AnimCmd gViceGripAnimCmds1[] =
+const union AnimCmd gViseGripAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(16, 3),
@@ -474,7 +474,7 @@ const union AnimCmd gViceGripAnimCmds1[] =
     ANIMCMD_END,
 };
 
-const union AnimCmd gViceGripAnimCmds2[] =
+const union AnimCmd gViseGripAnimCmds2[] =
 {
     ANIMCMD_FRAME(0, 3, .vFlip = TRUE, .hFlip = TRUE),
     ANIMCMD_FRAME(16, 3, .vFlip = TRUE, .hFlip = TRUE),
@@ -482,21 +482,21 @@ const union AnimCmd gViceGripAnimCmds2[] =
     ANIMCMD_END,
 };
 
-const union AnimCmd *const gViceGripAnimTable[] =
+const union AnimCmd *const gViseGripAnimTable[] =
 {
-    gViceGripAnimCmds1,
-    gViceGripAnimCmds2,
+    gViseGripAnimCmds1,
+    gViseGripAnimCmds2,
 };
 
-const struct SpriteTemplate gViceGripSpriteTemplate =
+const struct SpriteTemplate gViseGripSpriteTemplate =
 {
     .tileTag = ANIM_TAG_CUT,
     .paletteTag = ANIM_TAG_CUT,
     .oam = &gOamData_AffineOff_ObjBlend_32x32,
-    .anims = gViceGripAnimTable,
+    .anims = gViseGripAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimViceGripPincer,
+    .callback = AnimViseGripPincer,
 };
 
 const union AnimCmd gGuillotineAnimCmds1[] =
@@ -990,6 +990,28 @@ const union AffineAnimCmd gSpitUpOrbAffineAnimCmds[] =
     AFFINEANIMCMD_FRAME(0x80, 0x80, 0, 0),
     AFFINEANIMCMD_FRAME(0x8, 0x8, 0, 1),
     AFFINEANIMCMD_JUMP(1),
+};
+
+const struct SpriteTemplate gPowerGemOrbSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_POWER_GEM,
+    .paletteTag = ANIM_TAG_POWER_GEM,
+    .oam = &gOamData_AffineNormal_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gHiddenPowerOrbAffineAnimTable,
+    .callback = AnimOrbitFast,
+};
+
+const struct SpriteTemplate gPowerGemOrbScatterSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_POWER_GEM,
+    .paletteTag = ANIM_TAG_POWER_GEM,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gHiddenPowerOrbAffineAnimTable,
+    .callback = AnimOrbitScatter,
 };
 
 const union AffineAnimCmd *const gSpitUpOrbAffineAnimTable[] =
@@ -1900,7 +1922,7 @@ static void AnimRazorWindTornado(struct Sprite *sprite)
 
 // Animates a single pincer line that extends towards the center of the target mon.
 // arg 0: invert
-static void AnimViceGripPincer(struct Sprite *sprite)
+static void AnimViseGripPincer(struct Sprite *sprite)
 {
     s16 startXOffset = 32;
     s16 startYOffset = -32;
@@ -1921,10 +1943,10 @@ static void AnimViceGripPincer(struct Sprite *sprite)
     sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2) + endXOffset;
     sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET) + endYOffset;
     sprite->callback = StartAnimLinearTranslation;
-    StoreSpriteCallbackInData6(sprite, AnimViceGripPincer_Step);
+    StoreSpriteCallbackInData6(sprite, AnimViseGripPincer_Step);
 }
 
-static void AnimViceGripPincer_Step(struct Sprite *sprite)
+static void AnimViseGripPincer_Step(struct Sprite *sprite)
 {
     if (sprite->animEnded)
         DestroyAnimSprite(sprite);
@@ -2033,7 +2055,7 @@ static void AnimTask_GrowAndGrayscale_Step(u8 taskId)
 // Shrinks and grows the attacking mon several times. Also creates transparent versions of the
 // mon's sprite while it is shrinking.
 // No args.
-void AnimTask_Minimize(u8 taskId)
+void AnimTask_Minimise(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     u8 spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);
@@ -2046,17 +2068,17 @@ void AnimTask_Minimize(u8 taskId)
     task->data[5] = 0;
     task->data[6] = 0;
     task->data[7] = GetBattlerSpriteSubpriority(gBattleAnimAttacker);
-    task->func = AnimTask_Minimize_Step;
+    task->func = AnimTask_Minimise_Step;
 }
 
-static void AnimTask_Minimize_Step(u8 taskId)
+static void AnimTask_Minimise_Step(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     switch (task->data[1])
     {
     case 0:
         if (task->data[2] == 0 || task->data[2] == 3 || task->data[2] == 6)
-            CreateMinimizeSprite(task, taskId);
+            CreateMinimiseSprite(task, taskId);
         task->data[2]++;
         task->data[4] += 0x28;
         SetSpriteRotScale(task->data[0], task->data[4], task->data[4], 0);
@@ -2115,7 +2137,7 @@ static void AnimTask_Minimize_Step(u8 taskId)
     }
 }
 
-static void CreateMinimizeSprite(struct Task *task, u8 taskId)
+static void CreateMinimiseSprite(struct Task *task, u8 taskId)
 {
     u16 matrixNum;
     s16 spriteId = CloneBattlerSpriteWithBlend(ANIM_ATTACKER);

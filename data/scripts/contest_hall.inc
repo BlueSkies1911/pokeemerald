@@ -15,183 +15,183 @@
 .set LOCALID_ARTIST, 15
 
 @ Either ends or returns to EventScript_ContestReceptionist after submitting a contest entry
-LilycoveCity_ContestLobby_EventScript_SpeakToContestReceptionist::
+CeladonCity_ContestLobby_EventScript_SpeakToContestReceptionist::
 	lock
 	faceplayer
-	goto_if_ne VAR_CONTEST_PRIZE_PICKUP, 0, LilycoveCity_ContestLobby_EventScript_PickUpPrize
-	call_if_set FLAG_RECEIVED_POKEBLOCK_CASE, LilycoveCity_ContestLobby_EventScript_ReceptionWelcome
-	call_if_unset FLAG_RECEIVED_POKEBLOCK_CASE, LilycoveCity_ContestLobby_EventScript_GivePokeblockCase
-	goto LilycoveCity_ContestLobby_EventScript_AskEnterContest
+	goto_if_ne VAR_CONTEST_PRIZE_PICKUP, 0, CeladonCity_ContestLobby_EventScript_PickUpPrize
+	call_if_set FLAG_RECEIVED_POKEBLOCK_CASE, CeladonCity_ContestLobby_EventScript_ReceptionWelcome
+	call_if_unset FLAG_RECEIVED_POKEBLOCK_CASE, CeladonCity_ContestLobby_EventScript_GivePokeblockCase
+	goto CeladonCity_ContestLobby_EventScript_AskEnterContest
 	end
 
-LilycoveCity_ContestLobby_EventScript_ReceptionWelcome::
-	msgbox LilycoveCity_ContestLobby_Text_ContestReception, MSGBOX_DEFAULT
+CeladonCity_ContestLobby_EventScript_ReceptionWelcome::
+	msgbox CeladonCity_ContestLobby_Text_ContestReception, MSGBOX_DEFAULT
 	return
 
-LilycoveCity_ContestLobby_EventScript_GivePokeblockCase::
-	msgbox LilycoveCity_ContestLobby_Text_ReceptionDontHavePokeblockCase, MSGBOX_DEFAULT
+CeladonCity_ContestLobby_EventScript_GivePokeblockCase::
+	msgbox CeladonCity_ContestLobby_Text_ReceptionDontHavePokeblockCase, MSGBOX_DEFAULT
 	giveitem ITEM_POKEBLOCK_CASE
 	setflag FLAG_RECEIVED_POKEBLOCK_CASE
-	msgbox LilycoveCity_ContestLobby_Text_NowThatWeveClearedThatUp, MSGBOX_DEFAULT
+	msgbox CeladonCity_ContestLobby_Text_NowThatWeveClearedThatUp, MSGBOX_DEFAULT
 	return
 
-LilycoveCity_ContestLobby_EventScript_PickUpPrize::
-	msgbox LilycoveCity_ContestLobby_Text_PokemonWonWeHavePrize, MSGBOX_DEFAULT
+CeladonCity_ContestLobby_EventScript_PickUpPrize::
+	msgbox CeladonCity_ContestLobby_Text_PokemonWonWeHavePrize, MSGBOX_DEFAULT
 	switch VAR_CONTEST_PRIZE_PICKUP
-	case 4, LilycoveCity_ContestLobby_EventScript_GiveLuxuryBallAtCounter
+	case 4, CeladonCity_ContestLobby_EventScript_GiveLuxuryBallAtCounter
 	end
 
-LilycoveCity_ContestLobby_EventScript_GiveLuxuryBallAtCounter::
+CeladonCity_ContestLobby_EventScript_GiveLuxuryBallAtCounter::
 	giveitem ITEM_LUXURY_BALL
-	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_ContestLobby_EventScript_NoRoomForLuxuryBallAtCounter
+	goto_if_eq VAR_RESULT, FALSE, CeladonCity_ContestLobby_EventScript_NoRoomForLuxuryBallAtCounter
 	setvar VAR_CONTEST_PRIZE_PICKUP, 0
 	closemessage
 	release
 	end
 
-LilycoveCity_ContestLobby_EventScript_NoRoomForLuxuryBallAtCounter::
+CeladonCity_ContestLobby_EventScript_NoRoomForLuxuryBallAtCounter::
 	call Common_EventScript_BagIsFull
-	msgbox LilycoveCity_ContestLobby_Text_ComeBackForPrizeLater, MSGBOX_DEFAULT
+	msgbox CeladonCity_ContestLobby_Text_ComeBackForPrizeLater, MSGBOX_DEFAULT
 	release
 	end
 
-LilycoveCity_ContestLobby_EventScript_AskEnterContest::
-	message LilycoveCity_ContestLobby_Text_EnterContest1
+CeladonCity_ContestLobby_EventScript_AskEnterContest::
+	message CeladonCity_ContestLobby_Text_EnterContest1
 	waitmessage
 	multichoice 0, 0, MULTI_ENTERINFO, FALSE
 	switch VAR_RESULT
-	case 0, LilycoveCity_ContestLobby_EventScript_ChooseContestRank
-	case 1, LilycoveCity_ContestLobby_EventScript_ContestInfo
-	case 2, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
-	case MULTI_B_PRESSED, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
+	case 0, CeladonCity_ContestLobby_EventScript_ChooseContestRank
+	case 1, CeladonCity_ContestLobby_EventScript_ContestInfo
+	case 2, CeladonCity_ContestLobby_EventScript_CancelEnterContest
+	case MULTI_B_PRESSED, CeladonCity_ContestLobby_EventScript_CancelEnterContest
 	end
 
-LilycoveCity_ContestLobby_EventScript_ContestInfo::
-	message LilycoveCity_ContestLobby_Text_WhichTopic1
+CeladonCity_ContestLobby_EventScript_ContestInfo::
+	message CeladonCity_ContestLobby_Text_WhichTopic1
 	waitmessage
 	multichoice 0, 0, MULTI_CONTEST_INFO, FALSE
 	switch VAR_RESULT
-	case 0, LilycoveCity_ContestLobby_EventScript_ExplainContests
-	case 1, LilycoveCity_ContestLobby_EventScript_ExplainContestTypes
-	case 2, LilycoveCity_ContestLobby_EventScript_ExplainContestRanks
-	case 3, LilycoveCity_ContestLobby_EventScript_AskEnterContest
-	case MULTI_B_PRESSED, LilycoveCity_ContestLobby_EventScript_AskEnterContest
+	case 0, CeladonCity_ContestLobby_EventScript_ExplainContests
+	case 1, CeladonCity_ContestLobby_EventScript_ExplainContestTypes
+	case 2, CeladonCity_ContestLobby_EventScript_ExplainContestRanks
+	case 3, CeladonCity_ContestLobby_EventScript_AskEnterContest
+	case MULTI_B_PRESSED, CeladonCity_ContestLobby_EventScript_AskEnterContest
 	end
 
-LilycoveCity_ContestLobby_EventScript_ExplainContests::
-	msgbox LilycoveCity_ContestLobby_Text_ExplainContests, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ContestInfo
+CeladonCity_ContestLobby_EventScript_ExplainContests::
+	msgbox CeladonCity_ContestLobby_Text_ExplainContests, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ContestInfo
 	end
 
-LilycoveCity_ContestLobby_EventScript_ExplainContestTypes::
-	msgbox LilycoveCity_ContestLobby_Text_ExplainContestTypes, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ContestInfo
+CeladonCity_ContestLobby_EventScript_ExplainContestTypes::
+	msgbox CeladonCity_ContestLobby_Text_ExplainContestTypes, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ContestInfo
 	end
 
-LilycoveCity_ContestLobby_EventScript_ExplainContestRanks::
-	msgbox LilycoveCity_ContestLobby_Text_ExplainContestRanks, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ContestInfo
+CeladonCity_ContestLobby_EventScript_ExplainContestRanks::
+	msgbox CeladonCity_ContestLobby_Text_ExplainContestRanks, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ContestInfo
 	end
 
-LilycoveCity_ContestLobby_EventScript_CancelEnterContest::
-	msgbox LilycoveCity_ContestLobby_Text_ParticipateAnotherTime, MSGBOX_DEFAULT
+CeladonCity_ContestLobby_EventScript_CancelEnterContest::
+	msgbox CeladonCity_ContestLobby_Text_ParticipateAnotherTime, MSGBOX_DEFAULT
 	release
 	end
 
-LilycoveCity_ContestLobby_EventScript_ChooseContestMon::
-	msgbox LilycoveCity_ContestLobby_Text_EnterWhichPokemon1, MSGBOX_DEFAULT
+CeladonCity_ContestLobby_EventScript_ChooseContestMon::
+	msgbox CeladonCity_ContestLobby_Text_EnterWhichPokemon1, MSGBOX_DEFAULT
 	choosecontestmon
-	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
+	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, CeladonCity_ContestLobby_EventScript_CancelEnterContest
 	special TryEnterContestMon
-	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST, LilycoveCity_ContestLobby_EventScript_CantEnterLowRank
-	goto_if_eq VAR_RESULT, CAN_ENTER_CONTEST_EQUAL_RANK, LilycoveCity_ContestLobby_EventScript_EnterMon
-	goto_if_eq VAR_RESULT, CAN_ENTER_CONTEST_HIGH_RANK, LilycoveCity_ContestLobby_EventScript_ConfirmEntryAlreadyWon
-	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST_EGG, LilycoveCity_ContestLobby_EventScript_CantEnterEgg
-	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST_FAINTED, LilycoveCity_ContestLobby_EventScript_CantEnterFainted
+	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST, CeladonCity_ContestLobby_EventScript_CantEnterLowRank
+	goto_if_eq VAR_RESULT, CAN_ENTER_CONTEST_EQUAL_RANK, CeladonCity_ContestLobby_EventScript_EnterMon
+	goto_if_eq VAR_RESULT, CAN_ENTER_CONTEST_HIGH_RANK, CeladonCity_ContestLobby_EventScript_ConfirmEntryAlreadyWon
+	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST_EGG, CeladonCity_ContestLobby_EventScript_CantEnterEgg
+	goto_if_eq VAR_RESULT, CANT_ENTER_CONTEST_FAINTED, CeladonCity_ContestLobby_EventScript_CantEnterFainted
 	end
 
-LilycoveCity_ContestLobby_EventScript_ChooseContestRank::
-	message LilycoveCity_ContestLobby_Text_EnterWhichRank
+CeladonCity_ContestLobby_EventScript_ChooseContestRank::
+	message CeladonCity_ContestLobby_Text_EnterWhichRank
 	waitmessage
 	multichoice 0, 0, MULTI_CONTEST_RANK, FALSE
 	switch VAR_RESULT
-	case 0, LilycoveCity_ContestLobby_EventScript_EnterNormalRank
-	case 1, LilycoveCity_ContestLobby_EventScript_EnterSuperRank
-	case 2, LilycoveCity_ContestLobby_EventScript_EnterHyperRank
-	case 3, LilycoveCity_ContestLobby_EventScript_EnterMasterRank
-	case 4, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
-	case MULTI_B_PRESSED, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
+	case 0, CeladonCity_ContestLobby_EventScript_EnterNormalRank
+	case 1, CeladonCity_ContestLobby_EventScript_EnterSuperRank
+	case 2, CeladonCity_ContestLobby_EventScript_EnterHyperRank
+	case 3, CeladonCity_ContestLobby_EventScript_EnterMasterRank
+	case 4, CeladonCity_ContestLobby_EventScript_CancelEnterContest
+	case MULTI_B_PRESSED, CeladonCity_ContestLobby_EventScript_CancelEnterContest
 	end
 
-LilycoveCity_ContestLobby_EventScript_EnterNormalRank::
+CeladonCity_ContestLobby_EventScript_EnterNormalRank::
 	setvar VAR_CONTEST_RANK, CONTEST_RANK_NORMAL
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestType
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestType
 	end
 
-LilycoveCity_ContestLobby_EventScript_EnterSuperRank::
+CeladonCity_ContestLobby_EventScript_EnterSuperRank::
 	setvar VAR_CONTEST_RANK, CONTEST_RANK_SUPER
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestType
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestType
 	end
 
-LilycoveCity_ContestLobby_EventScript_EnterHyperRank::
+CeladonCity_ContestLobby_EventScript_EnterHyperRank::
 	setvar VAR_CONTEST_RANK, CONTEST_RANK_HYPER
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestType
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestType
 	end
 
-LilycoveCity_ContestLobby_EventScript_EnterMasterRank::
+CeladonCity_ContestLobby_EventScript_EnterMasterRank::
 	setvar VAR_CONTEST_RANK, CONTEST_RANK_MASTER
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestType
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestType
 	end
 
 @ The multichoice selection IDs are equal to the CATEGORY values
 @ So rather than list the cases they just copy VAR_RESULT for a valid selection into VAR_CONTEST_CATEGORY
-LilycoveCity_ContestLobby_EventScript_ChooseContestType::
-	message LilycoveCity_ContestLobby_Text_EnterWhichContest1
+CeladonCity_ContestLobby_EventScript_ChooseContestType::
+	message CeladonCity_ContestLobby_Text_EnterWhichContest1
 	waitmessage
 	multichoice 0, 0, MULTI_CONTEST_TYPE, FALSE
 	switch VAR_RESULT
-	case 5, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
-	case MULTI_B_PRESSED, LilycoveCity_ContestLobby_EventScript_CancelEnterContest
+	case 5, CeladonCity_ContestLobby_EventScript_CancelEnterContest
+	case MULTI_B_PRESSED, CeladonCity_ContestLobby_EventScript_CancelEnterContest
 	copyvar VAR_CONTEST_CATEGORY, VAR_RESULT
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestMon
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestMon
 	end
 
-LilycoveCity_ContestLobby_EventScript_CantEnterLowRank::
-	msgbox LilycoveCity_ContestLobby_Text_MonNotQualifiedForRank, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestMon
+CeladonCity_ContestLobby_EventScript_CantEnterLowRank::
+	msgbox CeladonCity_ContestLobby_Text_MonNotQualifiedForRank, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestMon
 	release
 	end
 
 @ Unused
-LilycoveCity_ContestLobby_EventScript_ConfirmEntry::
-	msgbox LilycoveCity_ContestLobby_Text_ConfirmContestMon, MSGBOX_YESNO
+CeladonCity_ContestLobby_EventScript_ConfirmEntry::
+	msgbox CeladonCity_ContestLobby_Text_ConfirmContestMon, MSGBOX_YESNO
 	switch VAR_RESULT
-	case NO, LilycoveCity_ContestLobby_EventScript_ChooseContestMon
-	case YES, LilycoveCity_ContestLobby_EventScript_EnterMon
+	case NO, CeladonCity_ContestLobby_EventScript_ChooseContestMon
+	case YES, CeladonCity_ContestLobby_EventScript_EnterMon
 	end
 
-LilycoveCity_ContestLobby_EventScript_ConfirmEntryAlreadyWon::
-	msgbox LilycoveCity_ContestLobby_Text_AlreadyWonEnterAnyway, MSGBOX_YESNO
+CeladonCity_ContestLobby_EventScript_ConfirmEntryAlreadyWon::
+	msgbox CeladonCity_ContestLobby_Text_AlreadyWonEnterAnyway, MSGBOX_YESNO
 	switch VAR_RESULT
-	case NO, LilycoveCity_ContestLobby_EventScript_ChooseContestMon
-	case YES, LilycoveCity_ContestLobby_EventScript_EnterMon
+	case NO, CeladonCity_ContestLobby_EventScript_ChooseContestMon
+	case YES, CeladonCity_ContestLobby_EventScript_EnterMon
 	end
 
-LilycoveCity_ContestLobby_EventScript_CantEnterEgg::
-	msgbox LilycoveCity_ContestLobby_Text_EggCannotTakePart, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestMon
+CeladonCity_ContestLobby_EventScript_CantEnterEgg::
+	msgbox CeladonCity_ContestLobby_Text_EggCannotTakePart, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestMon
 	release
 	end
 
-LilycoveCity_ContestLobby_EventScript_CantEnterFainted::
-	msgbox LilycoveCity_ContestLobby_Text_MonInNoConditionForContest, MSGBOX_DEFAULT
-	goto LilycoveCity_ContestLobby_EventScript_ChooseContestMon
+CeladonCity_ContestLobby_EventScript_CantEnterFainted::
+	msgbox CeladonCity_ContestLobby_Text_MonInNoConditionForContest, MSGBOX_DEFAULT
+	goto CeladonCity_ContestLobby_EventScript_ChooseContestMon
 	release
 	end
 
-@ The return here is back to LilycoveCity_ContestLobby_EventScript_ContestReceptionist
-LilycoveCity_ContestLobby_EventScript_EnterMon::
-	msgbox LilycoveCity_ContestLobby_Text_YourMonIsEntryNum4, MSGBOX_DEFAULT
+@ The return here is back to CeladonCity_ContestLobby_EventScript_ContestReceptionist
+CeladonCity_ContestLobby_EventScript_EnterMon::
+	msgbox CeladonCity_ContestLobby_Text_YourMonIsEntryNum4, MSGBOX_DEFAULT
 	closemessage
 	releaseall
 	setvar VAR_CONTEST_HALL_STATE, 1
@@ -1065,7 +1065,7 @@ ContestHall_EventScript_SetSketchFlag::
 	return
 
 ContestHall_EventScript_SetReadyForContestArtist::
-	setvar VAR_LILYCOVE_CONTEST_LOBBY_STATE, 1
+	setvar VAR_CELADON_CONTEST_LOBBY_STATE, 1
 	return
 
 ContestHall_EventScript_EndLinkContest::
@@ -1078,7 +1078,7 @@ ContestHall_EventScript_EndLinkContest::
 	return
 
 ContestHall_EventScript_SetReadyForLinkContestArtist::
-	setvar VAR_LILYCOVE_CONTEST_LOBBY_STATE, 2
+	setvar VAR_CELADON_CONTEST_LOBBY_STATE, 2
 	return
 
 @ Unused
@@ -1362,169 +1362,169 @@ ContestHall_EventScript_CheckIfContestWithRSPlayer::
 ContestHall_EventScript_RetRSPlayer::
 	return
 
-LilycoveCity_ContestLobby_EventScript_DelayIfContestWithRSPlayer::
+CeladonCity_ContestLobby_EventScript_DelayIfContestWithRSPlayer::
 	specialvar VAR_RESULT, IsContestWithRSPlayer
-	goto_if_eq VAR_RESULT, TRUE, LilycoveCity_ContestLobby_EventScript_DelayForRSPlayer
+	goto_if_eq VAR_RESULT, TRUE, CeladonCity_ContestLobby_EventScript_DelayForRSPlayer
 	return
 
-LilycoveCity_ContestLobby_EventScript_DelayForRSPlayer::
+CeladonCity_ContestLobby_EventScript_DelayForRSPlayer::
 	delay 9
 	return
 
-LilycoveCity_ContestLobby_Text_ReceptionDontHavePokeblockCase:
+CeladonCity_ContestLobby_Text_ReceptionDontHavePokeblockCase:
 	.string "Hello!\p"
 	.string "This is the reception counter for\n"
-	.string "POKéMON CONTESTS.\p"
+	.string "Pokémon Contests.\p"
 	.string "Oh? It appears that you don't have\n"
-	.string "a {POKEBLOCK} CASE yet.\p"
+	.string "a {POKEBLOCK} Case yet.\p"
 	.string "In that case, we need to provide you\n"
 	.string "with this!$"
 
-LilycoveCity_ContestLobby_Text_NowThatWeveClearedThatUp:
+CeladonCity_ContestLobby_Text_NowThatWeveClearedThatUp:
 	.string "Okay, now that we've cleared that\n"
 	.string "up…\p"
 	.string "Hello!\p"
 	.string "This is the reception counter for\n"
-	.string "POKéMON CONTESTS.$"
+	.string "Pokémon Contests.$"
 
-LilycoveCity_ContestLobby_Text_ContestReception:
+CeladonCity_ContestLobby_Text_ContestReception:
 	.string "Hello!\p"
 	.string "This is the reception counter for\n"
-	.string "POKéMON CONTESTS.$"
+	.string "Pokémon Contests.$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_CounterOnlyFor4PlayerContests:
+CeladonCity_ContestLobby_Text_CounterOnlyFor4PlayerContests:
 	.string "Hello!\p"
 	.string "This reception counter is only\n"
-	.string "for 4-player POKéMON CONTESTS.$"
+	.string "for 4-player Pokémon Contests.$"
 
-LilycoveCity_ContestLobby_Text_EnterContest1:
-	.string "Would you like to enter your POKéMON\n"
-	.string "in our CONTESTS?$"
+CeladonCity_ContestLobby_Text_EnterContest1:
+	.string "Would you like to enter your Pokémon\n"
+	.string "in our Contests?$"
 
-LilycoveCity_ContestLobby_Text_WhichTopic1:
+CeladonCity_ContestLobby_Text_WhichTopic1:
 	.string "Which topic would you like?$"
 
-LilycoveCity_ContestLobby_Text_ExplainContests:
-	.string "A POKéMON CONTEST involves four\n"
-	.string "TRAINERS entering one POKéMON each\l"
+CeladonCity_ContestLobby_Text_ExplainContests:
+	.string "A Pokémon Contest involves four\n"
+	.string "Trainers entering one Pokémon each\l"
 	.string "in competitive judging.\p"
-	.string "A CONTEST has two stages of judging,\n"
+	.string "A Contest has two stages of judging,\n"
 	.string "primary and secondary.\p"
 	.string "Primary judging is a popularity poll\n"
 	.string "involving the audience.\p"
 	.string "Secondary judging features appeals\n"
-	.string "by the POKéMON using their moves.\p"
+	.string "by the Pokémon using their moves.\p"
 	.string "Plan appeals carefully to earn the\n"
-	.string "most attention of the JUDGE and\l"
+	.string "most attention of the Judge and\l"
 	.string "excite the audience.\l"
 	.string "Do your best to stand out.\p"
 	.string "The primary and secondary scores are\n"
 	.string "added at the end.\p"
-	.string "The POKéMON garnering the highest\n"
+	.string "The Pokémon garnering the highest\n"
 	.string "score is declared the winner.$"
 
-LilycoveCity_ContestLobby_Text_ExplainContestTypes:
-	.string "There are five kinds of CONTESTS.\p"
-	.string "COOL, BEAUTY, CUTE, SMART, and\n"
-	.string "TOUGH are the five categories.\p"
-	.string "Choose the CONTEST that is right for\n"
-	.string "the POKéMON you plan to enter.$"
+CeladonCity_ContestLobby_Text_ExplainContestTypes:
+	.string "There are five kinds of Contests.\p"
+	.string "Cool, Beauty, Cute, Smart, and\n"
+	.string "Tough are the five categories.\p"
+	.string "Choose the Contest that is right for\n"
+	.string "the Pokémon you plan to enter.$"
 
-LilycoveCity_ContestLobby_Text_ExplainContestRanks:
-	.string "There are four ranks of POKéMON\n"
-	.string "CONTESTS.\p"
-	.string "NORMAL, SUPER, HYPER, and MASTER\n"
+CeladonCity_ContestLobby_Text_ExplainContestRanks:
+	.string "There are four ranks of Pokémon\n"
+	.string "Contests.\p"
+	.string "Normal, Super, Hyper, and Master\n"
 	.string "are the four ranks.\p"
-	.string "In the NORMAL Rank, any POKéMON may\n"
+	.string "In the Normal Rank, any Pokémon may\n"
 	.string "enter.\p"
-	.string "Any POKéMON that won a NORMAL Rank\n"
-	.string "CONTEST may move up to the SUPER Rank\l"
+	.string "Any Pokémon that won a Normal Rank\n"
+	.string "Contest may move up to the Super Rank\l"
 	.string "in the same category.\p"
-	.string "In the same way, a SUPER Rank winner\n"
-	.string "can move up to the HYPER Rank, and\l"
-	.string "a HYPER Rank winner can advance to\l"
-	.string "the MASTER Rank in the same category.\p"
-	.string "A POKéMON that won in the MASTER Rank\n"
-	.string "may compete in the MASTER Rank as\l"
-	.string "often as its TRAINER wants.$"
+	.string "In the same way, a Super Rank winner\n"
+	.string "can move up to the Hyper Rank, and\l"
+	.string "a Hyper Rank winner can advance to\l"
+	.string "the Master Rank in the same category.\p"
+	.string "A Pokémon that won in the Master Rank\n"
+	.string "may compete in the Master Rank as\l"
+	.string "often as its Trainer wants.$"
 
-LilycoveCity_ContestLobby_Text_EnterWhichRank:
+CeladonCity_ContestLobby_Text_EnterWhichRank:
 	.string "Which Rank would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_EnterWhichContest1:
-	.string "Which CONTEST would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichContest1:
+	.string "Which Contest would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_EnterWhichPokemon1:
-	.string "Which POKéMON would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichPokemon1:
+	.string "Which Pokémon would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_MonNotQualifiedForRank:
-	.string "I'm terribly sorry, but your POKéMON\n"
+CeladonCity_ContestLobby_Text_MonNotQualifiedForRank:
+	.string "I'm terribly sorry, but your Pokémon\n"
 	.string "is not qualified to compete at this\l"
 	.string "Rank yet…$"
 
-LilycoveCity_ContestLobby_Text_EggCannotTakePart:
-	.string "I'm sorry, but an EGG cannot take part\n"
-	.string "in a POKéMON CONTEST.$"
+CeladonCity_ContestLobby_Text_EggCannotTakePart:
+	.string "I'm sorry, but an Egg cannot take part\n"
+	.string "in a Pokémon Contest.$"
 
-LilycoveCity_ContestLobby_Text_MonInNoConditionForContest:
-	.string "Your POKéMON appears to be in no\n"
-	.string "condition to take part in a CONTEST…$"
+CeladonCity_ContestLobby_Text_MonInNoConditionForContest:
+	.string "Your Pokémon appears to be in no\n"
+	.string "condition to take part in a Contest…$"
 
-LilycoveCity_ContestLobby_Text_AlreadyWonEnterAnyway:
-	.string "Oh, but that RIBBON…\p"
-	.string "Your POKéMON has won this CONTEST\n"
+CeladonCity_ContestLobby_Text_AlreadyWonEnterAnyway:
+	.string "Oh, but that Ribbon…\p"
+	.string "Your Pokémon has won this Contest\n"
 	.string "before, hasn't it?\p"
 	.string "Would you like to enter it in this\n"
-	.string "CONTEST anyway?$"
+	.string "Contest anyway?$"
 
-LilycoveCity_ContestLobby_Text_ConfirmContestMon:
-	.string "Is that your CONTEST POKéMON?$"
+CeladonCity_ContestLobby_Text_ConfirmContestMon:
+	.string "Is that your Contest Pokémon?$"
 
-LilycoveCity_ContestLobby_Text_YourMonIsEntryNum4:
-	.string "Okay, your POKéMON will be entered\n"
-	.string "in this CONTEST.\p"
-	.string "Your POKéMON is Entry No. 4.\n"
-	.string "The CONTEST will begin shortly.$"
+CeladonCity_ContestLobby_Text_YourMonIsEntryNum4:
+	.string "Okay, your Pokémon will be entered\n"
+	.string "in this Contest.\p"
+	.string "Your Pokémon is Entry No. 4.\n"
+	.string "The Contest will begin shortly.$"
 
-LilycoveCity_ContestLobby_Text_ComeThroughHere:
+CeladonCity_ContestLobby_Text_ComeThroughHere:
 	.string "Please come in through here.\n"
 	.string "Good luck!$"
 
-LilycoveCity_ContestLobby_Text_PokemonWonWeHavePrize:
-	.string "Congratulations! Your POKéMON is the\n"
-	.string "CONTEST winner!\p"
+CeladonCity_ContestLobby_Text_PokemonWonWeHavePrize:
+	.string "Congratulations! Your Pokémon is the\n"
+	.string "Contest winner!\p"
 	.string "We have your prize right here.\n"
 	.string "Please, right this way!$"
 
-LilycoveCity_ContestLobby_Text_ComeBackForPrizeLater:
+CeladonCity_ContestLobby_Text_ComeBackForPrizeLater:
 	.string "Please come back for your prize\n"
 	.string "later on.$"
 
 ContestHall_Text_GettingStartedParticipantsAsFollows:
 	.string "MC: Hello! We're just getting started\n"
-	.string "with a {STR_VAR_3} Rank POKéMON\l"
+	.string "with a {STR_VAR_3} Rank Pokémon\l"
 	.string "{STR_VAR_2}!\p"
-	.string "The participating TRAINERS and their\n"
-	.string "POKéMON are as follows:$"
+	.string "The participating Trainers and their\n"
+	.string "Pokémon are as follows:$"
 
 ContestHall_Text_GettingStartedParticipantsAsFollowsLink:
 	.string "MC: Hello! We're just getting started\n"
-	.string "with a 4-player linked POKéMON\l"
+	.string "with a 4-player linked Pokémon\l"
 	.string "{STR_VAR_2}!\p"
-	.string "The participating TRAINERS and their\n"
-	.string "POKéMON are as follows:$"
+	.string "The participating Trainers and their\n"
+	.string "Pokémon are as follows:$"
 
 ContestHall_Text_EntryXTrainersMon:
 	.string "MC: Entry No. {STR_VAR_2}!\n"
 	.string "{STR_VAR_1}'s {STR_VAR_3}!$"
 
 ContestHall_Text_SeenContestantsAudienceWillVote:
-	.string "MC: We've just seen the four POKéMON\n"
+	.string "MC: We've just seen the four Pokémon\n"
 	.string "contestants.\p"
 	.string "Now it's time for primary judging!\p"
 	.string "The audience will vote on their\n"
-	.string "favorite POKéMON contestants.\p"
+	.string "favorite Pokémon contestants.\p"
 	.string "Without any further ado, let the\n"
 	.string "voting begin!$"
 
@@ -1554,11 +1554,11 @@ ContestHall_Text_ThankYouForAppeals:
 ContestHall_Text_JudgeLooksReady:
 	.string "Now, all that remains is the pulse-\n"
 	.string "pounding proclamation of the winner.\p"
-	.string "The JUDGE looks ready to make\n"
+	.string "The Judge looks ready to make\n"
 	.string "the announcement!$"
 
 ContestHall_Text_WeWillNowDeclareWinner:
-	.string "JUDGE: We will now declare the winner!$"
+	.string "Judge: We will now declare the winner!$"
 
 ContestHall_Text_CongratsTrainerXandMon:
 	.string "MC: Entry No. {STR_VAR_2}!\p"
@@ -1574,14 +1574,14 @@ ContestHall_Text_AcceptYourPrize:
 	.string "Please accept your prize!$"
 
 ContestHall_Text_ConferRibbonAsPrize:
-	.string "We confer on you this RIBBON\n"
+	.string "We confer on you this Ribbon\n"
 	.string "as your prize!$"
 
 ContestHall_Text_ReceivedRibbon:
-	.string "{PLAYER} received a RIBBON.$"
+	.string "{PLAYER} received a Ribbon.$"
 
 ContestHall_Text_PutRibbonOnMon:
-	.string "{PLAYER} put the RIBBON on\n"
+	.string "{PLAYER} put the Ribbon on\n"
 	.string "{STR_VAR_1}.$"
 
 ContestHall_Text_PickUpPrizeAtCounterLater:
@@ -1592,194 +1592,194 @@ ContestHall_Text_PickUpPrizeAtCounterLater:
 @ Unused
 ContestHall_Text_OnlyRegister4Players:
 	.string "I only register four players for\n"
-	.string "POKéMON CONTESTS.\p"
+	.string "Pokémon Contests.\p"
 	.string "If three other players link up, all\n"
-	.string "four may enter the same CONTEST.\p"
+	.string "four may enter the same Contest.\p"
 	.string "Would you like to take part?$"
 
-LilycoveCity_ContestLobby_Text_ProgressWillBeSaved:
-	.string "Before entering a CONTEST, your\n"
+CeladonCity_ContestLobby_Text_ProgressWillBeSaved:
+	.string "Before entering a Contest, your\n"
 	.string "progress will be saved.$"
 
-LilycoveCity_ContestLobby_Text_ParticipateAnotherTime:
+CeladonCity_ContestLobby_Text_ParticipateAnotherTime:
 	.string "We hope you will participate another\n"
 	.string "time.$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_EnterContest2:
-	.string "Would you like to enter a CONTEST?$"
+CeladonCity_ContestLobby_Text_EnterContest2:
+	.string "Would you like to enter a Contest?$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_Explain4PlayerContest:
+CeladonCity_ContestLobby_Text_Explain4PlayerContest:
 	.string "When four players are ready, connect\n"
 	.string "over a Game Link cable, and register\l"
 	.string "with me, please.\p"
-	.string "Please choose the same CONTEST\n"
+	.string "Please choose the same Contest\n"
 	.string "as your fellow contestants.\p"
-	.string "The CONTEST begins as soon as all\n"
+	.string "The Contest begins as soon as all\n"
 	.string "players register their entry.\p"
-	.string "After that, the usual CONTEST rules\n"
+	.string "After that, the usual Contest rules\n"
 	.string "apply.$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_EnterWhichContest2:
-	.string "Which CONTEST would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichContest2:
+	.string "Which Contest would you like to enter?$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_EnterWhichPokemon2:
-	.string "Which POKéMON would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichPokemon2:
+	.string "Which Pokémon would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_Transmitting:
+CeladonCity_ContestLobby_Text_Transmitting:
 	.string "Transmitting…$"
 
-LilycoveCity_ContestLobby_Text_TransmissionError:
+CeladonCity_ContestLobby_Text_TransmissionError:
 	.string "Transmission error…$"
 
-LilycoveCity_ContestLobby_Text_PlayersChoseDifferentContest:
+CeladonCity_ContestLobby_Text_PlayersChoseDifferentContest:
 	.string "You may have chosen a different\n"
-	.string "CONTEST than another player.$"
+	.string "Contest than another player.$"
 
-LilycoveCity_ContestLobby_Text_PlayersMadeDifferentChoice:
+CeladonCity_ContestLobby_Text_PlayersMadeDifferentChoice:
 	.string "You may have made a different\n"
 	.string "choice than another player.$"
 
-LilycoveCity_ContestLobby_Text_PleaseWaitBButtonCancel:
+CeladonCity_ContestLobby_Text_PleaseWaitBButtonCancel:
 	.string "Please wait.\n"
 	.string "… … B Button: Cancel$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_ParticipateAnotherTime2:
+CeladonCity_ContestLobby_Text_ParticipateAnotherTime2:
 	.string "We hope you will participate another\n"
 	.string "time.$"
 
 @ Unused
-LilycoveCity_ContestLobby_Text_TransmissionErrorTryAgain:
+CeladonCity_ContestLobby_Text_TransmissionErrorTryAgain:
 	.string "Transmission error.\n"
 	.string "Please try again.$"
 
-LilycoveCity_ContestLobby_Text_YourMonIsEntryNumX:
-	.string "Your POKéMON will be entered in\n"
-	.string "the CONTEST.\p"
-	.string "Your POKéMON is Entry No. {STR_VAR_2}.$"
+CeladonCity_ContestLobby_Text_YourMonIsEntryNumX:
+	.string "Your Pokémon will be entered in\n"
+	.string "the Contest.\p"
+	.string "Your Pokémon is Entry No. {STR_VAR_2}.$"
 
-LilycoveCity_ContestLobby_Text_ContestBeginShortly:
-	.string "The CONTEST will begin shortly.$"
+CeladonCity_ContestLobby_Text_ContestBeginShortly:
+	.string "The Contest will begin shortly.$"
 
-LilycoveCity_ContestLobby_Text_LinkContestReception:
-	.string "Welcome! This is the POKéMON CONTEST\n"
+CeladonCity_ContestLobby_Text_LinkContestReception:
+	.string "Welcome! This is the Pokémon Contest\n"
 	.string "link reception counter.\p"
-	.string "You may enter CONTESTS together with\n"
+	.string "You may enter Contests together with\n"
 	.string "one or more friends.$"
 
-LilycoveCity_ContestLobby_Text_WhichTopic2:
+CeladonCity_ContestLobby_Text_WhichTopic2:
 	.string "Which topic would you like?$"
 
-LilycoveCity_ContestLobby_Text_EnterContest3:
-	.string "Would you like to enter a CONTEST?$"
+CeladonCity_ContestLobby_Text_EnterContest3:
+	.string "Would you like to enter a Contest?$"
 
-LilycoveCity_ContestLobby_Text_EnterWhichContest3:
-	.string "Which CONTEST would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichContest3:
+	.string "Which Contest would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_MonInNoCondition2:
-	.string "Your POKéMON appears to be in no\n"
-	.string "condition to take part in a CONTEST…$"
+CeladonCity_ContestLobby_Text_MonInNoCondition2:
+	.string "Your Pokémon appears to be in no\n"
+	.string "condition to take part in a Contest…$"
 
-LilycoveCity_ContestLobby_Text_EggCannotTakePart2:
-	.string "I'm sorry, but an EGG cannot take part\n"
-	.string "in a POKéMON CONTEST.$"
+CeladonCity_ContestLobby_Text_EggCannotTakePart2:
+	.string "I'm sorry, but an Egg cannot take part\n"
+	.string "in a Pokémon Contest.$"
 
-LilycoveCity_ContestLobby_Text_EnterWhichPokemon3:
-	.string "Which POKéMON would you like to enter?$"
+CeladonCity_ContestLobby_Text_EnterWhichPokemon3:
+	.string "Which Pokémon would you like to enter?$"
 
-LilycoveCity_ContestLobby_Text_PleaseDecideLinkLeader:
+CeladonCity_ContestLobby_Text_PleaseDecideLinkLeader:
 	.string "Please decide which of you will\n"
-	.string "become the GROUP LEADER.\p"
+	.string "become the Group Leader.\p"
 	.string "The other players must then choose\n"
-	.string "“JOIN GROUP.”$"
+	.string "“Join Group.”$"
 
-LilycoveCity_ContestLobby_Text_PlayerAt4PCounterUseGMode:
+CeladonCity_ContestLobby_Text_PlayerAt4PCounterUseGMode:
 	.string "At least one player has entered using\n"
 	.string "the 4-player reception counter.\p"
 	.string "There must be four players connected\n"
 	.string "using a GBA Game Link cable.\p"
 	.string "When the four players are ready,\n"
-	.string "select G-MODE (GLOBAL MODE),\l"
+	.string "select G-Mode (Global Mode),\l"
 	.string "then register to enter again, please.$"
 
-LilycoveCity_ContestLobby_Text_ExplainLinkContest:
-	.string "This is a CONTEST for two to four\n"
+CeladonCity_ContestLobby_Text_ExplainLinkContest:
+	.string "This is a Contest for two to four\n"
 	.string "players linked using a Wireless\l"
 	.string "Adapter or a GBA Game Link cable.\p"
 	.string "Participants are first asked to choose\n"
 	.string "the mode they wish to enter.\p"
 	.string "There are two different modes.\p"
-	.string "E-MODE (EMERALD MODE) is for\n"
+	.string "E-Mode (Emerald Mode) is for\n"
 	.string "two to four players, each with a\l"
-	.string "POKéMON Emerald Game Pak.\p"
-	.string "G-MODE (GLOBAL MODE) is only for\n"
-	.string "four players, each with a POKéMON\l"
+	.string "Pokémon Emerald Game Pak.\p"
+	.string "G-Mode (Global Mode) is only for\n"
+	.string "four players, each with a Pokémon\l"
 	.string "Emerald, Ruby, or Sapphire Game Pak.\p"
 	.string "The players should discuss which mode\n"
 	.string "they want, then choose the same mode.\p"
 	.string "Once all the players have chosen\n"
-	.string "the same CONTEST in the same mode,\l"
+	.string "the same Contest in the same mode,\l"
 	.string "the entry registration is complete.\p"
-	.string "After that, a CONTEST will start in\n"
+	.string "After that, a Contest will start in\n"
 	.string "the usual manner.$"
 
-LilycoveCity_ContestLobby_Text_ExplainEMode:
-	.string "In E-MODE (EMERALD MODE),\n"
-	.string "a LINK CONTEST can be held with\l"
+CeladonCity_ContestLobby_Text_ExplainEMode:
+	.string "In E-Mode (Emerald Mode),\n"
+	.string "a Link Contest can be held with\l"
 	.string "two to four players. Each player must\l"
-	.string "have a POKéMON Emerald Game Pak.\p"
+	.string "have a Pokémon Emerald Game Pak.\p"
 	.string "The players must be linked with each\n"
 	.string "other using Wireless Adapters or\l"
 	.string "GBA Game Link cables.\p"
 	.string "If there are fewer than four players,\n"
-	.string "TRAINERS in the hall will join to fill\l"
-	.string "the 4-player CONTEST lineup.\p"
-	.string "Please be aware that E-MODE is not\n"
-	.string "available in POKéMON Ruby or Sapphire.$"
+	.string "Trainers in the hall will join to fill\l"
+	.string "the 4-player Contest lineup.\p"
+	.string "Please be aware that E-Mode is not\n"
+	.string "available in Pokémon Ruby or Sapphire.$"
 
-LilycoveCity_ContestLobby_Text_ExplainGMode:
-	.string "G-MODE (GLOBAL MODE) is specifically\n"
+CeladonCity_ContestLobby_Text_ExplainGMode:
+	.string "G-Mode (Global Mode) is specifically\n"
 	.string "for four players who are linked using\l"
 	.string "GBA Game Link cables.\p"
-	.string "Each player must have a POKéMON\n"
+	.string "Each player must have a Pokémon\n"
 	.string "Emerald, Ruby, or Sapphire Game Pak.\p"
-	.string "The CONTEST starts after all players\n"
-	.string "choose G-MODE (POKéMON Emerald) or\l"
+	.string "The Contest starts after all players\n"
+	.string "choose G-Mode (Pokémon Emerald) or\l"
 	.string "enter through the 4-player reception\l"
-	.string "counter (POKéMON Ruby or Sapphire).$"
+	.string "counter (Pokémon Ruby or Sapphire).$"
 
-LilycoveCity_ContestLobby_Text_NoWirelessAdapterInGMode:
+CeladonCity_ContestLobby_Text_NoWirelessAdapterInGMode:
 	.string "I'm terribly sorry.\p"
-	.string "G-MODE does not function\n"
+	.string "G-Mode does not function\n"
 	.string "with Wireless Adapters.\p"
-	.string "Please select E-MODE or try\n"
+	.string "Please select E-Mode or try\n"
 	.string "again using a GBA Game Link cable.$"
 
-LilycoveCity_ContestLobby_Text_WhichContestMode:
-	.string "Which CONTEST MODE would you like\n"
+CeladonCity_ContestLobby_Text_WhichContestMode:
+	.string "Which Contest Mode would you like\n"
 	.string "to enter?$"
 
 ContestHall_Text_GettingStartedWireless:
 	.string "MC: Hello! We're just getting started\n"
-	.string "with a 4-player linked POKéMON\l"
+	.string "with a 4-player linked Pokémon\l"
 	.string "{STR_VAR_2}!$"
 
 ContestHall_Text_ParticipantsAsFollows:
-	.string "The participating TRAINERS and their\n"
-	.string "POKéMON are as follows:$"
+	.string "The participating Trainers and their\n"
+	.string "Pokémon are as follows:$"
 
 ContestHall_Text_WeveSeenContestants:
-	.string "MC: We've just seen the four POKéMON\n"
+	.string "MC: We've just seen the four Pokémon\n"
 	.string "contestants.\p"
 	.string "Now it's time for primary judging!$"
 
 ContestHall_Text_AudienceWillVote:
 	.string "The audience will vote on their\n"
-	.string "favorite POKéMON contestants.$"
+	.string "favorite Pokémon contestants.$"
 
 ContestHall_Text_LetVotingBegin:
 	.string "Without any further ado,\n"

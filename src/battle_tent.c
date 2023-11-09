@@ -20,27 +20,27 @@
 #include "constants/trainers.h"
 
 // This file's functions.
-static void InitVerdanturfTentChallenge(void);
-static void GetVerdanturfTentPrize(void);
-static void SetVerdanturfTentPrize(void);
-static void SetVerdanturfTentTrainerGfx(void);
-static void BufferVerdanturfTentTrainerIntro(void);
-static void SaveVerdanturfTentChallenge(void);
-static void SetRandomVerdanturfTentPrize(void);
-static void GiveVerdanturfTentPrize(void);
-static void InitFallarborTentChallenge(void);
-static void GetFallarborTentPrize(void);
-static void SetFallarborTentPrize(void);
-static void SaveFallarborTentChallenge(void);
-static void SetRandomFallarborTentPrize(void);
-static void GiveFallarborTentPrize(void);
-static void BufferFallarborTentTrainerName(void);
-static void InitSlateportTentChallenge(void);
-static void GetSlateportTentPrize(void);
-static void SetSlateportTentPrize(void);
-static void SaveSlateportTentChallenge(void);
-static void SetRandomSlateportTentPrize(void);
-static void GiveSlateportTentPrize(void);
+static void InitFuchsiaTentChallenge(void);
+static void GetFuchsiaTentPrize(void);
+static void SetFuchsiaTentPrize(void);
+static void SetFuchsiaTentTrainerGfx(void);
+static void BufferFuchsiaTentTrainerIntro(void);
+static void SaveFuchsiaTentChallenge(void);
+static void SetRandomFuchsiaTentPrize(void);
+static void GiveFuchsiaTentPrize(void);
+static void InitSaffronTentChallenge(void);
+static void GetSaffronTentPrize(void);
+static void SetSaffronTentPrize(void);
+static void SaveSaffronTentChallenge(void);
+static void SetRandomSaffronTentPrize(void);
+static void GiveSaffronTentPrize(void);
+static void BufferSaffronTentTrainerName(void);
+static void InitCeruleanTentChallenge(void);
+static void GetCeruleanTentPrize(void);
+static void SetCeruleanTentPrize(void);
+static void SaveCeruleanTentChallenge(void);
+static void SetRandomCeruleanTentPrize(void);
+static void GiveCeruleanTentPrize(void);
 static void SelectInitialRentalMons(void);
 static void SwapRentalMons(void);
 static void GenerateOpponentMons(void);
@@ -50,64 +50,64 @@ static void GenerateInitialRentalMons(void);
  * Battle Tents are mini versions of particular Battle Frontier facilities
  * As such they each share some scripts and functions with their counterpart
  *
- * Verdanturf Battle Tent: Battle Palace
- * Fallarbor Battle Tent:  Battle Arena
- * Slateport Battle Tent:  Battle Factory
+ * Fuchsia Battle Tent: Battle Palace
+ * Saffron Battle Tent:  Battle Arena
+ * Cerulean Battle Tent:  Battle Factory
  *
  */
 
 static u16 sRandMonId;
 
-void static (*const sVerdanturfTentFuncs[])(void) =
+void static (*const sFuchsiaTentFuncs[])(void) =
 {
-    [VERDANTURF_TENT_FUNC_INIT]               = InitVerdanturfTentChallenge,
-    [VERDANTURF_TENT_FUNC_GET_PRIZE]          = GetVerdanturfTentPrize,
-    [VERDANTURF_TENT_FUNC_SET_PRIZE]          = SetVerdanturfTentPrize,
-    [VERDANTURF_TENT_FUNC_SET_OPPONENT_GFX]   = SetVerdanturfTentTrainerGfx,
-    [VERDANTURF_TENT_FUNC_GET_OPPONENT_INTRO] = BufferVerdanturfTentTrainerIntro,
-    [VERDANTURF_TENT_FUNC_SAVE]               = SaveVerdanturfTentChallenge,
-    [VERDANTURF_TENT_FUNC_SET_RANDOM_PRIZE]   = SetRandomVerdanturfTentPrize,
-    [VERDANTURF_TENT_FUNC_GIVE_PRIZE]         = GiveVerdanturfTentPrize
+    [FUCHSIA_TENT_FUNC_INIT]               = InitFuchsiaTentChallenge,
+    [FUCHSIA_TENT_FUNC_GET_PRIZE]          = GetFuchsiaTentPrize,
+    [FUCHSIA_TENT_FUNC_SET_PRIZE]          = SetFuchsiaTentPrize,
+    [FUCHSIA_TENT_FUNC_SET_OPPONENT_GFX]   = SetFuchsiaTentTrainerGfx,
+    [FUCHSIA_TENT_FUNC_GET_OPPONENT_INTRO] = BufferFuchsiaTentTrainerIntro,
+    [FUCHSIA_TENT_FUNC_SAVE]               = SaveFuchsiaTentChallenge,
+    [FUCHSIA_TENT_FUNC_SET_RANDOM_PRIZE]   = SetRandomFuchsiaTentPrize,
+    [FUCHSIA_TENT_FUNC_GIVE_PRIZE]         = GiveFuchsiaTentPrize
 };
 
-static const u16 sVerdanturfTentRewards[] = {ITEM_NEST_BALL};
+static const u16 sFuchsiaTentRewards[] = {ITEM_NEST_BALL};
 
-void static (*const sFallarborTentFuncs[])(void) =
+void static (*const sSaffronTentFuncs[])(void) =
 {
-    [FALLARBOR_TENT_FUNC_INIT]              = InitFallarborTentChallenge,
-    [FALLARBOR_TENT_FUNC_GET_PRIZE]         = GetFallarborTentPrize,
-    [FALLARBOR_TENT_FUNC_SET_PRIZE]         = SetFallarborTentPrize,
-    [FALLARBOR_TENT_FUNC_SAVE]              = SaveFallarborTentChallenge,
-    [FALLARBOR_TENT_FUNC_SET_RANDOM_PRIZE]  = SetRandomFallarborTentPrize,
-    [FALLARBOR_TENT_FUNC_GIVE_PRIZE]        = GiveFallarborTentPrize,
-    [FALLARBOR_TENT_FUNC_GET_OPPONENT_NAME] = BufferFallarborTentTrainerName
+    [SAFFRON_TENT_FUNC_INIT]              = InitSaffronTentChallenge,
+    [SAFFRON_TENT_FUNC_GET_PRIZE]         = GetSaffronTentPrize,
+    [SAFFRON_TENT_FUNC_SET_PRIZE]         = SetSaffronTentPrize,
+    [SAFFRON_TENT_FUNC_SAVE]              = SaveSaffronTentChallenge,
+    [SAFFRON_TENT_FUNC_SET_RANDOM_PRIZE]  = SetRandomSaffronTentPrize,
+    [SAFFRON_TENT_FUNC_GIVE_PRIZE]        = GiveSaffronTentPrize,
+    [SAFFRON_TENT_FUNC_GET_OPPONENT_NAME] = BufferSaffronTentTrainerName
 };
 
-static const u16 sFallarborTentRewards[] = {ITEM_HYPER_POTION};
+static const u16 sSaffronTentRewards[] = {ITEM_HYPER_POTION};
 
-void static (*const sSlateportTentFuncs[])(void) =
+void static (*const sCeruleanTentFuncs[])(void) =
 {
-    [SLATEPORT_TENT_FUNC_INIT]                   = InitSlateportTentChallenge,
-    [SLATEPORT_TENT_FUNC_GET_PRIZE]              = GetSlateportTentPrize,
-    [SLATEPORT_TENT_FUNC_SET_PRIZE]              = SetSlateportTentPrize,
-    [SLATEPORT_TENT_FUNC_SAVE]                   = SaveSlateportTentChallenge,
-    [SLATEPORT_TENT_FUNC_SET_RANDOM_PRIZE]       = SetRandomSlateportTentPrize,
-    [SLATEPORT_TENT_FUNC_GIVE_PRIZE]             = GiveSlateportTentPrize,
-    [SLATEPORT_TENT_FUNC_SELECT_RENT_MONS]       = SelectInitialRentalMons,
-    [SLATEPORT_TENT_FUNC_SWAP_RENT_MONS]         = SwapRentalMons,
-    [SLATEPORT_TENT_FUNC_GENERATE_OPPONENT_MONS] = GenerateOpponentMons,
-    [SLATEPORT_TENT_FUNC_GENERATE_RENTAL_MONS]   = GenerateInitialRentalMons
+    [CERULEAN_TENT_FUNC_INIT]                   = InitCeruleanTentChallenge,
+    [CERULEAN_TENT_FUNC_GET_PRIZE]              = GetCeruleanTentPrize,
+    [CERULEAN_TENT_FUNC_SET_PRIZE]              = SetCeruleanTentPrize,
+    [CERULEAN_TENT_FUNC_SAVE]                   = SaveCeruleanTentChallenge,
+    [CERULEAN_TENT_FUNC_SET_RANDOM_PRIZE]       = SetRandomCeruleanTentPrize,
+    [CERULEAN_TENT_FUNC_GIVE_PRIZE]             = GiveCeruleanTentPrize,
+    [CERULEAN_TENT_FUNC_SELECT_RENT_MONS]       = SelectInitialRentalMons,
+    [CERULEAN_TENT_FUNC_SWAP_RENT_MONS]         = SwapRentalMons,
+    [CERULEAN_TENT_FUNC_GENERATE_OPPONENT_MONS] = GenerateOpponentMons,
+    [CERULEAN_TENT_FUNC_GENERATE_RENTAL_MONS]   = GenerateInitialRentalMons
 };
 
-static const u16 sSlateportTentRewards[] = {ITEM_FULL_HEAL};
+static const u16 sCeruleanTentRewards[] = {ITEM_FULL_HEAL};
 
 // code
-void CallVerdanturfTentFunction(void)
+void CallFuchsiaTentFunction(void)
 {
-    sVerdanturfTentFuncs[gSpecialVar_0x8004]();
+    sFuchsiaTentFuncs[gSpecialVar_0x8004]();
 }
 
-static void InitVerdanturfTentChallenge(void)
+static void InitFuchsiaTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = 0;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = 0;
@@ -115,29 +115,29 @@ static void InitVerdanturfTentChallenge(void)
     SetDynamicWarp(0, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_NONE);
 }
 
-static void GetVerdanturfTentPrize(void)
+static void GetFuchsiaTentPrize(void)
 {
-    gSpecialVar_Result = gSaveBlock2Ptr->frontier.verdanturfTentPrize;
+    gSpecialVar_Result = gSaveBlock2Ptr->frontier.fuchsiaTentPrize;
 }
 
-static void SetVerdanturfTentPrize(void)
+static void SetFuchsiaTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.verdanturfTentPrize = gSpecialVar_0x8006;
+    gSaveBlock2Ptr->frontier.fuchsiaTentPrize = gSpecialVar_0x8006;
 }
 
-static void SetVerdanturfTentTrainerGfx(void)
+static void SetFuchsiaTentTrainerGfx(void)
 {
     gTrainerBattleOpponent_A = (u32)((Random() % 255) * 5) / 64;
     SetBattleFacilityTrainerGfxId(gTrainerBattleOpponent_A, 0);
 }
 
-static void BufferVerdanturfTentTrainerIntro(void)
+static void BufferFuchsiaTentTrainerIntro(void)
 {
     if (gTrainerBattleOpponent_A < FRONTIER_TRAINERS_COUNT)
         FrontierSpeechToString(gFacilityTrainers[gTrainerBattleOpponent_A].speechBefore);
 }
 
-static void SaveVerdanturfTentChallenge(void)
+static void SaveFuchsiaTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = gSpecialVar_0x8005;
     VarSet(VAR_TEMP_CHALLENGE_STATUS, 0);
@@ -145,17 +145,17 @@ static void SaveVerdanturfTentChallenge(void)
     SaveGameFrontier();
 }
 
-static void SetRandomVerdanturfTentPrize(void)
+static void SetRandomFuchsiaTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.verdanturfTentPrize = sVerdanturfTentRewards[Random() % ARRAY_COUNT(sVerdanturfTentRewards)];
+    gSaveBlock2Ptr->frontier.fuchsiaTentPrize = sFuchsiaTentRewards[Random() % ARRAY_COUNT(sFuchsiaTentRewards)];
 }
 
-static void GiveVerdanturfTentPrize(void)
+static void GiveFuchsiaTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.verdanturfTentPrize, 1) == TRUE)
+    if (AddBagItem(gSaveBlock2Ptr->frontier.fuchsiaTentPrize, 1) == TRUE)
     {
-        CopyItemName(gSaveBlock2Ptr->frontier.verdanturfTentPrize, gStringVar1);
-        gSaveBlock2Ptr->frontier.verdanturfTentPrize = ITEM_NONE;
+        CopyItemName(gSaveBlock2Ptr->frontier.fuchsiaTentPrize, gStringVar1);
+        gSaveBlock2Ptr->frontier.fuchsiaTentPrize = ITEM_NONE;
         gSpecialVar_Result = TRUE;
     }
     else
@@ -164,12 +164,12 @@ static void GiveVerdanturfTentPrize(void)
     }
 }
 
-void CallFallarborTentFunction(void)
+void CallSaffronTentFunction(void)
 {
-    sFallarborTentFuncs[gSpecialVar_0x8004]();
+    sSaffronTentFuncs[gSpecialVar_0x8004]();
 }
 
-static void InitFallarborTentChallenge(void)
+static void InitSaffronTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = 0;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = 0;
@@ -177,17 +177,17 @@ static void InitFallarborTentChallenge(void)
     SetDynamicWarp(0, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_NONE);
 }
 
-static void GetFallarborTentPrize(void)
+static void GetSaffronTentPrize(void)
 {
-    gSpecialVar_Result = gSaveBlock2Ptr->frontier.fallarborTentPrize;
+    gSpecialVar_Result = gSaveBlock2Ptr->frontier.saffronTentPrize;
 }
 
-static void SetFallarborTentPrize(void)
+static void SetSaffronTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.fallarborTentPrize = gSpecialVar_0x8006;
+    gSaveBlock2Ptr->frontier.saffronTentPrize = gSpecialVar_0x8006;
 }
 
-static void SaveFallarborTentChallenge(void)
+static void SaveSaffronTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = gSpecialVar_0x8005;
     VarSet(VAR_TEMP_CHALLENGE_STATUS, 0);
@@ -195,17 +195,17 @@ static void SaveFallarborTentChallenge(void)
     SaveGameFrontier();
 }
 
-static void SetRandomFallarborTentPrize(void)
+static void SetRandomSaffronTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.fallarborTentPrize = sFallarborTentRewards[Random() % ARRAY_COUNT(sFallarborTentRewards)];
+    gSaveBlock2Ptr->frontier.saffronTentPrize = sSaffronTentRewards[Random() % ARRAY_COUNT(sSaffronTentRewards)];
 }
 
-static void GiveFallarborTentPrize(void)
+static void GiveSaffronTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.fallarborTentPrize, 1) == TRUE)
+    if (AddBagItem(gSaveBlock2Ptr->frontier.saffronTentPrize, 1) == TRUE)
     {
-        CopyItemName(gSaveBlock2Ptr->frontier.fallarborTentPrize, gStringVar1);
-        gSaveBlock2Ptr->frontier.fallarborTentPrize = ITEM_NONE;
+        CopyItemName(gSaveBlock2Ptr->frontier.saffronTentPrize, gStringVar1);
+        gSaveBlock2Ptr->frontier.saffronTentPrize = ITEM_NONE;
         gSpecialVar_Result = TRUE;
     }
     else
@@ -214,17 +214,17 @@ static void GiveFallarborTentPrize(void)
     }
 }
 
-static void BufferFallarborTentTrainerName(void)
+static void BufferSaffronTentTrainerName(void)
 {
     GetFrontierTrainerName(gStringVar1, gTrainerBattleOpponent_A);
 }
 
-void CallSlateportTentFunction(void)
+void CallCeruleanTentFunction(void)
 {
-    sSlateportTentFuncs[gSpecialVar_0x8004]();
+    sCeruleanTentFuncs[gSpecialVar_0x8004]();
 }
 
-static void InitSlateportTentChallenge(void)
+static void InitCeruleanTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = 0;
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = 0;
@@ -232,17 +232,17 @@ static void InitSlateportTentChallenge(void)
     SetDynamicWarp(0, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_NONE);
 }
 
-static void GetSlateportTentPrize(void)
+static void GetCeruleanTentPrize(void)
 {
-    gSpecialVar_Result = gSaveBlock2Ptr->frontier.slateportTentPrize;
+    gSpecialVar_Result = gSaveBlock2Ptr->frontier.ceruleanTentPrize;
 }
 
-static void SetSlateportTentPrize(void)
+static void SetCeruleanTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.slateportTentPrize = gSpecialVar_0x8006;
+    gSaveBlock2Ptr->frontier.ceruleanTentPrize = gSpecialVar_0x8006;
 }
 
-static void SaveSlateportTentChallenge(void)
+static void SaveCeruleanTentChallenge(void)
 {
     gSaveBlock2Ptr->frontier.challengeStatus = gSpecialVar_0x8005;
     VarSet(VAR_TEMP_CHALLENGE_STATUS, 0);
@@ -250,17 +250,17 @@ static void SaveSlateportTentChallenge(void)
     SaveGameFrontier();
 }
 
-static void SetRandomSlateportTentPrize(void)
+static void SetRandomCeruleanTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.slateportTentPrize = sSlateportTentRewards[Random() % ARRAY_COUNT(sSlateportTentRewards)];
+    gSaveBlock2Ptr->frontier.ceruleanTentPrize = sCeruleanTentRewards[Random() % ARRAY_COUNT(sCeruleanTentRewards)];
 }
 
-static void GiveSlateportTentPrize(void)
+static void GiveCeruleanTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.slateportTentPrize, 1) == TRUE)
+    if (AddBagItem(gSaveBlock2Ptr->frontier.ceruleanTentPrize, 1) == TRUE)
     {
-        CopyItemName(gSaveBlock2Ptr->frontier.slateportTentPrize, gStringVar1);
-        gSaveBlock2Ptr->frontier.slateportTentPrize = ITEM_NONE;
+        CopyItemName(gSaveBlock2Ptr->frontier.ceruleanTentPrize, gStringVar1);
+        gSaveBlock2Ptr->frontier.ceruleanTentPrize = ITEM_NONE;
         gSpecialVar_Result = TRUE;
     }
     else
@@ -280,9 +280,9 @@ static void SwapRentalMons(void)
     DoBattleFactorySwapScreen();
 }
 
-bool8 InSlateportBattleTent(void)
+bool8 InCeruleanBattleTent(void)
 {
-    return gMapHeader.regionMapSectionId == MAPSEC_SLATEPORT_CITY
+    return gMapHeader.regionMapSectionId == MAPSEC_CERULEAN_CITY
            && (gMapHeader.mapLayoutId == LAYOUT_BATTLE_TENT_CORRIDOR || gMapHeader.mapLayoutId == LAYOUT_BATTLE_TENT_BATTLE_ROOM);
 }
 
@@ -297,20 +297,20 @@ static void GenerateInitialRentalMons(void)
     u16 heldItems[PARTY_SIZE];
 
     firstMonId = 0;
-    gFacilityTrainers = gSlateportBattleTentTrainers;
+    gFacilityTrainers = gCeruleanBattleTentTrainers;
     for (i = 0; i < PARTY_SIZE; i++)
     {
         species[i] = 0;
         monIds[i] = 0;
         heldItems[i] = 0;
     }
-    gFacilityTrainerMons = gSlateportBattleTentMons;
+    gFacilityTrainerMons = gCeruleanBattleTentMons;
     currSpecies = SPECIES_NONE;
     i = 0;
     while (i != PARTY_SIZE)
     {
         // Cannot have two pokemon of the same species.
-        monSetId = Random() % NUM_SLATEPORT_TENT_MONS;
+        monSetId = Random() % NUM_CERULEAN_TENT_MONS;
         for (j = firstMonId; j < firstMonId + i; j++)
         {
             if (monIds[j] == monSetId)
@@ -356,8 +356,8 @@ static void GenerateOpponentMons(void)
     u16 heldItems[FRONTIER_PARTY_SIZE];
     s32 numMons = 0;
 
-    gFacilityTrainers = gSlateportBattleTentTrainers;
-    gFacilityTrainerMons = gSlateportBattleTentMons;
+    gFacilityTrainers = gCeruleanBattleTentTrainers;
+    gFacilityTrainerMons = gCeruleanBattleTentMons;
 
     while (1)
     {

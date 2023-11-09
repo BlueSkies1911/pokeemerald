@@ -1,0 +1,20 @@
+ViridianForest_SouthEntrance_MapScripts::
+	.byte 0
+
+ViridianForest_SouthEntrance_EventScript_Woman1::
+    msgbox ViridianForest_SouthEntrance_Text_ForestIsMaze, MSGBOX_NPC
+    end
+
+ViridianForest_SouthEntrance_EventScript_Woman2::
+    msgbox ViridianForest_SouthEntrance_Text_RattataHasWickedBite, MSGBOX_NPC
+    end
+
+ViridianForest_SouthEntrance_Text_ForestIsMaze::
+    .string "Are you going to Viridian Forest?\n"
+    .string "It's a natural maze in there.\l"
+    .string "Be careful you don't get lost.$"
+
+ViridianForest_SouthEntrance_Text_RattataHasWickedBite::
+    .string "Rattata may be small, but don't\n"
+    .string "underestimate its wicked bite.\p"
+    .string "Have you caught one already?$"

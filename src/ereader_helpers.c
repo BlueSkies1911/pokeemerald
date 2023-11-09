@@ -9,14 +9,14 @@
 #include "sprite.h"
 #include "task.h"
 #include "util.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "constants/trainers.h"
 #include "constants/moves.h"
 #include "constants/items.h"
-#include "constants/trainer_hill.h"
+#include "constants/trainer_tower.h"
 
 // Save data using TryWriteSpecialSaveSector is allowed to exceed SECTOR_DATA_SIZE (up to the counter field)
-STATIC_ASSERT(sizeof(struct TrainerHillChallenge) <= SECTOR_COUNTER_OFFSET, TrainerHillChallengeFreeSpace);
+STATIC_ASSERT(sizeof(struct TrainerTowerChallenge) <= SECTOR_COUNTER_OFFSET, TrainerTowerChallengeFreeSpace);
 
 struct SendRecvMgr
 {
@@ -50,7 +50,7 @@ static u16 sSavedTm3Cnt;
 static u16 sSavedSioCnt;
 static u16 sSavedRCnt;
 
-static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
+static const struct TrainerTowerTrainer sTrainerTowerTrainerTemplates_JP[] = {
     [0] = {
         .name = __("マキエ$$$$$   "),
         .facilityClass = FACILITY_CLASS_HEX_MANIAC,
@@ -60,9 +60,9 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
         .speechLose = { EC_WORD_TO_HER, EC_WORD_WIN, EC_WORD_JOKING, EC_WORD_HIGHS, EC_WORD_SCARY, EC_WORD_ELLIPSIS_EXCL },
         .speechAfter = { EC_WORD_IGNORANT, EC_WORD_SO, EC_WORD_TODAY, EC_WORD_NIGHTTIME, EC_WORD_YOU_RE, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS },
         .mons = {
-            [0] = DUMMY_HILL_MON,
-            [1] = DUMMY_HILL_MON,
-            [2] = DUMMY_HILL_MON,
+            [0] = DUMMY_TOWER_MON,
+            [1] = DUMMY_TOWER_MON,
+            [2] = DUMMY_TOWER_MON,
             [3] = {
                 .species = SPECIES_SWALOT,
                 .heldItem = ITEM_SHELL_BELL,
@@ -73,7 +73,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 0,
                 .spDefenseEV = 100,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -95,7 +95,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -117,7 +117,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 155,
                 .spDefenseEV = 255,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -137,23 +137,23 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
         .unused = 0x1,
         .speechBefore = { EC_MOVE2(BOUNCE), EC_WORD_AS_MUCH_AS, EC_EMPTY_WORD, EC_WORD_THEY_RE, EC_WORD_STRONG, EC_WORD_EXCL },
         .speechWin = { EC_MOVE(FLY), EC_WORD_AS_MUCH_AS, EC_EMPTY_WORD, EC_WORD_THEY_RE, EC_WORD_HAPPY, EC_WORD_EXCL },
-        .speechLose = { EC_MOVE2(MINIMIZE), EC_WORD_AS_MUCH_AS, EC_EMPTY_WORD, EC_WORD_THEY_RE, EC_WORD_SAD, EC_WORD_EXCL },
+        .speechLose = { EC_MOVE2(MINIMISE), EC_WORD_AS_MUCH_AS, EC_EMPTY_WORD, EC_WORD_THEY_RE, EC_WORD_SAD, EC_WORD_EXCL },
         .speechAfter = { EC_MOVE(BITE), EC_WORD_AS_MUCH_AS, EC_EMPTY_WORD, EC_WORD_THEY_RE, EC_WORD_ANGRY, EC_WORD_EXCL },
         .mons = {
-            [0] = DUMMY_HILL_MON,
-            [1] = DUMMY_HILL_MON,
-            [2] = DUMMY_HILL_MON,
+            [0] = DUMMY_TOWER_MON,
+            [1] = DUMMY_TOWER_MON,
+            [2] = DUMMY_TOWER_MON,
             [3] = {
                 .species = SPECIES_CACTURNE,
                 .heldItem = ITEM_QUICK_CLAW,
-                .moves = { MOVE_GIGA_DRAIN, MOVE_FAINT_ATTACK, MOVE_THUNDER_PUNCH, MOVE_GROWTH },
+                .moves = { MOVE_GIGA_DRAIN, MOVE_FEINT_ATTACK, MOVE_THUNDER_PUNCH, MOVE_GROWTH },
                 .hpEV = 55,
                 .attackEV = 0,
                 .defenseEV = 100,
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 100,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -175,7 +175,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 0,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -197,7 +197,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -220,9 +220,9 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
         .speechLose = { EC_WORD_THAT, EC_WORD_ABOVE, EC_WORD_LOST, EC_WORD_STORES, EC_WORD_JOKING, EC_WORD_ELLIPSIS_ELLIPSIS_ELLIPSIS },
         .speechAfter = { EC_WORD_ENTERTAINING, EC_WORD_NONE, EC_WORD_HEY_QUES, EC_WORD_ALMOST, EC_WORD_EXCL, EC_EMPTY_WORD },
         .mons = {
-            [0] = DUMMY_HILL_MON,
-            [1] = DUMMY_HILL_MON,
-            [2] = DUMMY_HILL_MON,
+            [0] = DUMMY_TOWER_MON,
+            [1] = DUMMY_TOWER_MON,
+            [2] = DUMMY_TOWER_MON,
             [3] = {
                 .species = SPECIES_DELCATTY,
                 .heldItem = ITEM_LUM_BERRY,
@@ -233,7 +233,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 255,
                 .spAttackEV = 0,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -255,7 +255,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -277,7 +277,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 200,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -300,9 +300,9 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
         .speechLose = { EC_WORD_OUTSIDE, EC_WORD_UNCLE, EC_WORD_SURPRISE, EC_WORD_THESE, EC_WORD_HEY_QUES, EC_WORD_ELLIPSIS_EXCL },
         .speechAfter = { EC_WORD_HE_S, EC_WORD_NO_1, EC_WORD_STRONG, EC_WORD_CHILDREN, EC_WORD_CAN_T, EC_WORD_EXCL_EXCL },
         .mons = {
-            [0] = DUMMY_HILL_MON,
-            [1] = DUMMY_HILL_MON,
-            [2] = DUMMY_HILL_MON,
+            [0] = DUMMY_TOWER_MON,
+            [1] = DUMMY_TOWER_MON,
+            [2] = DUMMY_TOWER_MON,
             [3] = {
                 .species = SPECIES_MAWILE,
                 .heldItem = ITEM_BRIGHT_POWDER,
@@ -313,7 +313,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 155,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -335,7 +335,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -357,7 +357,7 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
                 .speedEV = 0,
                 .spAttackEV = 255,
                 .spDefenseEV = 0,
-                .otId = TRAINER_HILL_OTID,
+                .otId = TRAINER_TOWER_OTID,
                 .hpIV = 5,
                 .attackIV = 5,
                 .defenseIV = 5,
@@ -373,131 +373,131 @@ static const struct TrainerHillTrainer sTrainerHillTrainerTemplates_JP[] = {
     },
 };
 
-static u8 GetTrainerHillUnkVal(void)
+static u8 GetTrainerTowerUnkVal(void)
 {
-    return (gSaveBlock1Ptr->trainerHill.unused + 1) % 256;
+    return (gSaveBlock1Ptr->trainerTower.unused + 1) % 256;
 }
 
-static bool32 ValidateTrainerChecksum(struct EReaderTrainerHillTrainer * hillTrainer)
+static bool32 ValidateTrainerChecksum(struct EReaderTrainerTowerTrainer * towerTrainer)
 {
-    int checksum = CalcByteArraySum((u8 *)hillTrainer, offsetof(typeof(*hillTrainer), checksum));
-    if (checksum != hillTrainer->checksum)
+    int checksum = CalcByteArraySum((u8 *)towerTrainer, offsetof(typeof(*towerTrainer), checksum));
+    if (checksum != towerTrainer->checksum)
         return FALSE;
 
     return TRUE;
 }
 
-bool8 ValidateTrainerHillData(struct EReaderTrainerHillSet * hillSet)
+bool8 ValidateTrainerTowerData(struct EReaderTrainerTowerSet * towerSet)
 {
     u32 i;
     u32 checksum;
-    int numTrainers = hillSet->numTrainers;
+    int numTrainers = towerSet->numTrainers;
 
     // Validate number of trainers
-    if (numTrainers < 1 || numTrainers > NUM_TRAINER_HILL_TRAINERS)
+    if (numTrainers < 1 || numTrainers > NUM_TRAINER_TOWER_TRAINERS)
         return FALSE;
 
     // Validate trainers
     for (i = 0; i < numTrainers; i++)
     {
-        if (!ValidateTrainerChecksum(&hillSet->trainers[i]))
+        if (!ValidateTrainerChecksum(&towerSet->trainers[i]))
             return FALSE;
     }
 
     // Validate checksum
-    checksum = CalcByteArraySum((u8 *)hillSet->trainers, numTrainers * sizeof(struct EReaderTrainerHillTrainer));
-    if (checksum != hillSet->checksum)
+    checksum = CalcByteArraySum((u8 *)towerSet->trainers, numTrainers * sizeof(struct EReaderTrainerTowerTrainer));
+    if (checksum != towerSet->checksum)
         return FALSE;
 
     return TRUE;
 }
 
-static bool32 ValidateTrainerHillChecksum(struct EReaderTrainerHillSet *hillSet)
+static bool32 ValidateTrainerTowerChecksum(struct EReaderTrainerTowerSet *towerSet)
 {
     u32 checksum;
-    int numTrainers = hillSet->numTrainers;
-    if (numTrainers < 1 || numTrainers > NUM_TRAINER_HILL_TRAINERS)
+    int numTrainers = towerSet->numTrainers;
+    if (numTrainers < 1 || numTrainers > NUM_TRAINER_TOWER_TRAINERS)
         return FALSE;
 
-    checksum = CalcByteArraySum((u8 *)hillSet->trainers, sizeof(struct EReaderTrainerHillSet) - offsetof(struct EReaderTrainerHillSet, trainers));
-    if (checksum != hillSet->checksum)
+    checksum = CalcByteArraySum((u8 *)towerSet->trainers, sizeof(struct EReaderTrainerTowerSet) - offsetof(struct EReaderTrainerTowerSet, trainers));
+    if (checksum != towerSet->checksum)
         return FALSE;
 
     return TRUE;
 }
 
-static bool32 TryWriteTrainerHill_Internal(struct EReaderTrainerHillSet * hillSet, struct TrainerHillChallenge * challenge)
+static bool32 TryWriteTrainerTower_Internal(struct EReaderTrainerTowerSet * towerSet, struct TrainerTowerChallenge * challenge)
 {
     int i;
 
-    AGB_ASSERT_EX(hillSet->dummy == 0, "cereader_tool.c", 450);
-    AGB_ASSERT_EX(hillSet->id == 0, "cereader_tool.c", 452);
+    AGB_ASSERT_EX(towerSet->dummy == 0, "cereader_tool.c", 450);
+    AGB_ASSERT_EX(towerSet->id == 0, "cereader_tool.c", 452);
 
     memset(challenge, 0, SECTOR_SIZE);
-    challenge->numTrainers = hillSet->numTrainers;
-    challenge->unused1 = GetTrainerHillUnkVal();
-    challenge->numFloors = (hillSet->numTrainers + 1) / HILL_TRAINERS_PER_FLOOR;
+    challenge->numTrainers = towerSet->numTrainers;
+    challenge->unused1 = GetTrainerTowerUnkVal();
+    challenge->numFloors = (towerSet->numTrainers + 1) / TOWER_TRAINERS_PER_FLOOR;
 
-    for (i = 0; i < hillSet->numTrainers; i++)
+    for (i = 0; i < towerSet->numTrainers; i++)
     {
         if (!(i & 1))
         {
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainerNum1 = hillSet->trainers[i].trainerNum;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].map = hillSet->trainers[i].map;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[0] = hillSet->trainers[i].trainer;
+            challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].trainerNum1 = towerSet->trainers[i].trainerNum;
+            challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].map = towerSet->trainers[i].map;
+            challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].trainers[0] = towerSet->trainers[i].trainer;
         }
         else
         {
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainerNum2 = hillSet->trainers[i].trainerNum;
-            challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = hillSet->trainers[i].trainer;
+            challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].trainerNum2 = towerSet->trainers[i].trainerNum;
+            challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].trainers[1] = towerSet->trainers[i].trainer;
         }
     }
 
     if (i & 1)
     {
-        challenge->floors[i / HILL_TRAINERS_PER_FLOOR].trainers[1] = sTrainerHillTrainerTemplates_JP[i / HILL_TRAINERS_PER_FLOOR];
+        challenge->floors[i / TOWER_TRAINERS_PER_FLOOR].trainers[1] = sTrainerTowerTrainerTemplates_JP[i / TOWER_TRAINERS_PER_FLOOR];
     }
 
-    challenge->checksum = CalcByteArraySum((u8 *)challenge->floors, NUM_TRAINER_HILL_FLOORS * sizeof(struct TrainerHillFloor));
-    if (TryWriteSpecialSaveSector(SECTOR_ID_TRAINER_HILL, (u8 *)challenge) != SAVE_STATUS_OK)
+    challenge->checksum = CalcByteArraySum((u8 *)challenge->floors, NUM_TRAINER_TOWER_FLOORS * sizeof(struct TrainerTowerFloor));
+    if (TryWriteSpecialSaveSector(SECTOR_ID_TRAINER_TOWER, (u8 *)challenge) != SAVE_STATUS_OK)
         return FALSE;
 
     return TRUE;
 }
 
-bool32 TryWriteTrainerHill(struct EReaderTrainerHillSet * hillSet)
+bool32 TryWriteTrainerTower(struct EReaderTrainerTowerSet * towerSet)
 {
     void *buffer = AllocZeroed(SECTOR_SIZE);
-    bool32 result = TryWriteTrainerHill_Internal(hillSet, buffer);
+    bool32 result = TryWriteTrainerTower_Internal(towerSet, buffer);
     Free(buffer);
     return result;
 }
 
-static bool32 TryReadTrainerHill_Internal(struct EReaderTrainerHillSet * dest, u8 * buffer)
+static bool32 TryReadTrainerTower_Internal(struct EReaderTrainerTowerSet * dest, u8 * buffer)
 {
-    if (TryReadSpecialSaveSector(SECTOR_ID_TRAINER_HILL, buffer) != SAVE_STATUS_OK)
+    if (TryReadSpecialSaveSector(SECTOR_ID_TRAINER_TOWER, buffer) != SAVE_STATUS_OK)
         return FALSE;
 
-    memcpy(dest, buffer, sizeof(struct EReaderTrainerHillSet));
-    if (!ValidateTrainerHillChecksum(dest))
+    memcpy(dest, buffer, sizeof(struct EReaderTrainerTowerSet));
+    if (!ValidateTrainerTowerChecksum(dest))
         return FALSE;
 
     return TRUE;
 }
 
-static bool32 TryReadTrainerHill(struct EReaderTrainerHillSet * hillSet)
+static bool32 TryReadTrainerTower(struct EReaderTrainerTowerSet * towerSet)
 {
     u8 *buffer = AllocZeroed(SECTOR_SIZE);
-    bool32 result = TryReadTrainerHill_Internal(hillSet, buffer);
+    bool32 result = TryReadTrainerTower_Internal(towerSet, buffer);
     Free(buffer);
     return result;
 }
 
-bool32 ReadTrainerHillAndValidate(void)
+bool32 ReadTrainerTowerAndValidate(void)
 {
-    struct EReaderTrainerHillSet *hillSet = AllocZeroed(SECTOR_SIZE);
-    bool32 result = TryReadTrainerHill(hillSet);
-    Free(hillSet);
+    struct EReaderTrainerTowerSet *towerSet = AllocZeroed(SECTOR_SIZE);
+    bool32 result = TryReadTrainerTower(towerSet);
+    Free(towerSet);
     return result;
 }
 

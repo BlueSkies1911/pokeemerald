@@ -24,14 +24,15 @@
 // - Area glows, which highlight any of the maps in MAP_GROUP_TOWNS_AND_ROUTES that have the species.
 //   These are a tilemap with colored rectangular areas that blends in and out. The positions of the
 //   rectangles is determined by the positions of the matching MAPSEC values on the region map layout.
-// - Area markers, which highlight any of the maps in MAP_GROUP_DUNGEONS or MAP_GROUP_SPECIAL_AREA that
+// - Area markers, which highlight any of the maps in MAP_GROUP_DUNGEONS, MAP_GROUP_DUNGEONS2 or MAP_GROUP_SPECIAL_AREA that
 //   have the species. These are circular sprites that flash twice. The positions of the sprites is
 //   determined by the data for the corresponding MAPSEC in gRegionMapEntries.
 
 // Only maps in the following map groups have their encounters considered for the area screen
-#define MAP_GROUP_TOWNS_AND_ROUTES MAP_GROUP(PETALBURG_CITY)
-#define MAP_GROUP_DUNGEONS MAP_GROUP(METEOR_FALLS_1F_1R)
-#define MAP_GROUP_SPECIAL_AREA MAP_GROUP(SAFARI_ZONE_NORTHWEST)
+#define MAP_GROUP_TOWNS_AND_ROUTES MAP_GROUP(PALLET_TOWN)
+#define MAP_GROUP_DUNGEONS MAP_GROUP(VIRIDIAN_FOREST)
+#define MAP_GROUP_DUNGEONS2 MAP_GROUP(MT_EMBER_EXTERIOR)
+#define MAP_GROUP_SPECIAL_AREA MAP_GROUP(SAFARI_ZONE_CENTER)
 
 #define AREA_SCREEN_WIDTH 32
 #define AREA_SCREEN_HEIGHT 20
@@ -121,7 +122,7 @@ static const u16 sMovingRegionMapSections[3] =
 
 static const u16 sFeebasData[][3] =
 {
-    {SPECIES_FEEBAS, MAP_GROUP(ROUTE119), MAP_NUM(ROUTE119)},
+    {SPECIES_FEEBAS, MAP_GROUP(SEVAULT_CANYON), MAP_NUM(SEVAULT_CANYON)},
     {NUM_SPECIES}
 };
 
@@ -277,6 +278,7 @@ static void FindMapsWithMon(u16 species)
                     SetAreaHasMon(sFeebasData[i][1], sFeebasData[i][2]);
                     break;
                 case MAP_GROUP_DUNGEONS:
+                case MAP_GROUP_DUNGEONS2:
                 case MAP_GROUP_SPECIAL_AREA:
                     SetSpecialMapHasMon(sFeebasData[i][1], sFeebasData[i][2]);
                     break;
@@ -295,6 +297,7 @@ static void FindMapsWithMon(u16 species)
                     SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
                     break;
                 case MAP_GROUP_DUNGEONS:
+                case MAP_GROUP_DUNGEONS2:
                 case MAP_GROUP_SPECIAL_AREA:
                     SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
                     break;

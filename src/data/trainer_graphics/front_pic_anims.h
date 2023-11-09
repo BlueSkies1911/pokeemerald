@@ -62,6 +62,10 @@ static const union AnimCmd *const sAnims_AromaLady[] ={
     sAnim_GeneralFrame0,
 };
 
+static const union AnimCmd *const sAnims_SuperNerd[] ={
+    sAnim_GeneralFrame0,
+};
+
 static const union AnimCmd *const sAnims_RuinManiac[] ={
     sAnim_GeneralFrame0,
 };
@@ -142,54 +146,6 @@ static const union AnimCmd *const sAnims_Gentleman[] ={
     sAnim_GeneralFrame0,
 };
 
-static const union AnimCmd *const sAnims_EliteFourSidney[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_EliteFourPhoebe[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_EliteFourGlacia[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_EliteFourDrake[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderRoxanne[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderBrawly[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderWattson[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderFlannery[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderNorman[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderWinona[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderTateAndLiza[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_LeaderJuan[] ={
-    sAnim_GeneralFrame0,
-};
-
 static const union AnimCmd *const sAnims_SchoolKidM[] ={
     sAnim_GeneralFrame0,
 };
@@ -211,10 +167,6 @@ static const union AnimCmd *const sAnims_PokefanF[] ={
 };
 
 static const union AnimCmd *const sAnims_Youngster[] ={
-    sAnim_GeneralFrame0,
-};
-
-static const union AnimCmd *const sAnims_ChampionWallace[] ={
     sAnim_GeneralFrame0,
 };
 
@@ -370,6 +322,130 @@ static const union AnimCmd *const sAnims_RubySapphireMay[] ={
     sAnim_GeneralFrame0,
 };
 
+static const union AnimCmd *const sAnims_RivalEarly[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_RivalLate[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderBrock[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_RocketGruntM[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderMisty[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Engineer[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderLtSurge[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Gambler[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Biker[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderErika[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderGiovanni[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Channeler[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderSabrina[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Scientist[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Juggler[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Rocker[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_CrushKin[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Tamer[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderKoga[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_CueBall[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Burglar[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_LeaderBlaine[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_CoolCouple[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_EliteFourLorelei[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_EliteFourBruno[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_EliteFourAgatha[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_EliteFourLance[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_ChampionRival[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_CrushGirl[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_RocketGruntF[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_Painter[] ={
+    sAnim_GeneralFrame0,
+};
+
 const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[] =
 {
     [TRAINER_PIC_HIKER] = sAnims_Hiker,
@@ -388,6 +464,7 @@ const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[] =
     [TRAINER_PIC_AQUA_LEADER_ARCHIE] = sAnims_AquaLeaderArchie,
     [TRAINER_PIC_HEX_MANIAC] = sAnims_HexManiac,
     [TRAINER_PIC_AROMA_LADY] = sAnims_AromaLady,
+    [TRAINER_PIC_SUPER_NERD] = sAnims_SuperNerd,
     [TRAINER_PIC_RUIN_MANIAC] = sAnims_RuinManiac,
     [TRAINER_PIC_INTERVIEWER] = sAnims_Interviewer,
     [TRAINER_PIC_TUBER_F] = sAnims_TuberF,
@@ -408,25 +485,12 @@ const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[] =
     [TRAINER_PIC_PSYCHIC_M] = sAnims_PsychicM,
     [TRAINER_PIC_PSYCHIC_F] = sAnims_PsychicF,
     [TRAINER_PIC_GENTLEMAN] = sAnims_Gentleman,
-    [TRAINER_PIC_ELITE_FOUR_SIDNEY] = sAnims_EliteFourSidney,
-    [TRAINER_PIC_ELITE_FOUR_PHOEBE] = sAnims_EliteFourPhoebe,
-    [TRAINER_PIC_ELITE_FOUR_GLACIA] = sAnims_EliteFourGlacia,
-    [TRAINER_PIC_ELITE_FOUR_DRAKE] = sAnims_EliteFourDrake,
-    [TRAINER_PIC_LEADER_ROXANNE] = sAnims_LeaderRoxanne,
-    [TRAINER_PIC_LEADER_BRAWLY] = sAnims_LeaderBrawly,
-    [TRAINER_PIC_LEADER_WATTSON] = sAnims_LeaderWattson,
-    [TRAINER_PIC_LEADER_FLANNERY] = sAnims_LeaderFlannery,
-    [TRAINER_PIC_LEADER_NORMAN] = sAnims_LeaderNorman,
-    [TRAINER_PIC_LEADER_WINONA] = sAnims_LeaderWinona,
-    [TRAINER_PIC_LEADER_TATE_AND_LIZA] = sAnims_LeaderTateAndLiza,
-    [TRAINER_PIC_LEADER_JUAN] = sAnims_LeaderJuan,
     [TRAINER_PIC_SCHOOL_KID_M] = sAnims_SchoolKidM,
     [TRAINER_PIC_SCHOOL_KID_F] = sAnims_SchoolKidF,
     [TRAINER_PIC_SR_AND_JR] = sAnims_SrAndJr,
     [TRAINER_PIC_POKEFAN_M] = sAnims_PokefanM,
     [TRAINER_PIC_POKEFAN_F] = sAnims_PokefanF,
     [TRAINER_PIC_YOUNGSTER] = sAnims_Youngster,
-    [TRAINER_PIC_CHAMPION_WALLACE] = sAnims_ChampionWallace,
     [TRAINER_PIC_FISHERMAN] = sAnims_Fisherman,
     [TRAINER_PIC_CYCLING_TRIATHLETE_M] = sAnims_CyclingTriathleteM,
     [TRAINER_PIC_CYCLING_TRIATHLETE_F] = sAnims_CyclingTriathleteF,
@@ -465,4 +529,35 @@ const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[] =
     [TRAINER_PIC_LEAF] = sAnims_Leaf,
     [TRAINER_PIC_RS_BRENDAN] = sAnims_RubySapphireBrendan,
     [TRAINER_PIC_RS_MAY] = sAnims_RubySapphireMay,
+    [TRAINER_PIC_RIVAL_EARLY] = sAnims_RivalEarly,
+    [TRAINER_PIC_RIVAL_LATE] = sAnims_RivalLate,
+    [TRAINER_PIC_LEADER_BROCK] = sAnims_LeaderBrock,
+    [TRAINER_PIC_ROCKET_GRUNT_M] = sAnims_RocketGruntM,
+    [TRAINER_PIC_LEADER_MISTY] = sAnims_LeaderMisty,
+    [TRAINER_PIC_ENGINEER] = sAnims_Engineer,
+    [TRAINER_PIC_LEADER_LT_SURGE] = sAnims_LeaderLtSurge,
+    [TRAINER_PIC_GAMBLER] = sAnims_Gambler,
+    [TRAINER_PIC_BIKER] = sAnims_Biker,
+    [TRAINER_PIC_LEADER_ERIKA] = sAnims_LeaderErika,
+    [TRAINER_PIC_LEADER_GIOVANNI] = sAnims_LeaderGiovanni,
+    [TRAINER_PIC_CHANNELER] = sAnims_Channeler,
+    [TRAINER_PIC_LEADER_SABRINA] = sAnims_LeaderSabrina,
+    [TRAINER_PIC_SCIENTIST] = sAnims_Scientist,
+    [TRAINER_PIC_JUGGLER] = sAnims_Juggler,
+    [TRAINER_PIC_ROCKER] = sAnims_Rocker,
+    [TRAINER_PIC_CRUSH_KIN] = sAnims_CrushKin,
+    [TRAINER_PIC_TAMER] = sAnims_Tamer,
+    [TRAINER_PIC_LEADER_KOGA] = sAnims_LeaderKoga,
+    [TRAINER_PIC_CUE_BALL] = sAnims_CueBall,
+    [TRAINER_PIC_BURGLAR] = sAnims_Burglar,
+    [TRAINER_PIC_LEADER_BLAINE] = sAnims_LeaderBlaine,
+    [TRAINER_PIC_COOL_COUPLE] = sAnims_CoolCouple,
+    [TRAINER_PIC_ELITE_FOUR_LORELEI] = sAnims_EliteFourLorelei,
+    [TRAINER_PIC_ELITE_FOUR_BRUNO] = sAnims_EliteFourBruno,
+    [TRAINER_PIC_ELITE_FOUR_AGATHA] = sAnims_EliteFourAgatha,
+    [TRAINER_PIC_ELITE_FOUR_LANCE] = sAnims_EliteFourLance,
+    [TRAINER_PIC_CHAMPION_RIVAL] = sAnims_ChampionRival,
+    [TRAINER_PIC_CRUSH_GIRL] = sAnims_CrushGirl,
+    [TRAINER_PIC_ROCKET_GRUNT_F] = sAnims_RocketGruntF,
+    [TRAINER_PIC_PAINTER] = sAnims_Painter,
 };

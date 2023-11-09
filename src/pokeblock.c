@@ -1098,7 +1098,7 @@ static void Task_HandlePokeblocksSwapInput(u8 taskId)
             if (JOY_NEW(A_BUTTON)) // Pointless check, B Button has been pressed here
                 UpdatePokeblockSwapMenu(taskId, FALSE);
             else
-                UpdatePokeblockSwapMenu(taskId, TRUE); // Canceled swapping
+                UpdatePokeblockSwapMenu(taskId, TRUE); // Cancelled swapping
             break;
         default:
             // Swap items

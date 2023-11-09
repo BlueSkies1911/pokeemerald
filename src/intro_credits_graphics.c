@@ -576,66 +576,6 @@ static const struct SpriteTemplate sSpriteTemplate_FlygonLatias =
     .callback = SpriteCB_FlygonLeftHalf
 };
 
-const struct CompressedSpriteSheet gSpriteSheet_IntroBrendan[] =
-{
-    {
-        .data = gIntroBrendan_Gfx,
-        .size = 0x2000,
-        .tag = TAG_BRENDAN
-    },
-    {}
-};
-
-const struct CompressedSpriteSheet gSpriteSheet_IntroMay[] =
-{
-    {
-        .data = gIntroMay_Gfx,
-        .size = 0x2000,
-        .tag = TAG_MAY
-    },
-    {}
-};
-
-const struct CompressedSpriteSheet gSpriteSheet_IntroBicycle[] =
-{
-    {
-        .data = sBicycle_Gfx,
-        .size = 0x1000,
-        .tag = TAG_BICYCLE
-    },
-    {}
-};
-
-// In RS these were Latios/Latias. In Emerald both are replaced with Flygon and now only 1 is used
-static const struct CompressedSpriteSheet sSpriteSheet_IntroFlygon_Unused[] =
-{
-    {
-        .data = gIntroFlygon_Gfx,
-        .size = 0x1000,
-        .tag = TAG_FLYGON_LATIOS
-    },
-    {}
-};
-
-const struct CompressedSpriteSheet gSpriteSheet_IntroFlygon[] =
-{
-    {
-        .data = gIntroFlygon_Gfx,
-        .size = 0x1000,
-        .tag = TAG_FLYGON_LATIAS
-    },
-    {}
-};
-
-const struct SpritePalette gSpritePalettes_IntroPlayerFlygon[] =
-{
-    { .data = gIntroPlayer_Pal, .tag = TAG_BRENDAN },
-    { .data = gIntroPlayer_Pal, .tag = TAG_MAY },
-    { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIOS },
-    { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIAS },
-    {}
-};
-
 const struct CompressedSpriteSheet gSpriteSheet_CreditsBrendan[] =
 {
     {

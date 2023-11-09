@@ -17,20 +17,20 @@
 #define MULTI_BASE_PC_WITH_REGISTRY        6
 #define MULTI_REGISTER_MENU                7
 #define MULTI_SSTIDAL_LILYCOVE             8 // Exit only, populated by CreateLilycoveSSTidalMultichoice
-#define MULTI_UNUSED_9                     9
-#define MULTI_UNUSED_10                    10
+#define MULTI_BIKE_SHOP                    9
+#define MULTI_EEVEELUTIONS                 10
 #define MULTI_FRONTIER_PASS_INFO           11
 #define MULTI_BIKE                         12
 #define MULTI_STATUS_INFO                  13
 #define MULTI_BRINEY_OFF_DEWFORD           14
-#define MULTI_UNUSED_15                    15
+#define MULTI_THIRSTY_GIRL_FRESH_WATER     15
 #define MULTI_VIEWED_PAINTINGS             16
 #define MULTI_YESNOINFO                    17
 #define MULTI_BATTLE_MODE                  18
-#define MULTI_UNUSED_19                    19
+#define MULTI_THIRSTY_GIRL_SODA_POP        19
 #define MULTI_YESNOINFO_2                  20
-#define MULTI_UNUSED_21                    21
-#define MULTI_UNUSED_22                    22
+#define MULTI_THIRSTY_GIRL_FRESH_WATER_SODA_POP 21
+#define MULTI_THIRSTY_GIRL_LEMONADE        22
 #define MULTI_CHALLENGEINFO                23
 #define MULTI_LEVEL_MODE                   24
 #define MULTI_MECHADOLL1_Q1                25
@@ -48,18 +48,18 @@
 #define MULTI_MECHADOLL5_Q1                37
 #define MULTI_MECHADOLL5_Q2                38
 #define MULTI_MECHADOLL5_Q3                39
-#define MULTI_UNUSED_40                    40
-#define MULTI_UNUSED_41                    41
+#define MULTI_THIRSTY_GIRL_FRESH_WATER_LEMONADE 40
+#define MULTI_THIRSTY_GIRL_SODA_POP_LEMONADE 41
 #define MULTI_VENDING_MACHINE              42
 #define MULTI_MACH_BIKE_INFO               43
 #define MULTI_ACRO_BIKE_INFO               44
 #define MULTI_SATISFACTION                 45
 #define MULTI_STERN_DEEPSEA                46
-#define MULTI_UNUSED_ASH_VENDOR            47 // Replaced by scrollable multichoice
-#define MULTI_GAME_CORNER_DOLLS            48
+#define MULTI_THIRSTY_GIRL_FRESH_WATER_SODA_POP_LEMONADE 47
+#define MULTI_GAME_CORNER_ITEMS            48
 #define MULTI_GAME_CORNER_COINS            49
 #define MULTI_HOWS_FISHING                 50
-#define MULTI_UNUSED_51                    51
+#define MULTI_GAME_CORNER_POKEMON          51
 #define MULTI_SSTIDAL_SLATEPORT_WITH_BF    52
 #define MULTI_SSTIDAL_BATTLE_FRONTIER      53
 #define MULTI_RIGHTLEFT                    54
@@ -97,11 +97,11 @@
 #define MULTI_FORCED_START_MENU            86
 #define MULTI_FRONTIER_GAMBLER_BET         87
 #define MULTI_TENT                         88
-#define MULTI_UNUSED_SSTIDAL_1             89 // These 4 were replaced by CreateLilycoveSSTidalMultichoice
-#define MULTI_UNUSED_SSTIDAL_2             90 //
-#define MULTI_UNUSED_SSTIDAL_3             91 //
-#define MULTI_UNUSED_SSTIDAL_4             92 //
-#define MULTI_FOSSIL                       93
+#define MULTI_LINKED_DIRECT_UNION          89
+#define MULTI_ROCKET_HIDEOUT_ELEVATOR      90
+#define MULTI_HELIX                        91
+#define MULTI_DOME                         92
+#define MULTI_AMBER                        93
 #define MULTI_YESNO                        94
 #define MULTI_FRONTIER_RULES               95
 #define MULTI_BATTLE_ARENA_RULES           96
@@ -119,9 +119,20 @@
 #define MULTI_TV_LATI                      108
 #define MULTI_BATTLE_TOWER_FEELINGS        109
 #define MULTI_WHERES_RAYQUAZA              110
-#define MULTI_SLATEPORT_TENT_RULES         111
-#define MULTI_FALLARBOR_TENT_RULES         112
+#define MULTI_CERULEAN_TENT_RULES          111
+#define MULTI_SAFFRON_TENT_RULES           112
 #define MULTI_TAG_MATCH_TYPE               113
+#define MULTI_HELIX_AMBER                  114
+#define MULTI_DOME_AMBER                   115
+#define MULTI_ISLAND_23                    116
+#define MULTI_ISLAND_13                    117
+#define MULTI_ISLAND_12                    118
+#define MULTI_SEAGALLOP_123                119
+#define MULTI_SEAGALLOP_V23                120
+#define MULTI_SEAGALLOP_V13                121
+#define MULTI_SEAGALLOP_V12                122
+#define MULTI_SEAGALLOP_VERMILION          123
+#define MULTI_MUSHROOMS                    124
 
 // Lilycove SS Tidal Multichoice Selections
 #define SSTIDAL_SELECTION_SLATEPORT        0
@@ -164,5 +175,14 @@
 #define STDSTRING_BATTLE_ARENA     27
 #define STDSTRING_BATTLE_PIKE      28
 #define STDSTRING_BATTLE_PYRAMID   29
+#define STDSTRING_COINS            30
+#define STDSTRING_BOULDER_BADGE    31
+#define STDSTRING_CASCADE_BADGE    32
+#define STDSTRING_THUNDER_BADGE    33
+#define STDSTRING_RAINBOW_BADGE    34
+#define STDSTRING_SOUL_BADGE       35
+#define STDSTRING_MARSH_BADGE      36
+#define STDSTRING_VOLCANO_BADGE    37
+#define STDSTRING_EARTH_BADGE      38
 
 #endif //GUARD_SCRIPT_MENU_CONSTANTS_H

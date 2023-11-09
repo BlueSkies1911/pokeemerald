@@ -1,71 +1,62 @@
-gTrickHouse_Mechadoll_Oddish::
-	.string "ODDISH$"
+gTrickHouse_Mechadoll_Caterpie::
+	.string "Caterpie$"
 
-gTrickHouse_Mechadoll_Poochyena::
-	.string "POOCHYENA$"
+gTrickHouse_Mechadoll_Weedle::
+	.string "Weedle$"
 
-gTrickHouse_Mechadoll_Taillow::
-	.string "TAILLOW$"
+gTrickHouse_Mechadoll_Beedrill::
+	.string "Beedrill$"
 
-gTrickHouse_Mechadoll_Azurill::
-	.string "AZURILL$"
+gTrickHouse_Mechadoll_Pidgey::
+	.string "Pidgey$"
 
-gTrickHouse_Mechadoll_Lotad::
-	.string "LOTAD$"
+gTrickHouse_Mechadoll_Rattata::
+	.string "Rattata$"
 
-gTrickHouse_Mechadoll_Wingull::
-	.string "WINGULL$"
-
-gTrickHouse_Mechadoll_Dustox::
-	.string "DUSTOX$"
+gTrickHouse_Mechadoll_Spearow::
+	.string "Spearow$"
 
 gTrickHouse_Mechadoll_Zubat::
-	.string "ZUBAT$"
+	.string "Zubat$"
 
-gTrickHouse_Mechadoll_Nincada::
-	.string "NINCADA$"
+gTrickHouse_Mechadoll_Paras::
+	.string "Paras$"
 
-gTrickHouse_Mechadoll_Ralts::
-	.string "RALTS$"
+gTrickHouse_Mechadoll_Meowth::
+	.string "Meowth$"
 
-gTrickHouse_Mechadoll_Zigzagoon::
-	.string "ZIGZAGOON$"
+gTrickHouse_Mechadoll_Golduck::
+	.string "Golduck$"
 
-gTrickHouse_Mechadoll_Slakoth::
-	.string "SLAKOTH$"
+gTrickHouse_Mechadoll_Abra::
+	.string "Abra$"
 
-gTrickHouse_Mechadoll_Poochyena2::
-	.string "POOCHYENA$"
+gTrickHouse_Mechadoll_Drowzee::
+	.string "Drowzee$"
 
-gTrickHouse_Mechadoll_Shroomish::
-	.string "SHROOMISH$"
+gTrickHouse_Mechadoll_Goldeen::
+	.string "Goldeen$"
 
-gTrickHouse_Mechadoll_Zigzagoon2::
-	.string "ZIGZAGOON$"
+gTrickHouse_Mechadoll_Starmie::
+	.string "Starmie$"
 
-gTrickHouse_Mechadoll_Poochyena3::
-	.string "POOCHYENA$"
-
-gTrickHouse_Mechadoll_Zubat2::
-	.string "ZUBAT$"
-
-gTrickHouse_Mechadoll_Carvanha::
-	.string "CARVANHA$"
+gTrickHouse_Mechadoll_Magikarp::
+	.string "Magikarp$"
 
 gTrickHouse_Mechadoll_BurnHeal::
-	.string "BURN HEAL$"
+	.string "Burn Heal$"
 
-gTrickHouse_Mechadoll_HarborMail::
-	.string "HARBOR MAIL$"
+gTrickHouse_Mechadoll_SodaPop::
+	.string "Soda Pop$"
 
 gTrickHouse_Mechadoll_SamePrice::
 	.string "Same price$"
 
-gTrickHouse_Mechadoll_60Yen::
-	.string "¥60$"
+gTrickHouse_Mechadoll_50Yen::
+	.string "¥50$"
 
-gTrickHouse_Mechadoll_55Yen::
-	.string "¥55$"
+gTrickHouse_Mechadoll_100Yen::
+	.string "¥100$"
 
 gTrickHouse_Mechadoll_Nothing::
 	.string "Nothing$"
@@ -76,9 +67,6 @@ gTrickHouse_Mechadoll_CostMore::
 gTrickHouse_Mechadoll_CostLess::
 	.string "They will cost less.$"
 
-gTrickHouse_Mechadoll_SamePrice2::
-	.string "Same price$"
-
 gTrickHouse_Mechadoll_Male::
 	.string "Male$"
 
@@ -87,12 +75,6 @@ gTrickHouse_Mechadoll_Female::
 
 gTrickHouse_Mechadoll_Neither::
 	.string "Neither$"
-
-gTrickHouse_Mechadoll_ElderlyMen::
-	.string "Elderly men$"
-
-gTrickHouse_Mechadoll_ElderlyLadies::
-	.string "Elderly ladies$"
 
 gTrickHouse_Mechadoll_SameNumber::
 	.string "Same number$"
@@ -106,14 +88,11 @@ gTrickHouse_Mechadoll_One::
 gTrickHouse_Mechadoll_Two::
 	.string "2$"
 
-gTrickHouse_Mechadoll_Two2::
-	.string "2$"
-
 gTrickHouse_Mechadoll_Three::
 	.string "3$"
 
-gTrickHouse_Mechadoll_Four::
-	.string "4$"
+gTrickHouse_Mechadoll_Five::
+	.string "5$"
 
 gTrickHouse_Mechadoll_Six::
 	.string "6$"
@@ -121,14 +100,11 @@ gTrickHouse_Mechadoll_Six::
 gTrickHouse_Mechadoll_Seven::
 	.string "7$"
 
-gTrickHouse_Mechadoll_Eight::
-	.string "8$"
+gTrickHouse_Mechadoll_Fourteen::
+	.string "14$"
 
-gTrickHouse_Mechadoll_Six2::
-	.string "6$"
+gTrickHouse_Mechadoll_Fifteen::
+	.string "15$"
 
-gTrickHouse_Mechadoll_Seven2::
-	.string "7$"
-
-gTrickHouse_Mechadoll_Eight2::
-	.string "8$"
+gTrickHouse_Mechadoll_Sixteen::
+	.string "16$"

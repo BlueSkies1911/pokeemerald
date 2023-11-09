@@ -1,0 +1,179 @@
+.set LOCALID_PLAYER, 1
+.set LOCALID_OPPONENT, 2
+.set LOCALID_ATTENDANT, 3
+
+FuchsiaCity_BattleTentBattleRoom_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, FuchsiaCity_BattleTentBattleRoom_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, FuchsiaCity_BattleTentBattleRoom_OnFrame
+	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, FuchsiaCity_BattleTentBattleRoom_OnWarp
+	.byte 0
+
+	@ On this map the player (OBJ_EVENT_ID_PLAYER) is hidden
+	@ The player is represented instead by object event 1, which has the gfx id VAR_OBJ_GFX_ID_1
+	@ The opponent is represented by object event 2, which has the gfx id VAR_OBJ_GFX_ID_0
+
+FuchsiaCity_BattleTentBattleRoom_OnTransition:
+	call FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfx
+	end
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfx::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfxMale
+	goto_if_eq VAR_RESULT, FEMALE, FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfxFemale
+	return
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfxMale::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_RED_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RED_NORMAL
+	return
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfxFemale::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_GREEN_NORMAL
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_GREEN_NORMAL
+	return
+
+FuchsiaCity_BattleTentBattleRoom_OnFrame:
+	map_script_2 VAR_TEMP_0, 0, FuchsiaCity_BattleTentBattleRoom_EventScript_EnterRoom
+	.2byte 0
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_EnterRoom::
+	showobjectat LOCALID_PLAYER, MAP_FUCHSIA_CITY_BATTLE_TENT_BATTLE_ROOM
+	applymovement LOCALID_PLAYER, FuchsiaCity_BattleTentBattleRoom_Movement_PlayerEnter
+	waitmovement 0
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	goto_if_ne VAR_RESULT, 0, FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+FuchsiaCity_BattleTentBattleRoom_EventScript_NextOpponentEnter::
+	tower_setopponent
+	addobject LOCALID_OPPONENT
+	applymovement LOCALID_OPPONENT, FuchsiaCity_BattleTentBattleRoom_Movement_OpponentEnter
+	waitmovement 0
+	battletent_getopponentintro
+	msgbox gStringVar4, MSGBOX_DEFAULT
+	waitmessage
+	call BattleFrontier_BattlePalaceBattleRoom_EventScript_DoPalaceBattle
+	switch VAR_RESULT
+	case 1, FuchsiaCity_BattleTentBattleRoom_EventScript_DefeatedOpponent
+FuchsiaCity_BattleTentBattleRoom_EventScript_WarpToLobbyLost::
+	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_LOST
+	special LoadPlayerParty
+	warp MAP_FUCHSIA_CITY_BATTLE_TENT_LOBBY, 6, 6
+	waitstate
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_DefeatedOpponent::
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	addvar VAR_RESULT, 1
+	frontier_set FRONTIER_DATA_BATTLE_NUM, VAR_RESULT
+	switch VAR_RESULT
+	case 3, FuchsiaCity_BattleTentBattleRoom_EventScript_WarpToLobbyWon
+	applymovement LOCALID_OPPONENT, FuchsiaCity_BattleTentBattleRoom_Movement_OpponentExit
+	waitmovement 0
+	removeobject LOCALID_OPPONENT
+	applymovement LOCALID_ATTENDANT, Common_Movement_WalkInPlaceFasterDown
+	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp
+	waitmovement 0
+	msgbox BattleFrontier_BattlePalaceBattleRoom_Text_LetMeRestoreYourMons, MSGBOX_DEFAULT
+	special LoadPlayerParty
+	special SavePlayerParty
+	frontier_setpartyorder FRONTIER_PARTY_SIZE
+	playfanfare MUS_RG_HEAL
+	waitfanfare
+	special HealPlayerParty
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge::
+	frontier_get FRONTIER_DATA_BATTLE_NUM
+	call_if_eq VAR_RESULT, 1, FuchsiaCity_BattleTentBattleRoom_EventScript_ReadyFor2ndOpponent
+	call_if_eq VAR_RESULT, 2, FuchsiaCity_BattleTentBattleRoom_EventScript_ReadyFor3rdOpponent
+	multichoice 20, 6, MULTI_GO_ON_REST_RETIRE, TRUE
+	switch VAR_RESULT
+	case 0, FuchsiaCity_BattleTentBattleRoom_EventScript_ContinueChallenge
+	case 1, FuchsiaCity_BattleTentBattleRoom_EventScript_AskPauseChallenge
+	case 2, FuchsiaCity_BattleTentBattleRoom_EventScript_AskRetireChallenge
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_AskPauseChallenge::
+	msgbox BattleFrontier_BattlePalaceBattleRoom_Text_SaveAndQuitGame, MSGBOX_YESNO
+	switch VAR_RESULT
+	case NO, FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+	case YES, FuchsiaCity_BattleTentBattleRoom_EventScript_PauseChallenge
+	case MULTI_B_PRESSED, FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_AskRetireChallenge::
+	message BattleFrontier_BattlePalaceBattleRoom_Text_WishToQuitChallenge
+	waitmessage
+	multichoicedefault 20, 8, MULTI_YESNO, 1, FALSE
+	switch VAR_RESULT
+	case 1, FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+	case 0, FuchsiaCity_BattleTentBattleRoom_EventScript_WarpToLobbyLost
+	case MULTI_B_PRESSED, FuchsiaCity_BattleTentBattleRoom_EventScript_AskContinueChallenge
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_ContinueChallenge::
+	applymovement LOCALID_ATTENDANT, Common_Movement_WalkInPlaceFasterRight
+	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight
+	waitmovement 0
+	closemessage
+	goto FuchsiaCity_BattleTentBattleRoom_EventScript_NextOpponentEnter
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_WarpToLobbyWon::
+	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_WON
+	special LoadPlayerParty
+	warp MAP_FUCHSIA_CITY_BATTLE_TENT_LOBBY, 6, 6
+	waitstate
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_PauseChallenge::
+	message BattleFrontier_BattlePalaceBattleRoom_Text_SavingData
+	waitmessage
+	fuchsiatent_save CHALLENGE_STATUS_PAUSED
+	playse SE_SAVE
+	waitse
+	fadescreen FADE_TO_BLACK
+	frontier_reset
+	end
+
+FuchsiaCity_BattleTentBattleRoom_OnWarp:
+	map_script_2 VAR_TEMP_1, 0, FuchsiaCity_BattleTentBattleRoom_EventScript_SetUpObjects
+	.2byte 0
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_SetUpObjects::
+	hideobjectat LOCALID_PLAYER, MAP_FUCHSIA_CITY_BATTLE_TENT_BATTLE_ROOM
+	call FuchsiaCity_BattleTentBattleRoom_EventScript_SetPlayerGfx
+	setvar VAR_TEMP_1, 1
+	applymovement OBJ_EVENT_ID_PLAYER, FuchsiaCity_BattleTentBattleRoom_Movement_SetInvisible
+	removeobject LOCALID_OPPONENT
+	end
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_ReadyFor2ndOpponent::
+	message BattleFrontier_BattlePalaceBattleRoom_Text_PreparedFor2ndOpponent
+	waitmessage
+	return
+
+FuchsiaCity_BattleTentBattleRoom_EventScript_ReadyFor3rdOpponent::
+	message BattleFrontier_BattlePalaceBattleRoom_Text_PreparedFor3rdOpponent
+	waitmessage
+	return
+
+FuchsiaCity_BattleTentBattleRoom_Movement_SetInvisible:
+	set_invisible
+	step_end
+
+FuchsiaCity_BattleTentBattleRoom_Movement_PlayerEnter:
+	set_visible
+	walk_up
+	walk_up
+	walk_up
+	face_right
+	step_end
+
+FuchsiaCity_BattleTentBattleRoom_Movement_OpponentEnter:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	face_left
+	step_end
+
+FuchsiaCity_BattleTentBattleRoom_Movement_OpponentExit:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+

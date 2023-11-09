@@ -1,7 +1,7 @@
 #ifndef GUARD_EREADER_HELPERS_H
 #define GUARD_EREADER_HELPERS_H
 
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 
 enum {
     EREADER_XFR_STATE_INIT = 0,
@@ -31,27 +31,27 @@ enum {
 #define EREADER_CHECKSUM_OK_MASK (EREADER_CHECKSUM_OK << EREADER_CHECKSUM_SHIFT)
 #define EREADER_CHECKSUM_MASK    ((EREADER_CHECKSUM_OK | EREADER_CHECKSUM_ERR) << EREADER_CHECKSUM_SHIFT)
 
-struct EReaderTrainerHillTrainer
+struct EReaderTrainerTowerTrainer
 {
     u8 trainerNum;
-    struct TrainerHillTrainer trainer;
-    struct TrainerHillFloorMap map;
+    struct TrainerTowerTrainer trainer;
+    struct TrainerTowerFloorMap map;
     u32 checksum;
 }; // size=0x274
 
-struct EReaderTrainerHillSet
+struct EReaderTrainerTowerSet
 {
     u8 numTrainers;
     u8 id;
     u16 dummy; // Only read in an assert.
     u32 checksum;
-    struct EReaderTrainerHillTrainer trainers[6];
+    struct EReaderTrainerTowerTrainer trainers[6];
     u8 unk_ec0[40];
 }; // size = 0xf00
 
-bool8 ValidateTrainerHillData(struct EReaderTrainerHillSet *);
-bool32 TryWriteTrainerHill(struct EReaderTrainerHillSet *);
-bool32 ReadTrainerHillAndValidate(void);
+bool8 ValidateTrainerTowerData(struct EReaderTrainerTowerSet *);
+bool32 TryWriteTrainerTower(struct EReaderTrainerTowerSet *);
+bool32 ReadTrainerTowerAndValidate(void);
 int EReaderHandleTransfer(u8, size_t, const void *, void *);
 void EReaderHelper_Timer3Callback(void);
 void EReaderHelper_SerialCallback(void);

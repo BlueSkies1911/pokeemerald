@@ -6,13 +6,12 @@
 #include "fldeff_misc.h"
 #include "frontier_util.h"
 #include "menu.h"
-#include "mirage_tower.h"
 #include "overworld.h"
 #include "palette.h"
 #include "pokenav.h"
 #include "script.h"
 #include "secret_base.h"
-#include "trainer_hill.h"
+#include "trainer_tower.h"
 #include "tv.h"
 #include "constants/rgb.h"
 #include "constants/metatile_behaviors.h"
@@ -29,6 +28,7 @@ EWRAM_DATA static u16 ALIGNED(4) sBackupMapData[MAX_MAP_DATA_SIZE] = {0};
 EWRAM_DATA struct MapHeader gMapHeader = {0};
 EWRAM_DATA struct Camera gCamera = {0};
 EWRAM_DATA static struct ConnectionFlags sMapConnectionFlags = {0};
+EWRAM_DATA u8 gGlobalFieldTintMode = QL_TINT_NONE;
 EWRAM_DATA static u32 UNUSED sFiller = 0; // without this, the next file won't align properly
 
 struct BackupMapLayout gBackupMapLayout;
@@ -48,15 +48,22 @@ static const struct MapConnection *GetIncomingConnection(u8 direction, int x, in
 static bool8 IsPosInIncomingConnectingMap(u8 direction, int x, int y, const struct MapConnection *connection);
 static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, int offset);
 
-#define GetBorderBlockAt(x, y)({                                                                   \
-    u16 block;                                                                                     \
-    int i;                                                                                         \
-    const u16 *border = gMapHeader.mapLayout->border; /* Unused, they read it again below */       \
-                                                                                                   \
-    i = (x + 1) & 1;                                                                               \
-    i += ((y + 1) & 1) * 2;                                                                        \
-                                                                                                   \
-    block = gMapHeader.mapLayout->border[i] | MAPGRID_COLLISION_MASK;                              \
+#define GetBorderBlockAt(x, y) ({                                                                 \
+    u16 block;                                                                                    \
+    s32 xprime;                                                                                   \
+    s32 yprime;                                                                                   \
+                                                                                                  \
+    const struct MapLayout *mapLayout = gMapHeader.mapLayout;                                     \
+                                                                                                  \
+    xprime = x - MAP_OFFSET;                                                                      \
+    xprime += 8 * mapLayout->borderWidth;                                                         \
+    xprime %= mapLayout->borderWidth;                                                             \
+                                                                                                  \
+    yprime = y - MAP_OFFSET;                                                                      \
+    yprime += 8 * mapLayout->borderHeight;                                                        \
+    yprime %= mapLayout->borderHeight;                                                            \
+                                                                                                  \
+    block = mapLayout->border[xprime + yprime * mapLayout->borderWidth] | MAPGRID_COLLISION_MASK; \
 })
 
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)
@@ -91,10 +98,10 @@ void InitBattlePyramidMap(bool8 setPlayerPosition)
     GenerateBattlePyramidFloorLayout(sBackupMapData, setPlayerPosition);
 }
 
-void InitTrainerHillMap(void)
+void InitTrainerTowerMap(void)
 {
     CpuFastFill16(MAPGRID_UNDEFINED, sBackupMapData, sizeof(sBackupMapData));
-    GenerateTrainerHillFloorLayout(sBackupMapData);
+    GenerateTrainerTowerFloorLayout(sBackupMapData);
 }
 
 static void InitMapLayoutData(struct MapHeader *mapHeader)
@@ -659,7 +666,6 @@ bool8 CameraMove(int x, int y)
     else
     {
         SaveMapView();
-        ClearMirageTowerPulseBlendEffect();
         old_x = gSaveBlock1Ptr->pos.x;
         old_y = gSaveBlock1Ptr->pos.y;
         connection = GetIncomingConnection(direction, gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y);
@@ -865,9 +871,25 @@ static void ApplyGlobalTintToPaletteEntries(u16 offset, u16 size)
 
 }
 
-static void UNUSED ApplyGlobalTintToPaletteSlot(u8 slot, u8 count)
+void Fieldmap_ApplyGlobalTintToPaletteSlot(u8 slot, u8 count)
 {
-
+    switch (gGlobalFieldTintMode)
+    {
+    case QL_TINT_NONE:
+        return;
+    case QL_TINT_GRAYSCALE:
+        TintPalette_GrayScale(gPlttBufferUnfaded + slot * 16, count * 16);
+        break;
+    case QL_TINT_SEPIA:
+        TintPalette_SepiaTone(gPlttBufferUnfaded + slot * 16, count * 16);
+        break;
+    case QL_TINT_BACKUP_GRAYSCALE:
+        TintPalette_GrayScale(gPlttBufferUnfaded + slot * 16, count * 16);
+        break;
+    default:
+        return;
+    }
+    CpuFastCopy(gPlttBufferUnfaded + slot * 16, gPlttBufferFaded + slot * 16, count * 16 * sizeof(u16));
 }
 
 static void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size)

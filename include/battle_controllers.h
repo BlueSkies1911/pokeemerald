@@ -84,6 +84,7 @@ enum {
     BALL_3_SHAKES_FAIL,
     BALL_3_SHAKES_SUCCESS,
     BALL_TRAINER_BLOCK,
+    BALL_GHOST_DODGE,
 };
 
 enum {
@@ -256,12 +257,14 @@ void Task_PlayerController_RestoreBgmAfterCry(u8 taskId);
 void ActionSelectionCreateCursorAt(u8 cursorPos, u8 unused);
 void ActionSelectionDestroyCursorAt(u8 cursorPos);
 void InitMoveSelectionsVarsAndStrings(void);
+void HandleInputChooseMove(void);
 
 // recorded player controller
 void SetControllerToRecordedPlayer(void);
 
 // opponent controller
 void SetControllerToOpponent(void);
+void OpponentBufferExecCompleted(void);
 
 // player partner controller
 void SetControllerToPlayerPartner(void);
@@ -269,8 +272,29 @@ void SetControllerToPlayerPartner(void);
 // safari controller
 void SetControllerToSafari(void);
 
-// wally controller
-void SetControllerToWally(void);
+// oak and old man controller
+void SetControllerToOakOrOldMan(void);
+
+// These flags are set to signal that the indicated message
+// was already emitted
+
+// Inflicting damage is key
+#define FIRST_BATTLE_MSG_FLAG_INFLICT_DMG    0x1
+// Lowering stats is advantageous
+#define FIRST_BATTLE_MSG_FLAG_STAT_CHG       0x2
+// Keep an eye on your HP
+#define FIRST_BATTLE_MSG_FLAG_HP_RESTORE     0x4
+//
+#define FIRST_BATTLE_MSG_FLAG_PARTY_MENU     0x8
+
+bool8 BtlCtrl_OakOldMan_TestState2Flag(u8 mask);
+void BtlCtrl_OakOldMan_SetState2Flag(u8 mask);
+void PrintOakText_InflictingDamageIsKey(void);
+void PrintOakText_HowDisappointing(void);
+void PrintOakText_OakNoRunningFromATrainer(void);
+void OakOldManHandleInputChooseMove(void);
+void BtlCtrl_DrawVoiceoverMessageFrame(void);
+void BtlCtrl_RemoveVoiceoverMessageFrame(void);
 
 // recorded opponent controller
 void SetControllerToRecordedOpponent(void);
