@@ -15,19 +15,9 @@ Common_EventScript_NameReceivedBoxMon::
 
 Common_EventScript_TransferredToPC::
 	bufferboxname STR_VAR_1, VAR_PC_BOX_TO_SEND_MON
-<<<<<<< HEAD
 	bufferspeciesname STR_VAR_2, VAR_TEMP_TRANSFERRED_SPECIES
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_TransferredSomeonesPC
-	call_if_set FLAG_SYS_PC_LANETTE, EventScript_TransferredLanettesPC
-||||||| c32fbf594a
-	bufferspeciesname STR_VAR_2, VAR_TEMP_1
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_TransferredSomeonesPC
-	call_if_set FLAG_SYS_PC_LANETTE, EventScript_TransferredLanettesPC
-=======
-	bufferspeciesname STR_VAR_2, VAR_TEMP_1
 	call_if_unset FLAG_SYS_PC_BILL, EventScript_TransferredSomeonesPC
 	call_if_set FLAG_SYS_PC_BILL, EventScript_TransferredLanettesPC
->>>>>>> expanded-base
 	return
 
 EventScript_TransferredSomeonesPC::
