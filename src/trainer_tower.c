@@ -645,7 +645,7 @@ void LoadTrainerTowerObjectEventTemplates(void)
         eventTemplates[i].localId = i + 1;
         eventTemplates[i].graphicsId = FacilityClassToGraphicsId(sTowerData->floors[floorId].trainers[i].facilityClass);
         eventTemplates[i].x = sTowerData->floors[floorId].map.trainerCoords[i] & 0xF;
-        eventTemplates[i].y = ((sTowerData->floors[floorId].map.trainerCoords[i] >> 4) & 0xF) + HILL_FLOOR_HEIGHT_MARGIN;
+        eventTemplates[i].y = ((sTowerData->floors[floorId].map.trainerCoords[i] >> 4) & 0xF) + TOWER_FLOOR_HEIGHT_MARGIN;
         bits = i << 2;
         eventTemplates[i].movementType = ((sTowerData->floors[floorId].map.trainerDirections >> bits) & 0xF) + MOVEMENT_TYPE_FACE_UP;
         eventTemplates[i].trainerRange_berryTreeId = (sTowerData->floors[floorId].map.trainerRanges >> bits) & 0xF;

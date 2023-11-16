@@ -1456,7 +1456,7 @@ bool8 CapeBrinkGetMoveToTeachLeadPokemon(void)
     gSpecialVar_0x8007 = leadMonSlot;
     for (i = 0; i < NELEMS(sCapeBrinkCompatibleSpecies); i++)
     {
-        if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_SPECIES2, NULL) == sCapeBrinkCompatibleSpecies[i])
+        if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_SPECIES_OR_EGG, NULL) == sCapeBrinkCompatibleSpecies[i])
         {
             tutorMonId = i;
             break;
@@ -4217,7 +4217,7 @@ bool8 DoesPlayerPartyContainSpecies(void)
     u8 i;
     for (i = 0; i < partyCount; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2, NULL) == gSpecialVar_0x8004 
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL) == gSpecialVar_0x8004 
             && GetPlayerIDAsU32() == GetMonData(&gPlayerParty[i], MON_DATA_OT_ID, NULL))
             return TRUE;
     }

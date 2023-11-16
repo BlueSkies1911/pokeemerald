@@ -1219,7 +1219,7 @@ static void Cmd_attackcanceler(void)
     gHitMarker |= HITMARKER_OBEYS;
     if (NoTargetPresent(gBattlerAttacker, gCurrentMove) && (!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)))
     {
-        gBattlescriptCurrInstr = BattleScript_ButItFailedAtkStringPpReduce;
+        gBattlescriptCurrInstr = BattleScript_FailedFromAtkString;
         if (!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
             CancelMultiTurnMoves(gBattlerAttacker);
         return;
@@ -1952,16 +1952,16 @@ static void Cmd_datahpupdate(void)
             // Target has an active Substitute, deal damage to that instead.
             if (gDisableStructs[gActiveBattler].substituteHP >= gBattleMoveDamage)
             {
-                if (gSpecialStatuses[gActiveBattler].shellBellDmg == 0)
-                    gSpecialStatuses[gActiveBattler].shellBellDmg = gBattleMoveDamage;
+                if (gSpecialStatuses[gActiveBattler].dmg == 0)
+                    gSpecialStatuses[gActiveBattler].dmg = gBattleMoveDamage;
                 gDisableStructs[gActiveBattler].substituteHP -= gBattleMoveDamage;
                 gHpDealt = gBattleMoveDamage;
             }
             else
             {
                 // Substitute has less HP than the damage dealt, set its HP to 0.
-                if (gSpecialStatuses[gActiveBattler].shellBellDmg == 0)
-                    gSpecialStatuses[gActiveBattler].shellBellDmg = gDisableStructs[gActiveBattler].substituteHP;
+                if (gSpecialStatuses[gActiveBattler].dmg == 0)
+                    gSpecialStatuses[gActiveBattler].dmg = gDisableStructs[gActiveBattler].substituteHP;
                 gHpDealt = gDisableStructs[gActiveBattler].substituteHP;
                 gDisableStructs[gActiveBattler].substituteHP = 0;
             }
@@ -2013,8 +2013,8 @@ static void Cmd_datahpupdate(void)
                 }
 
                 // Record damage for Shell Bell
-                if (gSpecialStatuses[gActiveBattler].shellBellDmg == 0 && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
-                    gSpecialStatuses[gActiveBattler].shellBellDmg = gHpDealt;
+                if (gSpecialStatuses[gActiveBattler].dmg == 0 && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
+                    gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
 
                 // Note: While physicalDmg/specialDmg below are only distinguished between for Counter/Mirror Coat, they are
                 //       used in combination as general damage trackers for other purposes. specialDmg is additionally used
@@ -2063,8 +2063,8 @@ static void Cmd_datahpupdate(void)
     {
         // MOVE_RESULT_NO_EFFECT was set
         gActiveBattler = GetBattlerForBattleScript(cmd->battler);
-        if (gSpecialStatuses[gActiveBattler].shellBellDmg == 0)
-            gSpecialStatuses[gActiveBattler].shellBellDmg = IGNORE_SHELL_BELL;
+        if (gSpecialStatuses[gActiveBattler].dmg == 0)
+            gSpecialStatuses[gActiveBattler].dmg = IGNORE_SHELL_BELL;
     }
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
@@ -6199,8 +6199,8 @@ static void Cmd_getmoneyreward(void)
         s32 i, count;
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_NONE
-             && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_EGG)
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
+             && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
             {
                 if (GetMonData(&gPlayerParty[i], MON_DATA_LEVEL) > sPartyLevel)
                     sPartyLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
@@ -7025,7 +7025,7 @@ static bool32 CanTeleport(u8 battlerId)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        species = GetMonData(&party[i], MON_DATA_SPECIES2);
+        species = GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG);
         if (species != SPECIES_NONE && species != SPECIES_EGG && GetMonData(&party[i], MON_DATA_HP) != 0)
             count++;
     }
@@ -9566,7 +9566,7 @@ static void Cmd_painsplitdmgcalc(void)
         storeLoc[3] = (painSplitHp & 0xFF000000) >> 24;
 
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - hpDiff;
-        gSpecialStatuses[gBattlerTarget].shellBellDmg = IGNORE_SHELL_BELL;
+        gSpecialStatuses[gBattlerTarget].dmg = IGNORE_SHELL_BELL;
 
         gBattlescriptCurrInstr = cmd->nextInstr;
     }

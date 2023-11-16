@@ -162,10 +162,10 @@ static u8 DoJumpSpecialSpriteMovement(struct Sprite *);
 static void CreateLevitateMovementTask(struct ObjectEvent *);
 static void DestroyLevitateMovementTask(u8);
 static bool8 NpcTakeStep(struct Sprite *);
-static void SetObjectTemplateFlagIfTemporary(struct ObjectEventTemplate *template);
-static bool8 IsTreeOrRockOffScreenPostWalkTransition(struct ObjectEventTemplate *template, s16 x, s16 y);
-static bool8 IsConnectionTreeOrRockOnScreen(struct ObjectEventTemplate *template, s16 x, s16 y);
-static bool8 ShouldTreeOrRockObjectBeCreated(struct ObjectEventTemplate *template, bool8 inConnection, s16 x, s16 y);
+static void SetObjectTemplateFlagIfTemporary(const struct ObjectEventTemplate *template);
+static bool8 IsTreeOrRockOffScreenPostWalkTransition(const struct ObjectEventTemplate *template, s16 x, s16 y);
+static bool8 IsConnectionTreeOrRockOnScreen(const struct ObjectEventTemplate *template, s16 x, s16 y);
+static bool8 ShouldTreeOrRockObjectBeCreated(const struct ObjectEventTemplate *template, bool8 inConnection, s16 x, s16 y);
 static bool8 IsElevationMismatchAt(u8, s16, s16);
 static bool8 AreElevationsCompatible(u8, u8);
 static void sub_8064544(struct ObjectEvent *, struct Sprite *);
@@ -1184,7 +1184,7 @@ static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate *tem
     return objectEventId;
 }
 
-static bool8 ShouldTreeOrRockObjectBeCreated(struct ObjectEventTemplate *template, bool8 inConnection, s16 x, s16 y)
+static bool8 ShouldTreeOrRockObjectBeCreated(const struct ObjectEventTemplate *template, bool8 inConnection, s16 x, s16 y)
 {
     if (inConnection && !IsConnectionTreeOrRockOnScreen(template, x, y))
         return FALSE;
@@ -1196,7 +1196,7 @@ static bool8 ShouldTreeOrRockObjectBeCreated(struct ObjectEventTemplate *templat
 #define CONNECTION_OBJECT_RADIUS_X 8
 #define CONNECTION_OBJECT_RADIUS_Y 6
 
-static bool8 IsConnectionTreeOrRockOnScreen(struct ObjectEventTemplate *template, s16 x, s16 y)
+static bool8 IsConnectionTreeOrRockOnScreen(const struct ObjectEventTemplate *template, s16 x, s16 y)
 {
     if (template->graphicsId == OBJ_EVENT_GFX_CUTTABLE_TREE ||
         template->graphicsId == OBJ_EVENT_GFX_BREAKABLE_ROCK)
@@ -1227,7 +1227,7 @@ static bool8 IsConnectionTreeOrRockOnScreen(struct ObjectEventTemplate *template
 // If object is tree or rock, and is on screen when player is on edge of map,
 // then set its template flag so it isn't shown.
 // These would have a clone anyway so this should be okay.
-static bool8 IsTreeOrRockOffScreenPostWalkTransition(struct ObjectEventTemplate *template, s16 x, s16 y)
+static bool8 IsTreeOrRockOffScreenPostWalkTransition(const struct ObjectEventTemplate *template, s16 x, s16 y)
 {
     s32 width, height;
 
@@ -1276,7 +1276,7 @@ static bool8 IsTreeOrRockOffScreenPostWalkTransition(struct ObjectEventTemplate 
     return TRUE;
 }
 
-static void SetObjectTemplateFlagIfTemporary(struct ObjectEventTemplate *template)
+static void SetObjectTemplateFlagIfTemporary(const struct ObjectEventTemplate *template)
 {
     if ((template->flagId >= FLAG_TEMP_11) && (template->flagId <= FLAG_TEMP_1F))
     {
@@ -1295,7 +1295,7 @@ u8 Unref_TryInitLocalObjectEvent(u8 localId)
         if (InBattlePyramid())
             objectEventCount = GetNumBattlePyramidObjectEvents();
         else if (InTrainerTower())
-            objectEventCount = HILL_TRAINERS_PER_FLOOR;
+            objectEventCount = TOWER_TRAINERS_PER_FLOOR;
         else
             objectEventCount = gMapHeader.events->objectEventCount;
 
@@ -1463,7 +1463,7 @@ u8 SpawnSpecialObjectEventParameterized(u8 graphicsId, u8 movementBehavior, u8 l
     y -= MAP_OFFSET;
     objectEventTemplate.localId = localId;
     objectEventTemplate.graphicsId = graphicsId;
-    objectEventTemplate.kind = OBJ_KIND_NORMAL;
+    objectEventTemplate.inConnection = 0;
     objectEventTemplate.x = x;
     objectEventTemplate.y = y;
     objectEventTemplate.elevation = elevation;
@@ -1601,7 +1601,7 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
         if (InBattlePyramid())
             objectCount = GetNumBattlePyramidObjectEvents();
         else if (InTrainerTower())
-            objectCount = HILL_TRAINERS_PER_FLOOR;
+            objectCount = TOWER_TRAINERS_PER_FLOOR;
         else
             objectCount = gMapHeader.events->objectEventCount;
 

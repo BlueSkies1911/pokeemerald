@@ -444,7 +444,7 @@ static void LoadTrainerTowerRecordsWindowGfx(u8 bgId)
 {
     LoadBgTiles(bgId, sTrainerTowerWindowTileset, sizeof(sTrainerTowerWindowTileset), 0);
     CopyToBgTilemapBufferRect(bgId, sTrainerTowerWindowTilemap, 0, 0, 0x20, 0x20);
-    LoadPalette(sTrainerTowerWindowPalette, BG_PLTT_ID(0), sizeof(sTrainerHillWindowPalette));
+    LoadPalette(sTrainerTowerWindowPalette, BG_PLTT_ID(0), sizeof(sTrainerTowerWindowPalette));
 }
 
 static void VblankCB_TrainerTowerRecords(void)

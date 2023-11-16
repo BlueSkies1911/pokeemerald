@@ -1347,7 +1347,7 @@
 #define FLAG_OPENED_START_MENU                                (SYSTEM_FLAGS + 0x3)
 #define FLAG_SYS_GAME_CLEAR                                   (SYSTEM_FLAGS + 0x4)
 #define FLAG_SYS_CHAT_USED                                    (SYSTEM_FLAGS + 0x5)
-#define FLAG_SYS_HIPSTER_MEET                                 (SYSTEM_FLAGS + 0x6)
+#define FLAG_UNLOCKED_TRENDY_SAYINGS                          (SYSTEM_FLAGS + 0x6)
 
 // Badges
 #define FLAG_BADGE01_GET                                      (SYSTEM_FLAGS + 0x7)

@@ -64,22 +64,22 @@ struct HofGfx
     u8 tilemap2[0x1000];
 };
 
-static EWRAM_DATA u32 sSelectedPaletteIndices = 0;
+static EWRAM_DATA u32 sHofFadePalettes = 0;
 static EWRAM_DATA struct HallofFameTeam * sHofMonPtr = NULL;
 static EWRAM_DATA struct HofGfx * sHofGfxPtr = NULL;
 
 static void Task_Hof_InitMonData(u8 taskId);
 static void Task_Hof_InitTeamSaveData(u8 taskId);
+static void Task_Hof_SetMonDisplayTask(u8 taskId);
 static void Task_Hof_TrySaveData(u8 taskId);
 static void Task_Hof_DelayAfterSave(u8 taskId);
-static void Task_Hof_StartDisplayingMons(u8 taskId);
 static void Task_Hof_DisplayMon(u8 taskId);
 static void Task_Hof_PlayMonCryAndPrintInfo(u8 taskId);
 static void Task_Hof_TryDisplayAnotherMon(u8 taskId);
 static void Task_Hof_PaletteFadeAndPrintWelcomeText(u8 taskId);
 static void Task_Hof_ApplauseAndConfetti(u8 taskId);
-static void Task_Hof_WaitBorderFadeAway(u8 taskId);
-static void Task_Hof_SpawnPlayerPic(u8 taskId);
+static void Task_Hof_WaitToDisplayPlayer(u8 taskId);
+static void Task_Hof_DisplayPlayer(u8 taskId);
 static void Task_Hof_WaitAndPrintPlayerInfo(u8 taskId);
 static void Task_Hof_ExitOnKeyPressed(u8 taskId);
 static void Task_Hof_HandlePaletteOnExit(u8 taskId);
@@ -135,21 +135,19 @@ static const struct BgTemplate sHof_BgTemplates[] = {
     }
 };
 
-static const struct WindowTemplate sWindowTemplate = {
+static const struct WindowTemplate sHof_WindowTemplate = {
     .bg = 0,
     .tilemapLeft = 2,
     .tilemapTop = 2,
     .width = 14,
     .height = 6,
     .paletteNum = 14,
-    .baseBlock = 0x001
+    .baseBlock = 1
 };
 
-static const u8 sTextColors[][4] = {
-    { 0, 1, 2 },
-    { 0, 2, 3 },
-    { 4, 5, 0 }
-};
+static const u8 sMonInfoTextColors[4] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY};
+static const u8 sPlayerInfoTextColors[4] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+static const u8 sUnusedTextColors[4] = {TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED, TEXT_COLOR_TRANSPARENT};
 
 static const struct CompressedSpriteSheet sSpriteSheet_Confetti[] =
 {
@@ -431,36 +429,35 @@ void CB2_DoHallOfFameScreenDontSaveData(void)
 
 static void Task_Hof_InitMonData(u8 taskId)
 {
-    u16 i;
-    u16 j;
-    u8 nick[POKEMON_NAME_LENGTH + 2];
+    u16 i, j;
 
-    gTasks[taskId].tMonNumber = 0;
+    gTasks[taskId].tMonNumber = 0; // valid pokes
+
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+        u8 nickname[POKEMON_NAME_LENGTH + 1];
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES))
         {
-            sHofMonPtr[0].mon[i].species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
-            sHofMonPtr[0].mon[i].tid = GetMonData(&gPlayerParty[i], MON_DATA_OT_ID);
-            sHofMonPtr[0].mon[i].personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
-            sHofMonPtr[0].mon[i].lvl = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
-            GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, nick);
+            sHofMonPtr->mon[i].species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
+            sHofMonPtr->mon[i].tid = GetMonData(&gPlayerParty[i], MON_DATA_OT_ID);
+            sHofMonPtr->mon[i].personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
+            sHofMonPtr->mon[i].lvl = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+            GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, nickname);
             for (j = 0; j < POKEMON_NAME_LENGTH; j++)
-            {
-                sHofMonPtr[0].mon[i].nick[j] = nick[j];
-            }
+                sHofMonPtr->mon[i].nickname[j] = nickname[j];
             gTasks[taskId].tMonNumber++;
         }
         else
         {
-            sHofMonPtr[0].mon[i].species = SPECIES_NONE;
-            sHofMonPtr[0].mon[i].tid = 0;
-            sHofMonPtr[0].mon[i].personality = 0;
-            sHofMonPtr[0].mon[i].lvl = 0;
-            sHofMonPtr[0].mon[i].nick[0] = EOS;
+            sHofMonPtr->mon[i].species = SPECIES_NONE;
+            sHofMonPtr->mon[i].tid = 0;
+            sHofMonPtr->mon[i].personality = 0;
+            sHofMonPtr->mon[i].lvl = 0;
+            sHofMonPtr->mon[i].nickname[0] = EOS;
         }
     }
-    sSelectedPaletteIndices = 0;
+
+    sHofFadePalettes = 0;
     gTasks[taskId].tDisplayedMonId = 0;
     gTasks[taskId].tPlayerSpriteID = SPRITE_NONE;
 
@@ -470,7 +467,7 @@ static void Task_Hof_InitMonData(u8 taskId)
     }
 
     if (gTasks[taskId].tDontSaveData)
-        gTasks[taskId].func = Task_Hof_StartDisplayingMons;
+        gTasks[taskId].func = Task_Hof_SetMonDisplayTask;
     else
         gTasks[taskId].func = Task_Hof_InitTeamSaveData;
 }
@@ -528,10 +525,10 @@ static void Task_Hof_DelayAfterSave(u8 taskId)
     if (gTasks[taskId].tFrameCount != 0)
         gTasks[taskId].tFrameCount--;
     else
-        gTasks[taskId].func = Task_Hof_StartDisplayingMons;
+        gTasks[taskId].func = Task_Hof_SetMonDisplayTask;
 }
 
-static void Task_Hof_StartDisplayingMons(u8 taskId)
+static void Task_Hof_SetMonDisplayTask(u8 taskId)
 {
     gTasks[taskId].func = Task_Hof_DisplayMon;
 }
@@ -602,11 +599,11 @@ static void Task_Hof_TryDisplayAnotherMon(u8 taskId)
     }
     else
     {
-        sSelectedPaletteIndices |= (0x10000 << gSprites[gTasks[taskId].tMonSpriteId(currPokeID)].oam.paletteNum);
+        sHofFadePalettes |= (0x10000 << gSprites[gTasks[taskId].tMonSpriteId(currPokeID)].oam.paletteNum);
         if (gTasks[taskId].tDisplayedMonId < PARTY_SIZE - 1 && currMon[1].species != SPECIES_NONE) // there is another pokemon to display
         {
             gTasks[taskId].tDisplayedMonId++;
-            BeginNormalPaletteFade(sSelectedPaletteIndices, 0, 12, 12, HALL_OF_FAME_BG_PAL);
+            BeginNormalPaletteFade(sHofFadePalettes, 0, 12, 12, HALL_OF_FAME_BG_PAL);
             gSprites[gTasks[taskId].tMonSpriteId(currPokeID)].oam.priority = 1;
             gTasks[taskId].func = Task_Hof_DisplayMon;
         }
@@ -650,35 +647,35 @@ static void Task_Hof_ApplauseAndConfetti(u8 taskId)
             if (gTasks[taskId].tMonSpriteId(i) != SPRITE_NONE)
                 gSprites[gTasks[taskId].tMonSpriteId(i)].oam.priority = 1;
         }
-        BeginNormalPaletteFade(sSelectedPaletteIndices, 0, 12, 12, HALL_OF_FAME_BG_PAL);
+        BeginNormalPaletteFade(sHofFadePalettes, 0, 12, 12, HALL_OF_FAME_BG_PAL);
         FillWindowPixelBuffer(0, PIXEL_FILL(0));
         CopyWindowToVram(0, COPYWIN_FULL);
         gTasks[taskId].tFrameCount = 7;
-        gTasks[taskId].func = Task_Hof_WaitBorderFadeAway;
+        gTasks[taskId].func = Task_Hof_WaitToDisplayPlayer;
     }
 }
 
-static void Task_Hof_WaitBorderFadeAway(u8 taskId)
+static void Task_Hof_WaitToDisplayPlayer(u8 taskId)
 {
-    if (gTasks[taskId].tFrameCount > 15)
+    if (gTasks[taskId].tFrameCount >= 16)
     {
-        gTasks[taskId].func = Task_Hof_SpawnPlayerPic;
+        gTasks[taskId].func = Task_Hof_DisplayPlayer;
     }
     else
     {
         gTasks[taskId].tFrameCount++;
-        SetGpuReg(REG_OFFSET_BLDALPHA, 256 * gTasks[taskId].tFrameCount);
+        SetGpuReg(REG_OFFSET_BLDALPHA, gTasks[taskId].tFrameCount * 256);
     }
 }
 
-static void Task_Hof_SpawnPlayerPic(u8 taskId)
+static void Task_Hof_DisplayPlayer(u8 taskId)
 {
-    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
     ShowBg(1);
     ShowBg(3);
-    gTasks[taskId].tPlayerSpriteID = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId_Debug(gSaveBlock2Ptr->playerGender, TRUE), TRUE, 0x78, 0x48, 6, TAG_NONE);
-    AddWindow(&sWindowTemplate);
+    gTasks[taskId].tPlayerSpriteID = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId_Debug(gSaveBlock2Ptr->playerGender, TRUE), TRUE, 120, 72, 6, TAG_NONE);
+    AddWindow(&sHof_WindowTemplate);
     LoadWindowGfx(1, gSaveBlock2Ptr->optionsWindowFrameType, 0x21D, BG_PLTT_ID(13));
     LoadPalette(GetTextWindowPalette(1), BG_PLTT_ID(14), PLTT_SIZE_4BPP);
     gTasks[taskId].tFrameCount = 120;
@@ -867,7 +864,7 @@ static void Task_HofPC_DrawSpritesPrintText(u8 taskId)
         savedTeams++;
 
     currMon = &savedTeams->mon[0];
-    sSelectedPaletteIndices = 0;
+    sHofFadePalettes = 0;
     gTasks[taskId].tCurrMonId = 0;
     gTasks[taskId].tMonNo = 0;
 
@@ -939,8 +936,8 @@ static void Task_HofPC_PrintMonInfo(u8 taskId)
 
     currMonId = gTasks[taskId].tMonSpriteId(gTasks[taskId].tCurrMonId);
     gSprites[currMonId].oam.priority = 0;
-    sSelectedPaletteIndices = (0x10000 << gSprites[currMonId].oam.paletteNum) ^ PALETTES_OBJECTS;
-    BlendPalettesUnfaded(sSelectedPaletteIndices, 0xC, HALL_OF_FAME_BG_PAL);
+    sHofFadePalettes = (0x10000 << gSprites[currMonId].oam.paletteNum) ^ PALETTES_OBJECTS;
+    BlendPalettesUnfaded(sHofFadePalettes, 0xC, HALL_OF_FAME_BG_PAL);
 
     currMon = &savedTeams->mon[gTasks[taskId].tCurrMonId];
     if (currMon->species != SPECIES_EGG)
@@ -1055,25 +1052,20 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId)
 #undef tMonNo
 #undef tMonSpriteId
 
-static void HallOfFame_PrintWelcomeText(u8 not, u8 used)
+static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 {
-    u8 x = (0xD0 - GetStringWidth(2, gText_WelcomeToHOF, 0)) / 2;
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
     PutWindowTilemap(0);
-    AddTextPrinterParameterized3(0, FONT_NORMAL, x, 1, sTextColors[0], 0, gText_WelcomeToHOF);
+    AddTextPrinterParameterized3(0, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_WelcomeToHOF, 0xD0), 1, sMonInfoTextColors, 0, gText_WelcomeToHOF);
     CopyWindowToVram(0, COPYWIN_FULL);
 }
 
 static void HallOfFame_PrintMonInfo(struct HallofFameMon* currMon, u8 unused1, u8 unused2)
 {
-    u8 text[16];
-    u8 text2[24];
-    u16 i;
+    u8 text[max(32, POKEMON_NAME_LENGTH + 1)];
     u8 *stringPtr;
-    u16 dexNumber;
-    u8 gender;
+    s32 dexNumber;
     s32 width;
-    s32 x;
 
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
     PutWindowTilemap(0);
@@ -1081,100 +1073,101 @@ static void HallOfFame_PrintMonInfo(struct HallofFameMon* currMon, u8 unused1, u
     // dex number
     if (currMon->species != SPECIES_EGG)
     {
-        StringCopy(text2, gText_Number);
+        stringPtr = StringCopy(text, gText_Number);
         dexNumber = SpeciesToPokedexNum(currMon->species);
         if (dexNumber != 0xFFFF)
         {
-            text[0] = (dexNumber / 100) + CHAR_0;
-            text[1] = ((dexNumber %= 100) / 10) + CHAR_0;
-            text[2] = (dexNumber % 10) + CHAR_0;
+            stringPtr[0] = (dexNumber / 100) + CHAR_0;
+            stringPtr++;
+            dexNumber %= 100;
+            stringPtr[0] = (dexNumber / 10) + CHAR_0;
+            stringPtr++;
+            stringPtr[0] = (dexNumber % 10) + CHAR_0;
+            stringPtr++;
         }
         else
         {
-            text[0] = text[1] = text[2] = CHAR_QUESTION_MARK;
+            *(stringPtr)++ = CHAR_QUESTION_MARK;
+            *(stringPtr)++ = CHAR_QUESTION_MARK;
+            *(stringPtr)++ = CHAR_QUESTION_MARK;
         }
-        text[3] = EOS;
-        StringAppend(text2, text);
-        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x10, 1, sTextColors[0], TEXT_SKIP_DRAW, text2);
+        stringPtr[0] = EOS;
+        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x10, 1, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
     }
 
-    // nick, species names, gender and lvl
-    i = 0;
-    if (currMon->nick[0] != EOS)
-    {
-        for (i = 0; i < 10 && currMon->nick[i] != EOS; i++)
-        {
-            text[i] = currMon->nick[i];
-        }
-    }
-    text[i] = EOS;
-    width = GetStringWidth(FONT_NORMAL, text, GetFontAttribute(2, FONTATTR_LETTER_SPACING));
+    // nickname, species names, gender and level
+    memcpy(text, currMon->nickname, POKEMON_NAME_LENGTH);
+    text[POKEMON_NAME_LENGTH] = EOS;
     if (currMon->species == SPECIES_EGG)
-        x = 0x80 - width / 2;
-    else
-        x = 0x80 - width;
-    AddTextPrinterParameterized3(0, FONT_NORMAL, x, 1, sTextColors[0], 0, text);
-    if (currMon->species != SPECIES_EGG)
     {
+        width = GetStringCenterAlignXOffset(FONT_NORMAL, text, 0xD0);
+        AddTextPrinterParameterized3(0, FONT_NORMAL, width, 1, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
+        CopyWindowToVram(0, COPYWIN_FULL);
+    }
+    else
+    {
+        width = GetStringRightAlignXOffset(FONT_NORMAL, text, 0x80);
+        AddTextPrinterParameterized3(0, FONT_NORMAL, width, 1, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
+
         text[0] = CHAR_SLASH;
         stringPtr = StringCopy(text + 1, gSpeciesNames[currMon->species]);
 
-        if (currMon->species == SPECIES_NIDORAN_M || currMon->species == SPECIES_NIDORAN_F)
-            gender = MON_GENDERLESS;
-        else
-            gender = GetGenderFromSpeciesAndPersonality(currMon->species, currMon->personality);
-        switch (gender)
+        if (currMon->species != SPECIES_NIDORAN_M && currMon->species != SPECIES_NIDORAN_F)
         {
-        case MON_MALE:
-            *stringPtr++ = CHAR_MALE;
-            break;
-        case MON_FEMALE:
-            *stringPtr++ = CHAR_FEMALE;
-            break;
-        default:
-            *stringPtr++ = CHAR_SPACE;
-            break;
+            switch (GetGenderFromSpeciesAndPersonality(currMon->species, currMon->personality))
+            {
+            case MON_MALE:
+                stringPtr[0] = CHAR_MALE;
+                stringPtr++;
+                break;
+            case MON_FEMALE:
+                stringPtr[0] = CHAR_FEMALE;
+                stringPtr++;
+                break;
+            }
         }
-        *stringPtr = EOS;
 
-        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x80, 1, sTextColors[0], TEXT_SKIP_DRAW, text);
+        stringPtr[0] = EOS;
+        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x80, 1, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
 
         stringPtr = StringCopy(text, gText_Level);
         ConvertIntToDecimalStringN(stringPtr, currMon->lvl, STR_CONV_MODE_LEFT_ALIGN, 3);
-        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x20, 0x11, sTextColors[0], TEXT_SKIP_DRAW, text);
+        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x24, 0x11, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
 
         stringPtr = StringCopy(text, gText_IDNumber);
         ConvertIntToDecimalStringN(stringPtr, (u16)(currMon->tid), STR_CONV_MODE_LEADING_ZEROS, 5);
-        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x60, 0x11, sTextColors[0], TEXT_SKIP_DRAW, text);
+        AddTextPrinterParameterized3(0, FONT_NORMAL, 0x68, 0x11, sMonInfoTextColors, TEXT_SKIP_DRAW, text);
 
+        CopyWindowToVram(0, COPYWIN_FULL);
     }
-    CopyWindowToVram(0, COPYWIN_FULL);
 }
 
 static void HallOfFame_PrintPlayerInfo(u8 unused1, u8 unused2)
 {
     u8 text[20];
+    u32 width;
     u16 trainerId;
-    s32 textWidth = sWindowTemplate.width * 8 - 6;
-    
+
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
     PutWindowTilemap(1);
     DrawStdFrameWithCustomTileAndPalette(1, FALSE, 0x21D, 0xD);
-    AddTextPrinterParameterized4(1, FONT_NORMAL, 4, 3, 0, 0, sTextColors[1], TEXT_SKIP_DRAW, gText_Name);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, 0, 1, sPlayerInfoTextColors, TEXT_SKIP_DRAW, gText_Name);
 
-    AddTextPrinterParameterized3(1, FONT_NORMAL, textWidth - GetStringWidth(2, gSaveBlock2Ptr->playerName, 0), 3, sTextColors[1], TEXT_SKIP_DRAW, gSaveBlock2Ptr->playerName);
+    width = GetStringRightAlignXOffset(FONT_NORMAL, gSaveBlock2Ptr->playerName, 0x70);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, width, 1, sPlayerInfoTextColors, TEXT_SKIP_DRAW, gSaveBlock2Ptr->playerName);
 
     trainerId = (gSaveBlock2Ptr->playerTrainerId[0]) | (gSaveBlock2Ptr->playerTrainerId[1] << 8);
-    AddTextPrinterParameterized3(1, FONT_NORMAL, 4, 18, sTextColors[1], 0, gText_IDNumber);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, 0, 0x11, sPlayerInfoTextColors, 0, gText_IDNumber);
     text[0] = (trainerId % 100000) / 10000 + CHAR_0;
     text[1] = (trainerId % 10000) / 1000 + CHAR_0;
     text[2] = (trainerId % 1000) / 100 + CHAR_0;
     text[3] = (trainerId % 100) / 10 + CHAR_0;
     text[4] = (trainerId % 10) / 1 + CHAR_0;
     text[5] = EOS;
-    AddTextPrinterParameterized3(1, FONT_NORMAL, textWidth - 30, 18, sTextColors[1], TEXT_SKIP_DRAW, text);
+    width = GetStringRightAlignXOffset(FONT_NORMAL, text, 0x70);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, width, 0x11, sPlayerInfoTextColors, TEXT_SKIP_DRAW, text);
 
-    AddTextPrinterParameterized3(1, FONT_NORMAL, 4, 32, sTextColors[1], TEXT_SKIP_DRAW, gText_Time);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, 0, 0x21, sPlayerInfoTextColors, TEXT_SKIP_DRAW, gText_Time);
     text[0] = (gSaveBlock2Ptr->playTimeHours / 100) + CHAR_0;
     text[1] = (gSaveBlock2Ptr->playTimeHours % 100) / 10 + CHAR_0;
     text[2] = (gSaveBlock2Ptr->playTimeHours % 10) + CHAR_0;
@@ -1182,14 +1175,15 @@ static void HallOfFame_PrintPlayerInfo(u8 unused1, u8 unused2)
     if (text[0] == CHAR_0)
         text[0] = CHAR_SPACE;
     if (text[0] == CHAR_SPACE && text[1] == CHAR_0)
-        text[1] = CHAR_SPACE;
+        text[8] = CHAR_SPACE;
 
     text[3] = CHAR_COLON;
     text[4] = (gSaveBlock2Ptr->playTimeMinutes % 100) / 10 + CHAR_0;
     text[5] = (gSaveBlock2Ptr->playTimeMinutes % 10) + CHAR_0;
     text[6] = EOS;
 
-    AddTextPrinterParameterized3(1, FONT_NORMAL, textWidth - 36, 32, sTextColors[1], 0, text);
+    width = GetStringRightAlignXOffset(FONT_NORMAL, text, 0x70);
+    AddTextPrinterParameterized3(1, FONT_NORMAL, width, 0x21, sPlayerInfoTextColors, TEXT_SKIP_DRAW, text);
 
     CopyWindowToVram(1, COPYWIN_FULL);
 }

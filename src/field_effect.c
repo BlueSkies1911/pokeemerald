@@ -835,103 +835,129 @@ void MultiplyPaletteRGBComponents(u16 i, u8 r, u8 g, u8 b)
     gPlttBufferFaded[i] = color;
 }
 
-static void PokecenterHealEffect_Init(struct Task * task);
-static void PokecenterHealEffect_WaitForBallPlacement(struct Task * task);
-static void PokecenterHealEffect_WaitForBallFlashing(struct Task * task);
-static void PokecenterHealEffect_WaitForSoundAndEnd(struct Task * task);
-static void HallOfFameRecordEffect_Init(struct Task * task);
-static void HallOfFameRecordEffect_WaitForBallPlacement(struct Task * task);
-static void HallOfFameRecordEffect_WaitForBallFlashing(struct Task * task);
-static void HallOfFameRecordEffect_WaitForSoundAndEnd(struct Task * task);
+static void PokecenterHealEffect_Init(struct Task *task);
+static void PokecenterHealEffect_WaitForBallPlacement(struct Task *task);
+static void PokecenterHealEffect_WaitForBallFlashing(struct Task *task);
+static void PokecenterHealEffect_WaitForSoundAndEnd(struct Task *task);
+static void HallOfFameRecordEffect_Init(struct Task *task);
+static void HallOfFameRecordEffect_WaitForBallPlacement(struct Task *task);
+static void HallOfFameRecordEffect_WaitForBallFlashing(struct Task *task);
+static void HallOfFameRecordEffect_WaitForSoundAndEnd(struct Task *task);
 static void Task_HallOfFameRecord(u8 taskId);
-static u8 CreatePokeballGlowSprite(s16 duration, s16 x, s16 y, bool16 fanfare);
-static void SpriteCB_PokeballGlowEffect(struct Sprite * sprite);
-static void PokeballGlowEffect_PlaceBalls(struct Sprite * sprite);
-static void PokeballGlowEffect_TryPlaySe(struct Sprite * sprite);
-static void PokeballGlowEffect_Flash1(struct Sprite * sprite);
-static void PokeballGlowEffect_Flash2(struct Sprite * sprite);
-static void PokeballGlowEffect_WaitAfterFlash(struct Sprite * sprite);
-static void PokeballGlowEffect_Dummy(struct Sprite * sprite);
-static void PokeballGlowEffect_WaitForSound(struct Sprite * sprite);
-static void PokeballGlowEffect_Idle(struct Sprite * sprite);
-static u8 PokecenterHealEffectHelper(s32 x, s32 y);
-static void HallOfFameRecordEffectHelper(s32 x, s32 y);
+static u8 CreateGlowingPokeballsEffect(s16 duration, s16 x, s16 y, bool16 fanfare);
+static void SpriteCB_PokeballGlowEffect(struct Sprite *sprite);
+static void PokeballGlowEffect_PlaceBalls(struct Sprite *sprite);
+static void PokeballGlowEffect_TryPlaySe(struct Sprite *sprite);
+static void PokeballGlowEffect_FlashFirstThree(struct Sprite *sprite);
+static void PokeballGlowEffect_FlashLast(struct Sprite *sprite);
+static void PokeballGlowEffect_WaitAfterFlash(struct Sprite *sprite);
+static void PokeballGlowEffect_Dummy(struct Sprite *sprite);
+static void PokeballGlowEffect_WaitForSound(struct Sprite *sprite);
+static void PokeballGlowEffect_Idle(struct Sprite *sprite);
+static u8 CreatePokecenterMonitorSprite(s32 x, s32 y);
+static void CreateHofMonitorSprite(s32 x, s32 y);
 
-static void (*const sPokecenterHealTaskCBTable[])(struct Task * ) = {
+static void (*const sPokecenterHealEffectFuncs[])(struct Task *) =
+{
     PokecenterHealEffect_Init,
     PokecenterHealEffect_WaitForBallPlacement,
     PokecenterHealEffect_WaitForBallFlashing,
     PokecenterHealEffect_WaitForSoundAndEnd
 };
 
-static void (*const sHallOfFameRecordTaskCBTable[])(struct Task * ) = {
+static void (*const sHallOfFameRecordEffectFuncs[])(struct Task *) =
+{
     HallOfFameRecordEffect_Init,
     HallOfFameRecordEffect_WaitForBallPlacement,
     HallOfFameRecordEffect_WaitForBallFlashing,
     HallOfFameRecordEffect_WaitForSoundAndEnd
 };
 
-static void (*const sPokeballGlowSpriteCBTable[])(struct Sprite * ) = {
+static void (*const sPokeballGlowEffectFuncs[])(struct Sprite *) =
+{
     PokeballGlowEffect_PlaceBalls,
     PokeballGlowEffect_TryPlaySe,
-    PokeballGlowEffect_Flash1,
-    PokeballGlowEffect_Flash2,
+    PokeballGlowEffect_FlashFirstThree,
+    PokeballGlowEffect_FlashLast,
     PokeballGlowEffect_WaitAfterFlash,
     PokeballGlowEffect_Dummy,
     PokeballGlowEffect_WaitForSound,
     PokeballGlowEffect_Idle
 };
 
+// Task data for Task_PokecenterHeal and Task_HallOfFameRecord
+#define tState              data[0]
+#define tNumMons            data[1]
+#define tFirstBallX         data[2]
+#define tFirstBallY         data[3]
+#define tMonitorX           data[4]
+#define tMonitorY           data[5]
+#define tGlowEffectSpriteId data[6]
+#define tMonitorSpriteId    data[7]
+
+// Sprite data for SpriteCB_PokeballGlowEffect
+#define sState      data[0]
+#define sTimer      data[1]
+#define sCounter    data[2]
+#define sNumFlashed data[3]
+#define sPlayHealSe data[5]
+#define sNumMons    data[6]
+#define sSpriteId   data[7]
+
+// Sprite data for SpriteCB_PokeballGlow
+#define sGlowEffectSpriteId data[0]
+
+// Sprite data for SpriteCB_PokecenterMonitor
+#define sStartFlash data[0]
+
 bool8 FldEff_PokecenterHeal(void)
 {
     u8 nPokemon;
-    struct Task * task;
+    struct Task *task;
 
-    nPokemon = CountPartyNonEggMons();
-    task = &gTasks[CreateTask(Task_PokecenterHeal, 0xff)];
-    task->data[1] = nPokemon;
-    task->data[2] = 0x5d;
-    task->data[3] = 0x24;
-    task->data[4] = 0x80;
-    task->data[5] = 0x18;
+    nPokemon = CalculatePlayerPartyCount();
+    task = &gTasks[CreateTask(Task_PokecenterHeal, 0xFF)];
+    task->tNumMons = nPokemon;
+    task->tFirstBallX = 93;
+    task->tFirstBallY = 36;
+    task->tMonitorX = 128;
+    task->tMonitorY = 24;
     return FALSE;
 }
 
 static void Task_PokecenterHeal(u8 taskId)
 {
-    struct Task * task = &gTasks[taskId];
-    sPokecenterHealTaskCBTable[task->data[0]](task);
+    struct Task *task = &gTasks[taskId];
+    sPokecenterHealEffectFuncs[task->tState](task);
 }
 
-static void PokecenterHealEffect_Init(struct Task * task)
+static void PokecenterHealEffect_Init(struct Task *task)
 {
-    task->data[0]++;
-    task->data[6] = CreatePokeballGlowSprite(task->data[1], task->data[2], task->data[3], TRUE);
-    task->data[7] = PokecenterHealEffectHelper(task->data[4], task->data[5]);
+    task->tState++;
+    task->tGlowEffectSpriteId = CreateGlowingPokeballsEffect(task->tNumMons, task->tFirstBallX, task->tFirstBallY, TRUE);
+    task->tMonitorSpriteId = CreatePokecenterMonitorSprite(task->tMonitorX, task->tMonitorY);
 }
 
-static void PokecenterHealEffect_WaitForBallPlacement(struct Task * task)
+static void PokecenterHealEffect_WaitForBallPlacement(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 1)
+    if (gSprites[task->tGlowEffectSpriteId].sState >= 2)
     {
-        gSprites[task->data[7]].data[0]++;
-        task->data[0]++;
+        gSprites[task->tMonitorSpriteId].sStartFlash++;
+        task->tState++;
     }
 }
 
-static void PokecenterHealEffect_WaitForBallFlashing(struct Task * task)
+static void PokecenterHealEffect_WaitForBallFlashing(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 4)
-    {
-        task->data[0]++;
-    }
+    if (gSprites[task->tGlowEffectSpriteId].sState > 4)
+        task->tState++;
 }
 
-static void PokecenterHealEffect_WaitForSoundAndEnd(struct Task * task)
+static void PokecenterHealEffect_WaitForSoundAndEnd(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 6)
+    if (gSprites[task->tGlowEffectSpriteId].sState > 6)
     {
-        DestroySprite(&gSprites[task->data[6]]);
+        DestroySprite(&gSprites[task->tGlowEffectSpriteId]);
         FieldEffectActiveListRemove(FLDEFF_POKECENTER_HEAL);
         DestroyTask(FindTaskIdByFunc(Task_PokecenterHeal));
     }
@@ -940,82 +966,83 @@ static void PokecenterHealEffect_WaitForSoundAndEnd(struct Task * task)
 bool8 FldEff_HallOfFameRecord(void)
 {
     u8 nPokemon;
-    struct Task * task;
+    struct Task *task;
 
     nPokemon = CalculatePlayerPartyCount();
-    task = &gTasks[CreateTask(Task_HallOfFameRecord, 0xff)];
-    task->data[1] = nPokemon;
-    task->data[2] = 0x75;
-    task->data[3] = 0x3C;
+    task = &gTasks[CreateTask(Task_HallOfFameRecord, 0xFF)];
+    task->tNumMons = nPokemon;
+    task->tFirstBallX = 117;
+    task->tFirstBallY = 60;
     return FALSE;
 }
 
 static void Task_HallOfFameRecord(u8 taskId)
 {
-    struct Task * task;
+    struct Task *task;
     task = &gTasks[taskId];
-    sHallOfFameRecordTaskCBTable[task->data[0]](task);
+    sHallOfFameRecordEffectFuncs[task->tState](task);
 }
 
-static void HallOfFameRecordEffect_Init(struct Task * task)
+static void HallOfFameRecordEffect_Init(struct Task *task)
 {
     u8 taskId;
-    task->data[0]++;
-    task->data[6] = CreatePokeballGlowSprite(task->data[1], task->data[2], task->data[3], FALSE);
+    task->tState++;
+    task->tGlowEffectSpriteId = CreateGlowingPokeballsEffect(task->tNumMons, task->tFirstBallX, task->tFirstBallY, FALSE);
 }
 
-static void HallOfFameRecordEffect_WaitForBallPlacement(struct Task * task)
+static void HallOfFameRecordEffect_WaitForBallPlacement(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 1)
+    if (gSprites[task->tGlowEffectSpriteId].sState > 1)
     {
-        HallOfFameRecordEffectHelper(0x78, 0x19);
-        task->data[15]++; // was this ever initialized? is this ever used?
-        task->data[0]++;
+        CreateHofMonitorSprite(120, 25);
+        task->data[15]++; // unused, leftover from RSE
+        task->tState++;
     }
 }
 
-static void HallOfFameRecordEffect_WaitForBallFlashing(struct Task * task)
+static void HallOfFameRecordEffect_WaitForBallFlashing(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 4)
-    {
-        task->data[0]++;
-    }
+    if (gSprites[task->tGlowEffectSpriteId].sState > 4)
+        task->tState++;
 }
 
-static void HallOfFameRecordEffect_WaitForSoundAndEnd(struct Task * task)
+static void HallOfFameRecordEffect_WaitForSoundAndEnd(struct Task *task)
 {
-    if (gSprites[task->data[6]].data[0] > 6)
+    if (gSprites[task->tGlowEffectSpriteId].sState > 6)
     {
-        DestroySprite(&gSprites[task->data[6]]);
+        DestroySprite(&gSprites[task->tGlowEffectSpriteId]);
         FieldEffectActiveListRemove(FLDEFF_HALL_OF_FAME_RECORD);
         DestroyTask(FindTaskIdByFunc(Task_HallOfFameRecord));
     }
 }
 
-static u8 CreatePokeballGlowSprite(s16 duration, s16 x, s16 y, bool16 fanfare)
+#undef tState
+#undef tNumMons
+#undef tFirstBallX
+#undef tFirstBallY
+#undef tMonitorX
+#undef tMonitorY
+#undef tGlowEffectSpriteId
+#undef tMonitorSpriteId
+
+static u8 CreateGlowingPokeballsEffect(s16 numMons, s16 x, s16 y, bool16 playHealSe)
 {
     u8 spriteId;
-    struct Sprite * sprite;
+    struct Sprite *sprite;
     spriteId = CreateInvisibleSprite(SpriteCB_PokeballGlowEffect);
     sprite = &gSprites[spriteId];
     sprite->x2 = x;
     sprite->y2 = y;
     sprite->subpriority = 0xFF;
-    sprite->data[5] = fanfare;
-    sprite->data[6] = duration;
-    sprite->data[7] = spriteId;
+    sprite->sPlayHealSe = playHealSe;
+    sprite->sNumMons = numMons;
+    sprite->sSpriteId = spriteId;
     return spriteId;
 }
 
-static void SpriteCB_PokeballGlowEffect(struct Sprite * sprite)
+static void SpriteCB_PokeballGlowEffect(struct Sprite *sprite)
 {
-    sPokeballGlowSpriteCBTable[sprite->data[0]](sprite);
-}
-
-void ReturnToFieldFromFlyMapSelect(void)
-{
-    SetMainCallback2(CB2_ReturnToField);
-    gFieldCallback = FieldCallback_UseFly;
+    sPokeballGlowEffectFuncs[sprite->sState](sprite);
 }
 
 static const struct Coords16 sPokeballCoordOffsets[] = {
@@ -1027,130 +1054,134 @@ static const struct Coords16 sPokeballCoordOffsets[] = {
     {6, 8}
 };
 
-static const u8 sPokeballGlowReds[] = {16, 12,  8,  0};
-static const u8 sPokeballGlowBlues[] = {16, 12,  8,  0};
-static const u8 sPokeballGlowGreens[] = { 0,  0,  0,  0};
+static const u8 sPokeballGlowReds[]   = {16, 12,  8,  0};
+static const u8 sPokeballGlowGreens[] = {16, 12,  8,  0};
+static const u8 sPokeballGlowBlues[]  = { 0,  0,  0,  0};
 
-static void PokeballGlowEffect_PlaceBalls(struct Sprite * sprite)
+static void PokeballGlowEffect_PlaceBalls(struct Sprite *sprite)
 {
-    u8 endSpriteId;
-    if (sprite->data[1] == 0 || (--sprite->data[1]) == 0)
+    u8 spriteId;
+    if (sprite->sTimer == 0 || (--sprite->sTimer) == 0)
     {
-        sprite->data[1] = 25;
-        endSpriteId = CreateSpriteAtEnd(&sSpriteTemplate_PokeballGlow, sPokeballCoordOffsets[sprite->data[2]].x + sprite->x2, sPokeballCoordOffsets[sprite->data[2]].y + sprite->y2, 0xFF);
-        gSprites[endSpriteId].oam.priority = 2;
-        gSprites[endSpriteId].data[0] = sprite->data[7];
-        sprite->data[2]++;
-        sprite->data[6]--;
+        sprite->sTimer = 25;
+        spriteId = CreateSpriteAtEnd(&sSpriteTemplate_PokeballGlow, sPokeballCoordOffsets[sprite->sCounter].x + sprite->x2, sPokeballCoordOffsets[sprite->sCounter].y + sprite->y2, 0xFF);
+        gSprites[spriteId].oam.priority = 2;
+        gSprites[spriteId].sGlowEffectSpriteId = sprite->sSpriteId;
+        sprite->sCounter++;
+        sprite->sNumMons--;
         PlaySE(SE_BALL);
     }
-    if (sprite->data[6] == 0)
+    if (sprite->sNumMons == 0)
     {
-        sprite->data[1] = 32;
-        sprite->data[0]++;
+        sprite->sTimer = 32;
+        sprite->sState++;
     }
 }
 
-static void PokeballGlowEffect_TryPlaySe(struct Sprite * sprite)
+static void PokeballGlowEffect_TryPlaySe(struct Sprite *sprite)
 {
-    if ((--sprite->data[1]) == 0)
+    if ((--sprite->sTimer) == 0)
     {
-        sprite->data[0]++;
-        sprite->data[1] = 8;
-        sprite->data[2] = 0;
-        sprite->data[3] = 0;
-        if (sprite->data[5])
-        {
-            PlayFanfare(MUS_RG_HEAL);
-        }
+        sprite->sState++;
+        sprite->sTimer = 8;
+        sprite->sCounter = 0;
+        sprite->sNumFlashed = 0;
+        if (sprite->sPlayHealSe)
+            PlayFanfare(MUS_HEAL);
     }
 }
 
-static void PokeballGlowEffect_Flash1(struct Sprite * sprite)
+static void PokeballGlowEffect_FlashFirstThree(struct Sprite *sprite)
 {
     u8 phase;
-    if ((--sprite->data[1]) == 0)
+    if ((--sprite->sTimer) == 0)
     {
-        sprite->data[1] = 8;
-        sprite->data[2]++;
-        sprite->data[2] &= 3;
-        if (sprite->data[2] == 0)
-        {
-            sprite->data[3]++;
-        }
+        sprite->sTimer = 8;
+        sprite->sCounter++;
+        sprite->sCounter &= 3;
+        if (sprite->sCounter == 0)
+            sprite->sNumFlashed++;
     }
     phase = (sprite->sCounter + 3) & 3;
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 8, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 8, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
     phase = (sprite->sCounter + 2) & 3;
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 6, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 6, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
     phase = (sprite->sCounter + 1) & 3;
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 2, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 2, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
     phase = sprite->sCounter;
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 5, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 3, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    if (sprite->data[3] > 2)
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 5, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 3, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    if (sprite->sNumFlashed >= 3)
     {
-        sprite->data[0]++;
-        sprite->data[1] = 8;
-        sprite->data[2] = 0;
+        sprite->sState++;
+        sprite->sTimer = 8;
+        sprite->sCounter = 0;
     }
 }
 
-static void PokeballGlowEffect_Flash2(struct Sprite * sprite)
+static void PokeballGlowEffect_FlashLast(struct Sprite *sprite)
 {
     u8 phase;
-    if ((--sprite->data[1]) == 0)
+    if ((--sprite->sTimer) == 0)
     {
-        sprite->data[1] = 8;
-        sprite->data[2]++;
-        sprite->data[2] &= 3;
-        if (sprite->data[2] == 3)
+        sprite->sTimer = 8;
+        sprite->sCounter++;
+        sprite->sCounter &= 3;
+        if (sprite->sCounter == 3)
         {
-            sprite->data[0]++;
-            sprite->data[1] = 30;
+            sprite->sState++;
+            sprite->sTimer = 30;
         }
     }
     phase = sprite->sCounter;
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 8, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 6, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 2, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 5, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
-    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(FLDEFF_PAL_TAG_POKEBALL_GLOW)) + 3, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 8, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 6, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 2, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 5, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
+    MultiplyInvertedPaletteRGBComponents(OBJ_PLTT_ID(IndexOfSpritePaletteTag(0x1007)) + 3, sPokeballGlowReds[phase], sPokeballGlowGreens[phase], sPokeballGlowBlues[phase]);
 }
 
-static void PokeballGlowEffect_WaitAfterFlash(struct Sprite * sprite)
+static void PokeballGlowEffect_WaitAfterFlash(struct Sprite *sprite)
 {
     if ((--sprite->sTimer) == 0)
         sprite->sState++;
 }
 
-static void PokeballGlowEffect_Dummy(struct Sprite * sprite)
+static void PokeballGlowEffect_Dummy(struct Sprite *sprite)
 {
-    sprite->data[0]++;
+    sprite->sState++;
 }
 
-static void PokeballGlowEffect_WaitForSound(struct Sprite * sprite)
+static void PokeballGlowEffect_WaitForSound(struct Sprite *sprite)
 {
-    if (sprite->data[5] == 0 || IsFanfareTaskInactive())
-    {
-        sprite->data[0]++;
-    }
+    if (sprite->sPlayHealSe == FALSE || IsFanfareTaskInactive())
+        sprite->sState++;
 }
 
-static void PokeballGlowEffect_Idle(struct Sprite * sprite)
+static void PokeballGlowEffect_Idle(struct Sprite *sprite)
 {
 }
 
-static void SpriteCB_PokeballGlow(struct Sprite * sprite)
+static void SpriteCB_PokeballGlow(struct Sprite *sprite)
 {
-    if (gSprites[sprite->data[0]].data[0] > 4)
+    if (gSprites[sprite->sGlowEffectSpriteId].sState > 4)
         FieldEffectFreeGraphicsResources(sprite);
 }
 
-static u8 PokecenterHealEffectHelper(s32 x, s32 y)
+#undef sState
+#undef sTimer
+#undef sCounter
+#undef sNumFlashed
+#undef sPlayHealSe
+#undef sNumMons
+#undef sSpriteId
+
+#undef sGlowEffectSpriteId
+
+static u8 CreatePokecenterMonitorSprite(s32 x, s32 y)
 {
     u8 spriteId;
-    struct Sprite * sprite;
+    struct Sprite *sprite;
     spriteId = CreateSpriteAtEnd(&sSpriteTemplate_PokecenterMonitor, x, y, 0);
     sprite = &gSprites[spriteId];
     sprite->oam.priority = 2;
@@ -1158,11 +1189,11 @@ static u8 PokecenterHealEffectHelper(s32 x, s32 y)
     return spriteId;
 }
 
-static void SpriteCB_PokecenterMonitor(struct Sprite * sprite)
+static void SpriteCB_PokecenterMonitor(struct Sprite *sprite)
 {
-    if (sprite->data[0] != 0)
+    if (sprite->sStartFlash != FALSE)
     {
-        sprite->data[0] = 0;
+        sprite->sStartFlash = FALSE;
         sprite->invisible = FALSE;
         StartSpriteAnim(sprite, 1);
     }
@@ -1170,15 +1201,23 @@ static void SpriteCB_PokecenterMonitor(struct Sprite * sprite)
         FieldEffectFreeGraphicsResources(sprite);
 }
 
-static void HallOfFameRecordEffectHelper(s32 x, s32 y)
+#undef sStartFlash
+
+static void CreateHofMonitorSprite(s32 x, s32 y)
 {
     CreateSpriteAtEnd(&sSpriteTemplate_HofMonitor, x, y, 0);
 }
 
-static void SpriteCB_HallOfFameMonitor(struct Sprite * sprite)
+static void SpriteCB_HallOfFameMonitor(struct Sprite *sprite)
 {
     if (sprite->animEnded)
         FieldEffectFreeGraphicsResources(sprite);
+}
+
+void ReturnToFieldFromFlyMapSelect(void)
+{
+    SetMainCallback2(CB2_ReturnToField);
+    gFieldCallback = FieldCallback_UseFly;
 }
 
 static void FieldCallback_UseFly(void)
