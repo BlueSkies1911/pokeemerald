@@ -370,7 +370,32 @@ bool32 ShouldDoBrockCall(void)
         case MAP_TYPE_CITY:
         case MAP_TYPE_ROUTE:
         case MAP_TYPE_OCEAN_ROUTE:
-            if (++(*GetVarPointer(VAR_OAK_CALL_STEP_COUNTER)) < 250)
+            if (++(*GetVarPointer(VAR_BROCK_CALL_STEP_COUNTER)) < 250)
+                return FALSE;
+            break;
+        default:
+            return FALSE;
+        }
+    }
+    else
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+bool32 ShouldDoOldSeaMapCall(void)
+{
+    if (FlagGet(FLAG_ENABLE_OLD_SEA_MAP_CALL))
+    {
+        switch (gMapHeader.mapType)
+        {
+        case MAP_TYPE_TOWN:
+        case MAP_TYPE_CITY:
+        case MAP_TYPE_ROUTE:
+        case MAP_TYPE_OCEAN_ROUTE:
+            if (++(*GetVarPointer(VAR_OLD_SEA_MAP_CALL_STEP_COUNTER)) < 500)
                 return FALSE;
             break;
         default:

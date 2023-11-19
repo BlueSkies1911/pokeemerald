@@ -69,43 +69,82 @@ VermilionCity_EventScript_Sailor::
     end
 
 VermilionCity_EventScript_FerrySailor::
-    lock
-    faceplayer
-    compare VAR_MAP_SCENE_VERMILION_CITY, 3
-    goto_if_eq VermilionCity_EventScript_CheckSeagallopPresent
-    msgbox VermilionCity_Text_WelcomeToTheSSAnne, MSGBOX_DEFAULT
-    release
-    end
+	lock
+	faceplayer
+	goto_if_eq VAR_MAP_SCENE_VERMILION_CITY, 3, VermilionCity_EventScript_CheckSeagallopPresent
+	msgbox VermilionCity_Text_WelcomeToTheSSAnne
+	release
+	end
 
 VermilionCity_EventScript_CheckSeagallopPresent::
-    setvar VAR_0x8004, SEAGALLOP_VERMILION_CITY
-    compare VAR_MAP_SCENE_ONE_ISLAND_POKEMON_CENTER_1F, 5
-    goto_if_ge VermilionCity_EventScript_ChooseSeagallopDestRainbowPass
-    compare VAR_MAP_SCENE_ONE_ISLAND_POKEMON_CENTER_1F, 1
-    goto_if_ge VermilionCity_EventScript_ChooseSeagallopDestTriPass
-    msgbox VermilionCity_Text_TheShipSetSail, MSGBOX_DEFAULT
-    release
+	call VermilionCity_Harbor_EventScript_GetOldSeaMapState
+	call VermilionCity_Harbor_EventScript_GetFirstTimeShowingTicket
+	call VermilionCity_Harbor_EventScript_GetHasTicketsState
+	goto_if_eq VAR_TEMP_C, 2, VermilionCity_Harbor_EventScript_OldSeaMapFirstTime
+	goto_if_eq VAR_TEMP_B, 4, VermilionCity_Harbor_EventScript_OldSeaMapFirstTime
+	checkitem ITEM_OLD_SEA_MAP
+	goto_if_eq VAR_RESULT, FALSE, VermilionCity_EventScript_TheShipSetSail
+	goto VermilionCity_Harbor_EventScript_NoFirstTimeEventTickets
+	end
+
+VermilionCity_EventScript_TheShipSetSail::
+	msgbox VermilionCity_Text_TheShipSetSail, MSGBOX_DEFAULT
+	release
     end
 
-VermilionCity_EventScript_ChooseSeagallopDestRainbowPass::
-    setvar VAR_0x8004, SEAGALLOP_VERMILION_CITY
-    message VermilionCity_Text_BoardSeagallopRainbowPass
-    waitmessage
-    goto EventScript_SeviiDestinationsPage1
-    end
+VermilionCity_Harbor_EventScript_NoFirstTimeEventTickets::
+	msgbox VermilionCity_Text_ReturnToFarawayIsland, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, EventScript_CancelSail
+	warp MAP_FARAWAY_ISLAND_ENTRANCE, 13, 38
+	waitstate
+	release
+	end
 
-VermilionCity_EventScript_ChooseSeagallopDestTriPass::
-    message VermilionCity_Text_BoardSeagallopTriPass
-    waitmessage
-    setvar VAR_0x8004, SEAGALLOP_VERMILION_CITY
-    multichoice 19, 5, MULTI_SEAGALLOP_123, FALSE
-    switch VAR_RESULT
-    case 0, EventScript_SailToOneIsland2
-    case 1, EventScript_SailToTwoIsland2
-    case 2, EventScript_SailToThreeIsland2
-    case 3, EventScript_CancelSail
-    case 127, EventScript_CancelSail
-    end
+VermilionCity_Harbor_EventScript_GetOldSeaMapState::
+	setvar VAR_TEMP_C, 0
+	goto_if_unset FLAG_ENABLE_SHIP_FARAWAY_ISLAND, Common_EventScript_NopReturn
+	checkitem ITEM_OLD_SEA_MAP
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_NopReturn
+	setvar VAR_TEMP_C, 1
+	goto_if_set FLAG_SHOWN_OLD_SEA_MAP, Common_EventScript_NopReturn
+	setvar VAR_TEMP_C, 2
+	return
+
+VermilionCity_Harbor_EventScript_GetFirstTimeShowingTicket::
+	setvar VAR_TEMP_B, 0
+	call_if_eq VAR_TEMP_C, 2, VermilionCity_Harbor_EventScript_SetFirstTimeShowingOldSeaMap
+	return
+
+VermilionCity_Harbor_EventScript_SetFirstTimeShowingOldSeaMap::
+	addvar VAR_TEMP_B, 4
+	return
+
+VermilionCity_Harbor_EventScript_GetHasTicketsState::
+	setvar VAR_TEMP_A, 0
+	call_if_eq VAR_TEMP_C, 1, VermilionCity_Harbor_EventScript_SetHasOldSeaMap
+	return
+
+VermilionCity_Harbor_EventScript_SetHasOldSeaMap::
+	addvar VAR_TEMP_A, 4
+	return
+
+VermilionCity_Harbor_EventScript_OldSeaMapFirstTime::
+	setflag FLAG_SHOWN_OLD_SEA_MAP
+	msgbox EventTicket_Text_ShowOldSeaMap, MSGBOX_DEFAULT
+	closemessage
+	msgbox EventTicket_Text_OldSeaMapTooFar, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_FERRY_SAILOR, Common_Movement_WalkInPlaceFasterUp
+	waitmovement 0
+	playse SE_PIN
+	applymovement LOCALID_FERRY_SAILOR, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_FERRY_SAILOR, Common_Movement_Delay48
+	waitmovement 0
+	warp MAP_FARAWAY_ISLAND_ENTRANCE, 13, 38
+	waitstate
+	release
+	end
 
 VermilionCity_EventScript_OaksAide::
     lock
@@ -146,13 +185,11 @@ VermilionCity_EventScript_CheckTicketRight::
     end
 
 VermilionCity_EventScript_CheckTicket::
-    textcolor 0
     applymovement LOCALID_FERRY_SAILOR, Common_Movement_WalkInPlaceFasterLeft
     applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
     waitmovement 0
-    compare VAR_MAP_SCENE_VERMILION_CITY, 3
-    goto_if_eq VermilionCity_EventScript_CheckSeagallopPresentTrigger
-    msgbox VermilionCity_Text_DoYouHaveATicket, MSGBOX_DEFAULT
+	goto_if_eq VAR_MAP_SCENE_VERMILION_CITY, 3, VermilionCity_EventScript_CheckSeagallopPresentTrigger
+	msgbox VermilionCity_Text_DoYouHaveATicket, MSGBOX_DEFAULT
     goto_if_unset FLAG_GOT_SS_TICKET, VermilionCity_EventScript_DontHaveSSTicket
     msgbox VermilionCity_Text_FlashedSSTicket, MSGBOX_DEFAULT
     setvar VAR_VERMILION_CITY_TICKET_CHECK_TRIGGER, 1
@@ -166,11 +203,16 @@ VermilionCity_EventScript_DontHaveSSTicket::
     end
 
 VermilionCity_EventScript_CheckSeagallopPresentTrigger::
-    setvar VAR_0x8004, SEAGALLOP_VERMILION_CITY
-    compare VAR_MAP_SCENE_ONE_ISLAND_POKEMON_CENTER_1F, 5
-    goto_if_ge VermilionCity_EventScript_ChooseSeagallopDestRainbowPass
-    compare VAR_MAP_SCENE_ONE_ISLAND_POKEMON_CENTER_1F, 1
-    goto_if_ge VermilionCity_EventScript_ChooseSeagallopDestTriPass
+	call VermilionCity_Harbor_EventScript_GetOldSeaMapState
+	call VermilionCity_Harbor_EventScript_GetFirstTimeShowingTicket
+	call VermilionCity_Harbor_EventScript_GetHasTicketsState
+	goto_if_eq VAR_TEMP_C, 2, VermilionCity_Harbor_EventScript_OldSeaMapFirstTime
+	goto_if_eq VAR_TEMP_B, 4, VermilionCity_Harbor_EventScript_OldSeaMapFirstTime
+	goto_if_unset FLAG_ARRIVED_ON_FARAWAY_ISLAND, VermilionCity_EventScript_TheShipSetSailWalkUp
+	goto VermilionCity_Harbor_EventScript_NoFirstTimeEventTickets
+    end
+
+VermilionCity_EventScript_TheShipSetSailWalkUp::
     msgbox VermilionCity_Text_TheShipSetSail, MSGBOX_DEFAULT
     closemessage
     goto VermilionCity_EventScript_WalkUpPier
@@ -257,6 +299,10 @@ VermilionCity_Text_FlashedSSTicket::
 
 VermilionCity_Text_TheShipSetSail::
     .string "The ship set sail.$"
+
+VermilionCity_Text_ReturnToFarawayIsland::
+    .string "Do you wish to return\n"
+    .string "to Faraway Island?$"
 
 VermilionCity_Text_BoardSeagallopTriPass::
     .string "Ah, you have a Tri-Pass.\p"

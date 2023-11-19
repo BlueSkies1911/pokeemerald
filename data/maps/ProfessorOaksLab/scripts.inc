@@ -153,6 +153,7 @@ ProfessorOaksLab_EventScript_RivalWaitingForStarter::
 ProfessorOaksLab_EventScript_ProfOak::
     lock
     faceplayer
+    goto_if_unset FLAG_DISABLE_OAK_OLD_SEA_MAP_SCENE, ProfessorOaksLab_EventScript_ReceiveOldSeaMap
     goto_if_set SHOWED_OAK_COMPLETE_DEX, ProfessorOaksLab_EventScript_OakJustShownCompleteDex
     compare VAR_MAP_SCENE_PROFESSOR_OAKS_LAB, 9
     goto_if_eq ProfessorOaksLab_EventScript_RatePokedex
@@ -177,6 +178,83 @@ ProfessorOaksLab_EventScript_OakJustShownCompleteDex::
     msgbox gPokedexRating_Text_ThankYouMadeDreamReality, MSGBOX_DEFAULT
     release
     end
+
+ProfessorOaksLab_EventScript_ReceiveOldSeaMap::
+    msgbox ProfessorOaksLab_Text_OakThanksForComingPlayer, MSGBOX_DEFAULT
+    closemessage
+    compare VAR_FACING, DIR_EAST
+    call_if_eq ProfessorOaksLab_EventScript_OakGetOldSeaMapNorth
+    compare VAR_FACING, DIR_EAST
+    call_if_ne ProfessorOaksLab_EventScript_OakGetOldSeaMap
+    msgbox ProfessorOaksLab_Text_OakFoundOldSeaMap, MSGBOX_DEFAULT
+    closemessage
+    compare VAR_FACING, DIR_EAST
+    call_if_eq ProfessorOaksLab_EventScript_OakReturnWithOldSeaMapNorth
+    compare VAR_FACING, DIR_EAST
+    call_if_ne ProfessorOaksLab_EventScript_OakReturnWithOldSeaMap
+    msgbox ProfessorOaksLab_Text_OakGiveOldSeaMap, MSGBOX_DEFAULT
+	giveitem ITEM_OLD_SEA_MAP
+    msgbox ProfessorOaksLab_Text_ExplainOldSeaMap, MSGBOX_DEFAULT
+	setflag FLAG_DISABLE_OAK_OLD_SEA_MAP_SCENE
+	setflag FLAG_ENABLE_SHIP_FARAWAY_ISLAND
+	setflag FLAG_RECEIVED_OLD_SEA_MAP
+    release
+    end
+
+ProfessorOaksLab_EventScript_OakGetOldSeaMapNorth::
+    applymovement LOCALID_PROF_OAK, ProfessorOaksLab_Movement_OakGetOldSeaMapNorth
+    waitmovement 0
+    return
+
+ProfessorOaksLab_Movement_OakGetOldSeaMapNorth::
+    walk_up
+    walk_left
+    walk_left
+    walk_left
+    walk_in_place_faster_up
+    delay_16
+    delay_4
+    step_end
+
+ProfessorOaksLab_EventScript_OakGetOldSeaMap::
+    applymovement LOCALID_PROF_OAK, ProfessorOaksLab_Movement_OakGetOldSeaMap
+    waitmovement 0
+    return
+
+ProfessorOaksLab_Movement_OakGetOldSeaMap::
+    walk_left
+    walk_left
+    walk_left
+    walk_up
+    delay_16
+    delay_4
+    step_end
+
+ProfessorOaksLab_EventScript_OakReturnWithOldSeaMapNorth::
+    applymovement LOCALID_PROF_OAK, ProfessorOaksLab_Movement_OakReturnWithOldSeaMapNorth
+    waitmovement 0
+    return
+
+ProfessorOaksLab_Movement_OakReturnWithOldSeaMapNorth::
+    walk_right
+    walk_right
+    walk_right
+    walk_down
+    face_player
+    step_end
+
+ProfessorOaksLab_EventScript_OakReturnWithOldSeaMap::
+    applymovement LOCALID_PROF_OAK, ProfessorOaksLab_Movement_OakReturnWithOldSeaMap
+    waitmovement 0
+    return
+
+ProfessorOaksLab_Movement_OakReturnWithOldSeaMap::
+    walk_down
+    walk_right
+    walk_right
+    walk_right
+    face_player
+    step_end
 
 ProfessorOaksLab_EventScript_RatePokedex::
     call PokedexRating_EventScript_RateInPerson
@@ -1247,6 +1325,15 @@ ProfessorOaksLab_EventScript_RightSignAlt::
     releaseall
     end
 
+ProfessorOaksLab_EventScript_OldSeaMapCall::
+    lockall
+    pokenavcall ProfessorOaksLab_Text_OldSeaMapCall
+    waitmessage
+    clearflag FLAG_DISABLE_OAK_OLD_SEA_MAP_SCENE
+    clearflag FLAG_ENABLE_OLD_SEA_MAP_CALL
+    releaseall
+    end
+
 ProfessorOaksLab_Text_RivalFedUpWithWaiting::
     .string "{RIVAL}: Gramps!\n"
     .string "I'm fed up with waiting!$"
@@ -1482,6 +1569,46 @@ ProfessorOaksLab_Text_OakWhichOneWillYouChoose::
     .string "Which one will you choose for\n"
     .string "yourself?$"
 
+ProfessorOaksLab_Text_OakThanksForComingPlayer::
+    .string "Oak: {PLAYER}!\n"
+    .string "Thanks for coming!\p"
+    .string "You may be wondering why I've\n"
+    .string "called you here.\p"
+    .string "Well, the detectives that have\n"
+    .string "been investigating Viridian Gym\l"
+    .string "have discovered something\l"
+    .string "quite interesting.\p"
+    .string "Please wait here for a moment\n"
+    .string "while I fetch something.$"
+
+ProfessorOaksLab_Text_OakFoundOldSeaMap::
+    .string "Ah, there it is!$"
+
+ProfessorOaksLab_Text_OakGiveOldSeaMap::
+    .string "Have a look at this {PLAYER}.$"
+
+ProfessorOaksLab_Text_ExplainOldSeaMap::
+    .string "This tattered map was found\n"
+    .string "while searching through\l"
+    .string "Giovanni's Office.\p"
+    .string "The detectives were having\n"
+    .string "trouble deciphering it so\l"
+    .string "handed it to me to investigate.\p"
+    .string "By my estimations it appears\n"
+    .string "to be a map to a faraway island.\p"
+    .string "I wonder why Giovanni was\n"
+    .string "interested in this old map?\p"
+    .string "{PLAYER}!\p"
+    .string "I want you to find out what\n"
+    .string "interest Giovanni had in\l"
+    .string "this island.\p"
+    .string "May I suggest starting at\n"
+    .string "Vermilion Harbor.\p"
+    .string "Someone may be able to\n"
+    .string "take you to the island.\p"
+    .string "Good luck on your search,\n"
+    .string "{PLAYER}!$"
+
 ProfessorOaksLab_Text_StudyAsOaksAide::
     .string "I study Pokémon as Prof. Oak's\n"
     .string "Aide.$"
@@ -1602,3 +1729,19 @@ ProfessorOaksLab_Text_SaveOptionInMenu::
 ProfessorOaksLab_Text_AllMonTypesHaveStrongAndWeakPoints::
     .string "All Pokémon types have strong and\n"
     .string "weak points against others.$"
+
+ProfessorOaksLab_Text_OldSeaMapCall::
+    .string "… … … … … …\n"
+    .string "… … … … … Beep!\p"
+    .string "Prof. Oak: Oh, hello, {PLAYER}?\n"
+    .string "This is Prof. Oak.\p"
+    .string "I have just received some\n"
+    .string "important information I would\l"
+    .string "like to share with you.\p"
+    .string "Can you please drop by my lab\n"
+    .string "as soon as possible.\p"
+    .string "This could be a very important\n"
+    .string "discovery!\p"
+    .string "See you soon, {PLAYER}!\p"
+    .string "… … … … … …\n"
+    .string "… … … … … Click!$"

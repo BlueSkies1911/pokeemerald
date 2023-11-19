@@ -46,8 +46,8 @@
       "x": 22,
       "y": 7,
       "elevation": 3,
-      "dest_map": "MAP_VIRIDIAN_CITY",
-      "dest_warp_id": "1"
+      "dest_map": "MAP_FARAWAY_ISLAND_INTERIOR",
+      "dest_warp_id": "0"
     },
     {
       "x": 23,

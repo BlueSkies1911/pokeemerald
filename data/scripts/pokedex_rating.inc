@@ -58,7 +58,13 @@ PokedexRating_EventScript_DexIncomplete::
 	end
 
 PokedexRating_EventScript_DexComplete::
+	call_if_unset FLAG_OAK_SAW_DEX_COMPLETION, PokedexRating_EventScript_OldSeaMapStepCounter
 	setflag FLAG_OAK_SAW_DEX_COMPLETION
 	msgbox gPokedexRating_Text_YouveCompletedDex
     closemessage
 	end
+
+PokedexRating_EventScript_OldSeaMapStepCounter::
+	setflag FLAG_ENABLE_OLD_SEA_MAP_CALL
+	setvar VAR_OLD_SEA_MAP_CALL_STEP_COUNTER, 0
+	return

@@ -630,6 +630,11 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
             ScriptContext_SetupScript(CeruleanCity_EventScript_RegisterBrock);
             return TRUE;
         }
+        if (ShouldDoOldSeaMapCall() == TRUE)
+        {
+            ScriptContext_SetupScript(ProfessorOaksLab_EventScript_OldSeaMapCall);
+            return TRUE;
+        }
     }
 
     if (SafariZoneTakeStep() == TRUE)

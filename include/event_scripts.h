@@ -564,6 +564,7 @@ extern const u8 EventScript_EggHatch[];
 extern const u8 PewterCity_EventScript_RegisterOak[];
 extern const u8 CeruleanCity_EventScript_RegisterDaisyCall[];
 extern const u8 CeruleanCity_EventScript_RegisterBrock[];
+extern const u8 ProfessorOaksLab_EventScript_OldSeaMapCall[];
 extern const u8 EventScript_FallDownHoleMtPyre[];
 
 // Secret Base
