@@ -7,6 +7,7 @@ IndigoPlateau_MapScripts::
     .byte 0
 
 IndigoPlateau_OnTransition:
+    randomweather
     setflag FLAG_WORLD_MAP_INDIGO_PLATEAU
     compare VAR_MAP_SCENE_INDIGO_PLATEAU, 1
     call_if_eq IndigoPlateau_EventScript_PlayCreditsMusic

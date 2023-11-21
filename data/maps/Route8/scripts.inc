@@ -1,5 +1,10 @@
 Route8_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route8_OnTransition
+    .byte 0
+
+Route8_OnTransition:
+	randomweather
+    end
 
 Route8_EventScript_Paige::
     trainerbattle_single TRAINER_LASS_PAIGE, Route8_Text_PaigeIntro, Route8_Text_PaigeDefeat

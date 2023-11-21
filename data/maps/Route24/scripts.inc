@@ -1,7 +1,12 @@
 .equ LOCALID_ROCKET, 1
 
 Route24_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, Route24_OnTransition
     .byte 0
+
+Route24_OnTransition:
+	randomweather
+    end
 
 Route24_EventScript_RocketTriggerLeft::
     lockall

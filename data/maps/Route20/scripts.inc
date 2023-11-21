@@ -3,6 +3,7 @@ Route20_MapScripts::
 	.byte 0
 
 Route20_OnTransition:
+	randomweather
     call_if_unset FLAG_STOPPED_SEAFOAM_B3F_CURRENT, Route20_EventScript_ResetSeafoamBouldersForB3F
     call_if_unset FLAG_STOPPED_SEAFOAM_B4F_CURRENT, Route20_EventScript_ResetSeafoamBouldersForB4F
     end

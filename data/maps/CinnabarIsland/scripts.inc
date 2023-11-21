@@ -7,6 +7,7 @@ CinnabarIsland_MapScripts::
 	.byte 0
 
 CinnabarIsland_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_CINNABAR_ISLAND
     call CinnabarIsland_EventScript_CheckUnlockGym
     compare VAR_MAP_SCENE_CINNABAR_ISLAND, 1

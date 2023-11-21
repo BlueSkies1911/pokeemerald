@@ -1,5 +1,10 @@
 Route2_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route2_OnTransition
+    .byte 0
+
+Route2_OnTransition:
+	randomweather
+    end
 
 Route2_EventScript_RouteSign::
     msgbox Route2_Text_RouteSign, MSGBOX_SIGN

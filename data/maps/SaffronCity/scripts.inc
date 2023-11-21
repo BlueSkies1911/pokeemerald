@@ -5,6 +5,7 @@ SaffronCity_MapScripts::
 	.byte 0
 
 SaffronCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_SAFFRON_CITY
     call_if_unset FLAG_RESCUED_MR_FUJI, SaffronCity_EventScript_MoveDoorGuardGrunt
     end

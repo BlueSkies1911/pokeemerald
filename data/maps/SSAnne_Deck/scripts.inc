@@ -1,5 +1,10 @@
 SSAnne_Deck_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, SSAnne_Deck_OnTransition
+    .byte 0
+
+SSAnne_Deck_OnTransition:
+	randomweather
+    end
 
 SSAnne_Deck_EventScript_Youngster::
     msgbox SSAnne_Deck_Text_ShipDepartingSoon, MSGBOX_NPC

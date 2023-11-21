@@ -13,6 +13,7 @@ Route16_EventScript_RemoveSnorlax::
     return
 
 Route16_OnTransition:
+	randomweather
     compare VAR_MAP_SCENE_ROUTE16, 1
     call_if_eq Route16_OnTransitionCyclingRoad
     end

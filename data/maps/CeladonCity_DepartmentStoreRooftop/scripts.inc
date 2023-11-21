@@ -1,5 +1,10 @@
 CeladonCity_DepartmentStoreRooftop_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, CeladonCity_DepartmentStoreRooftop_OnTransition
+    .byte 0
+
+CeladonCity_DepartmentStoreRooftop_OnTransition:
+	randomweather
+    end
 
 CeladonCity_DepartmentStore_Roof_EventScript_ThirstyGirl::
     lock

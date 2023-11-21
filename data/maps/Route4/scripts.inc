@@ -1,5 +1,10 @@
 Route4_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route4_OnTransition
+    .byte 0
+
+Route4_OnTransition:
+	randomweather
+    end
 
 Route4_EventScript_Woman::
     msgbox Route4_Text_TrippedOverGeodude, MSGBOX_NPC

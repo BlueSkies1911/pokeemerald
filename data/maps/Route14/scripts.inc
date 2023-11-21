@@ -1,5 +1,10 @@
 Route14_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route14_OnTransition
+    .byte 0
+
+Route14_OnTransition:
+	randomweather
+    end
 
 Route14_EventScript_Malik::
     trainerbattle_single TRAINER_BIKER_MALIK, Route14_Text_MalikIntro, Route14_Text_MalikDefeat

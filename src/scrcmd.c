@@ -50,6 +50,7 @@
 #include "window.h"
 #include "constants/event_objects.h"
 #include "constants/items.h"
+#include "constants/weather.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2331,8 +2332,86 @@ bool8 ScrCmd_warpwhitefade(struct ScriptContext *ctx)
 }
 
 bool8 ScrCmd_textcolor(struct ScriptContext * ctx)
- {
-     gSpecialVar_PrevTextColor = gSpecialVar_TextColor;
-     gSpecialVar_TextColor = ScriptReadByte(ctx);
-     return FALSE;
- }
+{
+    gSpecialVar_PrevTextColor = gSpecialVar_TextColor;
+    gSpecialVar_TextColor = ScriptReadByte(ctx);
+    return FALSE;
+}
+
+bool8 ScrCmd_randomweather(struct ScriptContext * ctx)
+{
+    u16 rand = Random() % 100;
+    u8 oldWeather = gSaveBlock1Ptr->randomWeather;
+
+    RtcCalcLocalTime();
+    if (gLocalTime.hours > gSaveBlock1Ptr->timeWeather + 5)
+    {
+        FlagClear(FLAG_RANDOM_WEATHER_RESET);
+    }
+
+    if (FlagGet(FLAG_RANDOM_WEATHER_RESET))
+    {
+        SetSavedWeather(oldWeather);
+        gSaveBlock1Ptr->randomWeather = oldWeather;
+    }
+    else
+    {
+        if (rand < 45)
+        {
+            SetSavedWeather(WEATHER_SUNNY);
+            gSaveBlock1Ptr->randomWeather = WEATHER_SUNNY;
+        }
+        else if (rand >= 45 && rand < 65)
+        {
+            SetSavedWeather(WEATHER_SUNNY_CLOUDS);
+            gSaveBlock1Ptr->randomWeather = WEATHER_SUNNY_CLOUDS;
+        }
+        else if (rand >= 65 && rand < 75)
+        {
+            if (gLocalTime.hours < 6)
+            {
+                SetSavedWeather(WEATHER_SUNNY);
+                gSaveBlock1Ptr->randomWeather = WEATHER_SUNNY;
+            }
+            else
+            {
+                SetSavedWeather(WEATHER_DROUGHT);
+                gSaveBlock1Ptr->randomWeather = WEATHER_DROUGHT;
+            }
+        }
+        else if (rand >= 75 && rand < 95)
+        {
+            SetSavedWeather(WEATHER_RAIN);
+            gSaveBlock1Ptr->randomWeather = WEATHER_RAIN;
+        }
+        else if (rand >= 95 && rand < 99)
+        {
+            SetSavedWeather(WEATHER_RAIN_THUNDERSTORM);
+            gSaveBlock1Ptr->randomWeather = WEATHER_RAIN_THUNDERSTORM;
+        }
+        else
+        {
+            SetSavedWeather(WEATHER_SNOW);
+            gSaveBlock1Ptr->randomWeather = WEATHER_SNOW;
+        }
+        FlagSet(FLAG_RANDOM_WEATHER_RESET);
+
+        if (gLocalTime.hours < 6)
+        {
+            gSaveBlock1Ptr->timeWeather = 0;
+        }
+        else if (gLocalTime.hours >= 6 && gLocalTime.hours < 12)
+        {
+            gSaveBlock1Ptr->timeWeather = 6;
+        }
+        else if (gLocalTime.hours >= 12 && gLocalTime.hours < 18)
+        {
+            gSaveBlock1Ptr->timeWeather = 12;
+        }
+        else
+        {
+            gSaveBlock1Ptr->timeWeather = 18;
+        }
+    }
+    return FALSE;
+}

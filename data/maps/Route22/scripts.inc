@@ -1,7 +1,12 @@
 .set LOCALID_RIVAL, 1
 
 Route22_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route22_OnTransition
+    .byte 0
+
+Route22_OnTransition:
+	randomweather
+    end
 
 Route22_EventScript_EarlyRivalTriggerTop::
     lockall

@@ -1,5 +1,10 @@
 Route3_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route3_OnTransition
+    .byte 0
+
+Route3_OnTransition:
+	randomweather
+    end
 
 Route3_EventScript_Youngster::
     msgbox Route3_Text_TunnelFromCeruleanTiring, MSGBOX_NPC

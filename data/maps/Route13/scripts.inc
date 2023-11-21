@@ -1,5 +1,10 @@
 Route13_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route13_OnTransition
+    .byte 0
+
+Route13_OnTransition:
+	randomweather
+    end
 
 Route13_EventScript_Jared::
     trainerbattle_single TRAINER_BIKER_JARED, Route13_Text_JaredIntro, Route13_Text_JaredDefeat

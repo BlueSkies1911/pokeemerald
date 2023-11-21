@@ -6,6 +6,7 @@ CeladonCity_MapScripts::
     .byte 0
 
 CeladonCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_CELADON_CITY
     end
 

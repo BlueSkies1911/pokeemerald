@@ -1,5 +1,10 @@
 Route9_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route9_OnTransition
+    .byte 0
+
+Route9_OnTransition:
+	randomweather
+    end
 
 Route9_EventScript_Brent::
     trainerbattle_single TRAINER_BUG_CATCHER_BRENT, Route9_Text_BrentIntro, Route9_Text_BrentDefeat

@@ -1,5 +1,10 @@
 Route21_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route21_OnTransition
+    .byte 0
+
+Route21_OnTransition:
+	randomweather
+    end
 
 Route21_EventScript_Ronald::
     trainerbattle_single TRAINER_FISHERMAN_RONALD, Route21_Text_RonaldIntro, Route21_Text_RonaldDefeat

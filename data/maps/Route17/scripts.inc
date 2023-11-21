@@ -1,5 +1,10 @@
 Route17_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route17_OnTransition
+    .byte 0
+
+Route17_OnTransition:
+	randomweather
+    end
 
 Route17_EventScript_Billy::
     trainerbattle_single TRAINER_BIKER_BILLY, Route17_Text_BillyIntro, Route17_Text_BillyDefeat

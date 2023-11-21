@@ -6,6 +6,7 @@ FarawayIsland_Entrance_MapScripts::
 	.byte 0
 
 FarawayIsland_Entrance_OnTransition:
+	randomweather
 	setflag FLAG_ARRIVED_ON_FARAWAY_ISLAND
 	end
 

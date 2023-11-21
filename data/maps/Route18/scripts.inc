@@ -4,6 +4,7 @@ Route18_MapScripts::
 	.byte 0
 
 Route18_OnTransition:
+	randomweather
     compare VAR_MAP_SCENE_ROUTE16, 1
     call_if_eq Route18_OnTransitionCyclingRoad
     end

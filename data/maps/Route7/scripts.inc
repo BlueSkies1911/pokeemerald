@@ -1,5 +1,10 @@
 Route7_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route7_OnTransition
+    .byte 0
+
+Route7_OnTransition:
+	randomweather
+    end
 
 Route7_EventScript_UndergroundPathSign::
     msgbox Route7_Text_UndergroundPathSign, MSGBOX_SIGN

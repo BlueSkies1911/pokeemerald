@@ -7,6 +7,7 @@ ViridianCity_MapScripts::
     .byte 0
 
 ViridianCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_VIRIDIAN_CITY
     compare VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 0
     call_if_eq ViridianCity_EventScript_SetOldManBlockingRoad

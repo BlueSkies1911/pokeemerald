@@ -10,6 +10,7 @@ CeruleanCity_MapScripts::
 	.byte 0
 
 CeruleanCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_CERULEAN_CITY
 	setflag FLAG_SYS_TV_START
     call_if_unset FLAG_GOT_SS_TICKET, CeruleanCity_EventScript_BlockExits

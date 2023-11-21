@@ -1,8 +1,13 @@
 .set LOCALID_SS_ANNE, 1
 
 SSAnne_Exterior_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, SSAnne_Exterior_OnTransition
     map_script MAP_SCRIPT_ON_FRAME_TABLE, SSAnne_Exterior_OnFrame
     .byte 0
+
+SSAnne_Exterior_OnTransition:
+	randomweather
+    end
 
 SSAnne_Exterior_OnFrame:
     map_script_2 VAR_MAP_SCENE_VERMILION_CITY, 1, SSAnne_Exterior_ExitSSAnne

@@ -1,5 +1,10 @@
 Route11_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route11_OnTransition
+    .byte 0
+
+Route11_OnTransition:
+	randomweather
+    end
 
 Route11_EventScript_Eddie::
     trainerbattle_single TRAINER_YOUNGSTER_EDDIE, Route11_Text_EddieIntro, Route11_Text_EddieDefeat

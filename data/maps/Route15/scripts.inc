@@ -1,5 +1,10 @@
 Route15_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route15_OnTransition
+    .byte 0
+
+Route15_OnTransition:
+	randomweather
+    end
 
 Route15_EventScript_Ernest::
     trainerbattle_single TRAINER_BIKER_ERNEST, Route15_Text_ErnestIntro, Route15_Text_ErnestDefeat

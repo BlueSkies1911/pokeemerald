@@ -3,6 +3,7 @@ FuchsiaCity_MapScripts::
 	.byte 0
 
 FuchsiaCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_FUCHSIA_CITY
     call_if_set FLAG_GOT_DOME_FOSSIL, FuchsiaCity_EventScript_SetOmanyteGfx
     call_if_unset FLAG_GOT_DOME_FOSSIL, FuchsiaCity_EventScript_SetKabutoGfx

@@ -10,6 +10,7 @@ PalletTown_MapScripts::
 	.byte 0
 
 PalletTown_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_PALLET_TOWN
     call_if_set FLAG_PALLET_LADY_NOT_BLOCKING_SIGN, PalletTown_EventScript_TryReadySignLady
     compare VAR_MAP_SCENE_PALLET_TOWN_SIGN_LADY, 0

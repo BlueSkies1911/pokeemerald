@@ -1,5 +1,10 @@
 Route25_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route25_OnTransition
+    .byte 0
+
+Route25_OnTransition:
+	randomweather
+    end
 
 Route25_EventScript_Joey::
     trainerbattle_single TRAINER_YOUNGSTER_JOEY, Route25_Text_JoeyIntro, Route25_Text_JoeyDefeat

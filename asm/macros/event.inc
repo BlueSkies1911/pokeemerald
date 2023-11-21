@@ -1557,10 +1557,9 @@
 	.byte \color
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro loadhelp text:req
+	@ Changes weather every 6 hours.
+	.macro randomweather
 	.byte 0xc8
-	.4byte \text
 	.endm
 
 	@ Used only in FireRed/LeafGreen, does nothing in Emerald.

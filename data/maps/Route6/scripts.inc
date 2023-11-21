@@ -1,5 +1,10 @@
 Route6_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route6_OnTransition
+    .byte 0
+
+Route6_OnTransition:
+	randomweather
+    end
 
 Route6_EventScript_Keigo::
     trainerbattle_single TRAINER_BUG_CATCHER_KEIGO, Route6_Text_KeigoIntro, Route6_Text_KeigoDefeat

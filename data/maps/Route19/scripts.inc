@@ -1,5 +1,10 @@
 Route19_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route19_OnTransition
+    .byte 0
+
+Route19_OnTransition:
+	randomweather
+    end
 
 Route19_EventScript_Richard::
     trainerbattle_single TRAINER_SWIMMER_MALE_RICHARD, Route19_Text_RichardIntro, Route19_Text_RichardDefeat

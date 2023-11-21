@@ -7,6 +7,7 @@ PewterCity_MapScripts::
     .byte 0
 
 PewterCity_OnTransition:
+	randomweather
     setflag FLAG_WORLD_MAP_PEWTER_CITY
     setvar VAR_MAP_SCENE_PEWTER_CITY_MUSEUM_1F, 0
     end

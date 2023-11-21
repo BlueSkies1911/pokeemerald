@@ -1,5 +1,10 @@
 Route10_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, Route10_OnTransition
+    .byte 0
+
+Route10_OnTransition:
+	randomweather
+    end
 
 Route10_EventScript_Heidi::
     trainerbattle_single TRAINER_PICNICKER_HEIDI, Route10_Text_HeidiIntro, Route10_Text_HeidiDefeat

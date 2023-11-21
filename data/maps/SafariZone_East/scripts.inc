@@ -1,5 +1,10 @@
 SafariZone_East_MapScripts::
-	.byte 0
+    map_script MAP_SCRIPT_ON_TRANSITION, SafariZone_East_OnTransition
+    .byte 0
+
+SafariZone_East_OnTransition:
+	randomweather
+    end
 
 SafariZone_East_EventScript_RestHouseSign::
     msgbox SafariZone_East_Text_RestHouse, MSGBOX_SIGN
