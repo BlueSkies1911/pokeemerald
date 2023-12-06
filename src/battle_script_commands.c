@@ -2574,7 +2574,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     break;
             }
             if (!CanParalyzeType(gBattleScripting.battler, gEffectBattler)
-                && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
+                && (gHitMarker & HITMARKER_STATUS_ABILITY_EFFECT)
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
