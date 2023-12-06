@@ -2,6 +2,7 @@
 #include "malloc.h"
 #include "battle_pyramid.h"
 #include "berry.h"
+#include "day_night.h"
 #include "decoration.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -406,50 +407,6 @@ const u8 gInitialMovementTypeFacingDirections[] = {
     [MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_RIGHT] = DIR_EAST,
     [MOVEMENT_TYPE_WANDER_AROUND_SLOWER] = DIR_SOUTH,
 };
-
-#define OBJ_EVENT_PAL_TAG_PLAYER                  0x1100
-#define OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION      0x1101
-#define OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION       0x1102
-#define OBJ_EVENT_PAL_TAG_NPC_1                   0x1103
-#define OBJ_EVENT_PAL_TAG_NPC_2                   0x1104
-#define OBJ_EVENT_PAL_TAG_NPC_3                   0x1105
-#define OBJ_EVENT_PAL_TAG_NPC_4                   0x1106
-#define OBJ_EVENT_PAL_TAG_NPC_1_REFLECTION        0x1107
-#define OBJ_EVENT_PAL_TAG_NPC_2_REFLECTION        0x1108
-#define OBJ_EVENT_PAL_TAG_NPC_3_REFLECTION        0x1109
-#define OBJ_EVENT_PAL_TAG_NPC_4_REFLECTION        0x110A
-#define OBJ_EVENT_PAL_TAG_QUINTY_PLUMP            0x110B
-#define OBJ_EVENT_PAL_TAG_QUINTY_PLUMP_REFLECTION 0x110C
-#define OBJ_EVENT_PAL_TAG_TRUCK                   0x110D
-#define OBJ_EVENT_PAL_TAG_UNUSED                  0x110E
-#define OBJ_EVENT_PAL_TAG_ZIGZAGOON               0x110F
-#define OBJ_EVENT_PAL_TAG_MAY                     0x1110
-#define OBJ_EVENT_PAL_TAG_MAY_REFLECTION          0x1111
-#define OBJ_EVENT_PAL_TAG_MOVING_BOX              0x1112
-#define OBJ_EVENT_PAL_TAG_CABLE_CAR               0x1113
-#define OBJ_EVENT_PAL_TAG_SSTIDAL                 0x1114
-#define OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER       0x1115
-#define OBJ_EVENT_PAL_TAG_KYOGRE                  0x1116
-#define OBJ_EVENT_PAL_TAG_KYOGRE_REFLECTION       0x1117
-#define OBJ_EVENT_PAL_TAG_GROUDON                 0x1118
-#define OBJ_EVENT_PAL_TAG_GROUDON_REFLECTION      0x1119
-#define OBJ_EVENT_PAL_TAG_UNUSED_2                0x111A
-#define OBJ_EVENT_PAL_TAG_SUBMARINE_SHADOW        0x111B
-#define OBJ_EVENT_PAL_TAG_POOCHYENA               0x111C
-#define OBJ_EVENT_PAL_TAG_RED_LEAF                0x111D
-#define OBJ_EVENT_PAL_TAG_DEOXYS                  0x111E
-#define OBJ_EVENT_PAL_TAG_BIRTH_ISLAND_STONE      0x111F
-#define OBJ_EVENT_PAL_TAG_HO_OH                   0x1120
-#define OBJ_EVENT_PAL_TAG_LUGIA                   0x1121
-#define OBJ_EVENT_PAL_TAG_RS_BRENDAN              0x1122
-#define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
-#define OBJ_EVENT_PAL_TAG_NPC_BLUE                0x1124
-#define OBJ_EVENT_PAL_TAG_NPC_PINK                0x1125
-#define OBJ_EVENT_PAL_TAG_NPC_GREEN               0x1126
-#define OBJ_EVENT_PAL_TAG_NPC_WHITE               0x1127
-#define OBJ_EVENT_PAL_TAG_SS_ANNE                 0x1128
-#define OBJ_EVENT_PAL_TAG_SEAGALLOP               0x1129
-#define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/field_effects/field_effect_object_template_pointers.h"
 #include "data/object_events/object_event_pic_tables.h"
@@ -1957,12 +1914,13 @@ static void UNUSED LoadObjectEventPaletteSet(u16 *paletteTags)
         LoadObjectEventPalette(paletteTags[i]);
 }
 
+// NOTE: Does not use LoadSpritePaletteDayNight because of naming screen
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)
 {
     if (IndexOfSpritePaletteTag(spritePalette->tag) != 0xFF)
         return 0xFF;
 
-    return LoadSpritePalette(spritePalette);
+    return LoadSpritePaletteDayNight(spritePalette);
 }
 
 void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
@@ -1970,7 +1928,7 @@ void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
     // paletteTag is assumed to exist in sObjectEventSpritePalettes
     u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
 
-    LoadPalette(sObjectEventSpritePalettes[paletteIndex].data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
+    LoadPaletteDayNight(sObjectEventSpritePalettes[paletteIndex].data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
 }
 
 void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)

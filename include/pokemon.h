@@ -548,7 +548,4 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void);
 void DestroyMonSpritesGfxManager(void);
 u8 *MonSpritesGfxManager_GetSpritePtr(u8 spriteNum);
 
-#define DAY_START 7
-#define NIGHT_START 20
-
 #endif // GUARD_POKEMON_H

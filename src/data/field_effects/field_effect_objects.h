@@ -267,7 +267,7 @@ static const union AnimCmd *const sAnimTable_Arrow[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Arrow = {
     .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_PLAYER,
+    .paletteTag = FLDEFF_PAL_TAG_ARROW,
     .oam = &gObjectEventBaseOam_16x16,
     .anims = sAnimTable_Arrow,
     .images = sPicTable_Arrow,
@@ -1162,3 +1162,4 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_Rayquaza = {
 };
 
 static const struct SpritePalette sSpritePalette_Unused = {gObjectEventPal_Npc3, FLDEFF_PAL_TAG_UNKNOWN};
+const struct SpritePalette gSpritePalette_ArrowEmotionsFieldEffect = {gObjectEventPal_Player, FLDEFF_PAL_TAG_ARROW};

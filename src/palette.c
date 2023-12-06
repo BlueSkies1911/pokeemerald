@@ -1,4 +1,5 @@
 #include "global.h"
+#include "day_night.h"
 #include "palette.h"
 #include "util.h"
 #include "decompress.h"
@@ -83,15 +84,12 @@ static const u8 sRoundedDownGrayscaleMap[] = {
 
 void LoadCompressedPalette(const u32 *src, u16 offset, u16 size)
 {
-    LZDecompressWram(src, gPaletteDecompressionBuffer);
-    CpuCopy16(gPaletteDecompressionBuffer, &gPlttBufferUnfaded[offset], size);
-    CpuCopy16(gPaletteDecompressionBuffer, &gPlttBufferFaded[offset], size);
+    LoadCompressedPalette_HandleDayNight(src, offset, size, FALSE);
 }
 
 void LoadPalette(const void *src, u16 offset, u16 size)
 {
-    CpuCopy16(src, &gPlttBufferUnfaded[offset], size);
-    CpuCopy16(src, &gPlttBufferFaded[offset], size);
+    LoadPalette_HandleDayNight(src, offset, size, FALSE);
 }
 
 void FillPalette(u16 value, u16 offset, u16 size)

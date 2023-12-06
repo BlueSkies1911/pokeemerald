@@ -11,11 +11,10 @@
 #include "sound.h"
 #include "sprite.h"
 #include "trig.h"
+#include "constants/event_objects.h"
 #include "constants/field_effects.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
-
-#define OBJ_EVENT_PAL_TAG_NONE 0x11FF // duplicate of define in event_object_movement.c
 
 static void UpdateObjectReflectionSprite(struct Sprite *);
 static void LoadObjectReflectionPalette(struct ObjectEvent *objectEvent, struct Sprite *sprite);
@@ -76,8 +75,6 @@ static s16 GetReflectionVerticalOffset(struct ObjectEvent *objectEvent)
     return GetObjectEventGraphicsInfo(objectEvent->graphicsId)->height - 2;
 }
 
-#define OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION 0x1102
-
 static void LoadObjectReflectionPalette(struct ObjectEvent *objectEvent, struct Sprite *reflectionSprite)
 {
     u8 bridgeType;
@@ -127,7 +124,7 @@ void LoadSpecialReflectionPalette(struct Sprite *sprite)
     }
     reflectionPalette.data = gReflectionPaletteBuffer;
     reflectionPalette.tag = GetSpritePaletteTagByPaletteNum(sprite->oam.paletteNum) + 0x1000;
-    LoadSpritePalette(&reflectionPalette);
+    LoadSpritePaletteDayNight(&reflectionPalette);
     sprite->oam.paletteNum = IndexOfSpritePaletteTag(reflectionPalette.tag);
     UpdatePaletteGammaType(sprite->oam.paletteNum, COLOR_MAP_CONTRAST);
     UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
@@ -179,16 +176,20 @@ static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
 #undef sIsStillReflection
 
 extern const struct SpriteTemplate *const gFieldEffectObjectTemplatePointers[];
+extern const struct SpritePalette gSpritePalette_ArrowEmotionsFieldEffect;
 
 #define sPrevX data[0]
 #define sPrevY data[1]
 
 u8 CreateWarpArrowSprite(void)
 {
-    u8 spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_ARROW], 0, 0, 82);
+    u8 spriteId;
+    struct Sprite *sprite;
+
+    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_ARROW], 0, 0, 0x52);
     if (spriteId != MAX_SPRITES)
     {
-        struct Sprite *sprite = &gSprites[spriteId];
+        sprite = &gSprites[spriteId];
         sprite->oam.priority = 1;
         sprite->coordOffsetEnabled = TRUE;
         sprite->invisible = TRUE;
@@ -196,8 +197,13 @@ u8 CreateWarpArrowSprite(void)
     return spriteId;
 }
 
+// this function is only used for the warp arrow sprite
 void SetSpriteInvisible(u8 spriteId)
 {
+    // needed in order to trick the palette system into thinking that no sprite is using that palette
+    u8 paletteNum = gSprites[spriteId].oam.paletteNum;
+    gSprites[spriteId].oam.paletteNum = 0;
+    FieldEffectFreePaletteIfUnused(paletteNum);
     gSprites[spriteId].invisible = TRUE;
 }
 
@@ -214,6 +220,7 @@ void ShowWarpArrowSprite(u8 spriteId, u8 direction, s16 x, s16 y)
         sprite->invisible = FALSE;
         sprite->sPrevX = x;
         sprite->sPrevY = y;
+        sprite->oam.paletteNum = LoadSpritePalette(&gSpritePalette_ArrowEmotionsFieldEffect);
         StartSpriteAnim(sprite, direction - 1);
     }
 }
@@ -243,9 +250,14 @@ const u16 gShadowVerticalOffsets[] = {
 
 u32 FldEff_Shadow(void)
 {
-    u8 objectEventId = GetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
-    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
-    u8 spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[sShadowEffectTemplateIds[graphicsInfo->shadowSize]], 0, 0, 148);
+    u8 objectEventId;
+    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    u8 spriteId;
+
+    objectEventId = GetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
+    graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
+    LoadFieldEffectPalette_(sShadowEffectTemplateIds[graphicsInfo->shadowSize], FALSE);
+    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[sShadowEffectTemplateIds[graphicsInfo->shadowSize]], 0, 0, 148);
     if (spriteId != MAX_SPRITES)
     {
         gSprites[spriteId].coordOffsetEnabled = TRUE;

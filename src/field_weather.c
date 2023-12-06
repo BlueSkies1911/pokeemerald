@@ -105,7 +105,7 @@ void (*const gWeatherPalStateFuncs[])(void) =
 
 // This table specifies which of the color maps should be
 // applied to each of the background and sprite palettes.
-EWRAM_DATA u8 sBasePaletteColorMapTypes[32] =
+EWRAM_DATA u8 ALIGNED(2) sBasePaletteColorMapTypes[32] =
 {
     // background palettes
     COLOR_MAP_DARK_CONTRAST,
@@ -264,7 +264,7 @@ static u8 None_Finish(void)
 // this function always builds the same two tables.
 static void BuildColorMaps(void)
 {
-    u16 v0;
+    u16 i;
     u8 (*colorMaps)[32];
     u16 colorVal;
     u16 curBrightness;
@@ -273,15 +273,15 @@ static void BuildColorMaps(void)
     u16 baseBrightness;
     u32 remainingBrightness;
     s16 diff;
-    u8 i;
+    u8 j;
 
-    for (i = 0; i <= 12; i++)
-        sBasePaletteColorMapTypes[i] = COLOR_MAP_DARK_CONTRAST;
+    for (j = 0; j <= 12; j++)
+        sBasePaletteColorMapTypes[j] = COLOR_MAP_DARK_CONTRAST;
 
     sPaletteColorMapTypes = sBasePaletteColorMapTypes;
-    for (v0 = 0; v0 < 2; v0++)
+    for (i = 0; i < 2; i++)
     {
-        if (v0 == 0)
+        if (i == 0)
             colorMaps = gWeatherPtr->darkenedContrastColorMaps;
         else
             colorMaps = gWeatherPtr->contrastColorMaps;
@@ -289,7 +289,7 @@ static void BuildColorMaps(void)
         for (colorVal = 0; colorVal < 32; colorVal++)
         {
             curBrightness = colorVal << 8;
-            if (v0 == 0)
+            if (i == 0)
                 brightnessDelta = (colorVal << 8) / 16;
             else
                 brightnessDelta = 0;
@@ -931,7 +931,7 @@ static bool8 UNUSED IsFirstFrameOfWeatherFadeIn(void)
 
 void LoadCustomWeatherSpritePalette(const struct SpritePalette *palette)
 {
-    LoadSpritePalette(palette);
+    LoadSpritePaletteDayNight(palette);
     UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(palette->tag));
 }
 
@@ -1175,9 +1175,8 @@ void ResetPreservedPalettesInWeather(void)
     sPaletteColorMapTypes = sBasePaletteColorMapTypes;
 }
 
-void UpdatePaletteGammaType(u8 index, u8 gammaType)
+void UpdatePaletteGammaType(u8 index, u8 colorMapType)
 {
     if (index != 0xFF)
-        sBasePaletteColorMapTypes[index + 16] = gammaType;
+        sBasePaletteColorMapTypes[index + 16] = colorMapType;
 }
-

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "day_night.h"
 #include "decompress.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -257,6 +258,10 @@ bool8 (*const gFieldEffectScriptFuncs[])(u8 **, u32 *) =
     FieldEffectCmd_loadgfx_callnative,
     FieldEffectCmd_loadtiles_callnative,
     FieldEffectCmd_loadfadedpal_callnative,
+    // Added for day and night system
+    FieldEffectCmd_loadpaldaynight,
+    FieldEffectCmd_loadfadedpaldaynight,
+    FieldEffectCmd_loadfadedpaldaynight_callnative,
 };
 
 static const struct OamData sOam_64x64 =
@@ -611,6 +616,28 @@ bool8 FieldEffectCmd_loadfadedpal_callnative(u8 **script, u32 *val)
     return TRUE;
 }
 
+bool8 FieldEffectCmd_loadpaldaynight(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadPaletteDayNight(script);
+    return TRUE;
+}
+
+bool8 FieldEffectCmd_loadfadedpaldaynight(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadFadedPaletteDayNight(script);
+    return TRUE;
+}
+
+bool8 FieldEffectCmd_loadfadedpaldaynight_callnative(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadFadedPaletteDayNight(script);
+    FieldEffectScript_CallNative(script, val);
+    return TRUE;
+}
+
 u32 FieldEffectScript_ReadWord(u8 **script)
 {
     return (*script)[0]
@@ -640,6 +667,22 @@ void FieldEffectScript_LoadPalette(u8 **script)
 {
     struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
     LoadSpritePalette(palette);
+    (*script) += 4;
+}
+
+void FieldEffectScript_LoadFadedPaletteDayNight(u8 **script)
+{
+    struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
+    LoadSpritePaletteDayNight(palette);
+    UpdatePaletteGammaType(IndexOfSpritePaletteTag(palette->tag), COLOR_MAP_DARK_CONTRAST);
+    UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(palette->tag));
+    (*script) += 4;
+}
+
+void FieldEffectScript_LoadPaletteDayNight(u8 **script)
+{
+    struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
+    LoadSpritePaletteDayNight(palette);
     (*script) += 4;
 }
 

@@ -5,6 +5,7 @@
 #include "battle_ai_main.h"
 #include "battle_ai_util.h"
 #include "battle_scripts.h"
+#include "day_night.h"
 #include "item.h"
 #include "util.h"
 #include "pokemon.h"
@@ -46,6 +47,7 @@
 #include "constants/battle_anim.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_string_ids.h"
+#include "constants/day_night.h"
 #include "constants/hold_effects.h"
 #include "constants/items.h"
 #include "constants/map_types.h"
@@ -11649,7 +11651,7 @@ static void Cmd_handleballthrow(void)
                 break;
             case ITEM_DUSK_BALL:
                 RtcCalcLocalTime();
-                if ((gLocalTime.hours >= NIGHT_START || gLocalTime.hours < DAY_START) || gMapHeader.cave || gMapHeader.mapType == MAP_TYPE_UNDERGROUND)
+                if (GetCurrentTimeOfDay() == TIME_NIGHT || gMapHeader.cave || gMapHeader.mapType == MAP_TYPE_UNDERGROUND)
                     ballMultiplier = 300;
                 break;
             case ITEM_QUICK_BALL:
