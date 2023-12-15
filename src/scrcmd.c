@@ -2358,15 +2358,10 @@ bool8 ScrCmd_randomweather(struct ScriptContext * ctx)
     }
     else
     {
-        if (rand < 45)
+        if (rand < 65)
         {
             SetSavedWeather(WEATHER_SUNNY);
             gSaveBlock1Ptr->randomWeather = WEATHER_SUNNY;
-        }
-        else if (rand >= 45 && rand < 65)
-        {
-            SetSavedWeather(WEATHER_SUNNY_CLOUDS);
-            gSaveBlock1Ptr->randomWeather = WEATHER_SUNNY_CLOUDS;
         }
         else if (rand >= 65 && rand < 75)
         {
