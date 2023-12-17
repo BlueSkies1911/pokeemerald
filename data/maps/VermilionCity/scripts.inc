@@ -89,16 +89,60 @@ VermilionCity_EventScript_CheckSeagallopPresent::
 	end
 
 VermilionCity_EventScript_TheShipSetSail::
+	goto_if_set FLAG_BATTLE_FRONTIER_UNLOCKED, VermilionCity_Harbor_EventScript_TravelToBattleFrontier
 	msgbox VermilionCity_Text_TheShipSetSail, MSGBOX_DEFAULT
 	release
     end
 
+VermilionCity_Harbor_EventScript_TravelToBattleFrontier::
+	msgbox VermilionCity_Harbor_Text_TravelToBattleFrontier, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, EventScript_CancelSail
+	warp MAP_BATTLE_FRONTIER_OUTSIDE_WEST, 19, 67
+	waitstate
+	release
+	end
+
+
 VermilionCity_Harbor_EventScript_NoFirstTimeEventTickets::
+	goto_if_set FLAG_BATTLE_FRONTIER_UNLOCKED, VermilionCity_Harbor_EventScript_ChooseDestinationWithBattleFrontier
 	msgbox VermilionCity_Text_ReturnToFarawayIsland, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelSail
 	warp MAP_FARAWAY_ISLAND_ENTRANCE, 13, 38
 	waitstate
 	release
+	end
+
+VermilionCity_Harbor_EventScript_ChooseDestinationWithBattleFrontier::
+	message VermilionCity_Harbor_Text_FlashedTicketWhereTo
+	waitmessage
+	multichoicedefault 17, 6, MULTI_VERMILION_WITH_BF, 0, FALSE
+	switch VAR_RESULT
+	case 0, VermilionCity_Harbor_EventScript_BattleFrontier
+	case 1, VermilionCity_Harbor_EventScript_FarawayIsland
+	case 2, EventScript_CancelSail
+	case MULTI_B_PRESSED, EventScript_CancelSail
+	end
+
+VermilionCity_Harbor_EventScript_BattleFrontier::
+	msgbox VermilionCity_Harbor_Text_BattleFrontierItIs, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, VermilionCity_Harbor_EventScript_ChooseNewDestination
+	warp MAP_BATTLE_FRONTIER_OUTSIDE_WEST, 19, 67
+	waitstate
+	release
+	end
+
+VermilionCity_Harbor_EventScript_FarawayIsland::
+	msgbox VermilionCity_Harbor_Text_FarawayIslandItIs, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, VermilionCity_Harbor_EventScript_ChooseNewDestination
+	warp MAP_FARAWAY_ISLAND_ENTRANCE, 13, 38
+	waitstate
+	release
+	end
+
+VermilionCity_Harbor_EventScript_ChooseNewDestination::
+	message VermilionCity_Harbor_Text_WhereWouldYouLikeToGo
+	waitmessage
+	goto VermilionCity_Harbor_EventScript_ChooseDestinationWithBattleFrontier
 	end
 
 VermilionCity_Harbor_EventScript_GetOldSeaMapState::
@@ -214,6 +258,7 @@ VermilionCity_EventScript_CheckSeagallopPresentTrigger::
     end
 
 VermilionCity_EventScript_TheShipSetSailWalkUp::
+	goto_if_set FLAG_BATTLE_FRONTIER_UNLOCKED, VermilionCity_Harbor_EventScript_TravelToBattleFrontier
     msgbox VermilionCity_Text_TheShipSetSail, MSGBOX_DEFAULT
     closemessage
     goto VermilionCity_EventScript_WalkUpPier
@@ -304,6 +349,23 @@ VermilionCity_Text_TheShipSetSail::
 VermilionCity_Text_ReturnToFarawayIsland::
     .string "Do you wish to return\n"
     .string "to Faraway Island?$"
+
+VermilionCity_Harbor_Text_TravelToBattleFrontier::
+    .string "Do you wish to travel\n"
+    .string "to the Battle Frontier?$"
+
+VermilionCity_Harbor_Text_FlashedTicketWhereTo:
+	.string "Welcome!\p"
+	.string "Where would you like to go?$"
+
+VermilionCity_Harbor_Text_BattleFrontierItIs:
+	.string "Battle Frontier it is, then!$"
+
+VermilionCity_Harbor_Text_FarawayIslandItIs:
+	.string "Faraway Island it is, then!$"
+
+VermilionCity_Harbor_Text_WhereWouldYouLikeToGo:
+	.string "Then, where would you like to go?$"
 
 VermilionCity_Text_BoardSeagallopTriPass::
     .string "Ah, you have a Tri-Pass.\p"

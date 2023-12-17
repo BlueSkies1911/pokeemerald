@@ -20,62 +20,13 @@ BattleFrontier_OutsideWest_OnTransition:
 BattleFrontier_OutsideWest_EventScript_FerryAttendant::
 	lock
 	faceplayer
-	msgbox BattleFrontier_OutsideWest_Text_MayISeeYourTicket, MSGBOX_DEFAULT
-	checkitem ITEM_SS_TICKET
-	goto_if_eq VAR_RESULT, FALSE, BattleFrontier_OutsideWest_EventScript_NoSSTicket
-	message BattleFrontier_OutsideWest_Text_WhereWouldYouLikeToGo
-	waitmessage
-	goto BattleFrontier_OutsideWest_EventScript_ChooseFerryDestination
-	end
-
-BattleFrontier_OutsideWest_EventScript_ChooseFerryDestination::
-	multichoicedefault 18, 6, MULTI_SSTIDAL_BATTLE_FRONTIER, 2, FALSE
-	switch VAR_RESULT
-	case 0, BattleFrontier_OutsideWest_EventScript_FerryToSlateport
-	case 1, BattleFrontier_OutsideWest_EventScript_FerryToLilycove
-	case 2, BattleFrontier_OutsideWest_EventScript_CancelFerrySelect
-	case MULTI_B_PRESSED, BattleFrontier_OutsideWest_EventScript_CancelFerrySelect
-	end
-
-BattleFrontier_OutsideWest_EventScript_NoSSTicket::
-	msgbox BattleFrontier_OutsideWest_Text_MustHaveTicketToBoard, MSGBOX_DEFAULT
-	release
-	end
-
-BattleFrontier_OutsideWest_EventScript_FerryToSlateport::
-	msgbox BattleFrontier_OutsideWest_Text_SlateportItIs, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, NO, BattleFrontier_OutsideWest_EventScript_ChooseNewFerryDestination
-	msgbox BattleFrontier_OutsideWest_Text_PleaseBoardFerry, MSGBOX_DEFAULT
-	call BattleFrontier_OutsideWest_EventScript_BoardFerry
+	msgbox BattleFrontier_OutsideWest_Text_ReturnToVermilion, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_OutsideWest_EventScript_CancelFerrySelect
+	msgbox BattleFrontier_OutsideWest_Text_VermilionItIs, MSGBOX_DEFAULT
+	warp MAP_VERMILION_CITY, 23, 32
 	waitstate
 	release
 	end
-
-BattleFrontier_OutsideWest_EventScript_FerryToLilycove::
-	msgbox BattleFrontier_OutsideWest_Text_LilycoveItIs, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, NO, BattleFrontier_OutsideWest_EventScript_ChooseNewFerryDestination
-	msgbox BattleFrontier_OutsideWest_Text_PleaseBoardFerry, MSGBOX_DEFAULT
-	call BattleFrontier_OutsideWest_EventScript_BoardFerry
-	warp MAP_VERMILION_CITY, 8, 11
-	waitstate
-	release
-	end
-
-BattleFrontier_OutsideWest_EventScript_ChooseNewFerryDestination::
-	message BattleFrontier_OutsideWest_Text_ThenWhereWouldYouLikeToGo
-	waitmessage
-	goto BattleFrontier_OutsideWest_EventScript_ChooseFerryDestination
-	end
-
-BattleFrontier_OutsideWest_EventScript_BoardFerry::
-	closemessage
-	applymovement VAR_LAST_TALKED, Common_Movement_WalkInPlaceFasterDown
-	waitmovement 0
-	delay 30
-	hideobjectat LOCALID_FERRY_ATTENDANT, MAP_BATTLE_FRONTIER_OUTSIDE_WEST
-	setvar VAR_0x8004, LOCALID_SS_TIDAL
-	call Common_EventScript_FerryDepartIsland
-	return
 
 BattleFrontier_OutsideWest_EventScript_CancelFerrySelect::
 	msgbox BattleFrontier_OutsideWest_Text_SailWithUsAnotherTime, MSGBOX_DEFAULT
@@ -324,36 +275,15 @@ BattleFrontier_OutsideWest_Text_ThisIsBattleTower:
 	.string "Trainers bring their best-raised\n"
 	.string "Pokémon for elimination-style matches.$"
 
-BattleFrontier_OutsideWest_Text_MayISeeYourTicket:
-	.string "Hello, are you here for the ferry?\n"
-	.string "May I see your Ticket?$"
+BattleFrontier_OutsideWest_Text_ReturnToVermilion:
+	.string "Do you wish to return\n"
+	.string "to Vermilion City?$"
 
-BattleFrontier_OutsideWest_Text_MustHaveTicketToBoard:
-	.string "{PLAYER} doesn't have the Ticket…\p"
-	.string "I'm terribly sorry.\p"
-	.string "You must have a Ticket to board\n"
-	.string "the ferry.$"
-
-BattleFrontier_OutsideWest_Text_WhereWouldYouLikeToGo:
-	.string "{PLAYER} flashed the Ticket.\p"
-	.string "Perfect! That's all you need!\p"
-	.string "And where would you like to go?$"
-
-BattleFrontier_OutsideWest_Text_SlateportItIs:
-	.string "Slateport City it is, then!$"
-
-BattleFrontier_OutsideWest_Text_LilycoveItIs:
-	.string "Lilycove City it is, then!$"
+BattleFrontier_OutsideWest_Text_VermilionItIs:
+	.string "Vermilion City it is, then!$"
 
 BattleFrontier_OutsideWest_Text_SailWithUsAnotherTime:
 	.string "Please sail with us another time!$"
-
-BattleFrontier_OutsideWest_Text_PleaseBoardFerry:
-	.string "Please board the ferry and wait for\n"
-	.string "departure.$"
-
-BattleFrontier_OutsideWest_Text_ThenWhereWouldYouLikeToGo:
-	.string "Then, where would you like to go?$"
 
 BattleFrontier_OutsideWest_Text_BestOutOfAllMyFriends:
 	.string "I'm the best out of all my friends.\n"

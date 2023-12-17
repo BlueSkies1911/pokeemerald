@@ -443,7 +443,7 @@
 #define FLAG_MET_SCOTT_IN_SAFFRON                                   0x1AB
 #define FLAG_MET_SCOTT_IN_LILYCOVE                                  0x1AC
 #define FLAG_MET_SCOTT_IN_EVERGRANDE                                0x1AD
-#define FLAG_MET_SCOTT_ON_SS_TIDAL                                  0x1AE
+#define FLAG_BATTLE_FRONTIER_UNLOCKED                                  0x1AE
 #define FLAG_SCOTT_GIVES_BATTLE_POINTS                              0x1AF
 #define FLAG_COLLECTED_ALL_GOLD_SYMBOLS                             0x1B0
 #define FLAG_SHOWN_MYSTIC_TICKET                                    0x1B1

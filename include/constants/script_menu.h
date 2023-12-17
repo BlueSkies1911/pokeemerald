@@ -60,7 +60,7 @@
 #define MULTI_GAME_CORNER_COINS            49
 #define MULTI_HOWS_FISHING                 50
 #define MULTI_GAME_CORNER_POKEMON          51
-#define MULTI_SSTIDAL_SLATEPORT_WITH_BF    52
+#define MULTI_VERMILION_WITH_BF            52
 #define MULTI_SSTIDAL_BATTLE_FRONTIER      53
 #define MULTI_RIGHTLEFT                    54
 #define MULTI_GAME_CORNER_TMS              55

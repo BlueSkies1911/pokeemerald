@@ -350,10 +350,10 @@ static const struct MenuAction MultichoiceList_HowsFishing[] =
     {gText_NotSoGood},
 };
 
-static const struct MenuAction MultichoiceList_SSTidalSlateportWithBF[] =
+static const struct MenuAction MultichoiceList_VermilionWithBF[] =
 {
-    {gText_LilycoveCity},
     {gText_BattleFrontier},
+    {gText_FarawayIsland},
     {gText_Exit},
 };
 
@@ -997,7 +997,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_GAME_CORNER_COINS]          = MULTICHOICE(MultichoiceList_GameCornerCoins),
     [MULTI_HOWS_FISHING]               = MULTICHOICE(MultichoiceList_HowsFishing),
     [MULTI_GAME_CORNER_POKEMON]        = MULTICHOICE(MultichoiceList_GameCornerPokemon),
-    [MULTI_SSTIDAL_SLATEPORT_WITH_BF]  = MULTICHOICE(MultichoiceList_SSTidalSlateportWithBF),
+    [MULTI_VERMILION_WITH_BF]          = MULTICHOICE(MultichoiceList_VermilionWithBF),
     [MULTI_SSTIDAL_BATTLE_FRONTIER]    = MULTICHOICE(MultichoiceList_SSTidalBattleFrontier),
     [MULTI_RIGHTLEFT]                  = MULTICHOICE(MultichoiceList_RightLeft),
     [MULTI_GAME_CORNER_TMS]            = MULTICHOICE(MultichoiceList_GameCornerTMs),
