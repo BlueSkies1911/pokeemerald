@@ -1,7 +1,7 @@
 #ifndef GUARD_CONSTANTS_POKEDEX_H
 #define GUARD_CONSTANTS_POKEDEX_H
 
-// National Pokedex order
+// National Pokédex order
 enum {
     NATIONAL_DEX_NONE,
     // Kanto
@@ -425,7 +425,7 @@ enum {
 #define JOHTO_DEX_COUNT     NATIONAL_DEX_CELEBI
 #define NATIONAL_DEX_COUNT  NATIONAL_DEX_DEOXYS
 
-// Hoenn Pokedex order
+// Hoenn Pokédex order
 enum {
     HOENN_DEX_NONE,
     HOENN_DEX_BULBASAUR,
@@ -580,7 +580,7 @@ enum {
     HOENN_DEX_MEWTWO,
     HOENN_DEX_MEW,
     // End of Hoenn Dex (see HOENN_DEX_COUNT)
-    // Here below have values but are excluded from the Pokedex
+    // Here below have values but are excluded from the Pokédex
     HOENN_DEX_CHIKORITA,
     HOENN_DEX_BAYLEEF,
     HOENN_DEX_MEGANIUM,

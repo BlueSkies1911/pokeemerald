@@ -231,7 +231,7 @@ static const u16 sPokecenterMonitor_Gfx[] = INCBIN_U16("graphics/field_effects/p
 static const u16 sHofMonitor_Pal[] = INCBIN_U16("graphics/field_effects/palettes/hof_monitor.gbapal");
 static const u16 sHofMonitor_Gfx[] = INCBIN_U16("graphics/field_effects/pics/hof_monitor.4bpp");
 
-// Graphics for the lights streaking past your Pokemon when it uses a field move.
+// Graphics for the lights streaking past your Pokémon when it uses a field move.
 static const u32 sFieldMoveStreaksOutdoors_Gfx[] = INCBIN_U32("graphics/field_effects/pics/field_move_streaks.4bpp");
 static const u16 sFieldMoveStreaksOutdoors_Pal[16] = INCBIN_U16("graphics/field_effects/pics/field_move_streaks.gbapal");
 static const u16 sFieldMoveStreaksOutdoors_Tilemap[320] = INCBIN_U16("graphics/field_effects/pics/field_move_streaks.bin");

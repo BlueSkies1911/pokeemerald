@@ -2115,7 +2115,7 @@ u8 DoBattlerEndTurnEffects(void)
             {
                 MAGIC_GUARD_CHECK;
                 // R/S does not perform this sleep check, which causes the nightmare effect to
-                // persist even after the affected Pokemon has been awakened by Shed Skin.
+                // persist even after the affected Pokémon has been awakened by Shed Skin.
                 if (gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
@@ -2194,7 +2194,7 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 if (gBattlerAttacker != gBattlersCount)
                 {
-                    effect = 2;  // a pokemon was awaken
+                    effect = 2;  // a Pokémon was awaken
                     break;
                 }
                 else
@@ -2258,7 +2258,7 @@ u8 DoBattlerEndTurnEffects(void)
                     if (gDisableStructs[gActiveBattler].disabledMove == gBattleMons[gActiveBattler].moves[i])
                         break;
                 }
-                if (i == MAX_MON_MOVES)  // pokemon does not have the disabled move anymore
+                if (i == MAX_MON_MOVES)  // Pokémon does not have the disabled move anymore
                 {
                     gDisableStructs[gActiveBattler].disabledMove = 0;
                     gDisableStructs[gActiveBattler].disableTimer = 0;
