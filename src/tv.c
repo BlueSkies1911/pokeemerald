@@ -174,7 +174,7 @@ static void DoTVShowPokemonAngler(void);
 static void DoTVShowTheWorldOfMasters(void);
 static void DoTVShowTodaysRivalTrainer(void);
 static void DoTVShowDewfordTrendWatcherNetwork(void);
-static void DoTVShowHoennTreasureInvestigators(void);
+static void DoTVShowKantoTreasureInvestigators(void);
 static void DoTVShowFindThatGamer(void);
 static void DoTVShowBreakingNewsTV(void);
 static void DoTVShowSecretBaseVisit(void);
@@ -184,7 +184,7 @@ static void DoTVShowTrainerFanClubSpecial(void);
 static void DoTVShowTrainerFanClub(void);
 static void DoTVShowSpotTheCuties(void);
 static void DoTVShowPokemonNewsBattleFrontier(void);
-static void DoTVShowWhatsNo1InHoennToday(void);
+static void DoTVShowWhatsNo1InKantoToday(void);
 static void DoTVShowSecretBaseSecrets(void);
 static void DoTVShowSafariFanClub(void);
 static void DoTVShowLilycoveContestLady(void);
@@ -196,31 +196,31 @@ static const struct {
     u8 location;
 } sPokeOutbreakSpeciesList[] = {
     {
-        .species = SPECIES_SEEDOT,
+        .species = SPECIES_BELLSPROUT,
         .moves = {MOVE_BIDE, MOVE_HARDEN, MOVE_LEECH_SEED},
         .level = 3,
         .location = MAP_NUM(ROUTE2)
     },
     {
-        .species = SPECIES_NUZLEAF,
+        .species = SPECIES_WEEPINBELL,
         .moves = {MOVE_HARDEN, MOVE_GROWTH, MOVE_NATURE_POWER, MOVE_LEECH_SEED},
         .level = 15,
         .location = MAP_NUM(ROUTE14),
     },
     {
-        .species = SPECIES_SEEDOT,
+        .species = SPECIES_BELLSPROUT,
         .moves = {MOVE_HARDEN, MOVE_GROWTH, MOVE_NATURE_POWER, MOVE_LEECH_SEED},
         .level = 13,
         .location = MAP_NUM(ROUTE17),
     },
     {
-        .species = SPECIES_SEEDOT,
+        .species = SPECIES_BELLSPROUT,
         .moves = {MOVE_GIGA_DRAIN, MOVE_FRUSTRATION, MOVE_SOLAR_BEAM, MOVE_LEECH_SEED},
         .level = 25,
         .location = MAP_NUM(ROUTE20),
     },
     {
-        .species = SPECIES_SKITTY,
+        .species = SPECIES_MEOWTH,
         .moves = {MOVE_GROWL, MOVE_TACKLE, MOVE_TAIL_WHIP, MOVE_ATTRACT},
         .level = 8,
         .location = MAP_NUM(ROUTE16),
@@ -519,10 +519,10 @@ static const u8 *const sTVDewfordTrendWatcherNetworkTextGroup[] = {
     [TRENDWATCHER_STATE_OUTRO]           = TrendWatcher_Text_Outro
 };
 
-static const u8 *const sTVHoennTreasureInvestisatorsTextGroup[] = {
-    gTVHoennTreasureInvestigatorsText00,
-    gTVHoennTreasureInvestigatorsText01,
-    gTVHoennTreasureInvestigatorsText02
+static const u8 *const sTVKantoTreasureInvestisatorsTextGroup[] = {
+    gTVKantoTreasureInvestigatorsText00,
+    gTVKantoTreasureInvestigatorsText01,
+    gTVKantoTreasureInvestigatorsText02
 };
 
 static const u8 *const sTVFindThatGamerTextGroup[] = {
@@ -635,16 +635,16 @@ static const u8 *const sTVPokemonNewsBattleFrontierTextGroup[] = {
     gTVPokemonNewsBattleFrontierText18
 };
 
-static const u8 *const sTVWhatsNo1InHoennTodayTextGroup[] = {
-    gTVWhatsNo1InHoennTodayText00,
-    gTVWhatsNo1InHoennTodayText01,
-    gTVWhatsNo1InHoennTodayText02,
-    gTVWhatsNo1InHoennTodayText03,
-    gTVWhatsNo1InHoennTodayText04,
-    gTVWhatsNo1InHoennTodayText05,
-    gTVWhatsNo1InHoennTodayText06,
-    gTVWhatsNo1InHoennTodayText07,
-    gTVWhatsNo1InHoennTodayText08
+static const u8 *const sTVWhatsNo1InKantoTodayTextGroup[] = {
+    gTVWhatsNo1InKantoTodayText00,
+    gTVWhatsNo1InKantoTodayText01,
+    gTVWhatsNo1InKantoTodayText02,
+    gTVWhatsNo1InKantoTodayText03,
+    gTVWhatsNo1InKantoTodayText04,
+    gTVWhatsNo1InKantoTodayText05,
+    gTVWhatsNo1InKantoTodayText06,
+    gTVWhatsNo1InKantoTodayText07,
+    gTVWhatsNo1InKantoTodayText08
 };
 
 static const u8 *const sTVSecretBaseSecretsTextGroup[SBSECRETS_NUM_STATES] =
@@ -828,9 +828,6 @@ void UpdateTVScreensOnMap(int width, int height)
     FlagSet(FLAG_SYS_TV_WATCH);
     switch (CheckForPlayersHouseNews())
     {
-    case PLAYERS_HOUSE_TV_LATI:
-        SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On);
-        break;
     case PLAYERS_HOUSE_TV_MOVIE:
         // Don't flash TV for movie text in player's house
         break;
@@ -1852,7 +1849,7 @@ void TryPutTodaysRivalTrainerOnAir(void)
         if (IsNationalPokedexEnabled())
             show->rivalTrainer.dexCount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
         else
-            show->rivalTrainer.dexCount = GetHoennPokedexCount(FLAG_GET_CAUGHT);
+            show->rivalTrainer.dexCount = GetKantoPokedexCount(FLAG_GET_CAUGHT);
         show->rivalTrainer.location = gMapHeader.regionMapSectionId;
         show->rivalTrainer.mapLayoutId = gMapHeader.mapLayoutId;
         show->rivalTrainer.nSilverSymbols = 0;
@@ -3353,9 +3350,6 @@ u8 CheckForPlayersHouseNews(void)
     if (gSaveBlock1Ptr->location.mapNum != MAP_NUM(PLAYERS_HOUSE_1F))
         return PLAYERS_HOUSE_TV_NONE;
 
-    if (FlagGet(FLAG_SYS_TV_LATIAS_LATIOS) == TRUE)
-        return PLAYERS_HOUSE_TV_LATI;
-
     if (FlagGet(FLAG_SYS_TV_HOME) == FALSE)
         return PLAYERS_HOUSE_TV_MOVIE;
 
@@ -4222,7 +4216,7 @@ void DoTVShow(void)
             DoTVShowDewfordTrendWatcherNetwork();
             break;
         case TVSHOW_TREASURE_INVESTIGATORS:
-            DoTVShowHoennTreasureInvestigators();
+            DoTVShowKantoTreasureInvestigators();
             break;
         case TVSHOW_FIND_THAT_GAMER:
             DoTVShowFindThatGamer();
@@ -4252,7 +4246,7 @@ void DoTVShow(void)
             DoTVShowPokemonNewsBattleFrontier();
             break;
         case TVSHOW_NUMBER_ONE:
-            DoTVShowWhatsNo1InHoennToday();
+            DoTVShowWhatsNo1InKantoToday();
             break;
         case TVSHOW_SECRET_BASE_SECRETS:
             DoTVShowSecretBaseSecrets();
@@ -5660,7 +5654,7 @@ static void DoTVShowDewfordTrendWatcherNetwork(void)
     ShowFieldMessage(sTVDewfordTrendWatcherNetworkTextGroup[state]);
 }
 
-static void DoTVShowHoennTreasureInvestigators(void)
+static void DoTVShowKantoTreasureInvestigators(void)
 {
     TVShow *show;
     u8 state;
@@ -5686,7 +5680,7 @@ static void DoTVShowHoennTreasureInvestigators(void)
         TVShowDone();
         break;
     }
-    ShowFieldMessage(sTVHoennTreasureInvestisatorsTextGroup[state]);
+    ShowFieldMessage(sTVKantoTreasureInvestisatorsTextGroup[state]);
 }
 
 static void DoTVShowFindThatGamer(void)
@@ -6419,7 +6413,7 @@ static void DoTVShowPokemonNewsBattleFrontier(void)
     ShowFieldMessage(sTVPokemonNewsBattleFrontierTextGroup[state]);
 }
 
-static void DoTVShowWhatsNo1InHoennToday(void)
+static void DoTVShowWhatsNo1InKantoToday(void)
 {
     TVShow *show;
     u8 state;
@@ -6496,7 +6490,7 @@ static void DoTVShowWhatsNo1InHoennToday(void)
         TVShowDone();
         break;
     }
-    ShowFieldMessage(sTVWhatsNo1InHoennTodayTextGroup[state]);
+    ShowFieldMessage(sTVWhatsNo1InKantoTodayTextGroup[state]);
 }
 
 u8 SecretBaseSecrets_GetNumActionsTaken(TVShow *show)

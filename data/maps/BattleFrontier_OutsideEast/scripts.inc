@@ -1,30 +1,12 @@
-.set LOCALID_SUDOWOODO, 14
-
 BattleFrontier_OutsideEast_MapScripts::
-	map_script MAP_SCRIPT_ON_RESUME, BattleFrontier_OutsideEast_OnResume
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleFrontier_OutsideEast_OnTransition
 	.byte 0
-
-BattleFrontier_OutsideEast_OnResume:
-	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, BattleFrontier_OutsideEast_EventScript_TryRemoveSudowoodo
-	end
-
-BattleFrontier_OutsideEast_EventScript_TryRemoveSudowoodo::
-	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_ne VAR_RESULT, B_OUTCOME_CAUGHT, Common_EventScript_NopReturn
-	removeobject VAR_LAST_TALKED
-	return
 
 BattleFrontier_OutsideEast_OnTransition:
 	randomweather
 	setvar VAR_BRAVO_TRAINER_BATTLE_TOWER_ON, 0
 	setflag FLAG_HIDE_BATTLE_TOWER_REPORTER
-	call_if_unset FLAG_DEFEATED_SUDOWOODO, BattleFrontier_OutsideEast_EventScript_ShowSudowoodo
 	end
-
-BattleFrontier_OutsideEast_EventScript_ShowSudowoodo::
-	clearflag FLAG_HIDE_BATTLE_FRONTIER_SUDOWOODO
-	return
 
 BattleFrontier_OutsideEast_EventScript_BattleTowerSign::
 	msgbox BattleFrontier_OutsideEast_Text_BattleTowerSign, MSGBOX_SIGN
@@ -68,12 +50,12 @@ BattleFrontier_OutsideEast_EventScript_Cook::
 	release
 	end
 
-BattleFrontier_OutsideEast_EventScript_Zigzagoon::
+BattleFrontier_OutsideEast_EventScript_Meowth::
 	lock
 	faceplayer
 	waitse
-	playmoncry SPECIES_ZIGZAGOON, CRY_MODE_NORMAL
-	msgbox BattleFrontier_OutsideEast_Text_ZigzagoonLooksVacant, MSGBOX_DEFAULT
+	playmoncry SPECIES_MEOWTH, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideEast_Text_MeowthLooksVacant, MSGBOX_DEFAULT
 	waitmoncry
 	release
 	end
@@ -103,67 +85,6 @@ BattleFrontier_OutsideEast_EventScript_Man2::
 BattleFrontier_OutsideEast_EventScript_TriathleteM::
 	msgbox BattleFrontier_OutsideEast_Text_DidScottBringYouHere, MSGBOX_NPC
 	end
-
-BattleFrontier_OutsideEast_EventScript_Sudowoodo::
-	lock
-	faceplayer
-	waitse
-	playse SE_SUDOWOODO_SHAKE
-	applymovement LOCALID_SUDOWOODO, BattleFrontier_OutsideEast_Movement_SudowoodoShake
-	waitmovement 0
-	release
-	end
-
-BattleFrontier_OutsideEast_EventScript_WaterSudowoodo::
-	lock
-	faceplayer
-	special DoWateringBerryTreeAnim
-	waitstate
-	waitse
-	playse SE_SUDOWOODO_SHAKE
-	applymovement LOCALID_SUDOWOODO, BattleFrontier_OutsideEast_Movement_SudowoodoShake
-	waitmovement 0
-	msgbox gText_Sudowoodo_Attacked, MSGBOX_DEFAULT
-	closemessage
-	waitse
-	playmoncry SPECIES_SUDOWOODO, CRY_MODE_ENCOUNTER
-	delay 40
-	waitmoncry
-	setvar VAR_LAST_TALKED, LOCALID_SUDOWOODO
-	setwildbattle SPECIES_SUDOWOODO, 40
-	setflag FLAG_SYS_CTRL_OBJ_DELETE
-	dowildbattle
-	clearflag FLAG_SYS_CTRL_OBJ_DELETE
-	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, BattleFrontier_OutsideEast_EventScript_DefeatedSudowoodo
-	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, BattleFrontier_OutsideEast_EventScript_DefeatedSudowoodo
-	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, BattleFrontier_OutsideEast_EventScript_DefeatedSudowoodo
-	setflag FLAG_DEFEATED_SUDOWOODO
-	release
-	end
-
-BattleFrontier_OutsideEast_EventScript_DefeatedSudowoodo::
-	setflag FLAG_DEFEATED_SUDOWOODO
-	goto Common_EventScript_RemoveStaticPokemon
-	end
-
-BattleFrontier_OutsideEast_Movement_SudowoodoShake:
-	face_right
-	delay_8
-	face_down
-	delay_8
-	face_left
-	delay_8
-	face_down
-	delay_8
-	face_right
-	delay_8
-	face_down
-	delay_8
-	face_left
-	delay_8
-	face_down
-	step_end
 
 BattleFrontier_OutsideEast_EventScript_Maniac1::
 	msgbox BattleFrontier_OutsideEast_Text_HeardPrettyGirlAtBattleArena, MSGBOX_NPC
@@ -218,16 +139,7 @@ BattleFrontier_OutsideEast_EventScript_Gentleman::
 	end
 
 BattleFrontier_OutsideEast_EventScript_OldWoman::
-	lock
-	faceplayer
-	goto_if_set FLAG_DEFEATED_SUDOWOODO, BattleFrontier_OutsideEast_EventScript_OldWomanSudowoodoGone
-	msgbox BattleFrontier_OutsideEast_Text_OddTreeHereSeemsToWiggle, MSGBOX_DEFAULT
-	release
-	end
-
-BattleFrontier_OutsideEast_EventScript_OldWomanSudowoodoGone::
-	msgbox BattleFrontier_OutsideEast_Text_OnceAnOddTreePastHere, MSGBOX_DEFAULT
-	release
+	msgbox BattleFrontier_OutsideEast_Text_OddCaveThroughHere, MSGBOX_NPC
 	end
 
 BattleFrontier_OutsideEast_EventScript_Camper::
@@ -306,8 +218,8 @@ BattleFrontier_OutsideEast_Text_BelieveInYouBuddy:
 	.string "I'll make my little Zigg any favorite\n"
 	.string "tasty treats you like if you win!$"
 
-BattleFrontier_OutsideEast_Text_ZigzagoonLooksVacant:
-	.string "Zigzagoon looks vacant…$"
+BattleFrontier_OutsideEast_Text_MeowthLooksVacant:
+	.string "Meowth looks vacant…$"
 
 BattleFrontier_OutsideEast_Text_PeopleCallMeBusybody:
 	.string "People call me a busybody,\n"
@@ -419,17 +331,11 @@ BattleFrontier_OutsideEast_Text_FrontierNotExclusivelyForToughTrainers:
 	.string "He may have built this place to serve\n"
 	.string "a bigger objective…$"
 
-BattleFrontier_OutsideEast_Text_OddTreeHereSeemsToWiggle:
+BattleFrontier_OutsideEast_Text_OddCaveThroughHere:
 	.string "Excuse me, young one.\n"
 	.string "Have you good eyesight?\p"
-	.string "There is an odd tree past here, and to\n"
-	.string "my tired eyes it seems to wiggle.$"
-
-BattleFrontier_OutsideEast_Text_OnceAnOddTreePastHere:
-	.string "Excuse me, young one.\n"
-	.string "Have you a good memory?\p"
-	.string "I have this feeling there once was\n"
-	.string "an odd tree past here.$"
+	.string "There appears to be an odd\n"
+	.string "cave past here.$"
 
 BattleFrontier_OutsideEast_Text_StickyMonWithLongTail:
 	.string "I…\n"

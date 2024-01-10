@@ -312,7 +312,7 @@ MauvilleCity_PokemonCenter_1F_Text_TrendsStartedStory::
 	.string "This Trainer started new trends\n"
 	.string "{STR_VAR_1} times!\p"
 	.string "{STR_VAR_3} is setting trends for all\n"
-	.string "the Hoenn region!$"
+	.string "the Kanto region!$"
 
 MauvilleCity_PokemonCenter_1F_Text_BerriesPlantedTitle::
     .string "The Berry-Planting Trainer$"

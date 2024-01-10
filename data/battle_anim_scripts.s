@@ -487,7 +487,6 @@ gBattleAnims_StatusConditions::
 
 	.align 2
 gBattleAnims_General::
-	.4byte General_CastformChange           @ B_ANIM_CASTFORM_CHANGE
 	.4byte General_StatsChange              @ B_ANIM_STATS_CHANGE
 	.4byte General_SubstituteFade           @ B_ANIM_SUBSTITUTE_FADE
 	.4byte General_SubstituteAppear         @ B_ANIM_SUBSTITUTE_APPEAR
@@ -13545,22 +13544,6 @@ Status_Nightmare:
 	createvisualtask AnimTask_ShakeMon2, 2, ANIM_TARGET, 2, 0, 14, 1
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
-	end
-
-General_CastformChange:
-	createvisualtask AnimTask_IsMonInvisible, 2
-	jumpreteq TRUE, CastformChangeSkipAnim
-	goto CastformChangeContinue
-CastformChangeContinue:
-	monbg ANIM_ATTACKER
-	playsewithpan SE_M_TELEPORT, SOUND_PAN_ATTACKER
-	waitplaysewithpan SE_M_MINIMIZE, SOUND_PAN_ATTACKER, 48
-	createvisualtask AnimTask_TransformMon, 2, 1
-	waitforvisualfinish
-	clearmonbg ANIM_ATTACKER
-	end
-CastformChangeSkipAnim:
-	createvisualtask AnimTask_CastformGfxDataChange, 2, 1
 	end
 
 General_StatsChange:

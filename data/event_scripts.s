@@ -308,34 +308,8 @@ gStdScripts_End::
     .include "data/maps/BattleFrontier_Mart/scripts.inc"
     .include "data/maps/ArtisanCave_B1F/scripts.inc"
     .include "data/maps/ArtisanCave_1F/scripts.inc"
-    .include "data/maps/BirthIsland_Exterior/scripts.inc"
-    .include "data/maps/BirthIsland_Harbor/scripts.inc"
     .include "data/maps/FarawayIsland_Entrance/scripts.inc"
     .include "data/maps/FarawayIsland_Interior/scripts.inc"
-    .include "data/maps/NavelRock_Exterior/scripts.inc"
-    .include "data/maps/NavelRock_Harbor/scripts.inc"
-    .include "data/maps/NavelRock_Entrance/scripts.inc"
-    .include "data/maps/NavelRock_B1F/scripts.inc"
-    .include "data/maps/NavelRock_Fork/scripts.inc"
-    .include "data/maps/NavelRock_Up1/scripts.inc"
-    .include "data/maps/NavelRock_Up2/scripts.inc"
-    .include "data/maps/NavelRock_Up3/scripts.inc"
-    .include "data/maps/NavelRock_Up4/scripts.inc"
-    .include "data/maps/NavelRock_Top/scripts.inc"
-    .include "data/maps/NavelRock_Down01/scripts.inc"
-    .include "data/maps/NavelRock_Down02/scripts.inc"
-    .include "data/maps/NavelRock_Down03/scripts.inc"
-    .include "data/maps/NavelRock_Down04/scripts.inc"
-    .include "data/maps/NavelRock_Down05/scripts.inc"
-    .include "data/maps/NavelRock_Down06/scripts.inc"
-    .include "data/maps/NavelRock_Down07/scripts.inc"
-    .include "data/maps/NavelRock_Down08/scripts.inc"
-    .include "data/maps/NavelRock_Down09/scripts.inc"
-    .include "data/maps/NavelRock_Down10/scripts.inc"
-    .include "data/maps/NavelRock_Down11/scripts.inc"
-    .include "data/maps/NavelRock_Bottom/scripts.inc"
-    .include "data/maps/SouthernIsland_Exterior/scripts.inc"
-    .include "data/maps/SouthernIsland_Interior/scripts.inc"
     .include "data/maps/CeruleanCity_BattleTentLobby/scripts.inc"
     .include "data/maps/CeruleanCity_BattleTentCorridor/scripts.inc"
     .include "data/maps/CeruleanCity_BattleTentBattleRoom/scripts.inc"
@@ -807,6 +781,25 @@ Movement_UnusedBoardFerry:
 	walk_up
 	step_end
 
+Ferry_EventScript_DepartIslandSouth::
+	applymovement OBJ_EVENT_ID_PLAYER, Ferry_Movement_DepartIslandBoardSouth
+	waitmovement 0
+	return
+
+Ferry_EventScript_DepartIslandWest::
+	applymovement OBJ_EVENT_ID_PLAYER, Ferry_Movement_DepartIslandBoardWest
+	waitmovement 0
+	return
+
+Ferry_Movement_DepartIslandBoardSouth:
+	walk_down
+	step_end
+
+Ferry_Movement_DepartIslandBoardWest:
+	walk_left
+	walk_in_place_faster_down
+	step_end
+
 Common_EventScript_FerryDepartIsland::
 	call_if_eq VAR_FACING, DIR_SOUTH, Ferry_EventScript_DepartIslandSouth
 	call_if_eq VAR_FACING, DIR_WEST, Ferry_EventScript_DepartIslandWest
@@ -814,8 +807,6 @@ Common_EventScript_FerryDepartIsland::
 	hideobjectat OBJ_EVENT_ID_PLAYER, 0
 	call Common_EventScript_FerryDepart
 	return
-
-	.include "data/scripts/cave_of_origin.inc"
 
 Common_EventScript_NameReceivedPartyMon::
 	fadescreen FADE_TO_BLACK
@@ -961,11 +952,6 @@ gText_ItNeedsCardKey::
 
 gText_TheDoorIsOpen::
     .string "The door is open…$"
-
-gText_Sudowoodo_Attacked::
-	.string "The weird tree doesn't like the\n"
-	.string "Wailmer Pail!\p"
-	.string "The weird tree attacked!$"
 
 gText_LegendaryFlewAway::
 	.string "The {STR_VAR_1} flew away!$"

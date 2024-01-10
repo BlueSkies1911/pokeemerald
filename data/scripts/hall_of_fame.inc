@@ -19,7 +19,6 @@ EventScript_SetDefeatedEliteFourFlagsVars::
 	setflag FLAG_BATTLE_FRONTIER_UNLOCKED
 	special UpdateTrainerFanClubGameClear
 	call_if_unset FLAG_RECEIVED_SS_TICKET, EverGrandeCity_HallOfFame_EventScript_ReadyReceiveSSTicketEvent
-	call_if_unset FLAG_RECEIVED_BELDUM, EverGrandeCity_HallOfFame_EventScript_ShowStevensHouseBeldum
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_BEDROOM
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 0, EverGrandeCity_HallOfFame_EventScript_ReadyDexUpgradeEvent
 	return
@@ -30,18 +29,10 @@ EventScript_SetReadyTryGiveNationalDexScene::
 
 EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_MEW
-	clearflag FLAG_DEFEATED_LATIAS_OR_LATIOS
-	clearflag FLAG_DEFEATED_DEOXYS
-	clearflag FLAG_DEFEATED_LUGIA
-	clearflag FLAG_DEFEATED_HO_OH
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::
 	setvar VAR_FOSSIL_MANIAC_STATE, 1
-	return
-
-EverGrandeCity_HallOfFame_EventScript_ShowStevensHouseBeldum::
-	clearflag FLAG_HIDE_MOSSDEEP_CITY_STEVENS_HOUSE_BELDUM_POKEBALL
 	return
 
 EverGrandeCity_HallOfFame_EventScript_ReadyReceiveSSTicketEvent::

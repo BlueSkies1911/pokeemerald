@@ -279,7 +279,6 @@ SECTIONS {
         src/berry_tag_screen.o(.text);
         src/mystery_event_menu.o(.text);
         src/save_failed_screen.o(.text);
-        src/braille_puzzles.o(.text);
         src/pokeblock_feed.o(.text);
         src/clear_save_data_screen.o(.text);
         src/intro_credits_graphics.o(.text);
@@ -339,7 +338,6 @@ SECTIONS {
         src/faraway_island.o(.text);
         src/ereader_screen.o(.text);
         src/trainer_tower.o(.text);
-        src/rayquaza_scene.o(.text);
         src/walda_phrase.o(.text);
         src/contest_link_util.o(.text);
         src/gym_leader_rematch.o(.text);
@@ -645,7 +643,6 @@ SECTIONS {
         src/berry_tag_screen.o(.rodata);
         src/mystery_event_menu.o(.rodata);
         src/save_failed_screen.o(.rodata);
-        src/braille_puzzles.o(.rodata);
         src/pokeblock_feed.o(.rodata);
         src/clear_save_data_screen.o(.rodata);
         src/intro_credits_graphics.o(.rodata);
@@ -701,7 +698,6 @@ SECTIONS {
         src/faraway_island.o(.rodata);
         src/ereader_screen.o(.rodata);
         src/trainer_tower.o(.rodata);
-        src/rayquaza_scene.o(.rodata);
         src/walda_phrase.o(.rodata);
         src/gym_leader_rematch.o(.rodata);
         src/battle_transition_frontier.o(.rodata);
@@ -813,7 +809,7 @@ SECTIONS {
         sound/songs/midi/se_exp_max.o(.rodata);
         sound/songs/midi/se_roulette_ball.o(.rodata);
         sound/songs/midi/se_roulette_ball2.o(.rodata);
-        sound/songs/midi/se_taillow_wing_flap.o(.rodata);
+        sound/songs/midi/se_pidgey_wing_flap.o(.rodata);
         sound/songs/midi/se_shop.o(.rodata);
         sound/songs/midi/se_contest_heart.o(.rodata);
         sound/songs/midi/se_contest_curtain_rise.o(.rodata);

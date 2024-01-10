@@ -284,24 +284,24 @@ BattleFrontier_BattlePikeRoomNormal_EventScript_EnterStatusRoom::
 	waitmovement 0
 	pike_getstatusmon
 	copyvar VAR_0x8004, VAR_RESULT
-	call_if_eq VAR_0x8004, PIKE_STATUSMON_KIRLIA, BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaAttack
-	call_if_eq VAR_0x8004, PIKE_STATUSMON_DUSCLOPS, BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsAttack
+	call_if_eq VAR_0x8004, PIKE_STATUSMON_KADABRA, BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraAttack
+	call_if_eq VAR_0x8004, PIKE_STATUSMON_GENGAR, BattleFrontier_BattlePikeRoomNormal_EventScript_GengarAttack
 	msgbox BattleFrontier_BattlePikeRoomNormal_Text_AttacksWhenStartled, MSGBOX_DEFAULT
 	closemessage
 	releaseall
 	end
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaAttack::
-	msgbox BattleFrontier_BattlePikeRoomNormal_Text_KirliaStop, MSGBOX_DEFAULT
+BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraAttack::
+	msgbox BattleFrontier_BattlePikeRoomNormal_Text_KadabraStop, MSGBOX_DEFAULT
 	closemessage
 	waitse
-	playmoncry SPECIES_KIRLIA, CRY_MODE_NORMAL
+	playmoncry SPECIES_KADABRA, CRY_MODE_NORMAL
 	waitmoncry
 	pike_getstatus
-	call_if_eq VAR_RESULT, PIKE_STATUS_TOXIC, BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedToxic
-	call_if_eq VAR_RESULT, PIKE_STATUS_BURN, BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedWillOWisp
-	call_if_eq VAR_RESULT, PIKE_STATUS_PARALYSIS, BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedThunderWave
-	call_if_eq VAR_RESULT, PIKE_STATUS_SLEEP, BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedHypnosis
+	call_if_eq VAR_RESULT, PIKE_STATUS_TOXIC, BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedToxic
+	call_if_eq VAR_RESULT, PIKE_STATUS_BURN, BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedWillOWisp
+	call_if_eq VAR_RESULT, PIKE_STATUS_PARALYSIS, BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedThunderWave
+	call_if_eq VAR_RESULT, PIKE_STATUS_SLEEP, BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedHypnosis
 	pike_flashscreen
 	waitstate
 	applymovement LOCALID_OBJ_0, BattleFrontier_BattlePikeRoomNormal_Movement_NPCApproachMon
@@ -309,28 +309,28 @@ BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaAttack::
 	applymovement LOCALID_OBJ_1, BattleFrontier_BattlePikeRoomNormal_Movement_MonFaceNPC
 	waitmovement 0
 	waitse
-	playmoncry SPECIES_KIRLIA, CRY_MODE_NORMAL
+	playmoncry SPECIES_KADABRA, CRY_MODE_NORMAL
 	waitmoncry
 	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ThatsEnough, MSGBOX_DEFAULT
 	waitse
-	playmoncry SPECIES_KIRLIA, CRY_MODE_NORMAL
+	playmoncry SPECIES_KADABRA, CRY_MODE_NORMAL
 	waitmoncry
 	closemessage
 	applymovement LOCALID_OBJ_1, BattleFrontier_BattlePikeRoomNormal_Movement_MonMoveAside
 	applymovement LOCALID_OBJ_0, BattleFrontier_BattlePikeRoomNormal_Movement_StatusNPCApproachPlayer
 	waitmovement 0
-	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologizeForKirlia, MSGBOX_DEFAULT
+	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologiseForKadabra, MSGBOX_DEFAULT
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsAttack::
-	msgbox BattleFrontier_BattlePikeRoomNormal_Text_DusclopsStop, MSGBOX_DEFAULT
+BattleFrontier_BattlePikeRoomNormal_EventScript_GengarAttack::
+	msgbox BattleFrontier_BattlePikeRoomNormal_Text_GengarStop, MSGBOX_DEFAULT
 	closemessage
 	waitse
-	playmoncry SPECIES_DUSCLOPS, CRY_MODE_NORMAL
+	playmoncry SPECIES_GENGAR, CRY_MODE_NORMAL
 	waitmoncry
 	pike_getstatus
-	call_if_eq VAR_RESULT, PIKE_STATUS_FREEZE, BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsUsedIceBeam
-	call_if_eq VAR_RESULT, PIKE_STATUS_BURN, BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsUsedWillOWisp
+	call_if_eq VAR_RESULT, PIKE_STATUS_FREEZE, BattleFrontier_BattlePikeRoomNormal_EventScript_GengarUsedIcePunch
+	call_if_eq VAR_RESULT, PIKE_STATUS_BURN, BattleFrontier_BattlePikeRoomNormal_EventScript_GengarUsedWillOWisp
 	pike_flashscreen
 	waitstate
 	applymovement LOCALID_OBJ_0, BattleFrontier_BattlePikeRoomNormal_Movement_NPCApproachMon
@@ -338,46 +338,46 @@ BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsAttack::
 	applymovement LOCALID_OBJ_1, BattleFrontier_BattlePikeRoomNormal_Movement_MonFaceNPC
 	waitmovement 0
 	waitse
-	playmoncry SPECIES_DUSCLOPS, CRY_MODE_NORMAL
+	playmoncry SPECIES_GENGAR, CRY_MODE_NORMAL
 	waitmoncry
 	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ThatsEnough, MSGBOX_DEFAULT
 	waitse
-	playmoncry SPECIES_DUSCLOPS, CRY_MODE_NORMAL
+	playmoncry SPECIES_GENGAR, CRY_MODE_NORMAL
 	waitmoncry
 	closemessage
 	applymovement LOCALID_OBJ_1, BattleFrontier_BattlePikeRoomNormal_Movement_MonMoveAside
 	applymovement LOCALID_OBJ_0, BattleFrontier_BattlePikeRoomNormal_Movement_StatusNPCApproachPlayer
 	waitmovement 0
-	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologizeForDusclops, MSGBOX_DEFAULT
+	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologiseForGengar, MSGBOX_DEFAULT
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedToxic::
-	message BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedToxic
+BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedToxic::
+	message BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedToxic
 	waitmessage
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedWillOWisp::
-	message BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedWillOWisp
+BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedWillOWisp::
+	message BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedWillOWisp
 	waitmessage
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedThunderWave::
-	message BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedThunderWave
+BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedThunderWave::
+	message BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedThunderWave
 	waitmessage
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_KirliaUsedHypnosis::
-	message BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedHypnosis
+BattleFrontier_BattlePikeRoomNormal_EventScript_KadabraUsedHypnosis::
+	message BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedHypnosis
 	waitmessage
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsUsedIceBeam::
-	message BattleFrontier_BattlePikeRoomNormal_Text_DusclopsUsedIceBeam
+BattleFrontier_BattlePikeRoomNormal_EventScript_GengarUsedIcePunch::
+	message BattleFrontier_BattlePikeRoomNormal_Text_GengarUsedIcePunch
 	waitmessage
 	return
 
-BattleFrontier_BattlePikeRoomNormal_EventScript_DusclopsUsedWillOWisp::
-	message BattleFrontier_BattlePikeRoomNormal_Text_DusclopsUsedWillOWisp
+BattleFrontier_BattlePikeRoomNormal_EventScript_GengarUsedWillOWisp::
+	message BattleFrontier_BattlePikeRoomNormal_Text_GengarUsedWillOWisp
 	waitmessage
 	return
 
@@ -548,7 +548,7 @@ BattleFrontier_BattlePikeRoomNormal_EventScript_NormalNPC::
 BattleFrontier_BattlePikeRoomNormal_EventScript_StatusNPC::
 	lock
 	faceplayer
-	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologizeHopeMonsAreFine, MSGBOX_DEFAULT
+	msgbox BattleFrontier_BattlePikeRoomNormal_Text_ApologiseHopeMonsAreFine, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -580,7 +580,7 @@ BattleFrontier_BattlePikeRoomNormal_EventScript_WillRestoreTwoMons::
 	closemessage
 	return
 
-@ Dusclops or Kirlia
+@ Gengar or Kadabra
 BattleFrontier_BattlePikeRoomNormal_EventScript_StatusMon::
 	lock
 	faceplayer
@@ -699,51 +699,51 @@ BattleFrontier_BattlePikeRoomNormal_Text_WatchOut:
 	.string "Oh, my!\p"
 	.string "Watch out!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_KirliaStop:
+BattleFrontier_BattlePikeRoomNormal_Text_KadabraStop:
 	.string "Now, now!\n"
-	.string "Kirlia, stop that!$"
+	.string "Kadabra, stop that!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_DusclopsStop:
+BattleFrontier_BattlePikeRoomNormal_Text_GengarStop:
 	.string "Now, now!\n"
-	.string "Dusclops, stop that!$"
+	.string "Gengar, stop that!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedToxic:
-	.string "Kirlia used Toxic!$"
+BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedToxic:
+	.string "Kadabra used Toxic!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedHypnosis:
-	.string "Kirlia used Hypnosis!$"
+BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedHypnosis:
+	.string "Kadabra used Hypnosis!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedThunderWave:
-	.string "Kirlia used Thunder Wave!$"
+BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedThunderWave:
+	.string "Kadabra used Thunder Wave!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_KirliaUsedWillOWisp:
-	.string "Kirlia used Will-O-Wisp!$"
+BattleFrontier_BattlePikeRoomNormal_Text_KadabraUsedWillOWisp:
+	.string "Kadabra used Will-O-Wisp!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_DusclopsUsedWillOWisp:
-	.string "Dusclops used Will-O-Wisp!$"
+BattleFrontier_BattlePikeRoomNormal_Text_GengarUsedWillOWisp:
+	.string "Gengar used Will-O-Wisp!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_DusclopsUsedIceBeam:
-	.string "Dusclops used Ice Beam!$"
+BattleFrontier_BattlePikeRoomNormal_Text_GengarUsedIcePunch:
+	.string "Gengar used Ice Punch!$"
 
 BattleFrontier_BattlePikeRoomNormal_Text_ThatsEnough:
 	.string "Look here!\n"
 	.string "That's quite enough!$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_ApologizeForKirlia:
-	.string "I must apologize to you…\p"
-	.string "My Kirlia has a Timid nature…$"
+BattleFrontier_BattlePikeRoomNormal_Text_ApologiseForKadabra:
+	.string "I must apologise to you…\p"
+	.string "My Kadabra has a Timid nature…$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_ApologizeForDusclops:
-	.string "I must apologize to you…\p"
-	.string "My Dusclops has a Timid nature…$"
+BattleFrontier_BattlePikeRoomNormal_Text_ApologiseForGengar:
+	.string "I must apologise to you…\p"
+	.string "My Gengar has a Timid nature…$"
 
 BattleFrontier_BattlePikeRoomNormal_Text_AttacksWhenStartled:
 	.string "It attacks without warning if it is\n"
 	.string "startled by another person…\p"
 	.string "Are you and your Pokémon all right?$"
 
-BattleFrontier_BattlePikeRoomNormal_Text_ApologizeHopeMonsAreFine:
-	.string "I do apologize for what happened…\n"
+BattleFrontier_BattlePikeRoomNormal_Text_ApologiseHopeMonsAreFine:
+	.string "I do apologise for what happened…\n"
 	.string "I do hope your Pokémon are fine.$"
 
 BattleFrontier_BattlePikeRoomNormal_Text_Silence:

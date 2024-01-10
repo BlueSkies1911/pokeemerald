@@ -59,9 +59,7 @@ static void ItemUseOnFieldCB_Bike(u8);
 static void ItemUseOnFieldCB_Rod(u8);
 static void ItemUseOnFieldCB_Itemfinder(u8);
 static void ItemUseOnFieldCB_Berry(u8);
-static void ItemUseOnFieldCB_WailmerPailBerry(u8);
-static void ItemUseOnFieldCB_WailmerPailSudowoodo(u8);
-static bool8 TryToWaterSudowoodo(void);
+static void ItemUseOnFieldCB_SquirtBottleBerry(u8);
 static void BootUpSoundTMHM(u8);
 static void Task_ShowTMHMContainedMessage(u8);
 static void UseTMHMYesNo(u8);
@@ -699,16 +697,11 @@ static void ItemUseOnFieldCB_Berry(u8 taskId)
     DestroyTask(taskId);
 }
 
-void ItemUseOutOfBattle_WailmerPail(u8 taskId)
+void ItemUseOutOfBattle_SquirtBottle(u8 taskId)
 {
-    if (TryToWaterSudowoodo() == TRUE)
+    if (TryToWaterBerryTree() == TRUE)
     {
-        sItemUseOnFieldCB = ItemUseOnFieldCB_WailmerPailSudowoodo;
-        SetUpItemUseOnFieldCallback(taskId);
-    }
-    else if (TryToWaterBerryTree() == TRUE)
-    {
-        sItemUseOnFieldCB = ItemUseOnFieldCB_WailmerPailBerry;
+        sItemUseOnFieldCB = ItemUseOnFieldCB_SquirtBottleBerry;
         SetUpItemUseOnFieldCallback(taskId);
     }
     else
@@ -717,31 +710,10 @@ void ItemUseOutOfBattle_WailmerPail(u8 taskId)
     }
 }
 
-static void ItemUseOnFieldCB_WailmerPailBerry(u8 taskId)
+static void ItemUseOnFieldCB_SquirtBottleBerry(u8 taskId)
 {
     LockPlayerFieldControls();
-    ScriptContext_SetupScript(BerryTree_EventScript_ItemUseWailmerPail);
-    DestroyTask(taskId);
-}
-
-static bool8 TryToWaterSudowoodo(void)
-{
-    s16 x, y;
-    u8 elevation;
-    u8 objId;
-    GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
-    elevation = PlayerGetElevation();
-    objId = GetObjectEventIdByPosition(x, y, elevation);
-    if (objId == OBJECT_EVENTS_COUNT || gObjectEvents[objId].graphicsId != OBJ_EVENT_GFX_SUDOWOODO)
-        return FALSE;
-    else
-        return TRUE;
-}
-
-static void ItemUseOnFieldCB_WailmerPailSudowoodo(u8 taskId)
-{
-    LockPlayerFieldControls();
-    ScriptContext_SetupScript(BattleFrontier_OutsideEast_EventScript_WaterSudowoodo);
+    ScriptContext_SetupScript(BerryTree_EventScript_ItemUseSquirtBottle);
     DestroyTask(taskId);
 }
 

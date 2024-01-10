@@ -122,7 +122,7 @@ BattleFrontier_OutsideWest_EventScript_CamperAlreadyFacingFactory::
 BattleFrontier_OutsideWest_EventScript_Girl::
 	lock
 	faceplayer
-	message BattleFrontier_OutsideWest_Text_ScaredOfPikeBecauseSeviper
+	message BattleFrontier_OutsideWest_Text_ScaredOfPikeBecauseArbok
 	waitmessage
 	call_if_eq VAR_FACING, DIR_NORTH, BattleFrontier_OutsideWest_EventScript_GirlShudderNorth
 	call_if_eq VAR_FACING, DIR_SOUTH, BattleFrontier_OutsideWest_EventScript_GirlShudderSouth
@@ -328,9 +328,9 @@ BattleFrontier_OutsideWest_Text_WhosRaisingThoseRentalMons:
 	.string "But it makes me wonder.\n"
 	.string "Who's raising those rental Pokémon?$"
 
-BattleFrontier_OutsideWest_Text_ScaredOfPikeBecauseSeviper:
+BattleFrontier_OutsideWest_Text_ScaredOfPikeBecauseArbok:
 	.string "I'm scared of going into the Battle\n"
-	.string "Pike because of Seviper…\p"
+	.string "Pike because of Arbok…\p"
 	.string "B-but I came all the way here, so I will\n"
 	.string "try to conquer everything!\l"
 	.string "…Shudder…$"

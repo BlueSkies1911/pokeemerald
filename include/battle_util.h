@@ -25,7 +25,6 @@
 #define ABILITYEFFECT_ATK_SYNCHRONIZE            8
 #define ABILITYEFFECT_TRACE1                     9
 #define ABILITYEFFECT_TRACE2                     10
-#define ABILITYEFFECT_ON_WEATHER                 11
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          255
 
 // For the first argument of ItemBattleEffects, to deteremine which block of item effects to try
@@ -116,8 +115,6 @@ bool8 HandleFaintedMonActions(void);
 void TryClearRageAndFuryCutter(void);
 u8 AtkCanceller_UnableToUseMove(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
-u8 TryWeatherFormChange(u8 battlerId);
-u8 CastformDataTypeChange(u8 battlerId);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
 u32 GetBattlerAbility(u8 battlerId);

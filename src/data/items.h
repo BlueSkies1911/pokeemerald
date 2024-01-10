@@ -5630,16 +5630,16 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_PowderJar,
     },
 
-    [ITEM_WAILMER_PAIL] =
+    [ITEM_SQUIRT_BOTTLE] =
     {
-        .name = _("Wailmer Pail"),
-        .itemId = ITEM_WAILMER_PAIL,
+        .name = _("Squirt Bottle"),
+        .itemId = ITEM_SQUIRT_BOTTLE,
         .price = 0,
-        .description = sWailmerPailDesc,
+        .description = sSquirtBottleDesc,
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_FIELD,
-        .fieldUseFunc = ItemUseOutOfBattle_WailmerPail,
+        .fieldUseFunc = ItemUseOutOfBattle_SquirtBottle,
     },
 
     [ITEM_POKEBLOCK_CASE] =
@@ -5688,45 +5688,6 @@ const struct Item gItems[] =
         .price = 0,
         .description = sSSTicketDesc,
         .importance = 1,
-        .pocket = POCKET_KEY_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-    },
-
-    [ITEM_EON_TICKET] =
-    {
-        .name = _("Eon Ticket"),
-        .itemId = ITEM_EON_TICKET,
-        .price = 0,
-        .description = sEonTicketDesc,
-        .importance = 1,
-        .pocket = POCKET_KEY_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-        .secondaryId = 1,
-    },
-
-    [ITEM_MYSTIC_TICKET] =
-    {
-        .name = _("MysticTicket"),
-        .itemId = ITEM_MYSTIC_TICKET,
-        .price = 0,
-        .description = sMysticTicketDesc,
-        .importance = 1,
-        .registrability = TRUE,
-        .pocket = POCKET_KEY_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-    },
-
-    [ITEM_AURORA_TICKET] =
-    {
-        .name = _("AuroraTicket"),
-        .itemId = ITEM_AURORA_TICKET,
-        .price = 0,
-        .description = sAuroraTicketDesc,
-        .importance = 1,
-        .registrability = TRUE,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,

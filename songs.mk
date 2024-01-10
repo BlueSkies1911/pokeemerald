@@ -792,7 +792,7 @@ $(MID_SUBDIR)/se_a.s: %.s: %.mid
 $(MID_SUBDIR)/se_bang.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G128 -V110 -P4
 
-$(MID_SUBDIR)/se_taillow_wing_flap.s: %.s: %.mid
+$(MID_SUBDIR)/se_pidgey_wing_flap.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G128 -V105 -P5
 
 $(MID_SUBDIR)/se_glass_flute.s: %.s: %.mid

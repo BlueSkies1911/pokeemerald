@@ -499,7 +499,7 @@ static void Task_EReader(u8 taskId)
     case ER_STATE_SUCCESS_MSG:
         if (UpdateTimer(&data->timer, 120))
         {
-            MG_AddMessageTextPrinter(gJPText_NewTrainerHasComeToHoenn);
+            MG_AddMessageTextPrinter(gJPText_NewTrainerHasComeToKanto);
             PlayFanfare(MUS_OBTAIN_ITEM);
             data->state = ER_STATE_SUCCESS_END;
         }

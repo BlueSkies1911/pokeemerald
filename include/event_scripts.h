@@ -142,9 +142,9 @@ extern const u8 TrendWatcher_Text_PhraseWasHopeless[];
 extern const u8 TrendWatcher_Text_MaleTellMeBigger[];
 extern const u8 TrendWatcher_Text_FemaleTellMeBigger[];
 extern const u8 TrendWatcher_Text_Outro[];
-extern const u8 gTVHoennTreasureInvestigatorsText00[];
-extern const u8 gTVHoennTreasureInvestigatorsText01[];
-extern const u8 gTVHoennTreasureInvestigatorsText02[];
+extern const u8 gTVKantoTreasureInvestigatorsText00[];
+extern const u8 gTVKantoTreasureInvestigatorsText01[];
+extern const u8 gTVKantoTreasureInvestigatorsText02[];
 extern const u8 gTVFindThatGamerText00[];
 extern const u8 gTVFindThatGamerText01[];
 extern const u8 gTVFindThatGamerText02[];
@@ -231,15 +231,15 @@ extern const u8 gTVPokemonNewsBattleFrontierText15[];
 extern const u8 gTVPokemonNewsBattleFrontierText16[];
 extern const u8 gTVPokemonNewsBattleFrontierText17[];
 extern const u8 gTVPokemonNewsBattleFrontierText18[];
-extern const u8 gTVWhatsNo1InHoennTodayText00[];
-extern const u8 gTVWhatsNo1InHoennTodayText01[];
-extern const u8 gTVWhatsNo1InHoennTodayText02[];
-extern const u8 gTVWhatsNo1InHoennTodayText03[];
-extern const u8 gTVWhatsNo1InHoennTodayText04[];
-extern const u8 gTVWhatsNo1InHoennTodayText05[];
-extern const u8 gTVWhatsNo1InHoennTodayText06[];
-extern const u8 gTVWhatsNo1InHoennTodayText07[];
-extern const u8 gTVWhatsNo1InHoennTodayText08[];
+extern const u8 gTVWhatsNo1InKantoTodayText00[];
+extern const u8 gTVWhatsNo1InKantoTodayText01[];
+extern const u8 gTVWhatsNo1InKantoTodayText02[];
+extern const u8 gTVWhatsNo1InKantoTodayText03[];
+extern const u8 gTVWhatsNo1InKantoTodayText04[];
+extern const u8 gTVWhatsNo1InKantoTodayText05[];
+extern const u8 gTVWhatsNo1InKantoTodayText06[];
+extern const u8 gTVWhatsNo1InKantoTodayText07[];
+extern const u8 gTVWhatsNo1InKantoTodayText08[];
 extern const u8 TVSecretBaseSecrets_Text_Intro[];
 extern const u8 TVSecretBaseSecrets_Text_WhatWillPlayerDoNext1[];
 extern const u8 TVSecretBaseSecrets_Text_WhatWillPlayerDoNext2[];
@@ -598,8 +598,7 @@ extern const u8 TrainerTower_EventScript_TrainerBattle[];
 
 // Item Use
 extern const u8 BerryTree_EventScript_ItemUsePlantBerry[];
-extern const u8 BerryTree_EventScript_ItemUseWailmerPail[];
-extern const u8 BattleFrontier_OutsideEast_EventScript_WaterSudowoodo[];
+extern const u8 BerryTree_EventScript_ItemUseSquirtBottle[];
 
 extern const u8 EventScript_SelectWithoutRegisteredItem[];
 

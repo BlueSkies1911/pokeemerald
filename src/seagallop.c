@@ -75,9 +75,7 @@ static const s8 sSeag[][4] = {
     [SEAGALLOP_FIVE_ISLAND]     = {MAP(FIVE_ISLAND_HARBOR),  0x08, 0x05},
     [SEAGALLOP_SIX_ISLAND]      = {MAP(SIX_ISLAND_HARBOR),   0x08, 0x05},
     [SEAGALLOP_SEVEN_ISLAND]    = {MAP(SEVEN_ISLAND_HARBOR), 0x08, 0x05},
-    [SEAGALLOP_CINNABAR_ISLAND] = {MAP(CINNABAR_ISLAND),     0x15, 0x0F},
-    [SEAGALLOP_NAVEL_ROCK]      = {MAP(NAVEL_ROCK_HARBOR),   0x08, 0x05},
-    [SEAGALLOP_BIRTH_ISLAND]    = {MAP(BIRTH_ISLAND_HARBOR), 0x08, 0x05}
+    [SEAGALLOP_CINNABAR_ISLAND] = {MAP(CINNABAR_ISLAND),     0x15, 0x0F}
 };
 
 // Bitpacked array.  In the commented section, right-most bit is the
@@ -100,8 +98,6 @@ static const u16 sTravelDirectionMatrix[] = {
     [SEAGALLOP_SIX_ISLAND]      = 0x400, // 10000000000
     [SEAGALLOP_SEVEN_ISLAND]    = 0x440, // 10001000000
     [SEAGALLOP_CINNABAR_ISLAND] = 0x7ff, // 11111111111
-    [SEAGALLOP_NAVEL_ROCK]      = 0x6e0, // 11011100000
-    [SEAGALLOP_BIRTH_ISLAND]    = 0x000  // 00000000000
 };
 
 static const union AnimCmd sSpriteAnims_Ferry_WB[] = {
@@ -471,12 +467,6 @@ u8 GetSeagallopNumber(void)
 
     if (originId == SEAGALLOP_VERMILION_CITY || destId == SEAGALLOP_VERMILION_CITY)
         return 7;
-
-    if (originId == SEAGALLOP_NAVEL_ROCK || destId == SEAGALLOP_NAVEL_ROCK)
-        return 10;
-
-    if (originId == SEAGALLOP_BIRTH_ISLAND || destId == SEAGALLOP_BIRTH_ISLAND)
-        return 12;
 
     if ((originId == SEAGALLOP_ONE_ISLAND 
       || originId == SEAGALLOP_TWO_ISLAND 

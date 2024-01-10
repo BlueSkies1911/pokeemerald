@@ -126,7 +126,7 @@ gPokeNewsTextBlendMaster_Upcoming::
 	.string "appearing in Lilycove City with just\l"
 	.string "a mere {STR_VAR_1}-day wait to go!\p"
 	.string "The Blend Master is said to be\n"
-	.string "the best in all Hoenn when it comes to\l"
+	.string "the best in all Kanto when it comes to\l"
 	.string "spinning a Berry Blender.\p"
 	.string "Those people who want to make great\n"
 	.string "{POKEBLOCK}s or see the Master in action\l"

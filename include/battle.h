@@ -509,7 +509,6 @@ struct BattleStruct
     u8 unused_6[3];
     u8 givenExpMons; // Bits for enemy party's Pokémon that gave exp to player's party.
     u16 lastTakenMoveFrom[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; // a 2-D array [target][attacker]
-    u16 castformPalette[NUM_CASTFORM_FORMS][16];
     union {
         struct LinkBattlerHeader linkBattlerHeader;
         u32 battleVideo[2];

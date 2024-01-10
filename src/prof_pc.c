@@ -8,8 +8,8 @@ bool16 ScriptGetPokedexInfo(void)
 {
     if (gSpecialVar_0x8004 == 0) // is national dex not present?
     {
-        gSpecialVar_0x8005 = GetHoennPokedexCount(FLAG_GET_SEEN);
-        gSpecialVar_0x8006 = GetHoennPokedexCount(FLAG_GET_CAUGHT);
+        gSpecialVar_0x8005 = GetKantoPokedexCount(FLAG_GET_SEEN);
+        gSpecialVar_0x8006 = GetKantoPokedexCount(FLAG_GET_CAUGHT);
     }
     else
     {
@@ -20,7 +20,7 @@ bool16 ScriptGetPokedexInfo(void)
     return IsNationalPokedexEnabled();
 }
 
-// This shows your Hoenn Pokédex rating and not your National Dex.
+// This shows your Kanto Pokédex rating and not your National Dex.
 const u8 *GetPokedexRatingText(u16 count)
 {
     if (count < 10)
@@ -53,14 +53,7 @@ const u8 *GetPokedexRatingText(u16 count)
         return gPokedexRating_Text_LessThan140;
     if (count < 150)
         return gPokedexRating_Text_LessThan150;
-    
-    if (count == HOENN_DEX_COUNT - 1)
-    {
-        if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_MEW), FLAG_GET_CAUGHT)) // Mew is not counted towards the dex completion. If the flag is enabled, it means the actual count is less than 150.
-            return gPokedexRating_Text_LessThan150;
-        return gPokedexRating_Text_Complete;
-    }
-    if (count == HOENN_DEX_COUNT)
+    if (count == KANTO_DEX_COUNT)
         return gPokedexRating_Text_Complete;
     return gPokedexRating_Text_LessThan10;
 }

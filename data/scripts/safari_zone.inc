@@ -98,7 +98,7 @@ SafariZone_Text_PokeblockWasPlaced:
 Route121_SafariZoneEntrance_Text_WelcomeToSafariZone:
 	.string "Welcome to the Safari Zone!\p"
 	.string "Here, you may witness many kinds of\n"
-	.string "Pokémon rarely seen in Hoenn.\p"
+	.string "Pokémon rarely seen in Kanto.\p"
 	.string "And, you'll see them in their wild,\n"
 	.string "untamed state in natural habitats.\p"
 	.string "What's more, we've thrown open the\n"
@@ -209,7 +209,7 @@ SafariZone_Northwest_Text_Man:
 
 SafariZone_North_Text_Fisherman:
 	.string "I'm on a mission to find Water Pokémon\n"
-	.string "you don't see in Hoenn.\p"
+	.string "you don't see in Kanto.\p"
 	.string "Do you have any idea where the lake is?$"
 
 SafariZone_North_Text_Man:
@@ -275,7 +275,7 @@ SafariZone_Southeast_Text_FatMan:
 
 SafariZone_Southeast_Text_RichBoy:
 	.string "The Pokémon around here seem to be\n"
-	.string "from somewhere other than Hoenn.$"
+	.string "from somewhere other than Kanto.$"
 
 SafariZone_Northeast_Text_Boy:
 	.string "I only have a couple Safari Balls left.\p"

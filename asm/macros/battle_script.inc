@@ -1176,11 +1176,11 @@
 	.byte 0xe5
 	.endm
 
-	.macro doweatherformchangeanimation
+	.macro nop
 	.byte 0xe6
 	.endm
 
-	.macro tryweatherformdatachange
+	.macro nop1
 	.byte 0xe7
 	.endm
 
@@ -1627,10 +1627,6 @@
 
 	.macro getbattlerside battler:req
 	various \battler, VARIOUS_GET_BATTLER_SIDE
-	.endm
-
-	.macro activateweatherchangeabilities battler:req
-	various \battler, VARIOUS_ACTIVATE_WEATHER_CHANGE_ABILITIES
 	.endm
 
 	.macro jumpifnovalidtargets jumpInstr:req

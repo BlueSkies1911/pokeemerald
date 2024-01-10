@@ -167,8 +167,7 @@
 #define VARIOUS_CAN_TELEPORT                        74
 #define VARIOUS_GET_BATTLER_SIDE                    75
 #define VARIOUS_JUMP_IF_ABSORB                      76
-#define VARIOUS_ACTIVATE_WEATHER_CHANGE_ABILITIES   77
-#define VARIOUS_JUMP_IF_NO_VALID_TARGETS            78
+#define VARIOUS_JUMP_IF_NO_VALID_TARGETS            77
 
 // Cmd_manipulatedmg
 #define DMG_CHANGE_SIGN            0

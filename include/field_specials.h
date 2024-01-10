@@ -9,8 +9,6 @@ u8 IsDestinationBoxFull(void);
 u16 GetPCBoxToSendMon(void);
 bool8 InMultiPartnerRoom(void);
 void UpdateTrainerFansAfterLinkBattle(void);
-void IncrementBirthIslandRockStepCount(void);
-bool8 ShouldDoBrailleRegicePuzzle(void);
 bool32 ShouldDoScottBattleFrontierCall(void);
 bool32 ShouldDoOakCall(void);
 bool32 ShouldDoDaisyCall(void);

@@ -63,19 +63,19 @@ PrettyPetalFlowerShop_Pokemart_Plants:
 	release
 	end
 
-PrettyPetalFlowerShop_EventScript_WailmerPailGirl::
+PrettyPetalFlowerShop_EventScript_SquirtBottleGirl::
 	lock
 	faceplayer
-	goto_if_unset FLAG_RECEIVED_WAILMER_PAIL, PrettyPetalFlowerShop_EventScript_GiveWailmerPail
-	msgbox PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT
+	goto_if_unset FLAG_RECEIVED_SQUIRT_BOTTLE, PrettyPetalFlowerShop_EventScript_GiveSquirtBottle
+	msgbox PrettyPetalFlowerShop_Text_SquirtBottleExplanation, MSGBOX_DEFAULT
 	release
 	end
 
-PrettyPetalFlowerShop_EventScript_GiveWailmerPail::
+PrettyPetalFlowerShop_EventScript_GiveSquirtBottle::
 	msgbox PrettyPetalFlowerShop_Text_YouCanHaveThis, MSGBOX_DEFAULT
-	giveitem ITEM_WAILMER_PAIL
-	msgbox PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_WAILMER_PAIL
+	giveitem ITEM_SQUIRT_BOTTLE
+	msgbox PrettyPetalFlowerShop_Text_SquirtBottleExplanation, MSGBOX_DEFAULT
+	setflag FLAG_RECEIVED_SQUIRT_BOTTLE
 	release
 	end
 
@@ -140,9 +140,9 @@ PrettyPetalFlowerShop_Text_YouCanHaveThis:
 	.string "You'll like tending flowers. I'm sure\n"
 	.string "of it. You can have this.$"
 
-PrettyPetalFlowerShop_Text_WailmerPailExplanation:
+PrettyPetalFlowerShop_Text_SquirtBottleExplanation:
 	.string "While berry plants are growing,\n"
-	.string "water them with the Wailmer Pail.\p"
+	.string "water them with the Squirt Bottle.\p"
 	.string "Oh, another thing.\p"
 	.string "If you don't pick berries for a while,\n"
 	.string "they'll drop off onto the ground.\l"

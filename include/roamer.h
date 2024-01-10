@@ -1,9 +1,6 @@
 #ifndef GUARD_ROAMER_H
 #define GUARD_ROAMER_H
 
-void ClearRoamerData(void);
-void ClearRoamerLocationData(void);
-void InitRoamer(void);
 void UpdateLocationHistoryForRoamer(void);
 void RoamerMoveToOtherLocationSet(void);
 void RoamerMove(void);

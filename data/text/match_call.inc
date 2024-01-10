@@ -2394,35 +2394,6 @@ MatchCall_Text_Lance::
 	.string "the Pokémon League!\p"
 	.string "Don't you agree, {PLAYER}?$"
 
-MatchCall_Text_MayRayquazaCall:
-	.string "… … … … … …\n"
-	.string "… … … … … Beep!\p"
-	.string "May: Hi, {PLAYER}{KUN}!\p"
-	.string "I was just in Pacifidlog a little\n"
-	.string "while ago.\p"
-	.string "I saw a giant green Pokémon\n"
-	.string "flying high in the sky.\p"
-	.string "I…\n"
-	.string "I've never seen anything like it.\p"
-	.string "I wonder what it was.\n"
-	.string "Is this maybe a major discovery?\p"
-	.string "… … … … … …\n"
-	.string "… … … … … Click!$"
-
-MatchCall_Text_BrendanRayquazaCall:
-	.string "… … … … … …\n"
-	.string "… … … … … Beep!\p"
-	.string "Brendan: Hey, {PLAYER}!\n"
-	.string "I was in Pacifidlog just now.\p"
-	.string "I saw this huge green Pokémon\n"
-	.string "flying across the sky.\p"
-	.string "I've never seen anything that\n"
-	.string "amazing before.\p"
-	.string "I wish you could've seen it,\n"
-	.string "{PLAYER}.\p"
-	.string "… … … … … …\n"
-	.string "… … … … … Click!$"
-
 MatchCall_Text_Daisy1::
 	.string "Daisy: Oh? {PLAYER}{KUN}!\p"
 	.string "How are your Pokémon?\n"

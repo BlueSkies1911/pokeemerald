@@ -114,12 +114,6 @@ static void Task_Lance(u8);
 static void Task_Blue(u8);
 static void Task_Aqua(u8);
 static void Task_Magma(u8);
-static void Task_Regice(u8);
-static void Task_Registeel(u8);
-static void Task_Regirock(u8);
-static void Task_Kyogre(u8);
-static void Task_Groudon(u8);
-static void Task_Rayquaza(u8);
 static void Task_ShredSplit(u8);
 static void Task_Blackhole(u8);
 static void Task_BlackholePulsate(u8);
@@ -148,7 +142,6 @@ static void VBlankCB_WhiteBarsFade(void);
 static void VBlankCB_WhiteBarsFade_Blend(void);
 static void HBlankCB_WhiteBarsFade(void);
 static void VBlankCB_AngledWipes(void);
-static void VBlankCB_Rayquaza(void);
 static bool8 Blur_Init(struct Task *);
 static bool8 Blur_Main(struct Task *);
 static bool8 Blur_End(struct Task *);
@@ -161,20 +154,6 @@ static bool8 Aqua_SetGfx(struct Task *);
 static bool8 Magma_Init(struct Task *);
 static bool8 Magma_SetGfx(struct Task *);
 static bool8 FramesCountdown(struct Task *);
-static bool8 Regi_Init(struct Task *);
-static bool8 Regice_SetGfx(struct Task *);
-static bool8 Registeel_SetGfx(struct Task *);
-static bool8 Regirock_SetGfx(struct Task *);
-static bool8 WeatherTrio_BgFadeBlack(struct Task *);
-static bool8 WeatherTrio_WaitFade(struct Task *);
-static bool8 Kyogre_Init(struct Task *);
-static bool8 Kyogre_PaletteFlash(struct Task *);
-static bool8 Kyogre_PaletteBrighten(struct Task *);
-static bool8 Groudon_Init(struct Task *);
-static bool8 Groudon_PaletteFlash(struct Task *);
-static bool8 Groudon_PaletteBrighten(struct Task *);
-static bool8 WeatherDuo_FadeOut(struct Task *);
-static bool8 WeatherDuo_End(struct Task *);
 static bool8 BigPokeball_Init(struct Task *);
 static bool8 BigPokeball_SetGfx(struct Task *);
 static bool8 PatternWeave_Blend1(struct Task *);
@@ -228,13 +207,6 @@ static bool8 FrontierLogoWave_Init(struct Task *);
 static bool8 FrontierLogoWave_SetGfx(struct Task *);
 static bool8 FrontierLogoWave_InitScanline(struct Task *);
 static bool8 FrontierLogoWave_Main(struct Task *);
-static bool8 Rayquaza_Init(struct Task *);
-static bool8 Rayquaza_SetGfx(struct Task *);
-static bool8 Rayquaza_PaletteFlash(struct Task *);
-static bool8 Rayquaza_FadeToBlack(struct Task *);
-static bool8 Rayquaza_WaitFade(struct Task *);
-static bool8 Rayquaza_SetBlack(struct Task *);
-static bool8 Rayquaza_TriRing(struct Task *);
 static bool8 FrontierSquares_Init(struct Task *);
 static bool8 FrontierSquares_Draw(struct Task *);
 static bool8 FrontierSquares_Shrink(struct Task *);
@@ -306,25 +278,6 @@ static const u32 sTeamAqua_Tileset[] = INCBIN_U32("graphics/battle_transitions/t
 static const u32 sTeamAqua_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_aqua.bin.lz");
 static const u32 sTeamMagma_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_magma.4bpp.lz");
 static const u32 sTeamMagma_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_magma.bin.lz");
-static const u32 sRegis_Tileset[] = INCBIN_U32("graphics/battle_transitions/regis.4bpp");
-static const u16 sRegice_Palette[] = INCBIN_U16("graphics/battle_transitions/regice.gbapal");
-static const u16 sRegisteel_Palette[] = INCBIN_U16("graphics/battle_transitions/registeel.gbapal");
-static const u16 sRegirock_Palette[] = INCBIN_U16("graphics/battle_transitions/regirock.gbapal");
-static const u32 sRegice_Tilemap[] = INCBIN_U32("graphics/battle_transitions/regice.bin");
-static const u32 sRegisteel_Tilemap[] = INCBIN_U32("graphics/battle_transitions/registeel.bin");
-static const u32 sRegirock_Tilemap[] = INCBIN_U32("graphics/battle_transitions/regirock.bin");
-static const u16 sUnused_Palette[] = INCBIN_U16("graphics/battle_transitions/unused.gbapal");
-static const u32 sKyogre_Tileset[] = INCBIN_U32("graphics/battle_transitions/kyogre.4bpp.lz");
-static const u32 sKyogre_Tilemap[] = INCBIN_U32("graphics/battle_transitions/kyogre.bin.lz");
-static const u32 sGroudon_Tileset[] = INCBIN_U32("graphics/battle_transitions/groudon.4bpp.lz");
-static const u32 sGroudon_Tilemap[] = INCBIN_U32("graphics/battle_transitions/groudon.bin.lz");
-static const u16 sKyogre1_Palette[] = INCBIN_U16("graphics/battle_transitions/kyogre_pt1.gbapal");
-static const u16 sKyogre2_Palette[] = INCBIN_U16("graphics/battle_transitions/kyogre_pt2.gbapal");
-static const u16 sGroudon1_Palette[] = INCBIN_U16("graphics/battle_transitions/groudon_pt1.gbapal");
-static const u16 sGroudon2_Palette[] = INCBIN_U16("graphics/battle_transitions/groudon_pt2.gbapal");
-static const u16 sRayquaza_Palette[] = INCBIN_U16("graphics/battle_transitions/rayquaza.gbapal");
-static const u32 sRayquaza_Tileset[] = INCBIN_U32("graphics/battle_transitions/rayquaza.4bpp");
-static const u32 sRayquaza_Tilemap[] = INCBIN_U32("graphics/battle_transitions/rayquaza.bin");
 static const u16 sFrontierLogo_Palette[] = INCBIN_U16("graphics/battle_transitions/frontier_logo.gbapal");
 static const u32 sFrontierLogo_Tileset[] = INCBIN_U32("graphics/battle_transitions/frontier_logo.4bpp.lz");
 static const u32 sFrontierLogo_Tilemap[] = INCBIN_U32("graphics/battle_transitions/frontier_logo.bin.lz");
@@ -364,12 +317,6 @@ static const TaskFunc sTasks_Main[B_TRANSITION_COUNT] =
     [B_TRANSITION_BLUE] = Task_Blue,
     [B_TRANSITION_AQUA] = Task_Aqua,
     [B_TRANSITION_MAGMA] = Task_Magma,
-    [B_TRANSITION_REGICE] = Task_Regice,
-    [B_TRANSITION_REGISTEEL] = Task_Registeel,
-    [B_TRANSITION_REGIROCK] = Task_Regirock,
-    [B_TRANSITION_KYOGRE] = Task_Kyogre,
-    [B_TRANSITION_GROUDON] = Task_Groudon,
-    [B_TRANSITION_RAYQUAZA] = Task_Rayquaza,
     [B_TRANSITION_SHRED_SPLIT] = Task_ShredSplit,
     [B_TRANSITION_BLACKHOLE] = Task_Blackhole,
     [B_TRANSITION_BLACKHOLE_PULSATE] = Task_BlackholePulsate,
@@ -446,48 +393,6 @@ static const TransitionStateFunc sBigPokeball_Funcs[] =
     PatternWeave_Blend2,
     PatternWeave_FinishAppear,
     PatternWeave_CircularMask
-};
-
-static const TransitionStateFunc sRegice_Funcs[] =
-{
-    Regi_Init,
-    Regice_SetGfx,
-    PatternWeave_Blend1,
-    PatternWeave_Blend2,
-    PatternWeave_FinishAppear,
-    PatternWeave_CircularMask
-};
-
-static const TransitionStateFunc sRegisteel_Funcs[] =
-{
-    Regi_Init,
-    Registeel_SetGfx,
-    PatternWeave_Blend1,
-    PatternWeave_Blend2,
-    PatternWeave_FinishAppear,
-    PatternWeave_CircularMask
-};
-
-static const TransitionStateFunc sRegirock_Funcs[] =
-{
-    Regi_Init,
-    Regirock_SetGfx,
-    PatternWeave_Blend1,
-    PatternWeave_Blend2,
-    PatternWeave_FinishAppear,
-    PatternWeave_CircularMask
-};
-
-static const TransitionStateFunc sKyogre_Funcs[] =
-{
-    WeatherTrio_BgFadeBlack,
-    WeatherTrio_WaitFade,
-    Kyogre_Init,
-    Kyogre_PaletteFlash,
-    Kyogre_PaletteBrighten,
-    FramesCountdown,
-    WeatherDuo_FadeOut,
-    WeatherDuo_End
 };
 
 static const TransitionStateFunc sPokeballsTrail_Funcs[] =
@@ -696,33 +601,6 @@ static const s16 *const *const sRectangularSpiral_MoveDataTables[] =
 {
     sRectangularSpiral_MoveDataTable_MajorDiagonal,
     sRectangularSpiral_MoveDataTable_MinorDiagonal
-};
-
-static const TransitionStateFunc sGroudon_Funcs[] =
-{
-    WeatherTrio_BgFadeBlack,
-    WeatherTrio_WaitFade,
-    Groudon_Init,
-    Groudon_PaletteFlash,
-    Groudon_PaletteBrighten,
-    FramesCountdown,
-    WeatherDuo_FadeOut,
-    WeatherDuo_End
-};
-
-static const TransitionStateFunc sRayquaza_Funcs[] =
-{
-    WeatherTrio_BgFadeBlack,
-    WeatherTrio_WaitFade,
-    Rayquaza_Init,
-    Rayquaza_SetGfx,
-    Rayquaza_PaletteFlash,
-    Rayquaza_FadeToBlack,
-    Rayquaza_WaitFade,
-    Rayquaza_SetBlack,
-    Rayquaza_TriRing,
-    Blackhole_Vibrate,
-    Blackhole_GrowEnd
 };
 
 static const TransitionStateFunc sWhiteBarsFade_Funcs[] =
@@ -1313,13 +1191,9 @@ static void HBlankCB_Shuffle(void)
 #undef tAmplitude
 
 //------------------------------------------------------------------------
-// B_TRANSITION_BIG_POKEBALL, B_TRANSITION_AQUA, B_TRANSITION_MAGMA,
-// B_TRANSITION_REGICE, B_TRANSITION_REGISTEEL, B_TRANSITION_REGIROCK
-// and B_TRANSITION_KYOGRE.
+// B_TRANSITION_BIG_POKEBALL, B_TRANSITION_AQUA and B_TRANSITION_MAGMA.
 //
-// With the exception of B_TRANSITION_KYOGRE, all of the above transitions
-// use the same weave effect (see the PatternWeave functions).
-// Unclear why Kyogre's was grouped here and not with Groudon/Rayquaza's.
+// All of the above transitions use the same weave effect (see the PatternWeave functions).
 //------------------------------------------------------------------------
 
 #define tBlendTarget1 data[1]
@@ -1348,26 +1222,6 @@ static void Task_Aqua(u8 taskId)
 static void Task_Magma(u8 taskId)
 {
     while (sMagma_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static void Task_Regice(u8 taskId)
-{
-    while (sRegice_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static void Task_Registeel(u8 taskId)
-{
-    while (sRegisteel_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static void Task_Regirock(u8 taskId)
-{
-    while (sRegirock_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static void Task_Kyogre(u8 taskId)
-{
-    while (sKyogre_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
 static void InitPatternWeaveTransition(struct Task *task)
@@ -1419,20 +1273,6 @@ static bool8 Magma_Init(struct Task *task)
     CpuFill16(0, tilemap, BG_SCREEN_SIZE);
     LZ77UnCompVram(sTeamMagma_Tileset, tileset);
     LoadPalette(sEvilTeam_Palette, BG_PLTT_ID(15), sizeof(sEvilTeam_Palette));
-
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Regi_Init(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    task->tEndDelay = 60;
-    InitPatternWeaveTransition(task);
-    GetBg0TilesDst(&tilemap, &tileset);
-    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
-    CpuCopy16(sRegis_Tileset, tileset, 0x2000);
 
     task->tState++;
     return FALSE;
@@ -1495,114 +1335,6 @@ static bool8 Magma_SetGfx(struct Task *task)
     task->tState++;
     return FALSE;
 }
-
-static bool8 Regice_SetGfx(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    LoadPalette(sRegice_Palette, BG_PLTT_ID(15), sizeof(sRegice_Palette));
-    CpuCopy16(sRegice_Tilemap, tilemap, 0x500);
-    SetSinWave(gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
-
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Registeel_SetGfx(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    LoadPalette(sRegisteel_Palette, BG_PLTT_ID(15), sizeof(sRegisteel_Palette));
-    CpuCopy16(sRegisteel_Tilemap, tilemap, 0x500);
-    SetSinWave(gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
-
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Regirock_SetGfx(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    LoadPalette(sRegirock_Palette, BG_PLTT_ID(15), sizeof(sRegirock_Palette));
-    CpuCopy16(sRegirock_Tilemap, tilemap, 0x500);
-    SetSinWave(gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
-
-    task->tState++;
-    return FALSE;
-}
-
-#define tTimer data[1]
-
-static bool8 Kyogre_Init(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
-    LZ77UnCompVram(sKyogre_Tileset, tileset);
-    LZ77UnCompVram(sKyogre_Tilemap, tilemap);
-
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Kyogre_PaletteFlash(struct Task *task)
-{
-    if (task->tTimer % 3 == 0)
-    {
-        u16 offset = task->tTimer % 30;
-        offset /= 3;
-        LoadPalette(&sKyogre1_Palette[offset * 16], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer > 58)
-    {
-        task->tState++;
-        task->tTimer = 0;
-    }
-
-    return FALSE;
-}
-
-static bool8 Kyogre_PaletteBrighten(struct Task *task)
-{
-    if (task->tTimer % 5 == 0)
-    {
-        s16 offset = task->tTimer / 5;
-        LoadPalette(&sKyogre2_Palette[offset * 16], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer > 68)
-    {
-        task->tState++;
-        task->tTimer = 0;
-        task->tEndDelay = 30;
-    }
-
-    return FALSE;
-}
-
-static bool8 WeatherDuo_FadeOut(struct Task *task)
-{
-    BeginNormalPaletteFade(PALETTES_OBJECTS | (1 << 15), 1, 0, 16, RGB_BLACK);
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 WeatherDuo_End(struct Task *task)
-{
-    if (!gPaletteFade.active)
-    {
-        DmaStop(0);
-        FadeScreenBlack();
-        DestroyTask(FindTaskIdByFunc(task->func));
-    }
-    return FALSE;
-}
-
-#undef tTimer
 
 // The PatternWeave_ functions are used by several different transitions.
 // They create an effect where a pattern/image (such as the Magma emblem) is
@@ -1670,20 +1402,6 @@ static bool8 PatternWeave_FinishAppear(struct Task *task)
 static bool8 FramesCountdown(struct Task *task)
 {
     if (--task->tEndDelay == 0)
-        task->tState++;
-    return FALSE;
-}
-
-static bool8 WeatherTrio_BgFadeBlack(struct Task *task)
-{
-    BeginNormalPaletteFade(PALETTES_BG, 1, 0, 16, RGB_BLACK);
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 WeatherTrio_WaitFade(struct Task *task)
-{
-    if (!gPaletteFade.active)
         task->tState++;
     return FALSE;
 }
@@ -3332,216 +3050,6 @@ static bool16 UpdateRectangularSpiralLine(const s16 * const *moveDataTable, stru
     }
     return TRUE;
 }
-
-//----------------------
-// B_TRANSITION_GROUDON
-//----------------------
-
-#define tTimer data[1]
-
-static void Task_Groudon(u8 taskId)
-{
-    while (sGroudon_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static bool8 Groudon_Init(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
-    LZ77UnCompVram(sGroudon_Tileset, tileset);
-    LZ77UnCompVram(sGroudon_Tilemap, tilemap);
-
-    task->tState++;
-    task->tTimer = 0;
-    return FALSE;
-}
-
-static bool8 Groudon_PaletteFlash(struct Task *task)
-{
-    if (task->tTimer % 3 == 0)
-    {
-        u16 offset = (task->tTimer % 30) / 3;
-        LoadPalette(&sGroudon1_Palette[offset * 16], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer > 58)
-    {
-        task->tState++;
-        task->tTimer = 0;
-    }
-
-    return FALSE;
-}
-
-static bool8 Groudon_PaletteBrighten(struct Task *task)
-{
-    if (task->tTimer % 5 == 0)
-    {
-        s16 offset = task->tTimer / 5;
-        LoadPalette(&sGroudon2_Palette[offset * 16], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer > 68)
-    {
-        task->tState++;
-        task->tTimer = 0;
-        task->tEndDelay = 30;
-    }
-
-    return FALSE;
-}
-
-#undef tTimer
-#undef tEndDelay
-
-//-----------------------
-// B_TRANSITION_RAYQUAZA
-//-----------------------
-
-#define tTimer     data[1]
-#define tGrowSpeed data[2] // Shared from B_TRANSITION_BLACKHOLE
-#define tFlag      data[7] // Shared from B_TRANSITION_BLACKHOLE
-
-static void Task_Rayquaza(u8 taskId)
-{
-    while (sRayquaza_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
-}
-
-static bool8 Rayquaza_Init(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-    u16 i;
-
-    InitTransitionData();
-    ScanlineEffect_Clear();
-
-    SetGpuReg(REG_OFFSET_BG0CNT, BGCNT_CHARBASE(2) | BGCNT_SCREENBASE(26) | BGCNT_TXT256x512);
-    GetBg0TilesDst(&tilemap, &tileset);
-    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
-    CpuCopy16(sRayquaza_Tileset, tileset, 0x2000);
-
-    sTransitionData->counter = 0;
-    task->tState++;
-    LoadPalette(&sRayquaza_Palette[80], BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-
-    for (i = 0; i < DISPLAY_HEIGHT; i++)
-    {
-        gScanlineEffectRegBuffers[0][i] = 0;
-        gScanlineEffectRegBuffers[1][i] = 0x100;
-    }
-
-    SetVBlankCallback(VBlankCB_Rayquaza);
-    return FALSE;
-}
-
-static bool8 Rayquaza_SetGfx(struct Task *task)
-{
-    u16 *tilemap, *tileset;
-
-    GetBg0TilesDst(&tilemap, &tileset);
-    CpuCopy16(sRayquaza_Tilemap, tilemap, sizeof(sRayquaza_Tilemap));
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Rayquaza_PaletteFlash(struct Task *task)
-{
-    if ((task->tTimer % 4) == 0)
-    {
-        u16 value = task->tTimer / 4;
-        const u16 *palPtr = &sRayquaza_Palette[(value + 5) * 16];
-        LoadPalette(palPtr, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer > 40)
-    {
-        task->tState++;
-        task->tTimer = 0;
-    }
-
-    return FALSE;
-}
-
-static bool8 Rayquaza_FadeToBlack(struct Task *task)
-{
-    if (++task->tTimer > 20)
-    {
-        task->tState++;
-        task->tTimer = 0;
-        BeginNormalPaletteFade(PALETTES_OBJECTS | (1 << 15), 2, 0, 16, RGB_BLACK);
-    }
-
-    return FALSE;
-}
-
-static bool8 Rayquaza_WaitFade(struct Task *task)
-{
-    if (!gPaletteFade.active)
-    {
-        sTransitionData->counter = 1;
-        task->tState++;
-    }
-    return FALSE;
-}
-
-static bool8 Rayquaza_SetBlack(struct Task *task)
-{
-    BlendPalettes(PALETTES_BG & ~(1 << 15), 8, RGB_BLACK);
-    BlendPalettes(PALETTES_OBJECTS | (1 << 15), 0, RGB_BLACK);
-
-    task->tState++;
-    return FALSE;
-}
-
-static bool8 Rayquaza_TriRing(struct Task *task)
-{
-    if ((task->tTimer % 3) == 0)
-    {
-        u16 value = task->tTimer / 3;
-        const u16 *palPtr = &sRayquaza_Palette[(value + 0) * 16];
-        LoadPalette(palPtr, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
-    }
-    if (++task->tTimer >= 40)
-    {
-        u16 i;
-
-        sTransitionData->WININ = 0;
-        sTransitionData->WINOUT = WINOUT_WIN01_ALL;
-        sTransitionData->WIN0H = DISPLAY_WIDTH;
-        sTransitionData->WIN0V = DISPLAY_HEIGHT;
-
-        for (i = 0; i < DISPLAY_HEIGHT; i++)
-            gScanlineEffectRegBuffers[1][i] = 0;
-
-        SetVBlankCallback(VBlankCB_CircularMask);
-        task->tState++;
-        task->tGrowSpeed = 1 << 8;
-        task->tFlag = FALSE;
-        ClearGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_BG0_ON);
-    }
-
-    return FALSE;
-}
-
-static void VBlankCB_Rayquaza(void)
-{
-    void *dmaSrc;
-
-    DmaStop(0);
-    VBlankCB_BattleTransition();
-
-    if (sTransitionData->counter == 0)
-        dmaSrc = gScanlineEffectRegBuffers[0];
-    else if (sTransitionData->counter == 1)
-        dmaSrc = gScanlineEffectRegBuffers[1];
-    else
-        dmaSrc = gScanlineEffectRegBuffers[0];
-
-    DmaSet(0, dmaSrc, &REG_BG0VOFS, B_TRANS_DMA_FLAGS);
-}
-
-#undef tTimer
-#undef tGrowSpeed
-#undef tFlag
 
 //------------------------------
 // B_TRANSITION_WHITE_BARS_FADE

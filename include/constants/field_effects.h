@@ -57,13 +57,9 @@
 #define FLDEFF_SECRET_POWER_SHRUB        53
 #define FLDEFF_CUT_GRASS                 54
 #define FLDEFF_FIELD_MOVE_SHOW_MON_INIT  55
-#define FLDEFF_USE_TOMB_PUZZLE_EFFECT    56
-#define FLDEFF_PCTURN_ON                 57
-#define FLDEFF_HALL_OF_FAME_RECORD       58
-#define FLDEFF_USE_TELEPORT              59
-#define FLDEFF_RAYQUAZA_SPOTLIGHT        60
-#define FLDEFF_DESTROY_DEOXYS_ROCK       61
-#define FLDEFF_MOVE_DEOXYS_ROCK          62
+#define FLDEFF_PCTURN_ON                 56
+#define FLDEFF_HALL_OF_FAME_RECORD       57
+#define FLDEFF_USE_TELEPORT              58
 
 #define FLDEFFOBJ_SHADOW_S              0
 #define FLDEFFOBJ_SHADOW_M              1
@@ -97,7 +93,6 @@
 #define FLDEFFOBJ_ASH_LAUNCH            29
 #define FLDEFFOBJ_BUBBLES               30
 #define FLDEFFOBJ_SMALL_SPARKLE         31
-#define FLDEFFOBJ_RAYQUAZA              32
 
 #define FLDEFF_PAL_TAG_CUT_GRASS          0x1000
 #define FLDEFF_PAL_TAG_SECRET_POWER_TREE  0x1003

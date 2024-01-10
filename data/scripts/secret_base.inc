@@ -719,12 +719,12 @@ SecretBase_Text_ToyTV:
 	.string "A realistic toy TV. It could be easily\n"
 	.string "mistaken for the real thing.$"
 
-SecretBase_Text_SeedotTV:
-	.string "A toy TV shaped like a Seedot.\n"
+SecretBase_Text_PoliwagTV:
+	.string "A toy TV shaped like a Poliwag.\n"
 	.string "It looks ready to roll away on its own…$"
 
-SecretBase_Text_SkittyTV:
-	.string "A toy TV shaped like a Skitty.\n"
+SecretBase_Text_JigglypuffTV:
+	.string "A toy TV shaped like a Jigglypuff.\n"
 	.string "It looks ready to stroll away…$"
 
 SecretBase_Text_WouldYouLikeToMoveBases:

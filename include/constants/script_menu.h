@@ -118,31 +118,27 @@
 #define MULTI_TOURNEY_NO_RECORD            107
 #define MULTI_TV_LATI                      108
 #define MULTI_BATTLE_TOWER_FEELINGS        109
-#define MULTI_WHERES_RAYQUAZA              110
-#define MULTI_CERULEAN_TENT_RULES          111
-#define MULTI_SAFFRON_TENT_RULES           112
-#define MULTI_TAG_MATCH_TYPE               113
-#define MULTI_HELIX_AMBER                  114
-#define MULTI_DOME_AMBER                   115
-#define MULTI_ISLAND_23                    116
-#define MULTI_ISLAND_13                    117
-#define MULTI_ISLAND_12                    118
-#define MULTI_SEAGALLOP_123                119
-#define MULTI_SEAGALLOP_V23                120
-#define MULTI_SEAGALLOP_V13                121
-#define MULTI_SEAGALLOP_V12                122
-#define MULTI_SEAGALLOP_VERMILION          123
-#define MULTI_MUSHROOMS                    124
+#define MULTI_CERULEAN_TENT_RULES          110
+#define MULTI_SAFFRON_TENT_RULES           111
+#define MULTI_TAG_MATCH_TYPE               112
+#define MULTI_HELIX_AMBER                  113
+#define MULTI_DOME_AMBER                   114
+#define MULTI_ISLAND_23                    115
+#define MULTI_ISLAND_13                    116
+#define MULTI_ISLAND_12                    117
+#define MULTI_SEAGALLOP_123                118
+#define MULTI_SEAGALLOP_V23                119
+#define MULTI_SEAGALLOP_V13                120
+#define MULTI_SEAGALLOP_V12                121
+#define MULTI_SEAGALLOP_VERMILION          122
+#define MULTI_MUSHROOMS                    123
 
 // Lilycove SS Tidal Multichoice Selections
 #define SSTIDAL_SELECTION_SLATEPORT        0
 #define SSTIDAL_SELECTION_BATTLE_FRONTIER  1
-#define SSTIDAL_SELECTION_SOUTHERN_ISLAND  2
-#define SSTIDAL_SELECTION_NAVEL_ROCK       3
-#define SSTIDAL_SELECTION_BIRTH_ISLAND     4
-#define SSTIDAL_SELECTION_FARAWAY_ISLAND   5
-#define SSTIDAL_SELECTION_EXIT             6
-#define SSTIDAL_SELECTION_COUNT            7
+#define SSTIDAL_SELECTION_FARAWAY_ISLAND   2
+#define SSTIDAL_SELECTION_EXIT             3
+#define SSTIDAL_SELECTION_COUNT            4
 
 // Std String Ids
 #define STDSTRING_COOL             0

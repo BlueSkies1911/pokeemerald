@@ -97,7 +97,7 @@
 #define SE_EXP_MAX                  91 // SE_EXPMAX
 #define SE_ROULETTE_BALL            92 // SE_TAMAKORO
 #define SE_ROULETTE_BALL2           93 // SE_TAMAKORO_E
-#define SE_TAILLOW_WING_FLAP        94 // SE_BASABASA
+#define SE_PIDGEY_WING_FLAP         94 // SE_BASABASA
 #define SE_SHOP                     95 // SE_REGI
 #define SE_CONTEST_HEART            96 // SE_C_GAJI
 #define SE_CONTEST_CURTAIN_RISE     97 // SE_C_MAKU_U
@@ -309,7 +309,7 @@
 #define MUS_MOVE_DELETED            378 // MUS_ME_WASURE
 #define MUS_ENCOUNTER_GIRL          379 // MUS_SYOUJOEYE
 #define MUS_ENCOUNTER_MALE          380 // MUS_BOYEYE
-#define MUS_ABANDONED_SHIP          381 // MUS_DAN02            // Also used in Faraway and Southern Islands.
+#define MUS_ABANDONED_SHIP          381 // MUS_DAN02            // Also used in Faraway.
 #define MUS_FORTREE                 382 // MUS_MACHI_S3         // Also used in Secret Bases and the Safari Zone's entrance.
 #define MUS_BIRCH_LAB               383 // MUS_ODAMAKI
 #define MUS_B_TOWER_RS              384 // MUS_B_TOWER          // Used in Battle Tents, Trainer Hill and Battle Frontier's lounges and Exchange Service Corner.

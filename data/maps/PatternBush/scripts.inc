@@ -116,7 +116,7 @@ PatternBush_Text_GarretDefeat::
 
 PatternBush_Text_GarretPostBattle::
     .string "There's a girl near the bush who\n"
-    .string "measures Heracross for Trainers.$"
+    .string "measures Trainers.$"
 
 PatternBush_Text_JonahIntro::
     .string "You know, it just doesn't feel right\n"

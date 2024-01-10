@@ -541,12 +541,12 @@ static const u8 sBlackApricornDesc[] = _(
 
 // Mail
 static const u8 sOrangeMailDesc[] = _(
-    "A Zigzagoon-print\n"
+    "A Rattata-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
 static const u8 sHarborMailDesc[] = _(
-    "A Wingull-print\n"
+    "A Horsea-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
@@ -561,12 +561,12 @@ static const u8 sMechMailDesc[] = _(
     "a Pokémon.");
 
 static const u8 sWoodMailDesc[] = _(
-    "A Slakoth-print\n"
+    "A Farfetch'd-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
 static const u8 sWaveMailDesc[] = _(
-    "A Wailmer-print\n"
+    "A Tentacool-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
@@ -576,12 +576,12 @@ static const u8 sBeadMailDesc[] = _(
     "holding Pokémon.");
 
 static const u8 sShadowMailDesc[] = _(
-    "A Duskull-print\n"
+    "A Gastly-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
 static const u8 sTropicMailDesc[] = _(
-    "A Bellossom-print\n"
+    "A Vileplume-print\n"
     "Mail to be held by\n"
     "a Pokémon.");
 
@@ -2058,7 +2058,7 @@ static const u8 sPowderJarDesc[] = _(
     "Powder made using\n"
     "a Berry Crusher.");
 
-static const u8 sWailmerPailDesc[] = _(
+static const u8 sSquirtBottleDesc[] = _(
     "A tool used for\n"
     "watering berries\n"
     "and plants.");
@@ -2083,21 +2083,6 @@ static const u8 sSSTicketDesc[] = _(
     "The ticket required\n"
     "for sailing on a\n"
     "ferry.");
-
-static const u8 sEonTicketDesc[] = _(
-    "The ticket for a\n"
-    "ferry to a distant\n"
-    "southern island.");
-
-static const u8 sMysticTicketDesc[] = _(
-    "A ticket required\n"
-    "to board the ship\n"
-    "to Navel Rock.");
-
-static const u8 sAuroraTicketDesc[] = _(
-    "A ticket required\n"
-    "to board the ship\n"
-    "to Birth Island.");
 
 static const u8 sOldSeaMapDesc[] = _(
     "A faded sea chart\n"

@@ -156,25 +156,6 @@ static void GetMonSizeRecordInfo(u16 species, u16 *sizeRecord)
     StringCopy(gStringVar1, gSpeciesNames[species]);
 }
 
-void InitHeracrossSizeRecord(void)
-{
-    VarSet(VAR_HERACROSS_SIZE_RECORD, DEFAULT_MAX_SIZE);
-}
-
-void GetHeracrossSizeRecordInfo(void)
-{
-    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
-
-    GetMonSizeRecordInfo(SPECIES_HERACROSS, sizeRecord);
-}
-
-void CompareHeracrossSize(void)
-{
-    u16 *sizeRecord = GetVarPointer(VAR_HERACROSS_SIZE_RECORD);
-
-    gSpecialVar_Result = CompareMonSize(SPECIES_HERACROSS, sizeRecord);
-}
-
 void InitMagikarpSizeRecord(void)
 {
     VarSet(VAR_MAGIKARP_SIZE_RECORD, DEFAULT_MAX_SIZE);

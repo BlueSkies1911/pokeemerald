@@ -270,7 +270,7 @@
 #define EC_WORD_CONGRATS        ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 9)
 #define EC_WORD_GIVE_ME         ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 10)
 #define EC_WORD_SORRY           ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 11)
-#define EC_WORD_APOLOGIZE       ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 12)
+#define EC_WORD_APOLOGISE       ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 12)
 #define EC_WORD_FORGIVE         ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 13)
 #define EC_WORD_HEY_THERE       ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 14)
 #define EC_WORD_HELLO           ((EC_GROUP_GREETINGS << EC_MASK_BITS) | 15)
@@ -1098,12 +1098,12 @@
 #define NUM_TRENDY_SAYINGS                                                 33
 
 // Special Berry Masters Wife phrases
-#define NOT_SPECIAL_PHRASE          0
-#define PHRASE_GREAT_BATTLE         1
-#define PHRASE_CHALLENGE_CONTEST    2
-#define PHRASE_OVERWHELMING_LATIAS  3
-#define PHRASE_COOL_LATIOS          4
-#define PHRASE_SUPER_HUSTLE         5
+#define NOT_SPECIAL_PHRASE            0
+#define PHRASE_GREAT_BATTLE           1
+#define PHRASE_CHALLENGE_CONTEST      2
+#define PHRASE_OVERWHELMING_ARTICUNO  3
+#define PHRASE_COOL_ZAPDOS            4
+#define PHRASE_SUPER_HUSTLE           5
 
 #define EC_NUM_ALPHABET_GROUPS 27 // 26 (1 for each letter) + 1 (Others)
 

@@ -125,7 +125,7 @@ static const struct SpritePalette sSpinningNavgearPalettes[] =
 
 static const struct CompressedSpriteSheet sMenuLeftHeaderSpriteSheet =
 {
-    .data = gPokenavLeftHeaderKantoMap_Gfx, // Hoenn map is the first of the headers listed
+    .data = gPokenavLeftHeaderKantoMap_Gfx, // Kanto map is the first of the headers listed
     .size = 0xC00,
     .tag = 2
 };

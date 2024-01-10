@@ -667,15 +667,12 @@ static const struct MenuAction MultichoiceList_FrontierGamblerBet[] =
 
 static const struct MenuAction MultichoiceList_UnusedSSTidal3[] =
 {
-    {gText_BirthIsland},
     {gText_FarawayIsland},
     {gText_Exit},
 };
 
 static const struct MenuAction MultichoiceList_UnusedSSTidal4[] =
 {
-    {gText_SouthernIsland},
-    {gText_BirthIsland},
     {gText_FarawayIsland},
     {gText_Exit},
 };
@@ -802,26 +799,12 @@ static const struct MenuAction MultichoiceList_GoOnRetire[] =
     {gText_Retire},
 };
 
-static const struct MenuAction MultichoiceList_TVLati[] =
-{
-    {gText_Red},
-    {gText_Blue},
-};
-
 static const struct MenuAction MultichoiceList_BattleTowerFeelings[] =
 {
     {gText_IllBattleNow},
     {gText_IWon},
     {gText_ILost},
     {gText_IWontTell},
-};
-
-static const struct MenuAction MultichoiceList_WheresRayquaza[] =
-{
-    {gText_CaveOfOrigin},
-    {gText_MtPyre},
-    {gText_SkyPillar},
-    {gText_DontRemember},
 };
 
 static const struct MenuAction MultichoiceList_CeruleanTentRules[] =
@@ -1053,9 +1036,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_GO_ON_RECORD_RETIRE]        = MULTICHOICE(MultichoiceList_GoOnRecordRetire),
     [MULTI_GO_ON_RETIRE]               = MULTICHOICE(MultichoiceList_GoOnRetire),
     [MULTI_TOURNEY_NO_RECORD]          = MULTICHOICE(MultichoiceList_TourneyNoRecord),
-    [MULTI_TV_LATI]                    = MULTICHOICE(MultichoiceList_TVLati),
     [MULTI_BATTLE_TOWER_FEELINGS]      = MULTICHOICE(MultichoiceList_BattleTowerFeelings),
-    [MULTI_WHERES_RAYQUAZA]            = MULTICHOICE(MultichoiceList_WheresRayquaza),
     [MULTI_CERULEAN_TENT_RULES]        = MULTICHOICE(MultichoiceList_CeruleanTentRules),
     [MULTI_SAFFRON_TENT_RULES]         = MULTICHOICE(MultichoiceList_SaffronTentRules),
     [MULTI_TAG_MATCH_TYPE]             = MULTICHOICE(MultichoiceList_TagMatchType),
@@ -1137,9 +1118,6 @@ static const u8 *const sLilycoveSSTidalDestinations[SSTIDAL_SELECTION_COUNT] =
 {
     [SSTIDAL_SELECTION_SLATEPORT]       = gText_SlateportCity,
     [SSTIDAL_SELECTION_BATTLE_FRONTIER] = gText_BattleFrontier,
-    [SSTIDAL_SELECTION_SOUTHERN_ISLAND] = gText_SouthernIsland,
-    [SSTIDAL_SELECTION_NAVEL_ROCK]      = gText_NavelRock,
-    [SSTIDAL_SELECTION_BIRTH_ISLAND]    = gText_BirthIsland,
     [SSTIDAL_SELECTION_FARAWAY_ISLAND]  = gText_FarawayIsland,
     [SSTIDAL_SELECTION_EXIT]            = gText_Exit,
 };

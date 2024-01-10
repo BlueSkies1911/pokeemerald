@@ -20,8 +20,6 @@
 #define TAG_BICYCLE 1001
 #define TAG_BRENDAN 1002
 #define TAG_MAY     1003
-#define TAG_FLYGON_LATIOS  1004
-#define TAG_FLYGON_LATIAS  1005
 
 // Used for the Clouds/Trees/Houses sprites that pass by in the background
 #define TAG_MOVING_SCENERY 2000
@@ -66,15 +64,10 @@ static const u16 sMayCredits_Pal[]        = INCBIN_U16("graphics/intro/scene_2/m
 static const u16 sUnused[0xF0]            = {0};
 static const u32 sMayCredits_Gfx[]        = INCBIN_U32("graphics/intro/scene_2/may_credits.4bpp.lz");
 static const u32 sBicycle_Gfx[]           = INCBIN_U32("graphics/intro/scene_2/bicycle.4bpp.lz");
-static const u16 sLatios_Pal[]            = INCBIN_U16("graphics/intro/scene_2/latios.gbapal");
-static const u32 sLatios_Gfx[]            = INCBIN_U32("graphics/intro/scene_2/latios.4bpp.lz");
-static const u16 sLatias_Pal[]            = INCBIN_U16("graphics/intro/scene_2/latias.gbapal");
-static const u32 sLatias_Gfx[]            = INCBIN_U32("graphics/intro/scene_2/latias.4bpp.lz");
 
 static void SpriteCB_MovingScenery(struct Sprite *sprite);
 static void SpriteCB_Player(struct Sprite *sprite);
 static void SpriteCB_Bicycle(struct Sprite *sprite);
-static void SpriteCB_FlygonLeftHalf(struct Sprite *sprite);
 
 static const struct SpriteTemplate sSpriteTemplate_MovingScenery =
 {
@@ -528,54 +521,6 @@ static const struct SpriteTemplate sSpriteTemplate_MayBicycle =
     .callback = SpriteCB_Bicycle
 };
 
-static const struct OamData sOamData_Flygon =
-{
-    .y = DISPLAY_HEIGHT,
-    .shape = SPRITE_SHAPE(64x64),
-    .size = SPRITE_SIZE(64x64),
-    .priority = 1
-};
-
-static const union AnimCmd sAnim_FlygonLeft[] =
-{
-    ANIMCMD_FRAME(0, 16),
-    ANIMCMD_END
-};
-
-static const union AnimCmd sAnim_FlygonRight[] =
-{
-    ANIMCMD_FRAME(64, 16),
-    ANIMCMD_END
-};
-
-static const union AnimCmd *const sAnims_Flygon[] =
-{
-    sAnim_FlygonLeft,
-    sAnim_FlygonRight
-};
-
-static const struct SpriteTemplate sSpriteTemplate_FlygonLatios =
-{
-    .tileTag = TAG_FLYGON_LATIOS,
-    .paletteTag = TAG_FLYGON_LATIOS,
-    .oam = &sOamData_Flygon,
-    .anims = sAnims_Flygon,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCB_FlygonLeftHalf
-};
-
-static const struct SpriteTemplate sSpriteTemplate_FlygonLatias =
-{
-    .tileTag = TAG_FLYGON_LATIAS,
-    .paletteTag = TAG_FLYGON_LATIAS,
-    .oam = &sOamData_Flygon,
-    .anims = sAnims_Flygon,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCB_FlygonLeftHalf
-};
-
 const struct CompressedSpriteSheet gSpriteSheet_CreditsBrendan[] =
 {
     {
@@ -606,34 +551,10 @@ const struct CompressedSpriteSheet gSpriteSheet_CreditsBicycle[] =
     {}
 };
 
-// Unused
-static const struct CompressedSpriteSheet sSpriteSheet_Latios[] =
-{
-    {
-        .data = sLatios_Gfx,
-        .size = 0x1000,
-        .tag = TAG_FLYGON_LATIOS
-    },
-    {}
-};
-
-// Unused
-static const struct CompressedSpriteSheet sSpriteSheet_Latias[] =
-{
-    {
-        .data = sLatias_Gfx,
-        .size = 0x1000,
-        .tag = TAG_FLYGON_LATIAS
-    },
-    {}
-};
-
 const struct SpritePalette gSpritePalettes_Credits[] =
 {
     { .data = sBrendanCredits_Pal, .tag = TAG_BRENDAN },
     { .data = sMayCredits_Pal,     .tag = TAG_MAY },
-    { .data = sLatios_Pal,         .tag = TAG_FLYGON_LATIOS },
-    { .data = sLatias_Pal,         .tag = TAG_FLYGON_LATIAS },
     {}
 };
 
@@ -1072,41 +993,3 @@ u8 CreateIntroMaySprite(s16 x, s16 y)
 }
 
 #undef sPlayerSpriteId
-
-static void SpriteCB_FlygonLeftHalf(struct Sprite *sprite)
-{
-}
-
-#define sLeftSpriteId data[0]
-
-static void SpriteCB_FlygonRightHalf(struct Sprite *sprite)
-{
-    sprite->invisible = gSprites[sprite->sLeftSpriteId].invisible;
-    sprite->y = gSprites[sprite->sLeftSpriteId].y;
-    sprite->x2 = gSprites[sprite->sLeftSpriteId].x2;
-    sprite->y2 = gSprites[sprite->sLeftSpriteId].y2;
-}
-
-// In RS these were for Latios/Latias. In Emerald both are replaced with Flygon and now only 1 is used
-static u8 UNUSED CreateIntroFlygonSprite_Unused(s16 x, s16 y)
-{
-    u8 leftSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatios, x - 32, y, 5);
-    u8 rightSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatios, x + 32, y, 6);
-    gSprites[rightSpriteId].sLeftSpriteId = leftSpriteId;
-    StartSpriteAnim(&gSprites[rightSpriteId], 1);
-    gSprites[rightSpriteId].callback = &SpriteCB_FlygonRightHalf;
-    return leftSpriteId;
-}
-
-
-u8 CreateIntroFlygonSprite(s16 x, s16 y)
-{
-    u8 leftSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatias, x - 32, y, 5);
-    u8 rightSpriteId = CreateSprite(&sSpriteTemplate_FlygonLatias, x + 32, y, 6);
-    gSprites[rightSpriteId].sLeftSpriteId = leftSpriteId;
-    StartSpriteAnim(&gSprites[rightSpriteId], 1);
-    gSprites[rightSpriteId].callback = &SpriteCB_FlygonRightHalf;
-    return leftSpriteId;
-}
-
-#undef sLeftSpriteId

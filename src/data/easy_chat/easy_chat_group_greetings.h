@@ -10,7 +10,7 @@ const u8 gEasyChatWord_HowDo[] = _("How Do");
 const u8 gEasyChatWord_Congrats[] = _("Congrats");
 const u8 gEasyChatWord_GiveMe[] = _("Give Me");
 const u8 gEasyChatWord_Sorry[] = _("Sorry");
-const u8 gEasyChatWord_Apologize[] = _("Apologise");
+const u8 gEasyChatWord_Apologise[] = _("Apologise");
 const u8 gEasyChatWord_Forgive[] = _("Forgive");
 const u8 gEasyChatWord_HeyThere[] = _("Hey, There");
 const u8 gEasyChatWord_Hello[] = _("Hello");
@@ -114,9 +114,9 @@ const struct EasyChatWordInfo gEasyChatGroup_Greetings[] = {
         .alphabeticalOrder = 16,
         .enabled = TRUE,
     },
-    [EC_INDEX(EC_WORD_APOLOGIZE)] =
+    [EC_INDEX(EC_WORD_APOLOGISE)] =
     {
-        .text = gEasyChatWord_Apologize,
+        .text = gEasyChatWord_Apologise,
         .alphabeticalOrder = 15,
         .enabled = TRUE,
     },

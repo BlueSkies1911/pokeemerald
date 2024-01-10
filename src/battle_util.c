@@ -1556,7 +1556,6 @@ enum
     ENDTURN_WATER_SPORT,
     ENDTURN_MUD_SPORT,
     ENDTURN_TRICK_ROOM,
-    ENDTURN_WEATHER_FORM,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -1886,10 +1885,6 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_GravityEnds);
                 effect++;
             }
-            gBattleStruct->turnCountersTracker++;
-            break;
-        case ENDTURN_WEATHER_FORM:
-            AbilityBattleEffects(ABILITYEFFECT_ON_WEATHER, 0, 0, 0, 0);
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FIELD_COUNT:
@@ -3074,57 +3069,6 @@ bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
     }
 }
 
-u8 TryWeatherFormChange(u8 battler)
-{
-    u8 ret = 0;
-    bool32 weatherEffect = WEATHER_HAS_EFFECT;
-    u16 holdEffect = GetBattlerHoldEffect(battler, TRUE);
-
-    switch (gBattleMons[battler].species)
-    {
-    case SPECIES_CASTFORM:
-        if (gBattleMons[battler].hp == 0)
-        {
-            ret = 0; // No change
-        }
-        else if (GetBattlerAbility(battler) != ABILITY_FORECAST || !weatherEffect)
-        {
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
-            {
-                SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-                ret = CASTFORM_NORMAL + 1;
-            }
-            else
-            {
-                ret = 0; // No change
-            }
-        }
-        else if (!(gBattleWeather & (B_WEATHER_RAIN | B_WEATHER_SUN | B_WEATHER_HAIL)) && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
-        {
-            SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-            ret = CASTFORM_NORMAL + 1;
-        }
-        else if (gBattleWeather & B_WEATHER_SUN && !IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
-        {
-            SET_BATTLER_TYPE(battler, TYPE_FIRE);
-            ret = CASTFORM_FIRE + 1;
-        }
-        else if (gBattleWeather & B_WEATHER_RAIN && !IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
-        {
-            SET_BATTLER_TYPE(battler, TYPE_WATER);
-            ret = CASTFORM_WATER + 1;
-        }
-        else if (gBattleWeather & B_WEATHER_HAIL && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
-        {
-            SET_BATTLER_TYPE(battler, TYPE_ICE);
-            ret = CASTFORM_ICE + 1;
-        }
-        break;
-    }
-
-    return ret;
-}
-
 static const u16 sWeatherFlagsInfo[][3] =
 {
     [ENUM_WEATHER_RAIN] = {B_WEATHER_RAIN_TEMPORARY, B_WEATHER_RAIN_PERMANENT, HOLD_EFFECT_DAMP_ROCK},
@@ -3132,41 +3076,6 @@ static const u16 sWeatherFlagsInfo[][3] =
     [ENUM_WEATHER_SANDSTORM] = {B_WEATHER_SANDSTORM_TEMPORARY, B_WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
     [ENUM_WEATHER_HAIL] = {B_WEATHER_HAIL_TEMPORARY, B_WEATHER_HAIL_PERMANENT, HOLD_EFFECT_ICY_ROCK},
 };
-
-u8 CastformDataTypeChange(u8 battler)
-{
-    u8 formChange = 0;
-    if (gBattleMons[battler].species != SPECIES_CASTFORM || gBattleMons[battler].ability != ABILITY_FORECAST || gBattleMons[battler].hp == 0)
-        return 0; // No change
-    if (!WEATHER_HAS_EFFECT && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-        return CASTFORM_NORMAL + 1;
-    }
-    if (!WEATHER_HAS_EFFECT)
-        return 0; // No change
-    if (!(gBattleWeather & (B_WEATHER_RAIN | B_WEATHER_SUN | B_WEATHER_HAIL)) && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-        formChange = CASTFORM_NORMAL + 1;
-    }
-    if (gBattleWeather & B_WEATHER_SUN && !IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_FIRE);
-        formChange = CASTFORM_FIRE + 1;
-    }
-    if (gBattleWeather & B_WEATHER_RAIN && !IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_WATER);
-        formChange = CASTFORM_WATER + 1;
-    }
-    if (gBattleWeather & B_WEATHER_HAIL && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_ICE);
-        formChange = CASTFORM_ICE + 1;
-    }
-    return formChange;
-}
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
@@ -5535,16 +5444,6 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
     return targetBattler;
 }
 
-static bool32 IsBattlerModernFatefulEncounter(u8 battlerId)
-{
-    if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
-        return TRUE;
-    if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES, NULL) != SPECIES_DEOXYS
-        && GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES, NULL) != SPECIES_MEW)
-            return TRUE;
-    return GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL);
-}
-
 u8 IsMonDisobedient(void)
 {
     s32 rnd;
@@ -5556,37 +5455,34 @@ u8 IsMonDisobedient(void)
         return 0;
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT)
         return 0;
+    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && GetBattlerPosition(gBattlerAttacker) == 2)
+        return 0;
+    if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+        return 0;
+    if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
+        return 0;
+    if (!IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
+        return 0;
+    if (FlagGet(FLAG_BADGE08_GET))
+        return 0;
 
-    if (IsBattlerModernFatefulEncounter(gBattlerAttacker)) // only false if illegal Mew or Deoxys
-    {
-        if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && GetBattlerPosition(gBattlerAttacker) == 2)
-            return 0;
-        if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
-            return 0;
-        if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
-            return 0;
-        if (!IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
-            return 0;
-        if (FlagGet(FLAG_BADGE08_GET))
-            return 0;
+    obedienceLevel = 10;
 
-        obedienceLevel = 10;
+    if (FlagGet(FLAG_BADGE01_GET))
+        obedienceLevel = 20;
+    if (FlagGet(FLAG_BADGE02_GET))
+        obedienceLevel = 30;
+    if (FlagGet(FLAG_BADGE03_GET))
+        obedienceLevel = 40;
+    if (FlagGet(FLAG_BADGE04_GET))
+        obedienceLevel = 50;
+    if (FlagGet(FLAG_BADGE05_GET))
+        obedienceLevel = 60;
+    if (FlagGet(FLAG_BADGE06_GET))
+        obedienceLevel = 70;
+    if (FlagGet(FLAG_BADGE07_GET))
+        obedienceLevel = 80;
 
-        if (FlagGet(FLAG_BADGE01_GET))
-            obedienceLevel = 20;
-        if (FlagGet(FLAG_BADGE02_GET))
-            obedienceLevel = 30;
-        if (FlagGet(FLAG_BADGE03_GET))
-            obedienceLevel = 40;
-        if (FlagGet(FLAG_BADGE04_GET))
-            obedienceLevel = 50;
-        if (FlagGet(FLAG_BADGE05_GET))
-            obedienceLevel = 60;
-        if (FlagGet(FLAG_BADGE06_GET))
-            obedienceLevel = 70;
-        if (FlagGet(FLAG_BADGE07_GET))
-            obedienceLevel = 80;
-    }
     if (gBattleMons[gBattlerAttacker].level <= obedienceLevel)
         levelReferenced = gBattleMons[gBattlerAttacker].level;
 

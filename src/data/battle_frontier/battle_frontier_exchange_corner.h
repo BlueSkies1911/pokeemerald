@@ -2,14 +2,14 @@ static const u16 sFrontierExchangeCorner_Decor1[] =
 {
     DECOR_KISS_POSTER,
     DECOR_KISS_CUSHION,
-    DECOR_SMOOCHUM_DOLL,
-    DECOR_TOGEPI_DOLL,
+    DECOR_BULBASAUR_DOLL,
+    DECOR_CHARMANDER_DOLL,
+    DECOR_SQUIRTLE_DOLL,
+    DECOR_KOFFING_DOLL,
+    DECOR_ABRA_DOLL,
     DECOR_MEOWTH_DOLL,
     DECOR_CLEFAIRY_DOLL,
     DECOR_DITTO_DOLL,
-    DECOR_CYNDAQUIL_DOLL,
-    DECOR_CHIKORITA_DOLL,
-    DECOR_TOTODILE_DOLL,
     ITEM_LIST_END
 };
 
@@ -52,14 +52,14 @@ static const u8 *const sFrontierExchangeCorner_Decor1Descriptions[] =
 {
     BattleFrontier_ExchangeServiceCorner_Text_KissPosterDesc,
     BattleFrontier_ExchangeServiceCorner_Text_KissCushionDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_SmoochumDollDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_TogepiDollDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_BulbasaurDollDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_CharmanderDollDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_SquirtleDollDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_KoffingDollDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_AbraDollDesc,
     BattleFrontier_ExchangeServiceCorner_Text_MeowthDollDesc,
     BattleFrontier_ExchangeServiceCorner_Text_ClefairyDollDesc,
     BattleFrontier_ExchangeServiceCorner_Text_DittoDollDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_CyndaquilDollDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_ChikoritaDollDesc,
-    BattleFrontier_ExchangeServiceCorner_Text_TotodileDollDesc,
     gText_Exit,
 };
 

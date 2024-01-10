@@ -50,7 +50,7 @@
 #define VAR_RECYCLE_GOODS                                0x4020
 #define VAR_REPEL_STEP_COUNT                             0x4021
 #define VAR_ICE_STEP_COUNT                               0x4022
-#define VAR_STARTER_MON                                  0x4023 // 0=Treecko, 1=Torchic, 2=Mudkip
+#define VAR_STARTER_MON                                  0x4023 // 0=Bulbasaur, 1=Charmander, 2=Squirtle
 #define VAR_MIRAGE_RND_H                                 0x4024
 #define VAR_MIRAGE_RND_L                                 0x4025
 #define VAR_SECRET_BASE_MAP                              0x4026
@@ -69,18 +69,18 @@
 #define VAR_FRONTIER_GAMBLER_AMOUNT_BET                  0x4032
 #define VAR_FRONTIER_GAMBLER_STATE                       0x4033
 
-#define VAR_DEOXYS_ROCK_STEP_COUNT           0x4034
-#define VAR_DEOXYS_ROCK_LEVEL                0x4035
+#define VAR_UNUSED_0x4034                    0x4034
+#define VAR_UNUSED_0x4035                    0x4035
 #define VAR_PC_BOX_TO_SEND_MON               0x4036
 #define VAR_ABNORMAL_WEATHER_LOCATION        0x4037
 #define VAR_ABNORMAL_WEATHER_STEP_COUNTER    0x4038
 #define VAR_SHOULD_END_ABNORMAL_WEATHER      0x4039
 #define VAR_FARAWAY_ISLAND_STEP_COUNTER      0x403A
-#define VAR_REGICE_STEPS_1                   0x403B
-#define VAR_REGICE_STEPS_2                   0x403C
-#define VAR_REGICE_STEPS_3                   0x403D
+#define VAR_UNUSED_0x403B                    0x403B
+#define VAR_UNUSED_0x403C                    0x403C
+#define VAR_UNUSED_0x403D                    0x403D
 #define VAR_ALTERING_CAVE_WILD_SET           0x403E
-#define VAR_DISTRIBUTE_EON_TICKET            0x403F // This var is read and written, but is always zero. The only way to obtain the Eon Ticket in Emerald is via Record Mixing
+#define VAR_UNUSED_0x403F                    0x403F
 #define VAR_DAYS                             0x4040
 #define VAR_FANCLUB_FAN_COUNTER              0x4041
 #define VAR_FANCLUB_LOSE_FAN_TIMER           0x4042
@@ -88,7 +88,7 @@
 #define VAR_TRICK_HOUSE_LEVEL                0x4044
 #define VAR_POKELOT_PRIZE_ITEM               0x4045
 #define VAR_NATIONAL_DEX                     0x4046
-#define VAR_HERACROSS_SIZE_RECORD            0x4047
+#define VAR_UNUSED_0x4047                    0x4047
 #define VAR_ASH_GATHER_COUNT                 0x4048
 #define VAR_BIRCH_STATE                      0x4049
 #define VAR_CRUISE_STEP_COUNT                0x404A
@@ -230,8 +230,8 @@
 #define VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE   0x40D2
 #define VAR_DEX_UPGRADE_JOHTO_STARTER_STATE  0x40D3
 #define VAR_SS_TIDAL_SCOTT_STATE             0x40D4 // Always equal to FLAG_BATTLE_FRONTIER_UNLOCKED
-#define VAR_ROAMER_POKEMON                   0x40D5 // 0 = Latias, 1 = Latios
-#define VAR_MAP_SCENE_TRAINER_TOWER           0x40D6
+#define VAR_ROAMER_POKEMON                   0x40D5
+#define VAR_MAP_SCENE_TRAINER_TOWER          0x40D6
 #define VAR_SKY_PILLAR_RAQUAZA_CRY_DONE      0x40D7
 #define VAR_SOOTOPOLIS_WALLACE_STATE         0x40D8
 #define VAR_HAS_TALKED_TO_SEAFLOOR_CAVERN_ENTRANCE_GRUNT 0x40D9

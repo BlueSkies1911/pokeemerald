@@ -46,93 +46,93 @@
 #define SLOT_MIDPOINT (DEGREES_PER_SLOT / 2 - 1)
 
 // IDs for grid selections when betting
-#define SELECTION_NONE      0
-#define COL_WYNAUT          1
-#define COL_AZURILL         2
-#define COL_SKITTY          3
-#define COL_MAKUHITA        4
-#define ROW_ORANGE          (COL_MAKUHITA + 1)
-#define SQU_ORANGE_WYNAUT   (ROW_ORANGE + COL_WYNAUT)
-#define SQU_ORANGE_AZURILL  (ROW_ORANGE + COL_AZURILL)
-#define SQU_ORANGE_SKITTY   (ROW_ORANGE + COL_SKITTY)
-#define SQU_ORANGE_MAKUHITA (ROW_ORANGE + COL_MAKUHITA)
-#define ROW_GREEN           (SQU_ORANGE_MAKUHITA + 1)
-#define SQU_GREEN_WYNAUT    (ROW_GREEN + COL_WYNAUT)
-#define SQU_GREEN_AZURILL   (ROW_GREEN + COL_AZURILL)
-#define SQU_GREEN_SKITTY    (ROW_GREEN + COL_SKITTY)
-#define SQU_GREEN_MAKUHITA  (ROW_GREEN + COL_MAKUHITA)
-#define ROW_PURPLE          (SQU_GREEN_MAKUHITA + 1)
-#define SQU_PURPLE_WYNAUT   (ROW_PURPLE + COL_WYNAUT)
-#define SQU_PURPLE_AZURILL  (ROW_PURPLE + COL_AZURILL)
-#define SQU_PURPLE_SKITTY   (ROW_PURPLE + COL_SKITTY)
-#define SQU_PURPLE_MAKUHITA (ROW_PURPLE + COL_MAKUHITA)
-#define NUM_GRID_SELECTIONS SQU_PURPLE_MAKUHITA
+#define SELECTION_NONE        0
+#define COL_BULBASAUR         1
+#define COL_POLIWAG           2
+#define COL_JIGGLYPUFF        3
+#define COL_ABRA              4
+#define ROW_ORANGE            (COL_ABRA + 1)
+#define SQU_ORANGE_BULBASAUR  (ROW_ORANGE + COL_BULBASAUR)
+#define SQU_ORANGE_POLIWAG    (ROW_ORANGE + COL_POLIWAG)
+#define SQU_ORANGE_JIGGLYPUFF (ROW_ORANGE + COL_JIGGLYPUFF)
+#define SQU_ORANGE_ABRA       (ROW_ORANGE + COL_ABRA)
+#define ROW_GREEN             (SQU_ORANGE_ABRA + 1)
+#define SQU_GREEN_BULBASAUR   (ROW_GREEN + COL_BULBASAUR)
+#define SQU_GREEN_POLIWAG     (ROW_GREEN + COL_POLIWAG)
+#define SQU_GREEN_JIGGLYPUFF  (ROW_GREEN + COL_JIGGLYPUFF)
+#define SQU_GREEN_ABRA        (ROW_GREEN + COL_ABRA)
+#define ROW_PURPLE            (SQU_GREEN_ABRA + 1)
+#define SQU_PURPLE_BULBASAUR  (ROW_PURPLE + COL_BULBASAUR)
+#define SQU_PURPLE_POLIWAG    (ROW_PURPLE + COL_POLIWAG)
+#define SQU_PURPLE_JIGGLYPUFF (ROW_PURPLE + COL_JIGGLYPUFF)
+#define SQU_PURPLE_ABRA       (ROW_PURPLE + COL_ABRA)
+#define NUM_GRID_SELECTIONS   SQU_PURPLE_ABRA
 
 // Get the id of the col/row from the selection ID
-// e.g. GET_ROW(SQU_PURPLE_SKITTY) is ROW_PURPLE
+// e.g. GET_ROW(SQU_PURPLE_JIGGLYPUFF) is ROW_PURPLE
 #define GET_COL(selectionId)((selectionId) % (NUM_BOARD_POKES + 1))
 #define GET_ROW(selectionId)((selectionId) / (NUM_BOARD_POKES + 1) * (NUM_BOARD_POKES + 1))
 
 // Get the col/row index from the selection ID
-// e.g. GET_ROW_IDX(SQU_PURPLE_SKITTY) is 2 (purple being the 3rd row)
+// e.g. GET_ROW_IDX(SQU_PURPLE_JIGGLYPUFF) is 2 (purple being the 3rd row)
 #define GET_COL_IDX(selectionId)(selectionId - 1)
 #define GET_ROW_IDX(selectionId)(selectionId / 5 - 1)
 
 // Flags for the above selections, used to set which spaces have been hit or bet on
-#define F_WYNAUT_COL      (1 << COL_WYNAUT)
-#define F_AZURILL_COL     (1 << COL_AZURILL)
-#define F_SKITTY_COL      (1 << COL_SKITTY)
-#define F_MAKUHITA_COL    (1 << COL_MAKUHITA)
-#define F_ORANGE_ROW      (1 << ROW_ORANGE)
-#define F_ORANGE_WYNAUT   (1 << SQU_ORANGE_WYNAUT)
-#define F_ORANGE_AZURILL  (1 << SQU_ORANGE_AZURILL)
-#define F_ORANGE_SKITTY   (1 << SQU_ORANGE_SKITTY)
-#define F_ORANGE_MAKUHITA (1 << SQU_ORANGE_MAKUHITA)
-#define F_GREEN_ROW       (1 << ROW_GREEN)
-#define F_GREEN_WYNAUT    (1 << SQU_GREEN_WYNAUT)
-#define F_GREEN_AZURILL   (1 << SQU_GREEN_AZURILL)
-#define F_GREEN_SKITTY    (1 << SQU_GREEN_SKITTY)
-#define F_GREEN_MAKUHITA  (1 << SQU_GREEN_MAKUHITA)
-#define F_PURPLE_ROW      (1 << ROW_PURPLE)
-#define F_PURPLE_WYNAUT   (1 << SQU_PURPLE_WYNAUT)
-#define F_PURPLE_AZURILL  (1 << SQU_PURPLE_AZURILL)
-#define F_PURPLE_SKITTY   (1 << SQU_PURPLE_SKITTY)
-#define F_PURPLE_MAKUHITA (1 << SQU_PURPLE_MAKUHITA)
+#define F_BULBASAUR_COL     (1 << COL_BULBASAUR)
+#define F_POLIWAG_COL       (1 << COL_POLIWAG)
+#define F_JIGGLYPUFF_COL    (1 << COL_JIGGLYPUFF)
+#define F_ABRA_COL          (1 << COL_ABRA)
+#define F_ORANGE_ROW        (1 << ROW_ORANGE)
+#define F_ORANGE_BULBASAUR  (1 << SQU_ORANGE_BULBASAUR)
+#define F_ORANGE_POLIWAG    (1 << SQU_ORANGE_POLIWAG)
+#define F_ORANGE_JIGGLYPUFF (1 << SQU_ORANGE_JIGGLYPUFF)
+#define F_ORANGE_ABRA       (1 << SQU_ORANGE_ABRA)
+#define F_GREEN_ROW         (1 << ROW_GREEN)
+#define F_GREEN_BULBASAUR   (1 << SQU_GREEN_BULBASAUR)
+#define F_GREEN_POLIWAG     (1 << SQU_GREEN_POLIWAG)
+#define F_GREEN_JIGGLYPUFF  (1 << SQU_GREEN_JIGGLYPUFF)
+#define F_GREEN_ABRA        (1 << SQU_GREEN_ABRA)
+#define F_PURPLE_ROW        (1 << ROW_PURPLE)
+#define F_PURPLE_BULBASAUR  (1 << SQU_PURPLE_BULBASAUR)
+#define F_PURPLE_POLIWAG    (1 << SQU_PURPLE_POLIWAG)
+#define F_PURPLE_JIGGLYPUFF (1 << SQU_PURPLE_JIGGLYPUFF)
+#define F_PURPLE_ABRA       (1 << SQU_PURPLE_ABRA)
 
 // Flags for flashing selections on the roulette wheel
-#define F_FLASH_COLOR_O_WYNAUT   (1 << 0)
-#define F_FLASH_COLOR_G_AZURILL  (1 << 1)
-#define F_FLASH_COLOR_P_SKITTY   (1 << 2)
-#define F_FLASH_COLOR_O_MAKUHITA (1 << 3)
-#define F_FLASH_COLOR_G_WYNAUT   (1 << 4)
-#define F_FLASH_COLOR_P_AZURILL  (1 << 5)
-#define F_FLASH_COLOR_O_SKITTY   (1 << 6)
-#define F_FLASH_COLOR_G_MAKUHITA (1 << 7)
-#define F_FLASH_COLOR_P_WYNAUT   (1 << 8)
-#define F_FLASH_COLOR_O_AZURILL  (1 << 9)
-#define F_FLASH_COLOR_G_SKITTY   (1 << 10)
-#define F_FLASH_COLOR_P_MAKUHITA (1 << 11)
-#define F_FLASH_OUTER_EDGES      (1 << 12) // when the player wins
-#define FLASH_ICON               (NUM_ROULETTE_SLOTS + 1)
-#define FLASH_ICON_2             (FLASH_ICON + 1)
-#define FLASH_ICON_3             (FLASH_ICON + 2)
-#define F_FLASH_ICON             (1 << FLASH_ICON)
-#define F_FLASH_COLUMN           (1 << FLASH_ICON | 1 << FLASH_ICON_2 | 1 << FLASH_ICON_3)
+#define F_FLASH_COLOR_O_BULBASAUR  (1 << 0)
+#define F_FLASH_COLOR_G_POLIWAG    (1 << 1)
+#define F_FLASH_COLOR_P_JIGGLYPUFF (1 << 2)
+#define F_FLASH_COLOR_O_ABRA       (1 << 3)
+#define F_FLASH_COLOR_G_BULBASAUR  (1 << 4)
+#define F_FLASH_COLOR_P_POLIWAG    (1 << 5)
+#define F_FLASH_COLOR_O_JIGGLYPUFF (1 << 6)
+#define F_FLASH_COLOR_G_ABRA       (1 << 7)
+#define F_FLASH_COLOR_P_BULBASAUR  (1 << 8)
+#define F_FLASH_COLOR_O_POLIWAG    (1 << 9)
+#define F_FLASH_COLOR_G_JIGGLYPUFF (1 << 10)
+#define F_FLASH_COLOR_P_ABRA       (1 << 11)
+#define F_FLASH_OUTER_EDGES        (1 << 12) // when the player wins
+#define FLASH_ICON                 (NUM_ROULETTE_SLOTS + 1)
+#define FLASH_ICON_2               (FLASH_ICON + 1)
+#define FLASH_ICON_3               (FLASH_ICON + 2)
+#define F_FLASH_ICON               (1 << FLASH_ICON)
+#define F_FLASH_COLUMN             (1 << FLASH_ICON | 1 << FLASH_ICON_2 | 1 << FLASH_ICON_3)
 
 #define MAX_MULTIPLIER 12
 
-#define PALTAG_SHADOW 1
-#define PALTAG_BALL 2
-#define PALTAG_BALL_COUNTER 3
-#define PALTAG_CURSOR 4
-#define PALTAG_INTERFACE 5
-#define PALTAG_SHROOMISH 6
-#define PALTAG_TAILLOW   7
-#define PALTAG_GRID_ICONS 8
-#define PALTAG_WYNAUT    9
-#define PALTAG_AZURILL   10
-#define PALTAG_SKITTY    11
-#define PALTAG_MAKUHITA  12
+#define PALTAG_SHADOW        1
+#define PALTAG_BALL          2
+#define PALTAG_BALL_COUNTER  3
+#define PALTAG_CURSOR        4
+#define PALTAG_INTERFACE     5
+#define PALTAG_PARAS         6
+#define PALTAG_PIDGEY        7
+#define PALTAG_GRID_ICONS    8
+#define PALTAG_BULBASAUR     9
+#define PALTAG_POLIWAG      10
+#define PALTAG_JIGGLYPUFF   11
+#define PALTAG_ABRA         12
 
 #define GFXTAG_WHEEL_ICONS 0
 #define GFXTAG_HEADERS 4
@@ -144,17 +144,17 @@
 #define GFXTAG_BALL_COUNTER 10
 #define GFXTAG_CURSOR 11
 #define GFXTAG_BALL 12
-#define GFXTAG_SHROOMISH_TAILLOW 13
+#define GFXTAG_PARAS_PIDGEY 13
 #define GFXTAG_SHADOW 14
 
 // 2 different Roulette tables with 2 different rates (normal vs service day special)
 // & 1 gets which table, >> 7 gets if ROULETTE_SPECIAL_RATE is set
 #define GET_MIN_BET_ID(var)(((var) & 1) + (((var) >> 7) * 2))
 
-// Having Shroomish or Taillow in the party can make rolls more consistent in length
+// Having Paras or Pidgey in the party can make rolls more consistent in length
 // It also increases the likelihood that, if they appear to unstick a ball, they'll move it to a slot the player bet on
-#define HAS_SHROOMISH  (1 << 0)
-#define HAS_TAILLOW    (1 << 1)
+#define HAS_PARAS    (1 << 0)
+#define HAS_PIDGEY   (1 << 1)
 
 #define NO_DELAY 0xFFFF
 
@@ -181,18 +181,18 @@ enum {
     SPR_WHEEL_BALL_5,
     SPR_WHEEL_BALL_6,
     SPR_WHEEL_CENTER,
-    SPR_WHEEL_ICON_ORANGE_WYNAUT,
-    SPR_WHEEL_ICON_GREEN_AZURILL,
-    SPR_WHEEL_ICON_PURPLE_SKITTY,
-    SPR_WHEEL_ICON_ORANGE_MAKUHITA,
-    SPR_WHEEL_ICON_GREEN_WYNAUT,
-    SPR_WHEEL_ICON_PURPLE_AZURILL,
-    SPR_WHEEL_ICON_ORANGE_SKITTY,
-    SPR_WHEEL_ICON_GREEN_MAKUHITA,
-    SPR_WHEEL_ICON_PURPLE_WYNAUT,
-    SPR_WHEEL_ICON_ORANGE_AZURILL,
-    SPR_WHEEL_ICON_GREEN_SKITTY,
-    SPR_WHEEL_ICON_PURPLE_MAKUHITA,
+    SPR_WHEEL_ICON_ORANGE_BULBASAUR,
+    SPR_WHEEL_ICON_GREEN_POLIWAG,
+    SPR_WHEEL_ICON_PURPLE_JIGGLYPUFF,
+    SPR_WHEEL_ICON_ORANGE_ABRA,
+    SPR_WHEEL_ICON_GREEN_BULBASAUR,
+    SPR_WHEEL_ICON_PURPLE_POLIWAG,
+    SPR_WHEEL_ICON_ORANGE_JIGGLYPUFF,
+    SPR_WHEEL_ICON_GREEN_ABRA,
+    SPR_WHEEL_ICON_PURPLE_BULBASAUR,
+    SPR_WHEEL_ICON_ORANGE_POLIWAG,
+    SPR_WHEEL_ICON_GREEN_JIGGLYPUFF,
+    SPR_WHEEL_ICON_PURPLE_ABRA,
     SPR_19, // Unused
     SPR_CREDIT,
     SPR_CREDIT_DIG_1,
@@ -203,18 +203,18 @@ enum {
     SPR_BALL_COUNTER_1,
     SPR_BALL_COUNTER_2,
     SPR_BALL_COUNTER_3,
-    SPR_GRID_ICON_ORANGE_WYNAUT,
-    SPR_GRID_ICON_GREEN_AZURILL,
-    SPR_GRID_ICON_PURPLE_SKITTY,
-    SPR_GRID_ICON_ORANGE_MAKUHITA,
-    SPR_GRID_ICON_GREEN_WYNAUT,
-    SPR_GRID_ICON_PURPLE_AZURILL,
-    SPR_GRID_ICON_ORANGE_SKITTY,
-    SPR_GRID_ICON_GREEN_MAKUHITA,
-    SPR_GRID_ICON_PURPLE_WYNAUT,
-    SPR_GRID_ICON_ORANGE_AZURILL,
-    SPR_GRID_ICON_GREEN_SKITTY,
-    SPR_GRID_ICON_PURPLE_MAKUHITA,
+    SPR_GRID_ICON_ORANGE_BULBASAUR,
+    SPR_GRID_ICON_GREEN_POLIWAG,
+    SPR_GRID_ICON_PURPLE_JIGGLYPUFF,
+    SPR_GRID_ICON_ORANGE_ABRA,
+    SPR_GRID_ICON_GREEN_BULBASAUR,
+    SPR_GRID_ICON_PURPLE_POLIWAG,
+    SPR_GRID_ICON_ORANGE_JIGGLYPUFF,
+    SPR_GRID_ICON_GREEN_ABRA,
+    SPR_GRID_ICON_PURPLE_BULBASAUR,
+    SPR_GRID_ICON_ORANGE_POLIWAG,
+    SPR_GRID_ICON_GREEN_JIGLYPUFF,
+    SPR_GRID_ICON_PURPLE_ABRA,
     SPR_POKE_HEADER_1,
     SPR_POKE_HEADER_2,
     SPR_POKE_HEADER_3,
@@ -229,7 +229,7 @@ enum {
     SPR_GRID_BALL_4,
     SPR_GRID_BALL_5,
     SPR_GRID_BALL_6,
-    SPR_CLEAR_MON, // Shroomish/Taillow
+    SPR_CLEAR_MON, // Paras/Pidgey
     SPR_CLEAR_MON_SHADOW_1,
     SPR_CLEAR_MON_SHADOW_2,
     SPR_58, // Here below unused
@@ -242,22 +242,22 @@ enum {
 
 // Start points for sprite IDs that are looped over
 #define SPR_WHEEL_BALLS SPR_WHEEL_BALL_1
-#define SPR_WHEEL_ICONS SPR_WHEEL_ICON_ORANGE_WYNAUT
+#define SPR_WHEEL_ICONS SPR_WHEEL_ICON_ORANGE_BULBASAUR
 #define SPR_BALL_COUNTER SPR_BALL_COUNTER_1
 #define SPR_CREDIT_DIGITS SPR_CREDIT_DIG_1
-#define SPR_GRID_ICONS SPR_GRID_ICON_ORANGE_WYNAUT
+#define SPR_GRID_ICONS SPR_GRID_ICON_ORANGE_BULBASAUR
 #define SPR_POKE_HEADERS SPR_POKE_HEADER_1
 #define SPR_COLOR_HEADERS SPR_COLOR_HEADER_1
 #define SPR_GRID_BALLS SPR_GRID_BALL_1
 
-struct Shroomish
+struct Paras
 {
     u16 startAngle;
     u16 dropAngle;
     u16 fallSlowdown;
 };
 
-struct Taillow
+struct Pidgey
 {
     u16 baseDropDelay;
     u16 rightStartAngle;
@@ -271,8 +271,8 @@ struct RouletteTable
     u8 randDistanceLow;
     u8 wheelSpeed;
     u8 wheelDelay;
-    struct Shroomish shroomish;
-    struct Taillow taillow;
+    struct Paras paras;
+    struct Pidgey pidgey;
     u16 ballSpeed;
     u16 baseTravelDist;
     f32 var1C;
@@ -304,9 +304,9 @@ struct RouletteSlot
 static EWRAM_DATA struct Roulette
 {
     u8 unk0; // Never read
-    u8 shroomishShadowTimer;
+    u8 parasShadowTimer;
     u8 partySpeciesFlags;
-    bool8 useTaillow:5;
+    bool8 usePidgey:5;
     bool8 ballStuck:1;
     bool8 ballUnstuck:1;
     bool8 ballRolling:1; // Never read
@@ -329,7 +329,7 @@ static EWRAM_DATA struct Roulette
     s16 selectionRectDrawState;
     s16 updateGridHighlight;
     struct OamMatrix wheelRotation;
-    u16 shroomishShadowAlpha;
+    u16 parasShadowAlpha;
     struct Sprite *ball;
     u8 spriteIds[MAX_SPRITES];
     u8 curBallSpriteId;
@@ -410,11 +410,11 @@ static void SpriteCB_WheelCenter(struct Sprite *);
 static void CreateWheelBallSprites(void);
 static void HideWheelBalls(void);
 static void SpriteCB_RollBall_Start(struct Sprite *);
-static void CreateShroomishSprite(struct Sprite *);
-static void CreateTaillowSprite(struct Sprite *);
+static void CreateParasSprite(struct Sprite *);
+static void CreatePidgeySprite(struct Sprite *);
 static void SetBallStuck(struct Sprite *);
-static void SpriteCB_Shroomish(struct Sprite *);
-static void SpriteCB_Taillow(struct Sprite *);
+static void SpriteCB_Paras(struct Sprite *);
+static void SpriteCB_Pidgey(struct Sprite *);
 
 static const u16 sWheel_Pal[] = INCBIN_U16("graphics/roulette/wheel.gbapal"); // also palette for grid
 static const u32 sGrid_Tilemap[] = INCBIN_U32("graphics/roulette/grid.bin.lz");
@@ -483,7 +483,7 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .inSelectionFlags = 0,
         .flashFlags = 0,
     },
-    [COL_WYNAUT] = {
+    [COL_BULBASAUR] = {
         .spriteIdOffset = 12,
         .baseMultiplier = NUM_BOARD_POKES,
         .column = 1,
@@ -492,11 +492,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 7,
         .var05 = 0,
         .tilemapOffset = 0,
-        .flag = F_WYNAUT_COL,
-        .inSelectionFlags = F_WYNAUT_COL | F_ORANGE_WYNAUT | F_GREEN_WYNAUT | F_PURPLE_WYNAUT,
+        .flag = F_BULBASAUR_COL,
+        .inSelectionFlags = F_BULBASAUR_COL | F_ORANGE_BULBASAUR | F_GREEN_BULBASAUR | F_PURPLE_BULBASAUR,
         .flashFlags = F_FLASH_COLUMN,
     },
-    [COL_AZURILL] = {
+    [COL_POLIWAG] = {
         .spriteIdOffset = 13,
         .baseMultiplier = NUM_BOARD_POKES,
         .column = 2,
@@ -505,11 +505,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 7,
         .var05 = 0,
         .tilemapOffset = 0,
-        .flag = F_AZURILL_COL,
-        .inSelectionFlags = F_AZURILL_COL | F_ORANGE_AZURILL | F_GREEN_AZURILL | F_PURPLE_AZURILL,
+        .flag = F_POLIWAG_COL,
+        .inSelectionFlags = F_POLIWAG_COL | F_ORANGE_POLIWAG | F_GREEN_POLIWAG | F_PURPLE_POLIWAG,
         .flashFlags = F_FLASH_COLUMN,
     },
-    [COL_SKITTY] = {
+    [COL_JIGGLYPUFF] = {
         .spriteIdOffset = 14,
         .baseMultiplier = NUM_BOARD_POKES,
         .column = 3,
@@ -518,11 +518,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 7,
         .var05 = 0,
         .tilemapOffset = 0,
-        .flag = F_SKITTY_COL,
-        .inSelectionFlags = F_SKITTY_COL | F_ORANGE_SKITTY | F_GREEN_SKITTY | F_PURPLE_SKITTY,
+        .flag = F_JIGGLYPUFF_COL,
+        .inSelectionFlags = F_JIGGLYPUFF_COL | F_ORANGE_JIGGLYPUFF | F_GREEN_JIGGLYPUFF | F_PURPLE_JIGGLYPUFF,
         .flashFlags = F_FLASH_COLUMN,
     },
-    [COL_MAKUHITA] = {
+    [COL_ABRA] = {
         .spriteIdOffset = 15,
         .baseMultiplier = NUM_BOARD_POKES,
         .column = 4,
@@ -531,8 +531,8 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 7,
         .var05 = 0,
         .tilemapOffset = 0,
-        .flag = F_MAKUHITA_COL,
-        .inSelectionFlags = F_MAKUHITA_COL | F_ORANGE_MAKUHITA | F_GREEN_MAKUHITA | F_PURPLE_MAKUHITA,
+        .flag = F_ABRA_COL,
+        .inSelectionFlags = F_ABRA_COL | F_ORANGE_ABRA | F_GREEN_ABRA | F_PURPLE_ABRA,
         .flashFlags = F_FLASH_COLUMN,
     },
     [ROW_ORANGE] = {
@@ -545,10 +545,10 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .var05 = 0,
         .tilemapOffset = 12,
         .flag = F_ORANGE_ROW,
-        .inSelectionFlags = F_ORANGE_ROW | F_ORANGE_WYNAUT | F_ORANGE_AZURILL | F_ORANGE_SKITTY | F_ORANGE_MAKUHITA,
-        .flashFlags = F_FLASH_COLOR_O_WYNAUT | F_FLASH_COLOR_O_AZURILL | F_FLASH_COLOR_O_SKITTY | F_FLASH_COLOR_O_MAKUHITA,
+        .inSelectionFlags = F_ORANGE_ROW | F_ORANGE_BULBASAUR | F_ORANGE_POLIWAG | F_ORANGE_JIGGLYPUFF | F_ORANGE_ABRA,
+        .flashFlags = F_FLASH_COLOR_O_BULBASAUR | F_FLASH_COLOR_O_POLIWAG | F_FLASH_COLOR_O_JIGGLYPUFF | F_FLASH_COLOR_O_ABRA,
     },
-    [SQU_ORANGE_WYNAUT] = {
+    [SQU_ORANGE_BULBASAUR] = {
         .spriteIdOffset = 0,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 1,
@@ -557,11 +557,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 10,
         .var05 = 3,
         .tilemapOffset = 3,
-        .flag = F_ORANGE_WYNAUT,
-        .inSelectionFlags = F_ORANGE_WYNAUT,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_WYNAUT,
+        .flag = F_ORANGE_BULBASAUR,
+        .inSelectionFlags = F_ORANGE_BULBASAUR,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_BULBASAUR,
     },
-    [SQU_ORANGE_AZURILL] = {
+    [SQU_ORANGE_POLIWAG] = {
         .spriteIdOffset = 9,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 2,
@@ -570,11 +570,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 10,
         .var05 = 3,
         .tilemapOffset = 3,
-        .flag = F_ORANGE_AZURILL,
-        .inSelectionFlags = F_ORANGE_AZURILL,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_AZURILL,
+        .flag = F_ORANGE_POLIWAG,
+        .inSelectionFlags = F_ORANGE_POLIWAG,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_POLIWAG,
     },
-    [SQU_ORANGE_SKITTY] = {
+    [SQU_ORANGE_JIGGLYPUFF] = {
         .spriteIdOffset = 6,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 3,
@@ -583,11 +583,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 10,
         .var05 = 3,
         .tilemapOffset = 3,
-        .flag = F_ORANGE_SKITTY,
-        .inSelectionFlags = F_ORANGE_SKITTY,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_SKITTY,
+        .flag = F_ORANGE_JIGGLYPUFF,
+        .inSelectionFlags = F_ORANGE_JIGGLYPUFF,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_JIGGLYPUFF,
     },
-    [SQU_ORANGE_MAKUHITA] = {
+    [SQU_ORANGE_ABRA] = {
         .spriteIdOffset = 3,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 4,
@@ -596,9 +596,9 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 10,
         .var05 = 3,
         .tilemapOffset = 3,
-        .flag = F_ORANGE_MAKUHITA,
-        .inSelectionFlags = F_ORANGE_MAKUHITA,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_MAKUHITA,
+        .flag = F_ORANGE_ABRA,
+        .inSelectionFlags = F_ORANGE_ABRA,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_O_ABRA,
     },
     [ROW_GREEN] = {
         .spriteIdOffset = 17,
@@ -610,10 +610,10 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .var05 = 3,
         .tilemapOffset = 15,
         .flag = F_GREEN_ROW,
-        .inSelectionFlags = F_GREEN_ROW | F_GREEN_WYNAUT | F_GREEN_AZURILL | F_GREEN_SKITTY | F_GREEN_MAKUHITA,
-        .flashFlags = F_FLASH_COLOR_G_WYNAUT | F_FLASH_COLOR_G_AZURILL | F_FLASH_COLOR_G_SKITTY | F_FLASH_COLOR_G_MAKUHITA,
+        .inSelectionFlags = F_GREEN_ROW | F_GREEN_BULBASAUR | F_GREEN_POLIWAG | F_GREEN_JIGGLYPUFF | F_GREEN_ABRA,
+        .flashFlags = F_FLASH_COLOR_G_BULBASAUR | F_FLASH_COLOR_G_POLIWAG | F_FLASH_COLOR_G_JIGGLYPUFF | F_FLASH_COLOR_G_ABRA,
     },
-    [SQU_GREEN_WYNAUT] = {
+    [SQU_GREEN_BULBASAUR] = {
         .spriteIdOffset = 4,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 1,
@@ -622,11 +622,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 13,
         .var05 = 6,
         .tilemapOffset = 6,
-        .flag = F_GREEN_WYNAUT,
-        .inSelectionFlags = F_GREEN_WYNAUT,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_WYNAUT,
+        .flag = F_GREEN_BULBASAUR,
+        .inSelectionFlags = F_GREEN_BULBASAUR,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_BULBASAUR,
     },
-    [SQU_GREEN_AZURILL] = {
+    [SQU_GREEN_POLIWAG] = {
         .spriteIdOffset = 1,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 2,
@@ -635,11 +635,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 13,
         .var05 = 6,
         .tilemapOffset = 6,
-        .flag = F_GREEN_AZURILL,
-        .inSelectionFlags = F_GREEN_AZURILL,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_AZURILL,
+        .flag = F_GREEN_POLIWAG,
+        .inSelectionFlags = F_GREEN_POLIWAG,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_POLIWAG,
     },
-    [SQU_GREEN_SKITTY] = {
+    [SQU_GREEN_JIGGLYPUFF] = {
         .spriteIdOffset = 10,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 3,
@@ -648,11 +648,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 13,
         .var05 = 6,
         .tilemapOffset = 6,
-        .flag = F_GREEN_SKITTY,
-        .inSelectionFlags = F_GREEN_SKITTY,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_SKITTY,
+        .flag = F_GREEN_JIGGLYPUFF,
+        .inSelectionFlags = F_GREEN_JIGGLYPUFF,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_JIGGLYPUFF,
     },
-    [SQU_GREEN_MAKUHITA] = {
+    [SQU_GREEN_ABRA] = {
         .spriteIdOffset = 7,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 4,
@@ -661,9 +661,9 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 13,
         .var05 = 6,
         .tilemapOffset = 6,
-        .flag = F_GREEN_MAKUHITA,
-        .inSelectionFlags = F_GREEN_MAKUHITA,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_MAKUHITA,
+        .flag = F_GREEN_ABRA,
+        .inSelectionFlags = F_GREEN_ABRA,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_G_ABRA,
     },
     [ROW_PURPLE] = {
         .spriteIdOffset = 18,
@@ -675,10 +675,10 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .var05 = 6,
         .tilemapOffset = 18,
         .flag = F_PURPLE_ROW,
-        .inSelectionFlags = F_PURPLE_ROW | F_PURPLE_WYNAUT | F_PURPLE_AZURILL | F_PURPLE_SKITTY | F_PURPLE_MAKUHITA,
-        .flashFlags = F_FLASH_COLOR_P_WYNAUT | F_FLASH_COLOR_P_AZURILL | F_FLASH_COLOR_P_SKITTY | F_FLASH_COLOR_P_MAKUHITA,
+        .inSelectionFlags = F_PURPLE_ROW | F_PURPLE_BULBASAUR | F_PURPLE_POLIWAG | F_PURPLE_JIGGLYPUFF | F_PURPLE_ABRA,
+        .flashFlags = F_FLASH_COLOR_P_BULBASAUR | F_FLASH_COLOR_P_POLIWAG | F_FLASH_COLOR_P_JIGGLYPUFF | F_FLASH_COLOR_P_ABRA,
     },
-    [SQU_PURPLE_WYNAUT] = {
+    [SQU_PURPLE_BULBASAUR] = {
         .spriteIdOffset = 8,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 1,
@@ -687,11 +687,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 16,
         .var05 = 9,
         .tilemapOffset = 9,
-        .flag = F_PURPLE_WYNAUT,
-        .inSelectionFlags = F_PURPLE_WYNAUT,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_WYNAUT,
+        .flag = F_PURPLE_BULBASAUR,
+        .inSelectionFlags = F_PURPLE_BULBASAUR,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_BULBASAUR,
     },
-    [SQU_PURPLE_AZURILL] = {
+    [SQU_PURPLE_POLIWAG] = {
         .spriteIdOffset = 5,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 2,
@@ -700,11 +700,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 16,
         .var05 = 9,
         .tilemapOffset = 9,
-        .flag = F_PURPLE_AZURILL,
-        .inSelectionFlags = F_PURPLE_AZURILL,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_AZURILL,
+        .flag = F_PURPLE_POLIWAG,
+        .inSelectionFlags = F_PURPLE_POLIWAG,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_POLIWAG,
     },
-    [SQU_PURPLE_SKITTY] = {
+    [SQU_PURPLE_JIGGLYPUFF] = {
         .spriteIdOffset = 2,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 3,
@@ -713,11 +713,11 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 16,
         .var05 = 9,
         .tilemapOffset = 9,
-        .flag = F_PURPLE_SKITTY,
-        .inSelectionFlags = F_PURPLE_SKITTY,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_SKITTY,
+        .flag = F_PURPLE_JIGGLYPUFF,
+        .inSelectionFlags = F_PURPLE_JIGGLYPUFF,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_JIGGLYPUFF,
     },
-    [SQU_PURPLE_MAKUHITA] = {
+    [SQU_PURPLE_ABRA] = {
         .spriteIdOffset = 11,
         .baseMultiplier = NUM_ROULETTE_SLOTS,
         .column = 4,
@@ -726,9 +726,9 @@ static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
         .y = 16,
         .var05 = 9,
         .tilemapOffset = 9,
-        .flag = F_PURPLE_MAKUHITA,
-        .inSelectionFlags = F_PURPLE_MAKUHITA,
-        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_MAKUHITA,
+        .flag = F_PURPLE_ABRA,
+        .inSelectionFlags = F_PURPLE_ABRA,
+        .flashFlags = F_FLASH_ICON | F_FLASH_COLOR_P_ABRA,
     },
 };
 
@@ -737,74 +737,74 @@ static const struct RouletteSlot sRouletteSlots[] =
     {
         .id1 = 0,
         .id2 = 1,
-        .gridSquare = SQU_ORANGE_WYNAUT,
-        .flag = F_ORANGE_WYNAUT,
+        .gridSquare = SQU_ORANGE_BULBASAUR,
+        .flag = F_ORANGE_BULBASAUR,
     },
     {
         .id1 = 1,
         .id2 = 3,
-        .gridSquare = SQU_GREEN_AZURILL,
-        .flag = F_GREEN_AZURILL,
+        .gridSquare = SQU_GREEN_POLIWAG,
+        .flag = F_GREEN_POLIWAG,
     },
     {
         .id1 = 2,
         .id2 = 5,
-        .gridSquare = SQU_PURPLE_SKITTY,
-        .flag = F_PURPLE_SKITTY,
+        .gridSquare = SQU_PURPLE_JIGGLYPUFF,
+        .flag = F_PURPLE_JIGGLYPUFF,
     },
     {
         .id1 = 3,
         .id2 = 7,
-        .gridSquare = SQU_ORANGE_MAKUHITA,
-        .flag = F_ORANGE_MAKUHITA,
+        .gridSquare = SQU_ORANGE_ABRA,
+        .flag = F_ORANGE_ABRA,
     },
     {
         .id1 = 4,
         .id2 = 9,
-        .gridSquare = SQU_GREEN_WYNAUT,
-        .flag = F_GREEN_WYNAUT,
+        .gridSquare = SQU_GREEN_BULBASAUR,
+        .flag = F_GREEN_BULBASAUR,
     },
     {
         .id1 = 5,
         .id2 = 11,
-        .gridSquare = SQU_PURPLE_AZURILL,
-        .flag = F_PURPLE_AZURILL,
+        .gridSquare = SQU_PURPLE_POLIWAG,
+        .flag = F_PURPLE_POLIWAG,
     },
     {
         .id1 = 6,
         .id2 = 13,
-        .gridSquare = SQU_ORANGE_SKITTY,
-        .flag = F_ORANGE_SKITTY,
+        .gridSquare = SQU_ORANGE_JIGGLYPUFF,
+        .flag = F_ORANGE_JIGGLYPUFF,
     },
     {
         .id1 = 7,
         .id2 = 15,
-        .gridSquare = SQU_GREEN_MAKUHITA,
-        .flag = F_GREEN_MAKUHITA,
+        .gridSquare = SQU_GREEN_ABRA,
+        .flag = F_GREEN_ABRA,
     },
     {
         .id1 = 8,
         .id2 = 17,
-        .gridSquare = SQU_PURPLE_WYNAUT,
-        .flag = F_PURPLE_WYNAUT,
+        .gridSquare = SQU_PURPLE_BULBASAUR,
+        .flag = F_PURPLE_BULBASAUR,
     },
     {
         .id1 = 9,
         .id2 = 19,
-        .gridSquare = SQU_ORANGE_AZURILL,
-        .flag = F_ORANGE_AZURILL,
+        .gridSquare = SQU_ORANGE_POLIWAG,
+        .flag = F_ORANGE_POLIWAG,
     },
     {
         .id1 = 10,
         .id2 = 21,
-        .gridSquare = SQU_GREEN_SKITTY,
-        .flag = F_GREEN_SKITTY,
+        .gridSquare = SQU_GREEN_JIGGLYPUFF,
+        .flag = F_GREEN_JIGGLYPUFF,
     },
     {
         .id1 = 11,
         .id2 = 23,
-        .gridSquare = SQU_PURPLE_MAKUHITA,
-        .flag = F_PURPLE_MAKUHITA,
+        .gridSquare = SQU_PURPLE_ABRA,
+        .flag = F_PURPLE_ABRA,
     },
 };
 static const u8 sTableMinBets[] = {1, 3, 1, 6};
@@ -818,12 +818,12 @@ static const struct RouletteTable sRouletteTables[] =
         .randDistanceLow = DEGREES_PER_SLOT,
         .wheelSpeed = 1,
         .wheelDelay = 1,
-        .shroomish = {
+        .paras = {
             .startAngle = 45,
             .dropAngle = 30,
             .fallSlowdown = 1,
         },
-        .taillow = {
+        .pidgey = {
             .baseDropDelay = 75,
             .rightStartAngle = 27,
             .leftStartAngle = 24,
@@ -839,12 +839,12 @@ static const struct RouletteTable sRouletteTables[] =
         .randDistanceLow = DEGREES_PER_SLOT / 2,
         .wheelSpeed = 1,
         .wheelDelay = 0,
-        .shroomish = {
+        .paras = {
             .startAngle = 75,
             .dropAngle = 60,
             .fallSlowdown = 2,
         },
-        .taillow = {
+        .pidgey = {
             .baseDropDelay = 0,
             .rightStartAngle = 54,
             .leftStartAngle = 48,
@@ -858,7 +858,7 @@ static const struct RouletteTable sRouletteTables[] =
 // Data to flash the color indicator for each slot on the roulette wheel
 static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS + 1] =
 {
-    { // F_FLASH_COLOR_O_WYNAUT
+    { // F_FLASH_COLOR_O_BULBASAUR
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(0) + 5,
         .numColors = 1,
@@ -868,7 +868,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_G_AZURILL
+    { // F_FLASH_COLOR_G_POLIWAG
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(0) + 10,
         .numColors = 1,
@@ -878,7 +878,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_P_SKITTY
+    { // F_FLASH_COLOR_P_JIGGLYPUFF
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(1) + 5,
         .numColors = 1,
@@ -888,7 +888,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_O_MAKUHITA
+    { // F_FLASH_COLOR_O_ABRA
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(5) + 5,
         .numColors = 1,
@@ -898,7 +898,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_G_WYNAUT
+    { // F_FLASH_COLOR_G_BULBASAUR
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(5) + 10,
         .numColors = 1,
@@ -908,7 +908,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_P_AZURILL
+    { // F_FLASH_COLOR_P_POLIWAG
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(6) + 5,
         .numColors = 1,
@@ -918,7 +918,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_O_SKITTY
+    { // F_FLASH_COLOR_O_JIGGLYPUFF
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(7) + 5,
         .numColors = 1,
@@ -928,7 +928,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_G_MAKUHITA
+    { // F_FLASH_COLOR_G_ABRA
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(7) + 10,
         .numColors = 1,
@@ -938,7 +938,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_P_WYNAUT
+    { // F_FLASH_COLOR_P_BULBASAUR
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(8) + 5,
         .numColors = 1,
@@ -948,7 +948,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_O_AZURILL
+    { // F_FLASH_COLOR_O_POLIWAG
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(9) + 5,
         .numColors = 1,
@@ -958,7 +958,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_G_SKITTY
+    { // F_FLASH_COLOR_G_JIGGLYPUFF
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(9) + 10,
         .numColors = 1,
@@ -968,7 +968,7 @@ static const struct RouletteFlashSettings sFlashData_Colors[NUM_ROULETTE_SLOTS +
         .unk7_5 = -2,
         .colorDeltaDir = 0,
     },
-    { // F_FLASH_COLOR_P_MAKUHITA
+    { // F_FLASH_COLOR_P_ABRA
         .color = FLASHUTIL_USE_EXISTING_COLOR,
         .paletteOffset = BG_PLTT_ID(10) + 5,
         .numColors = 1,
@@ -1055,8 +1055,8 @@ static void VBlankCB_Roulette(void)
     UpdateWheelPosition();
     SetGpuReg(REG_OFFSET_BG1HOFS, 0x200 - sRoulette->gridX);
 
-    if (sRoulette->shroomishShadowTimer)
-        SetGpuReg(REG_OFFSET_BLDALPHA, sRoulette->shroomishShadowAlpha);
+    if (sRoulette->parasShadowTimer)
+        SetGpuReg(REG_OFFSET_BLDALPHA, sRoulette->parasShadowAlpha);
 
     if (sRoulette->updateGridHighlight)
     {
@@ -1146,11 +1146,11 @@ static void InitRouletteTableData(void)
     {
         switch (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG))
         {
-        case SPECIES_SHROOMISH:
-            sRoulette->partySpeciesFlags |= HAS_SHROOMISH;
+        case SPECIES_PARAS:
+            sRoulette->partySpeciesFlags |= HAS_PARAS;
             break;
-        case SPECIES_TAILLOW:
-            sRoulette->partySpeciesFlags |= HAS_TAILLOW;
+        case SPECIES_PIDGEY:
+            sRoulette->partySpeciesFlags |= HAS_PIDGEY;
             break;
         }
     }
@@ -1319,10 +1319,10 @@ static void UpdateGridSelectionRect(u8 selectionId)
     case SELECTION_NONE:
         FillTilemapRect(&sRoulette->tilemapBuffers[0][0], 0, 14, 7, 16, 13);
         break;
-    case COL_WYNAUT:
-    case COL_AZURILL:
-    case COL_SKITTY:
-    case COL_MAKUHITA:
+    case COL_BULBASAUR:
+    case COL_POLIWAG:
+    case COL_JIGGLYPUFF:
+    case COL_ABRA:
         temp0 = (selectionId * 3 + 14);
         FillTilemapRect(&sRoulette->tilemapBuffers[0][0], 0, 14, 7, 16, 13);
         SetTilemapRect(&sRoulette->tilemapBuffers[0][0], &sRoulette->gridTilemap[281], temp0, 7, 3, 13);
@@ -1366,7 +1366,7 @@ static void Task_SelectFirstEmptySquare(u8 taskId)
     if (sRoulette->hitFlags & F_ORANGE_ROW)
     {
         // If the whole orange row is filled, get first in green row
-        for (i = SQU_GREEN_WYNAUT; i < SQU_GREEN_MAKUHITA; i++)
+        for (i = SQU_GREEN_BULBASAUR; i < SQU_GREEN_ABRA; i++)
         {
             if (!(sRoulette->hitFlags & sGridSelections[i].flag))
                 break;
@@ -1376,7 +1376,7 @@ static void Task_SelectFirstEmptySquare(u8 taskId)
     {
         // Otherwise get first in orange row
         // With only 6 balls both rows can't be filled, no need to check purple row
-        for (i = SQU_ORANGE_WYNAUT; i <= SQU_ORANGE_MAKUHITA; i++) // <= is accidental, but it will never get that far
+        for (i = SQU_ORANGE_BULBASAUR; i <= SQU_ORANGE_ABRA; i++) // <= is accidental, but it will never get that far
         {
             if (!(sRoulette->hitFlags & sGridSelections[i].flag))
                 break;
@@ -1410,7 +1410,7 @@ static bool8 CanMoveSelectionInDir(s16 *selectionId, u8 dir)
     case 2: // LEFT
     case 3: // RIGHT
         temp1 = GET_ROW(*selectionId);
-        temp = temp1 + COL_MAKUHITA;
+        temp = temp1 + COL_ABRA;
         if (temp1 == SELECTION_NONE)
             temp1 = 1;
         break;
@@ -1457,7 +1457,7 @@ static void ProcessBetGridInput(u8 taskId)
             + (*gSprites[sRoulette->spriteIds[i + SPR_POKE_HEADERS]].anims)->type;
         }
         // If the current selection is a column with at least 1 unhit space, fill in the header
-        if ((u16)(gTasks[taskId].tSelectionId - 1) < COL_MAKUHITA && !(sRoulette->hitFlags & sGridSelections[gTasks[taskId].tSelectionId].flag))
+        if ((u16)(gTasks[taskId].tSelectionId - 1) < COL_ABRA && !(sRoulette->hitFlags & sGridSelections[gTasks[taskId].tSelectionId].flag))
         {
             headerOffset = gTasks[taskId].tSelectionId - 1;
             gSprites[sRoulette->spriteIds[headerOffset + SPR_POKE_HEADERS]].oam.tileNum =
@@ -1553,13 +1553,13 @@ static void Task_SlideGridOffscreen(u8 taskId)
 // Each roll a random value is generated to add onto this distance
 // Half the value returned by this function is the max distance that can be added on per roll
 // i.e. the lower this value is, the closer the roll will be to a consistent distance
-// Odds of a lower value increase as play continues, if the player has Shroomish and/or Taillow in the party, and dependent on the time
+// Odds of a lower value increase as play continues, if the player has Paras and/or Pidgey in the party, and dependent on the time
 static u8 GetRandomForBallTravelDistance(u16 ballNum, u16 rand)
 {
     switch (sRoulette->partySpeciesFlags)
     {
-    case HAS_SHROOMISH:
-    case HAS_TAILLOW:
+    case HAS_PARAS:
+    case HAS_PIDGEY:
         // one of the two is in party
         if (gLocalTime.hours > 3 && gLocalTime.hours < 10)
         {
@@ -1577,7 +1577,7 @@ static u8 GetRandomForBallTravelDistance(u16 ballNum, u16 rand)
             return sRouletteTables[sRoulette->tableId].randDistanceLow;
         }
         break;
-    case HAS_SHROOMISH | HAS_TAILLOW:
+    case HAS_PARAS | HAS_PIDGEY:
         // both are in party
         if (gLocalTime.hours > 3 && gLocalTime.hours < 11)
         {
@@ -2030,7 +2030,7 @@ static void ResetBallDataForNewSpin(u8 taskId)
     sRoulette->ballRolling = FALSE;
     sRoulette->ballStuck = FALSE;
     sRoulette->ballUnstuck = FALSE;
-    sRoulette->useTaillow = FALSE;
+    sRoulette->usePidgey = FALSE;
 
     for (i = 0; i < BALLS_PER_ROUND; i++)
         sRoulette->betSelection[i] = SELECTION_NONE;
@@ -2060,15 +2060,15 @@ static u8 RecordHit(u8 taskId, u8 slotId)
 {
     u8 i, j;
     u32 columnFlags[NUM_BOARD_POKES] = {
-        F_WYNAUT_COL | F_ORANGE_WYNAUT | F_GREEN_WYNAUT | F_PURPLE_WYNAUT,
-        F_AZURILL_COL | F_ORANGE_AZURILL | F_GREEN_AZURILL | F_PURPLE_AZURILL,
-        F_SKITTY_COL | F_ORANGE_SKITTY | F_GREEN_SKITTY | F_PURPLE_SKITTY,
-        F_MAKUHITA_COL | F_ORANGE_MAKUHITA | F_GREEN_MAKUHITA | F_PURPLE_MAKUHITA
+        F_BULBASAUR_COL | F_ORANGE_BULBASAUR | F_GREEN_BULBASAUR | F_PURPLE_BULBASAUR,
+        F_POLIWAG_COL | F_ORANGE_POLIWAG | F_GREEN_POLIWAG | F_PURPLE_POLIWAG,
+        F_JIGGLYPUFF_COL | F_ORANGE_JIGGLYPUFF | F_GREEN_JIGGLYPUFF | F_PURPLE_JIGGLYPUFF,
+        F_ABRA_COL | F_ORANGE_ABRA | F_GREEN_ABRA | F_PURPLE_ABRA
     };
     u32 rowFlags[NUM_BOARD_COLORS] = {
-        F_ORANGE_ROW | F_ORANGE_WYNAUT | F_ORANGE_AZURILL | F_ORANGE_SKITTY | F_ORANGE_MAKUHITA,
-        F_GREEN_ROW | F_GREEN_WYNAUT | F_GREEN_AZURILL | F_GREEN_SKITTY | F_GREEN_MAKUHITA,
-        F_PURPLE_ROW | F_PURPLE_WYNAUT | F_PURPLE_AZURILL | F_PURPLE_SKITTY | F_PURPLE_MAKUHITA
+        F_ORANGE_ROW | F_ORANGE_BULBASAUR | F_ORANGE_POLIWAG | F_ORANGE_JIGGLYPUFF | F_ORANGE_ABRA,
+        F_GREEN_ROW | F_GREEN_BULBASAUR | F_GREEN_POLIWAG | F_GREEN_JIGGLYPUFF | F_GREEN_ABRA,
+        F_PURPLE_ROW | F_PURPLE_BULBASAUR | F_PURPLE_POLIWAG | F_PURPLE_JIGGLYPUFF | F_PURPLE_ABRA
     };
 
     if (slotId >= NUM_ROULETTE_SLOTS)
@@ -2105,10 +2105,10 @@ static bool8 IsHitInBetSelection(u8 gridSquare, u8 betSelection)
         {
         case SELECTION_NONE:
             return 3; // should never happen, player must place bet
-        case COL_WYNAUT:
-        case COL_AZURILL:
-        case COL_SKITTY:
-        case COL_MAKUHITA:
+        case COL_BULBASAUR:
+        case COL_POLIWAG:
+        case COL_JIGGLYPUFF:
+        case COL_ABRA:
             if (hit == betSelection + ROW_ORANGE
              || hit == betSelection + ROW_GREEN
              || hit == betSelection + ROW_PURPLE)
@@ -2117,8 +2117,8 @@ static bool8 IsHitInBetSelection(u8 gridSquare, u8 betSelection)
         case ROW_ORANGE:
         case ROW_GREEN:
         case ROW_PURPLE:
-            if (hit >= (betSelection + COL_WYNAUT)
-             && hit <= (betSelection + COL_MAKUHITA))
+            if (hit >= (betSelection + COL_BULBASAUR)
+             && hit <= (betSelection + COL_ABRA))
                 return TRUE;
             break;
         // Individual square
@@ -2156,7 +2156,7 @@ static void FlashSelectionOnWheel(u8 selectionId)
         struct RouletteFlashSettings iconFlash[NUM_BOARD_COLORS];
         memcpy(iconFlash, sFlashData_PokeIcons, sizeof(iconFlash));
 
-        if (selectionId >= COL_WYNAUT && selectionId <= COL_MAKUHITA)
+        if (selectionId >= COL_BULBASAUR && selectionId <= COL_ABRA)
             numSelected = NUM_BOARD_COLORS; // Selection is full column
         else
             numSelected = 1;
@@ -2166,17 +2166,17 @@ static void FlashSelectionOnWheel(u8 selectionId)
         {
         // The specific color of the poke it references doesn't matter, because the icons of a poke share a palette
         // So it just uses the first sprite ID of each
-        case COL_WYNAUT:
-            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_ORANGE_WYNAUT]].oam.paletteNum);
+        case COL_BULBASAUR:
+            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_ORANGE_BULBASAUR]].oam.paletteNum);
             break;
-        case COL_AZURILL:
-            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_GREEN_AZURILL]].oam.paletteNum);
+        case COL_POLIWAG:
+            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_GREEN_POLIWAG]].oam.paletteNum);
             break;
-        case COL_SKITTY:
-            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_PURPLE_SKITTY]].oam.paletteNum);
+        case COL_JIGGLYPUFF:
+            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_PURPLE_JIGGLYPUFF]].oam.paletteNum);
             break;
-        case COL_MAKUHITA:
-            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_ORANGE_MAKUHITA]].oam.paletteNum);
+        case COL_ABRA:
+            palOffset = PLTT_ID(gSprites[sRoulette->spriteIds[SPR_WHEEL_ICON_ORANGE_ABRA]].oam.paletteNum);
             break;
         }
         if (numSelected == 1)
@@ -2237,10 +2237,10 @@ static void DrawGridBackground(u8 selectionId)
     {
     case SELECTION_NONE:
         return;
-    case COL_WYNAUT:
-    case COL_AZURILL:
-    case COL_SKITTY:
-    case COL_MAKUHITA:
+    case COL_BULBASAUR:
+    case COL_POLIWAG:
+    case COL_JIGGLYPUFF:
+    case COL_ABRA:
         numSquares = NUM_BOARD_COLORS + 1; // For each poke column, 3 colors and a header
         for (i = 0; i < numSquares; i++)
             selectionIds[i] = i * ROW_ORANGE + selectionId;
@@ -2328,20 +2328,20 @@ static const u16 sBall_Pal[] = INCBIN_U16("graphics/roulette/ball.gbapal");
 static const u16 sBallCounter_Pal[] = INCBIN_U16("graphics/roulette/ball_counter.gbapal");
 static const u16 sCursor_Pal[] = INCBIN_U16("graphics/roulette/cursor.gbapal");
 static const u16 sCredit_Pal[] = INCBIN_U16("graphics/roulette/credit.gbapal");
-static const u16 sShroomish_Pal[] = INCBIN_U16("graphics/roulette/shroomish.gbapal");
-static const u16 sTaillow_Pal[] = INCBIN_U16("graphics/roulette/tailow.gbapal");
+static const u16 sParas_Pal[] = INCBIN_U16("graphics/roulette/paras.gbapal");
+static const u16 sPidgey_Pal[] = INCBIN_U16("graphics/roulette/tailow.gbapal");
 static const u16 sGridIcons_Pal[] = INCBIN_U16("graphics/roulette/grid_icons.gbapal");
-static const u16 sWynaut_Pal[] = INCBIN_U16("graphics/roulette/wynaut.gbapal");
-static const u16 sAzurill_Pal[] = INCBIN_U16("graphics/roulette/azurill.gbapal");
-static const u16 sSkitty_Pal[] = INCBIN_U16("graphics/roulette/skitty.gbapal");
-static const u16 sMakuhita_Pal[] = INCBIN_U16("graphics/roulette/makuhita.gbapal");
+static const u16 sBulbasaur_Pal[] = INCBIN_U16("graphics/roulette/bulbasaur.gbapal");
+static const u16 sPoliwag_Pal[] = INCBIN_U16("graphics/roulette/poliwag.gbapal");
+static const u16 sJigglypuff_Pal[] = INCBIN_U16("graphics/roulette/jigglypuff.gbapal");
+static const u16 sAbra_Pal[] = INCBIN_U16("graphics/roulette/abra.gbapal");
 static const u16 sUnused1_Pal[] = INCBIN_U16("graphics/roulette/unused_1.gbapal");
 static const u16 sUnused2_Pal[] = INCBIN_U16("graphics/roulette/unused_2.gbapal");
 static const u16 sUnused3_Pal[] = INCBIN_U16("graphics/roulette/unused_3.gbapal");
 static const u16 sUnused4_Pal[] = INCBIN_U16("graphics/roulette/unused_4.gbapal");
 static const u32 sBall_Gfx[] = INCBIN_U32("graphics/roulette/ball.4bpp.lz");
 static const u32 sBallCounter_Gfx[] = INCBIN_U32("graphics/roulette/ball_counter.4bpp.lz");
-static const u32 sShroomishTaillow_Gfx[] = INCBIN_U32("graphics/roulette/roulette_tilt.4bpp.lz");
+static const u32 sParasPidgey_Gfx[] = INCBIN_U32("graphics/roulette/roulette_tilt.4bpp.lz");
 static const u32 sGridIcons_Gfx[] = INCBIN_U32("graphics/roulette/grid_icons.4bpp.lz");
 static const u32 sWheelIcons_Gfx[] = INCBIN_U32("graphics/roulette/wheel_icons.4bpp.lz");
 static const u32 sShadow_Gfx[] = INCBIN_U32("graphics/roulette/shadow.4bpp.lz");
@@ -2354,13 +2354,13 @@ static const struct SpritePalette sSpritePalettes[] =
     { .data = sBallCounter_Pal, .tag = PALTAG_BALL_COUNTER },
     { .data = sCursor_Pal,      .tag = PALTAG_CURSOR },
     { .data = sCredit_Pal,      .tag = PALTAG_INTERFACE },
-    { .data = sShroomish_Pal,   .tag = PALTAG_SHROOMISH },
-    { .data = sTaillow_Pal,     .tag = PALTAG_TAILLOW },
+    { .data = sParas_Pal,       .tag = PALTAG_PARAS },
+    { .data = sPidgey_Pal,      .tag = PALTAG_PIDGEY },
     { .data = sGridIcons_Pal,   .tag = PALTAG_GRID_ICONS },
-    { .data = sWynaut_Pal,      .tag = PALTAG_WYNAUT },
-    { .data = sAzurill_Pal,     .tag = PALTAG_AZURILL },
-    { .data = sSkitty_Pal,      .tag = PALTAG_SKITTY },
-    { .data = sMakuhita_Pal,    .tag = PALTAG_MAKUHITA },
+    { .data = sBulbasaur_Pal,   .tag = PALTAG_BULBASAUR },
+    { .data = sPoliwag_Pal,     .tag = PALTAG_POLIWAG },
+    { .data = sJigglypuff_Pal,  .tag = PALTAG_JIGGLYPUFF },
+    { .data = sAbra_Pal,        .tag = PALTAG_ABRA },
     {}
 };
 
@@ -2437,62 +2437,62 @@ static const union AnimCmd sAnim_WheelIcons[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_OrangeWynaut[] =
+static const union AnimCmd *const sAnim_WheelIcon_OrangeBulbasaur[] =
 {
     &sAnim_WheelIcons[0]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_GreenAzurill[] =
+static const union AnimCmd *const sAnim_WheelIcon_GreenPoliwag[] =
 {
     &sAnim_WheelIcons[1]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_PurpleSkitty[] =
+static const union AnimCmd *const sAnim_WheelIcon_PurpleJigglypuff[] =
 {
     &sAnim_WheelIcons[2]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_OrangeMakuhita[] =
+static const union AnimCmd *const sAnim_WheelIcon_OrangeAbra[] =
 {
     &sAnim_WheelIcons[3]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_GreenWynaut[] =
+static const union AnimCmd *const sAnim_WheelIcon_GreenBulbasaur[] =
 {
     &sAnim_WheelIcons[4]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_PurpleAzurill[] =
+static const union AnimCmd *const sAnim_WheelIcon_PurplePoliwag[] =
 {
     &sAnim_WheelIcons[5]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_OrangeSkitty[] =
+static const union AnimCmd *const sAnim_WheelIcon_OrangeJigglypuff[] =
 {
     &sAnim_WheelIcons[6]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_GreenMakuhita[] =
+static const union AnimCmd *const sAnim_WheelIcon_GreenAbra[] =
 {
     &sAnim_WheelIcons[7]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_PurpleWynaut[] =
+static const union AnimCmd *const sAnim_WheelIcon_PurpleBulbasaur[] =
 {
     &sAnim_WheelIcons[8]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_OrangeAzurill[] =
+static const union AnimCmd *const sAnim_WheelIcon_OrangePoliwag[] =
 {
     &sAnim_WheelIcons[9]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_GreenSkitty[] =
+static const union AnimCmd *const sAnim_WheelIcon_GreenJigglypuff[] =
 {
     &sAnim_WheelIcons[10]
 };
 
-static const union AnimCmd *const sAnim_WheelIcon_PurpleMakuhita[] =
+static const union AnimCmd *const sAnim_WheelIcon_PurpleAbra[] =
 {
     &sAnim_WheelIcons[11]
 };
@@ -2536,22 +2536,22 @@ static const union AnimCmd sAnim_GridIcons[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnim_WynautHeader[] =
+static const union AnimCmd *const sAnim_BulbasaurHeader[] =
 {
     &sAnim_Headers[0]
 };
 
-static const union AnimCmd *const sAnim_AzurillHeader[] =
+static const union AnimCmd *const sAnim_PoliwagHeader[] =
 {
     &sAnim_Headers[2]
 };
 
-static const union AnimCmd *const sAnim_SkittyHeader[] =
+static const union AnimCmd *const sAnim_JigglypuffHeader[] =
 {
     &sAnim_Headers[4]
 };
 
-static const union AnimCmd *const sAnim_MakuhitaHeader[] =
+static const union AnimCmd *const sAnim_AbraHeader[] =
 {
     &sAnim_Headers[6]
 };
@@ -2571,22 +2571,22 @@ static const union AnimCmd *const sAnim_PurpleHeader[] =
     &sAnim_Headers[10]
 };
 
-static const union AnimCmd *const sAnim_GridIcon_Wynaut[] =
+static const union AnimCmd *const sAnim_GridIcon_Bulbasaur[] =
 {
     &sAnim_GridIcons[0]
 };
 
-static const union AnimCmd *const sAnim_GridIcon_Azurill[] =
+static const union AnimCmd *const sAnim_GridIcon_Poliwag[] =
 {
     &sAnim_GridIcons[1]
 };
 
-static const union AnimCmd *const sAnim_GridIcon_Skitty[] =
+static const union AnimCmd *const sAnim_GridIcon_Jigglypuff[] =
 {
     &sAnim_GridIcons[2]
 };
 
-static const union AnimCmd *const sAnim_GridIcon_Makuhita[] =
+static const union AnimCmd *const sAnim_GridIcon_Abra[] =
 {
     &sAnim_GridIcons[3]
 };
@@ -2597,7 +2597,7 @@ static const struct SpriteTemplate sSpriteTemplates_PokeHeaders[NUM_BOARD_POKES]
         .tileTag = GFXTAG_HEADERS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridHeader,
-        .anims = sAnim_WynautHeader,
+        .anims = sAnim_BulbasaurHeader,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2606,7 +2606,7 @@ static const struct SpriteTemplate sSpriteTemplates_PokeHeaders[NUM_BOARD_POKES]
         .tileTag = GFXTAG_HEADERS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridHeader,
-        .anims = sAnim_AzurillHeader,
+        .anims = sAnim_PoliwagHeader,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2615,7 +2615,7 @@ static const struct SpriteTemplate sSpriteTemplates_PokeHeaders[NUM_BOARD_POKES]
         .tileTag = GFXTAG_HEADERS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridHeader,
-        .anims = sAnim_SkittyHeader,
+        .anims = sAnim_JigglypuffHeader,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2624,7 +2624,7 @@ static const struct SpriteTemplate sSpriteTemplates_PokeHeaders[NUM_BOARD_POKES]
         .tileTag = GFXTAG_HEADERS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridHeader,
-        .anims = sAnim_MakuhitaHeader,
+        .anims = sAnim_AbraHeader,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2668,7 +2668,7 @@ static const struct SpriteTemplate sSpriteTemplates_GridIcons[NUM_BOARD_POKES] =
         .tileTag = GFXTAG_GRID_ICONS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridIcon,
-        .anims = sAnim_GridIcon_Wynaut,
+        .anims = sAnim_GridIcon_Bulbasaur,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2677,7 +2677,7 @@ static const struct SpriteTemplate sSpriteTemplates_GridIcons[NUM_BOARD_POKES] =
         .tileTag = GFXTAG_GRID_ICONS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridIcon,
-        .anims = sAnim_GridIcon_Azurill,
+        .anims = sAnim_GridIcon_Poliwag,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2686,7 +2686,7 @@ static const struct SpriteTemplate sSpriteTemplates_GridIcons[NUM_BOARD_POKES] =
         .tileTag = GFXTAG_GRID_ICONS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridIcon,
-        .anims = sAnim_GridIcon_Skitty,
+        .anims = sAnim_GridIcon_Jigglypuff,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2695,7 +2695,7 @@ static const struct SpriteTemplate sSpriteTemplates_GridIcons[NUM_BOARD_POKES] =
         .tileTag = GFXTAG_GRID_ICONS,
         .paletteTag = PALTAG_GRID_ICONS,
         .oam = &sOam_GridIcon,
-        .anims = sAnim_GridIcon_Makuhita,
+        .anims = sAnim_GridIcon_Abra,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_GridSquare
@@ -2703,113 +2703,113 @@ static const struct SpriteTemplate sSpriteTemplates_GridIcons[NUM_BOARD_POKES] =
 };
 
 // Wheel icons are listed clockwise starting from 1 oclock on the roulette wheel (with Poké Ball upside right)
-// They go Wynaut -> Azurill -> Skitty -> Makuhita, and Orange -> Green -> Purple
+// They go Bulbasaur -> Poliwag -> Jigglypuff -> Abra, and Orange -> Green -> Purple
 static const struct SpriteTemplate sSpriteTemplates_WheelIcons[NUM_ROULETTE_SLOTS] =
 {
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_WYNAUT,
+        .paletteTag = PALTAG_BULBASAUR,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_OrangeWynaut,
+        .anims = sAnim_WheelIcon_OrangeBulbasaur,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_AZURILL,
+        .paletteTag = PALTAG_POLIWAG,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_GreenAzurill,
+        .anims = sAnim_WheelIcon_GreenPoliwag,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_SKITTY,
+        .paletteTag = PALTAG_JIGGLYPUFF,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_PurpleSkitty,
+        .anims = sAnim_WheelIcon_PurpleJigglypuff,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_MAKUHITA,
+        .paletteTag = PALTAG_ABRA,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_OrangeMakuhita,
+        .anims = sAnim_WheelIcon_OrangeAbra,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_WYNAUT,
+        .paletteTag = PALTAG_BULBASAUR,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_GreenWynaut,
+        .anims = sAnim_WheelIcon_GreenBulbasaur,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_AZURILL,
+        .paletteTag = PALTAG_POLIWAG,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_PurpleAzurill,
+        .anims = sAnim_WheelIcon_PurplePoliwag,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_SKITTY,
+        .paletteTag = PALTAG_JIGGLYPUFF,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_OrangeSkitty,
+        .anims = sAnim_WheelIcon_OrangeJigglypuff,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_MAKUHITA,
+        .paletteTag = PALTAG_ABRA,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_GreenMakuhita,
+        .anims = sAnim_WheelIcon_GreenAbra,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_WYNAUT,
+        .paletteTag = PALTAG_BULBASAUR,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_PurpleWynaut,
+        .anims = sAnim_WheelIcon_PurpleBulbasaur,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_AZURILL,
+        .paletteTag = PALTAG_POLIWAG,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_OrangeAzurill,
+        .anims = sAnim_WheelIcon_OrangePoliwag,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_SKITTY,
+        .paletteTag = PALTAG_JIGGLYPUFF,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_GreenSkitty,
+        .anims = sAnim_WheelIcon_GreenJigglypuff,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
     },
     {
         .tileTag = GFXTAG_WHEEL_ICONS,
-        .paletteTag = PALTAG_MAKUHITA,
+        .paletteTag = PALTAG_ABRA,
         .oam = &sOam_WheelIcon,
-        .anims = sAnim_WheelIcon_PurpleMakuhita,
+        .anims = sAnim_WheelIcon_PurpleAbra,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCB_WheelIcon
@@ -3129,7 +3129,7 @@ static const struct SpriteTemplate sSpriteTemplate_WheelCenter =
     .callback = SpriteCB_WheelCenter
 };
 
-static const struct OamData sOam_Shroomish =
+static const struct OamData sOam_Paras =
 {
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3138,7 +3138,7 @@ static const struct OamData sOam_Shroomish =
     .priority = 2,
 };
 
-static const struct OamData sOam_Taillow =
+static const struct OamData sOam_Pidgey =
 {
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3147,14 +3147,14 @@ static const struct OamData sOam_Taillow =
     .priority = 2,
 };
 
-static const struct CompressedSpriteSheet sSpriteSheet_ShroomishTaillow =
+static const struct CompressedSpriteSheet sSpriteSheet_ParasPidgey =
 {
-    .data = sShroomishTaillow_Gfx,
+    .data = sParasPidgey_Gfx,
     .size = 0xE00,
-    .tag = GFXTAG_SHROOMISH_TAILLOW
+    .tag = GFXTAG_PARAS_PIDGEY
 };
 
-static const union AnimCmd sAnim_Shroomish[] =
+static const union AnimCmd sAnim_Paras[] =
 {
     ANIMCMD_FRAME(0, 6),
     ANIMCMD_FRAME(16, 6),
@@ -3165,84 +3165,84 @@ static const union AnimCmd sAnim_Shroomish[] =
     ANIMCMD_JUMP(2)
 };
 
-static const union AnimCmd sAnim_Taillow_WingDown_Left[] =
+static const union AnimCmd sAnim_Pidgey_WingDown_Left[] =
 {
     ANIMCMD_FRAME(80, 10),
     ANIMCMD_END
 };
 
-static const union AnimCmd sAnim_Taillow_WingDown_Right[] =
+static const union AnimCmd sAnim_Pidgey_WingDown_Right[] =
 {
     ANIMCMD_FRAME(80, 10, .hFlip = TRUE),
     ANIMCMD_END
 };
 
-static const union AnimCmd sAnim_Taillow_FlapSlow_Left[] =
+static const union AnimCmd sAnim_Pidgey_FlapSlow_Left[] =
 {
     ANIMCMD_FRAME(80, 20),
     ANIMCMD_FRAME(96, 20),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd sAnim_Taillow_FlapSlow_Right[] =
+static const union AnimCmd sAnim_Pidgey_FlapSlow_Right[] =
 {
     ANIMCMD_FRAME(80, 20, .hFlip = TRUE),
     ANIMCMD_FRAME(96, 20, .hFlip = TRUE),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd sAnim_Taillow_FlapFast_Left[] =
+static const union AnimCmd sAnim_Pidgey_FlapFast_Left[] =
 {
     ANIMCMD_FRAME(80, 10),
     ANIMCMD_FRAME(96, 10),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd sAnim_Taillow_FlapFast_Right[] =
+static const union AnimCmd sAnim_Pidgey_FlapFast_Right[] =
 {
     ANIMCMD_FRAME(80, 10, .hFlip = TRUE),
     ANIMCMD_FRAME(96, 10, .hFlip = TRUE),
     ANIMCMD_JUMP(0)
 };
 
-static const union AnimCmd *const sAnims_Shroomish[] =
+static const union AnimCmd *const sAnims_Paras[] =
 {
-    sAnim_Shroomish
+    sAnim_Paras
 };
 
-static const union AnimCmd *const sAnims_Taillow[] =
+static const union AnimCmd *const sAnims_Pidgey[] =
 {
-    sAnim_Taillow_WingDown_Left,   // While gliding in
-    sAnim_Taillow_WingDown_Right,
-    sAnim_Taillow_FlapSlow_Left,   // While carrying ball
-    sAnim_Taillow_FlapSlow_Right,
-    sAnim_Taillow_FlapFast_Left,   // While flying off
-    sAnim_Taillow_FlapFast_Right
+    sAnim_Pidgey_WingDown_Left,   // While gliding in
+    sAnim_Pidgey_WingDown_Right,
+    sAnim_Pidgey_FlapSlow_Left,   // While carrying ball
+    sAnim_Pidgey_FlapSlow_Right,
+    sAnim_Pidgey_FlapFast_Left,   // While flying off
+    sAnim_Pidgey_FlapFast_Right
 };
 
-static const struct SpriteTemplate sSpriteTemplate_Shroomish =
+static const struct SpriteTemplate sSpriteTemplate_Paras =
 {
-    .tileTag = GFXTAG_SHROOMISH_TAILLOW,
-    .paletteTag = PALTAG_SHROOMISH,
-    .oam = &sOam_Shroomish,
-    .anims = sAnims_Shroomish,
+    .tileTag = GFXTAG_PARAS_PIDGEY,
+    .paletteTag = PALTAG_PARAS,
+    .oam = &sOam_Paras,
+    .anims = sAnims_Paras,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy
 };
 
-static const struct SpriteTemplate sSpriteTemplate_Taillow =
+static const struct SpriteTemplate sSpriteTemplate_Pidgey =
 {
-    .tileTag = GFXTAG_SHROOMISH_TAILLOW,
-    .paletteTag = PALTAG_TAILLOW,
-    .oam = &sOam_Taillow,
-    .anims = sAnims_Taillow,
+    .tileTag = GFXTAG_PARAS_PIDGEY,
+    .paletteTag = PALTAG_PIDGEY,
+    .oam = &sOam_Pidgey,
+    .anims = sAnims_Pidgey,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCB_Taillow
+    .callback = SpriteCB_Pidgey
 };
 
-static const struct OamData sOam_ShroomishBallShadow =
+static const struct OamData sOam_ParasBallShadow =
 {
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3251,7 +3251,7 @@ static const struct OamData sOam_ShroomishBallShadow =
     .priority = 2,
 };
 
-static const struct OamData sOam_ShroomishShadow =
+static const struct OamData sOam_ParasShadow =
 {
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3260,7 +3260,7 @@ static const struct OamData sOam_ShroomishShadow =
     .priority = 2,
 };
 
-static const struct OamData sOam_TaillowShadow =
+static const struct OamData sOam_PidgeyShadow =
 {
     .affineMode = ST_OAM_AFFINE_NORMAL,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3283,7 +3283,7 @@ static const union AffineAnimCmd sAffineAnim_Unused3[] =
     AFFINEANIMCMD_END
 };
 
-static const union AffineAnimCmd sAffineAnim_TaillowShadow[] =
+static const union AffineAnimCmd sAffineAnim_PidgeyShadow[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),
     AFFINEANIMCMD_FRAME(-2,    0x0,   0, 15),
@@ -3297,9 +3297,9 @@ static const union AffineAnimCmd *const sAffineAnims_Unused3[] =
     sAffineAnim_Unused3
 };
 
-static const union AffineAnimCmd *const sAffineAnims_TaillowShadow[] =
+static const union AffineAnimCmd *const sAffineAnims_PidgeyShadow[] =
 {
-    sAffineAnim_TaillowShadow
+    sAffineAnim_PidgeyShadow
 };
 
 static const union AffineAnimCmd sAffineAnim_Unused4[] =
@@ -3313,7 +3313,7 @@ static const union AffineAnimCmd *const sAffineAnims_Unused4[] =
     sAffineAnim_Unused4
 };
 
-static const union AnimCmd sAnim_ShroomishBallShadow[] =
+static const union AnimCmd sAnim_ParasBallShadow[] =
 {
     ANIMCMD_FRAME(0, 0),
     ANIMCMD_END
@@ -3325,9 +3325,9 @@ static const union AnimCmd sAnim_UnstickMonShadow[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_ShroomishBallShadow[] =
+static const union AnimCmd *const sAnims_ParasBallShadow[] =
 {
-    sAnim_ShroomishBallShadow
+    sAnim_ParasBallShadow
 };
 
 static const union AnimCmd *const sAnims_UnstickMonShadow[] =
@@ -3335,39 +3335,39 @@ static const union AnimCmd *const sAnims_UnstickMonShadow[] =
     sAnim_UnstickMonShadow
 };
 
-static const struct SpriteTemplate sSpriteTemplate_ShroomishShadow[] =
+static const struct SpriteTemplate sSpriteTemplate_ParasShadow[] =
 {
     // Ball's shadow as it flies up
     {
         .tileTag = GFXTAG_SHADOW,
         .paletteTag = PALTAG_SHADOW,
-        .oam = &sOam_ShroomishBallShadow,
-        .anims = sAnims_ShroomishBallShadow,
+        .oam = &sOam_ParasBallShadow,
+        .anims = sAnims_ParasBallShadow,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCallbackDummy
     },
-    // Shroomish's Shadow
+    // Paras's Shadow
     {
         .tileTag = GFXTAG_SHADOW,
         .paletteTag = PALTAG_SHADOW,
-        .oam = &sOam_ShroomishShadow,
+        .oam = &sOam_ParasShadow,
         .anims = sAnims_UnstickMonShadow,
         .images = NULL,
         .affineAnims = gDummySpriteAffineAnimTable,
-        .callback = SpriteCB_Shroomish
+        .callback = SpriteCB_Paras
     }
 };
 
-static const struct SpriteTemplate sSpriteTemplate_TaillowShadow =
+static const struct SpriteTemplate sSpriteTemplate_PidgeyShadow =
 {
     .tileTag = GFXTAG_SHADOW,
     .paletteTag = PALTAG_SHADOW,
-    .oam = &sOam_TaillowShadow,
+    .oam = &sOam_PidgeyShadow,
     .anims = sAnims_UnstickMonShadow,
     .images = NULL,
-    .affineAnims = sAffineAnims_TaillowShadow,
-    .callback = SpriteCB_Taillow
+    .affineAnims = sAffineAnims_PidgeyShadow,
+    .callback = SpriteCB_Pidgey
 };
 
 static void Task_ShowMinBetYesNo(u8 taskId)
@@ -3488,14 +3488,14 @@ static void LoadOrFreeMiscSpritePalettesAndSheets(bool8 free)
         FreeAllSpritePalettes();
         LoadSpritePalettes(sSpritePalettes);
         LoadCompressedSpriteSheet(&sSpriteSheet_Ball);
-        LoadCompressedSpriteSheet(&sSpriteSheet_ShroomishTaillow);
+        LoadCompressedSpriteSheet(&sSpriteSheet_ParasPidgey);
         LoadCompressedSpriteSheet(&sSpriteSheet_Shadow);
     }
     else
     {
         // Unused
         FreeSpriteTilesByTag(GFXTAG_SHADOW);
-        FreeSpriteTilesByTag(GFXTAG_SHROOMISH_TAILLOW);
+        FreeSpriteTilesByTag(GFXTAG_PARAS_PIDGEY);
         FreeSpriteTilesByTag(GFXTAG_BALL);
         FreeAllSpritePalettes();
     }
@@ -4017,7 +4017,7 @@ static void SpriteCB_BallLandInSlot(struct Sprite *sprite)
     sprite->y2 += gSpriteCoordOffsetY;
 }
 
-static void SpriteCB_UnstickBall_ShroomishBallFall(struct Sprite *sprite)
+static void SpriteCB_UnstickBall_ParasBallFall(struct Sprite *sprite)
 {
     UpdateBallPos(sprite);
     sprite->data[2]++;
@@ -4049,7 +4049,7 @@ static void SpriteCB_UnstickBall_ShroomishBallFall(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_UnstickBall_Shroomish(struct Sprite *sprite)
+static void SpriteCB_UnstickBall_Paras(struct Sprite *sprite)
 {
     f32 slotOffset, ballFallDist, ballFallSpeed;
     UpdateBallPos(sprite);
@@ -4061,7 +4061,7 @@ static void SpriteCB_UnstickBall_Shroomish(struct Sprite *sprite)
         {
             slotOffset = sprite->data[7];
             ballFallDist = (slotOffset * sRouletteTables[sRoulette->tableId].randDistanceHigh + (sRouletteTables[sRoulette->tableId].randDistanceLow - 1));
-            ballFallSpeed = (slotOffset / sRouletteTables[sRoulette->tableId].shroomish.fallSlowdown);
+            ballFallSpeed = (slotOffset / sRouletteTables[sRoulette->tableId].paras.fallSlowdown);
         }
         else
         {
@@ -4073,7 +4073,7 @@ static void SpriteCB_UnstickBall_Shroomish(struct Sprite *sprite)
         {
             slotOffset = sprite->data[7];
             ballFallDist = (slotOffset * sRouletteTables[sRoulette->tableId].randDistanceHigh + (sRouletteTables[sRoulette->tableId].randDistanceLow - 1));
-            ballFallSpeed = -(slotOffset / sRouletteTables[sRoulette->tableId].shroomish.fallSlowdown);
+            ballFallSpeed = -(slotOffset / sRouletteTables[sRoulette->tableId].paras.fallSlowdown);
         }
         else
         {
@@ -4091,11 +4091,11 @@ static void SpriteCB_UnstickBall_Shroomish(struct Sprite *sprite)
     sprite->animNum = 0;
     sprite->animBeginning = TRUE;
     sprite->animEnded = FALSE;
-    sprite->callback = SpriteCB_UnstickBall_ShroomishBallFall;
+    sprite->callback = SpriteCB_UnstickBall_ParasBallFall;
     sprite->data[2] = 0;
 }
 
-static void SpriteCB_UnstickBall_TaillowDrop(struct Sprite *sprite)
+static void SpriteCB_UnstickBall_PidgeyDrop(struct Sprite *sprite)
 {
     sprite->y2 = (s16)(sprite->data[2] * 0.05f * sprite->data[2]) - 45;
     sprite->data[2]++;
@@ -4106,7 +4106,7 @@ static void SpriteCB_UnstickBall_TaillowDrop(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_UnstickBall_TaillowPickUp(struct Sprite *sprite)
+static void SpriteCB_UnstickBall_PidgeyPickUp(struct Sprite *sprite)
 {
     if (sprite->data[2]++ < 45)
     {
@@ -4136,13 +4136,13 @@ static void SpriteCB_UnstickBall_TaillowPickUp(struct Sprite *sprite)
             sprite->animBeginning = TRUE;
             sprite->animEnded = FALSE;
             sprite->data[2] = 0;
-            sprite->callback = SpriteCB_UnstickBall_TaillowDrop;
+            sprite->callback = SpriteCB_UnstickBall_PidgeyDrop;
             m4aSongNumStart(SE_BALL_THROW);
         }
     }
 }
 
-static void SpriteCB_UnstickBall_Taillow(struct Sprite *sprite)
+static void SpriteCB_UnstickBall_Pidgey(struct Sprite *sprite)
 {
     UpdateBallPos(sprite);
 
@@ -4151,35 +4151,35 @@ static void SpriteCB_UnstickBall_Taillow(struct Sprite *sprite)
     case 90:
         if (sprite->sStuckOnWheelLeft != TRUE)
         {
-            sprite->callback = &SpriteCB_UnstickBall_TaillowPickUp;
+            sprite->callback = &SpriteCB_UnstickBall_PidgeyPickUp;
             sprite->data[2] = 0;
         }
         break;
     case 270:
         if (sprite->sStuckOnWheelLeft)
         {
-            sprite->callback = &SpriteCB_UnstickBall_TaillowPickUp;
+            sprite->callback = &SpriteCB_UnstickBall_PidgeyPickUp;
             sprite->data[2] = 0;
         }
         break;
     }
 }
 
-// The below SpriteCB_UnstickBall_* callbacks handle the ball while its being cleared by Shroomish/Taillow
-// For what Shroomish/Taillow do during this sequence, see SpriteCB_Shroomish / SpriteCB_Taillow
+// The below SpriteCB_UnstickBall_* callbacks handle the ball while its being cleared by Paras/Pidgey
+// For what Paras/Pidgey do during this sequence, see SpriteCB_Paras / SpriteCB_Pidgey
 static void SpriteCB_UnstickBall(struct Sprite *sprite)
 {
     UpdateBallPos(sprite);
-    switch (sRoulette->useTaillow)
+    switch (sRoulette->usePidgey)
     {
     default:
     case FALSE:
-        CreateShroomishSprite(sprite);
-        sprite->callback = SpriteCB_UnstickBall_Shroomish;
+        CreateParasSprite(sprite);
+        sprite->callback = SpriteCB_UnstickBall_Paras;
         break;
     case TRUE:
-        CreateTaillowSprite(sprite);
-        sprite->callback = SpriteCB_UnstickBall_Taillow;
+        CreatePidgeySprite(sprite);
+        sprite->callback = SpriteCB_UnstickBall_Pidgey;
         break;
     }
 }
@@ -4202,7 +4202,7 @@ static void SpriteCB_RollBall_TryLandAdjacent(struct Sprite *sprite)
         }
         else
         {
-            // Ball is stuck, need Shroomish/Taillow to clear ball
+            // Ball is stuck, need Paras/Pidgey to clear ball
             sprite->animPaused = TRUE;
             m4aSongNumStart(SE_BALL_BOUNCE_1);
             SetBallStuck(sprite);
@@ -4339,12 +4339,12 @@ static void SpriteCB_RollBall_Start(struct Sprite *sprite)
     sprite->callback = SpriteCB_RollBall_Fast;
 }
 
-// Sprite data for Shroomish / its shadows
+// Sprite data for Paras / its shadows
 #define sMonSpriteId        data[4]
 #define sBallShadowSpriteId data[5]
 #define sMonShadowSpriteId  data[6]
 
-static void CreateShroomishSprite(struct Sprite *ball)
+static void CreateParasSprite(struct Sprite *ball)
 {
     u16 t;
     u8 i;
@@ -4356,9 +4356,9 @@ static void CreateShroomishSprite(struct Sprite *ball)
 
     t = ball->data[7] - 2;
     roulette = sRoulette;  // Unnecessary, needed to match
-    sRoulette->spriteIds[SPR_CLEAR_MON] = CreateSprite(&sSpriteTemplate_Shroomish, 36, -12, 50);
-    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1] = CreateSprite(&sSpriteTemplate_ShroomishShadow[0], coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 59);
-    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_2] = CreateSprite(&sSpriteTemplate_ShroomishShadow[1], 36, 140, 51);
+    sRoulette->spriteIds[SPR_CLEAR_MON] = CreateSprite(&sSpriteTemplate_Paras, 36, -12, 50);
+    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1] = CreateSprite(&sSpriteTemplate_ParasShadow[0], coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 59);
+    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_2] = CreateSprite(&sSpriteTemplate_ParasShadow[1], 36, 140, 51);
     gSprites[sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_2]].oam.objMode = ST_OAM_OBJ_BLEND;
     for (i = 0; i < 3; i++)
     {
@@ -4377,7 +4377,7 @@ static void CreateShroomishSprite(struct Sprite *ball)
     sRoulette->ball = ball;
 }
 
-static void CreateTaillowSprite(struct Sprite *ball)
+static void CreatePidgeySprite(struct Sprite *ball)
 {
     u8 i = 0;
     s16 t;
@@ -4387,12 +4387,12 @@ static void CreateTaillowSprite(struct Sprite *ball)
     };
 
     t = ball->data[7] - 2;
-    sRoulette->spriteIds[SPR_CLEAR_MON] = CreateSprite(&sSpriteTemplate_Taillow, coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 50);
+    sRoulette->spriteIds[SPR_CLEAR_MON] = CreateSprite(&sSpriteTemplate_Pidgey, coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 50);
     StartSpriteAnim(&gSprites[sRoulette->spriteIds[SPR_CLEAR_MON]], ball->sStuckOnWheelLeft);
-    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1] = CreateSprite(&sSpriteTemplate_TaillowShadow, coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 51);
+    sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1] = CreateSprite(&sSpriteTemplate_PidgeyShadow, coords[ball->sStuckOnWheelLeft][0], coords[ball->sStuckOnWheelLeft][1], 51);
     gSprites[sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1]].affineAnimPaused = TRUE;
     gSprites[sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1]].animPaused = TRUE;
-    ball->data[7] = (t * sRouletteTables[sRoulette->tableId].randDistanceHigh) + (sRouletteTables[sRoulette->tableId].taillow.baseDropDelay + 45);
+    ball->data[7] = (t * sRouletteTables[sRoulette->tableId].randDistanceHigh) + (sRouletteTables[sRoulette->tableId].pidgey.baseDropDelay + 45);
     for (; i < 2; i++)
     {
         gSprites[sRoulette->spriteIds[SPR_CLEAR_MON + i]].sMonSpriteId = sRoulette->spriteIds[SPR_CLEAR_MON];
@@ -4424,43 +4424,43 @@ static void SetBallStuck(struct Sprite *sprite)
     sRoulette->ballFallSpeed = 0.0f;
     sRoulette->ballAngleSpeed = sRouletteTables[sRoulette->tableId].var1C;
 
-    angle = (sRoulette->tableId * DEGREES_PER_SLOT + 33) + (1 - sRoulette->useTaillow) * 15;
+    angle = (sRoulette->tableId * DEGREES_PER_SLOT + 33) + (1 - sRoulette->usePidgey) * 15;
 
     // Determine which quadrant the ball got stuck in
-    // Use either Shroomish or Taillow to clear the ball depending on where it's stuck
+    // Use either Paras or Pidgey to clear the ball depending on where it's stuck
     for (i = 0; i < 4; i++)
     {
         if (angle < sprite->sBallAngle && sprite->sBallAngle <= angle + 90)
         {
             sprite->sStuckOnWheelLeft = i / 2;
-            sRoulette->useTaillow = i % 2;
+            sRoulette->usePidgey = i % 2;
             break;
         }
         if (i == 3)
         {
             sprite->sStuckOnWheelLeft = TRUE;
-            sRoulette->useTaillow = TRUE;
+            sRoulette->usePidgey = TRUE;
             break;
         }
         angle += 90;
     }
 
-    if (sRoulette->useTaillow)
+    if (sRoulette->usePidgey)
     {
         if (sprite->sStuckOnWheelLeft)
-            PlayCry_Normal(SPECIES_TAILLOW, -63);
+            PlayCry_Normal(SPECIES_PIDGEY, -63);
         else
-            PlayCry_Normal(SPECIES_TAILLOW, 63);
+            PlayCry_Normal(SPECIES_PIDGEY, 63);
     }
     else
     {
-        PlayCry_Normal(SPECIES_SHROOMISH, -63);
+        PlayCry_Normal(SPECIES_PARAS, -63);
     }
 
     slotsToSkip = 2;
     slotId = (sRoulette->stuckHitSlot + 2) % NUM_ROULETTE_SLOTS;
 
-    if (sRoulette->useTaillow == TRUE && sRoulette->tableId == 1)
+    if (sRoulette->usePidgey == TRUE && sRoulette->tableId == 1)
         maxSlotToCheck += 6; // Check all remaining slots
     else
         maxSlotToCheck += slotsToSkip; // Check enough slots to guarantee an empty will be found
@@ -4479,9 +4479,9 @@ static void SetBallStuck(struct Sprite *sprite)
 
     // Determine which identified slot the ball should be moved to
     // The below slot ids are relative to the slot the ball got stuck on
-    if ((sRoulette->useTaillow + 1) & sRoulette->partySpeciesFlags)
+    if ((sRoulette->usePidgey + 1) & sRoulette->partySpeciesFlags)
     {
-        // If the player has the corresponding Pokémon in their party (HAS_SHROOMISH or HAS_TAILLOW),
+        // If the player has the corresponding Pokémon in their party (HAS_PARAS or HAS_PIDGEY),
         // there's a 75% chance that the ball will be moved to a spot they bet on
         // assuming it was one of the slots identified as a candidate
         if (betSlotId && (rand % 256) < 192)
@@ -4497,7 +4497,7 @@ static void SetBallStuck(struct Sprite *sprite)
     sprite->callback = SpriteCB_UnstickBall;
 }
 
-static const u16 sShroomishShadowAlphas[] = {
+static const u16 sParasShadowAlphas[] = {
     0x907,
     0x808,
     0x709,
@@ -4510,7 +4510,7 @@ static const u16 sShroomishShadowAlphas[] = {
     0x010,
 };
 
-static void SpriteCB_ShroomishExit(struct Sprite *sprite)
+static void SpriteCB_ParasExit(struct Sprite *sprite)
 {
     // Delay for screen shaking, then exit left
     if (sprite->data[1]++ >= sprite->data[3])
@@ -4521,14 +4521,14 @@ static void SpriteCB_ShroomishExit(struct Sprite *sprite)
             if (!sRoulette->ballUnstuck)
                 sRoulette->ballUnstuck = TRUE;
             DestroySprite(sprite);
-            sRoulette->shroomishShadowTimer = 0;
-            sRoulette->shroomishShadowAlpha = sShroomishShadowAlphas[0];
+            sRoulette->parasShadowTimer = 0;
+            sRoulette->parasShadowAlpha = sParasShadowAlphas[0];
         }
     }
 }
 
-// Handles both the screen shake and ball shadow effect for when Shroomish unsticks the ball
-static void SpriteCB_ShroomishShakeScreen(struct Sprite *sprite)
+// Handles both the screen shake and ball shadow effect for when Paras unsticks the ball
+static void SpriteCB_ParasShakeScreen(struct Sprite *sprite)
 {
     int screenShakeIdx;
     u16 screenShakeOffsets[][4] = {
@@ -4557,83 +4557,83 @@ static void SpriteCB_ShroomishShakeScreen(struct Sprite *sprite)
     }
 }
 
-static void SpriteCB_ShroomishFall(struct Sprite *sprite)
+static void SpriteCB_ParasFall(struct Sprite *sprite)
 {
     f32 timer;
     sprite->data[1]++;
     timer = sprite->data[1];
     sprite->y2 = timer * 0.039f * timer;
-    sRoulette->shroomishShadowAlpha = sShroomishShadowAlphas[(sRoulette->shroomishShadowTimer - 1) / 2];
-    if (sRoulette->shroomishShadowTimer < ARRAY_COUNT(sShroomishShadowAlphas) * 2 - 1)
-        sRoulette->shroomishShadowTimer++;
+    sRoulette->parasShadowAlpha = sParasShadowAlphas[(sRoulette->parasShadowTimer - 1) / 2];
+    if (sRoulette->parasShadowTimer < ARRAY_COUNT(sParasShadowAlphas) * 2 - 1)
+        sRoulette->parasShadowTimer++;
     if (sprite->data[1] > 60)
     {
         sprite->data[1] = 0;
-        sprite->callback = SpriteCB_ShroomishExit;
-        gSprites[sprite->sMonShadowSpriteId].callback  = SpriteCB_ShroomishExit;
+        sprite->callback = SpriteCB_ParasExit;
+        gSprites[sprite->sMonShadowSpriteId].callback  = SpriteCB_ParasExit;
         gSprites[sprite->sMonShadowSpriteId].data[1] = -2;
         gSprites[sprite->sBallShadowSpriteId].invisible = FALSE;
-        gSprites[sprite->sBallShadowSpriteId].callback  = SpriteCB_ShroomishShakeScreen;
+        gSprites[sprite->sBallShadowSpriteId].callback  = SpriteCB_ParasShakeScreen;
         m4aSongNumStart(SE_M_STRENGTH);
     }
 }
 
-static void SpriteCB_Shroomish(struct Sprite *sprite)
+static void SpriteCB_Paras(struct Sprite *sprite)
 {
     if (sprite->data[7] == 0)
     {
         // Wait for the ball to be a specific angle (or its 180 degree opposite) specified by the table
-        // Once it is, reveal the shadow for Shroomish falling in
+        // Once it is, reveal the shadow for Paras falling in
         if (!sRoulette->ball->sStuckOnWheelLeft)
         {
-            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].shroomish.startAngle)
+            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].paras.startAngle)
                 return;
         }
         else
         {
-            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].shroomish.startAngle + 180)
+            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].paras.startAngle + 180)
                 return;
         }
 
         sprite->invisible = FALSE;
         sprite->data[7]++;
         m4aSongNumStart(SE_FALL);
-        sRoulette->shroomishShadowTimer = 1;
-        sRoulette->shroomishShadowAlpha = sShroomishShadowAlphas[0];
+        sRoulette->parasShadowTimer = 1;
+        sRoulette->parasShadowAlpha = sParasShadowAlphas[0];
     }
     else
     {
-        sRoulette->shroomishShadowAlpha = sShroomishShadowAlphas[(sRoulette->shroomishShadowTimer - 1) / 2];
-        if (sRoulette->shroomishShadowTimer < 19)
-            sRoulette->shroomishShadowTimer++;
+        sRoulette->parasShadowAlpha = sParasShadowAlphas[(sRoulette->parasShadowTimer - 1) / 2];
+        if (sRoulette->parasShadowTimer < 19)
+            sRoulette->parasShadowTimer++;
 
         // Wait for the ball to be a specific angle (or its 180 degree opposite) specified by the table
-        // Once it is, have Shroomish begin to fall in
+        // Once it is, have Paras begin to fall in
         // On both tables this angle is 15 degrees off the "start" angle
         if (!sRoulette->ball->sStuckOnWheelLeft)
         {
-            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].shroomish.dropAngle)
+            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].paras.dropAngle)
                 return;
         }
         else
         {
-            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].shroomish.dropAngle + 180)
+            if (sRoulette->ball->sBallAngle != sRouletteTables[sRoulette->tableId].paras.dropAngle + 180)
                 return;
         }
 
-        gSprites[sprite->sMonSpriteId].callback  = SpriteCB_ShroomishFall;
+        gSprites[sprite->sMonSpriteId].callback  = SpriteCB_ParasFall;
         gSprites[sprite->sMonSpriteId].invisible = FALSE;
         sprite->callback  = &SpriteCallbackDummy;
         sprite->data[7] = 0;
     }
 }
 
-static void SpriteCB_TaillowShadow_Flash(struct Sprite *sprite)
+static void SpriteCB_PidgeyShadow_Flash(struct Sprite *sprite)
 {
     sprite->invisible ^= 1;
 }
 
-static void SpriteCB_Taillow_FlyAway(struct Sprite *sprite)
+static void SpriteCB_Pidgey_FlyAway(struct Sprite *sprite)
 {
     if (sprite->y > -16)
     {
@@ -4644,14 +4644,14 @@ static void SpriteCB_Taillow_FlyAway(struct Sprite *sprite)
         sprite->callback = SpriteCallbackDummy;
         sprite->invisible = TRUE;
         sprite->animPaused = TRUE;
-        m4aSongNumStop(SE_TAILLOW_WING_FLAP);
+        m4aSongNumStop(SE_PIDGEY_WING_FLAP);
         DestroySprite(sprite);
         FreeOamMatrix(gSprites[sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1]].oam.matrixNum);
         DestroySprite(&gSprites[sRoulette->spriteIds[SPR_CLEAR_MON_SHADOW_1]]);
     }
 }
 
-static void SpriteCB_Taillow_PickUpBall(struct Sprite *sprite)
+static void SpriteCB_Pidgey_PickUpBall(struct Sprite *sprite)
 {
     if (sprite->data[1] >= 0)
     {
@@ -4677,13 +4677,13 @@ static void SpriteCB_Taillow_PickUpBall(struct Sprite *sprite)
         {
             m4aSongNumStart(SE_FALL);
             StartSpriteAnim(sprite, sRoulette->ball->sStuckOnWheelLeft + 4);
-            sprite->callback = SpriteCB_Taillow_FlyAway;
+            sprite->callback = SpriteCB_Pidgey_FlyAway;
             gSprites[sprite->sMonShadowSpriteId].affineAnimPaused = FALSE;
         }
     }
 }
 
-static void SpriteCB_Taillow_FlyIn(struct Sprite *sprite)
+static void SpriteCB_Pidgey_FlyIn(struct Sprite *sprite)
 {
     s8 xMoveOffsets[2] = {-1, 1};
     s8 yMoveOffsets[][2] = {
@@ -4716,19 +4716,19 @@ static void SpriteCB_Taillow_FlyIn(struct Sprite *sprite)
         }
         else
         {
-            m4aSongNumStartOrChange(SE_TAILLOW_WING_FLAP);
+            m4aSongNumStartOrChange(SE_PIDGEY_WING_FLAP);
             if (sRoulette->ball->sStuckOnWheelLeft == 0)
-                PlayCry_Normal(SPECIES_TAILLOW, 63);
+                PlayCry_Normal(SPECIES_PIDGEY, 63);
             else
-                PlayCry_Normal(SPECIES_TAILLOW, -63);
+                PlayCry_Normal(SPECIES_PIDGEY, -63);
             StartSpriteAnim(sprite, sRoulette->ball->sStuckOnWheelLeft + 2);
             sprite->data[1] = 45;
-            sprite->callback = SpriteCB_Taillow_PickUpBall;
+            sprite->callback = SpriteCB_Pidgey_PickUpBall;
         }
     }
 }
 
-static void SpriteCB_TaillowShadow_FlyIn(struct Sprite *sprite)
+static void SpriteCB_PidgeyShadow_FlyIn(struct Sprite *sprite)
 {
     s8 moveDir[2] = {-1, 1};
 
@@ -4739,15 +4739,15 @@ static void SpriteCB_TaillowShadow_FlyIn(struct Sprite *sprite)
     }
     else
     {
-        sprite->callback = SpriteCB_TaillowShadow_Flash;
+        sprite->callback = SpriteCB_PidgeyShadow_Flash;
     }
 }
 
-static void SpriteCB_Taillow(struct Sprite *sprite)
+static void SpriteCB_Pidgey(struct Sprite *sprite)
 {
     if (sRoulette->ball->sStuckOnWheelLeft == FALSE)
     {
-        if (sRoulette->ball->sBallAngle == sRouletteTables[sRoulette->tableId].taillow.rightStartAngle + 90)
+        if (sRoulette->ball->sBallAngle == sRouletteTables[sRoulette->tableId].pidgey.rightStartAngle + 90)
         {
             gSprites[sprite->sMonShadowSpriteId].data[1] = 52;
             gSprites[sprite->sMonSpriteId].data[1] = 52;
@@ -4759,7 +4759,7 @@ static void SpriteCB_Taillow(struct Sprite *sprite)
     }
     else
     {
-        if (sRoulette->ball->sBallAngle == sRouletteTables[sRoulette->tableId].taillow.leftStartAngle + 270)
+        if (sRoulette->ball->sBallAngle == sRouletteTables[sRoulette->tableId].pidgey.leftStartAngle + 270)
         {
             gSprites[sprite->sMonShadowSpriteId].data[1] = 46;
             gSprites[sprite->sMonSpriteId].data[1] = 46;
@@ -4769,7 +4769,7 @@ static void SpriteCB_Taillow(struct Sprite *sprite)
             return;
         }
     }
-    gSprites[sprite->sMonShadowSpriteId].callback = SpriteCB_TaillowShadow_FlyIn;
-    gSprites[sprite->sMonSpriteId].callback = SpriteCB_Taillow_FlyIn;
+    gSprites[sprite->sMonShadowSpriteId].callback = SpriteCB_PidgeyShadow_FlyIn;
+    gSprites[sprite->sMonSpriteId].callback = SpriteCB_Pidgey_FlyIn;
     m4aSongNumStart(SE_FALL);
 }

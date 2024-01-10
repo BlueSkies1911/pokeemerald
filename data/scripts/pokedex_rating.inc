@@ -47,7 +47,7 @@ PokedexRating_EventScript_Rate::
 	buffernumberstring STR_VAR_1, VAR_0x8008 @ Num National Seen
 	buffernumberstring STR_VAR_2, VAR_0x8009 @ Num National Caught
 	msgbox gPokedexRating_Text_NationalDexSeenXOwnedY
-	specialvar VAR_RESULT, HasAllMons
+	specialvar VAR_RESULT, HasAllKantoMons
 	goto_if_eq VAR_RESULT, FALSE, PokedexRating_EventScript_DexIncomplete
 	goto_if_eq VAR_RESULT, TRUE, PokedexRating_EventScript_DexComplete
 	end

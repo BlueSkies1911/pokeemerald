@@ -579,14 +579,14 @@ gTV3CheersForPokeblocksText00::
 	.string "Today, we examine the {POKEBLOCK} blended\n"
 	.string "by {STR_VAR_1} and associates.\p"
 	.string "Without any delay, let me feed it\n"
-	.string "to my gourmet Pokémon Gulpin.\p"
+	.string "to my gourmet Pokémon Grimer.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … …$"
 
 gTV3CheersForPokeblocksText01::
-	.string "Gulpin: Gubi! Gubii!\p"
+	.string "Grimer: Grimi! Grimii!\p"
 	.string "MC: And the verdict is very {STR_VAR_1}!\n"
-	.string "Gulpin says it tastes “{STR_VAR_2}!”\p"
+	.string "Grimer says it tastes “{STR_VAR_2}!”\p"
 	.string "Thank you so much, {STR_VAR_3}!$"
 
 gTV3CheersForPokeblocksText02::
@@ -596,9 +596,9 @@ gTV3CheersForPokeblocksText02::
 	.string "the {POKEBLOCK} would be much tastier.$"
 
 gTV3CheersForPokeblocksText03::
-	.string "Gulpin: Gubi! Gubii!\p"
+	.string "Grimer: Grimi! Grimii!\p"
 	.string "MC: Hmm… It's too {STR_VAR_1}.\n"
-	.string "Gulpin says it tastes “{STR_VAR_2}!”\p"
+	.string "Grimer says it tastes “{STR_VAR_2}!”\p"
 	.string "It looks like {STR_VAR_3}'s errors\n"
 	.string "hurt the blending quality…$"
 
@@ -658,7 +658,7 @@ gTVTrainerFanClubSpecialText00::
 	.string "Trainer Fan Club\n"
 	.string "{STR_VAR_1} Special!\p"
 	.string "This is a special presentation for\n"
-	.string "the fans of {STR_VAR_1} all over Hoenn!\p"
+	.string "the fans of {STR_VAR_1} all over Kanto!\p"
 	.string "Today, we ask the question, “What do\n"
 	.string "people think of {STR_VAR_1}?”\p"
 	.string "We posed the question to {STR_VAR_2}\n"
@@ -1292,8 +1292,8 @@ TrendWatcher_Text_Outro::
 	.string "My time is up. Catch you on the fly!\p"
 	.string "Old man: {STR_VAR_1} {STR_VAR_2}!$"
 
-gTVHoennTreasureInvestigatorsText00::
-	.string "Hoenn Treasure Investigators!\p"
+gTVKantoTreasureInvestigatorsText00::
+	.string "Kanto Treasure Investigators!\p"
 	.string "Hi, gang!\n"
 	.string "Score any secret items lately?\p"
 	.string "As always, we'll examine eyewitness\n"
@@ -1301,7 +1301,7 @@ gTVHoennTreasureInvestigatorsText00::
 	.string "Let's start with a letter.\n"
 	.string "It says, “{STR_VAR_1} discovered!”$"
 
-gTVHoennTreasureInvestigatorsText01::
+gTVKantoTreasureInvestigatorsText01::
 	.string "Wow, we'd better check this letter\n"
 	.string "out! Let me read it to you.\p"
 	.string "…Dear Investigators,\n"
@@ -1316,7 +1316,7 @@ gTVHoennTreasureInvestigatorsText01::
 	.string "I'll be waiting for exciting news\n"
 	.string "from all of you!$"
 
-gTVHoennTreasureInvestigatorsText02::
+gTVKantoTreasureInvestigatorsText02::
 	.string "Wow, we'd better check this letter\n"
 	.string "out! Let me read it to you.\p"
 	.string "…Dear Investigators,\n"
@@ -1608,7 +1608,7 @@ gTVPokemonLotteryWinnerFlashReportText00::
 	.string "This has been a live broadcast from\n"
 	.string "the Lilycove Department Store,\l"
 	.string "offering you the greatest selection\l"
-	.string "in all Hoenn!$"
+	.string "in all Kanto!$"
 
 gTVThePokemonBattleSeminarText00::
 	.string "The Pokémon Battle Seminar!\p"
@@ -2004,8 +2004,8 @@ gTVPokemonNewsBattleFrontierText18::
 	.string "Pokémon!\p"
 	.string "That's the news on Pokémon News!$"
 
-gTVWhatsNo1InHoennTodayText00::
-	.string "What's No. 1 in Hoenn Today?\n"
+gTVWhatsNo1InKantoTodayText00::
+	.string "What's No. 1 in Kanto Today?\n"
 	.string "Yes, it's that time again!\p"
 	.string "Hello, viewers! Are you giving your\n"
 	.string "best at whatever you do?\p"
@@ -2014,7 +2014,7 @@ gTVWhatsNo1InHoennTodayText00::
 	.string "Today's no. 1 Trainer is none other\n"
 	.string "than {STR_VAR_1}!$"
 
-gTVWhatsNo1InHoennTodayText01::
+gTVWhatsNo1InKantoTodayText01::
 	.string "In one day, {STR_VAR_1} spun the Slots\n"
 	.string "at the Game Corner {STR_VAR_2} times.\p"
 	.string "While playing, {STR_VAR_1} was heard\n"
@@ -2022,7 +2022,7 @@ gTVWhatsNo1InHoennTodayText01::
 	.string "even move…”\l"
 	.string "Isn't that interesting?$"
 
-gTVWhatsNo1InHoennTodayText02::
+gTVWhatsNo1InKantoTodayText02::
 	.string "In one day, {STR_VAR_1} played\n"
 	.string "the Roulette game at the Game\l"
 	.string "Corner {STR_VAR_2} times.\p"
@@ -2031,7 +2031,7 @@ gTVWhatsNo1InHoennTodayText02::
 	.string "The Trainer's eyes were focused and\n"
 	.string "the face showed concentration.$"
 
-gTVWhatsNo1InHoennTodayText03::
+gTVWhatsNo1InKantoTodayText03::
 	.string "In one day, {STR_VAR_1} battled\n"
 	.string "wild Pokémon {STR_VAR_2} times!\p"
 	.string "Apparently, {STR_VAR_1}'s Pokémon\n"
@@ -2039,15 +2039,15 @@ gTVWhatsNo1InHoennTodayText03::
 	.string "They appear eager to battle anywhere,\n"
 	.string "anytime, and anyhow!$"
 
-gTVWhatsNo1InHoennTodayText04::
+gTVWhatsNo1InKantoTodayText04::
 	.string "In just one day, {STR_VAR_1} spun\n"
 	.string "the Berry Blender {STR_VAR_2} times!\p"
 	.string "Toward the end, even {STR_VAR_1}\n"
 	.string "seemed to get dizzy.\p"
 	.string "The Trainer appeared to totter\n"
-	.string "around like a Spinda!$"
+	.string "around!$"
 
-gTVWhatsNo1InHoennTodayText05::
+gTVWhatsNo1InKantoTodayText05::
 	.string "In just one day, {STR_VAR_1} planted\n"
 	.string "{STR_VAR_2} Berries!\p"
 	.string "As a result, {STR_VAR_1}'s clothes\n"
@@ -2057,14 +2057,14 @@ gTVWhatsNo1InHoennTodayText05::
 	.string "The flowers are said to soothe\n"
 	.string "the emotions of people.$"
 
-gTVWhatsNo1InHoennTodayText06::
+gTVWhatsNo1InKantoTodayText06::
 	.string "In just one day, {STR_VAR_1} picked\n"
 	.string "{STR_VAR_2} Berries!\p"
 	.string "{STR_VAR_1}'s Bag became so filled\n"
 	.string "with Berries, the Trainer had trouble\l"
 	.string "walking afterward!$"
 
-gTVWhatsNo1InHoennTodayText07::
+gTVWhatsNo1InKantoTodayText07::
 	.string "In just one day, {STR_VAR_1} obtained\n"
 	.string "{STR_VAR_2} Battle Points!\p"
 	.string "{STR_VAR_1} was later seen wrestling\n"
@@ -2074,7 +2074,7 @@ gTVWhatsNo1InHoennTodayText07::
 	.string "The Trainer reportedly was grinning\n"
 	.string "while mulling options.$"
 
-gTVWhatsNo1InHoennTodayText08::
+gTVWhatsNo1InKantoTodayText08::
 	.string "Well, isn't that something!\p"
 	.string "{STR_VAR_1}!\n"
 	.string "You're today's no. 1 Trainer!\p"

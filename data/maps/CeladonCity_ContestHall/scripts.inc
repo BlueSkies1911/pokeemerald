@@ -253,7 +253,7 @@ CeladonCity_ContestHall_EventScript_CuteContestJudge::
 CeladonCity_ContestHall_EventScript_CuteContestant1::
 	lock
 	faceplayer
-	msgbox CeladonCity_ContestHall_Text_MyAzurillWasDistracted, MSGBOX_DEFAULT
+	msgbox CeladonCity_ContestHall_Text_MyPoliwagWasDistracted, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_CUTE_CONTESTANT_1, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -485,8 +485,8 @@ CeladonCity_ContestHall_Text_SuchCharmingCuteAppeals:
 	.string "Oh, my goodness! What a perfectly\n"
 	.string "adorable Water Sport appeal!$"
 
-CeladonCity_ContestHall_Text_MyAzurillWasDistracted:
-	.string "Oh, no… My sweet Azurill was\n"
+CeladonCity_ContestHall_Text_MyPoliwagWasDistracted:
+	.string "Oh, no… My sweet Poliwag was\n"
 	.string "distracted by another Pokémon.$"
 
 CeladonCity_ContestHall_Text_NeverWonBattleButContest:

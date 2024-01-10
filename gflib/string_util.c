@@ -493,16 +493,6 @@ static const u8 *ExpandPlaceholder_Maxie(void)
     return gText_ExpandedPlaceholder_Maxie;
 }
 
-static const u8 *ExpandPlaceholder_Kyogre(void)
-{
-    return gText_ExpandedPlaceholder_Kyogre;
-}
-
-static const u8 *ExpandPlaceholder_Groudon(void)
-{
-    return gText_ExpandedPlaceholder_Groudon;
-}
-
 const u8 *GetExpandedPlaceholder(u32 id)
 {
     typedef const u8 *(*ExpandPlaceholderFunc)(void);
@@ -521,8 +511,6 @@ const u8 *GetExpandedPlaceholder(u32 id)
         [PLACEHOLDER_ID_MAGMA]        = ExpandPlaceholder_Magma,
         [PLACEHOLDER_ID_ARCHIE]       = ExpandPlaceholder_Archie,
         [PLACEHOLDER_ID_MAXIE]        = ExpandPlaceholder_Maxie,
-        [PLACEHOLDER_ID_KYOGRE]       = ExpandPlaceholder_Kyogre,
-        [PLACEHOLDER_ID_GROUDON]      = ExpandPlaceholder_Groudon,
     };
 
     if (id >= ARRAY_COUNT(funcs))

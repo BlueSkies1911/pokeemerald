@@ -614,7 +614,6 @@ static const struct WindowTemplate sTradeYesNoWindowTemplate =
     .baseBlock = 582
 };
 
-static const u8 sText_ShedinjaJP[] = _("ヌケニン");
 static const u8 sSelectedMonLevelGenderCoords[3][2] =
 {
     [TRADE_PLAYER]  = {4,  3},
@@ -1128,10 +1127,10 @@ static const struct InGameTrade sIngameTrades[] =
         .sheen = 10,
         .requestedSpecies = SPECIES_PONYTA
     },
-    [INGAME_TRADE_SKITTY] =
+    [INGAME_TRADE_VULPIX] =
     {
-        .nickname = _("Meowow"),
-        .species = SPECIES_SKITTY,
+        .nickname = _("Vulpi"),
+        .species = SPECIES_VULPIX,
         .ivs = {4, 5, 4, 5, 4, 4},
         .abilityNum = 0,
         .otId = 91481,

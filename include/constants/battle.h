@@ -57,33 +57,29 @@
 #define BATTLE_TYPE_OLD_MAN_TUTORIAL   (1 << 9)
 #define BATTLE_TYPE_ROAMER             (1 << 10)
 #define BATTLE_TYPE_EREADER_TRAINER    (1 << 11)
-#define BATTLE_TYPE_KYOGRE_GROUDON     (1 << 12)
-#define BATTLE_TYPE_LEGENDARY          (1 << 13)
-#define BATTLE_TYPE_REGI               (1 << 14)
-#define BATTLE_TYPE_TWO_OPPONENTS      (1 << 15) // Used in pokefirered as BATTLE_TYPE_GHOST.
-#define BATTLE_TYPE_DOME               (1 << 16) // Used in pokefirered as BATTLE_TYPE_POKEDUDE.
-#define BATTLE_TYPE_PALACE             (1 << 17) // Used in pokefirered as BATTLE_TYPE_WILD_SCRIPTED.
-#define BATTLE_TYPE_ARENA              (1 << 18) // Used in pokefirered as BATTLE_TYPE_LEGENDARY_FRLG.
-#define BATTLE_TYPE_FACTORY            (1 << 19) // Used in pokefirered as BATTLE_TYPE_TRAINER_TOWER.
-#define BATTLE_TYPE_PIKE               (1 << 20)
-#define BATTLE_TYPE_PYRAMID            (1 << 21)
-#define BATTLE_TYPE_INGAME_PARTNER     (1 << 22)
-#define BATTLE_TYPE_TOWER_LINK_MULTI   (1 << 23)
-#define BATTLE_TYPE_RECORDED           (1 << 24)
-#define BATTLE_TYPE_RECORDED_LINK      (1 << 25)
-#define BATTLE_TYPE_TRAINER_TOWER      (1 << 26)
-#define BATTLE_TYPE_SECRET_BASE        (1 << 27)
-#define BATTLE_TYPE_GHOST              (1 << 28)
-#define BATTLE_TYPE_GHOST_UNVEILED     (1 << 29)
-#define BATTLE_TYPE_RAYQUAZA           (1 << 30)
-#define BATTLE_TYPE_RECORDED_IS_MASTER (1 << 31)
+#define BATTLE_TYPE_LEGENDARY          (1 << 12)
+#define BATTLE_TYPE_TWO_OPPONENTS      (1 << 13) // Used in pokefirered as BATTLE_TYPE_GHOST.
+#define BATTLE_TYPE_DOME               (1 << 14) // Used in pokefirered as BATTLE_TYPE_POKEDUDE.
+#define BATTLE_TYPE_PALACE             (1 << 15) // Used in pokefirered as BATTLE_TYPE_WILD_SCRIPTED.
+#define BATTLE_TYPE_ARENA              (1 << 16) // Used in pokefirered as BATTLE_TYPE_LEGENDARY_FRLG.
+#define BATTLE_TYPE_FACTORY            (1 << 17) // Used in pokefirered as BATTLE_TYPE_TRAINER_TOWER.
+#define BATTLE_TYPE_PIKE               (1 << 18)
+#define BATTLE_TYPE_PYRAMID            (1 << 19)
+#define BATTLE_TYPE_INGAME_PARTNER     (1 << 20)
+#define BATTLE_TYPE_TOWER_LINK_MULTI   (1 << 21)
+#define BATTLE_TYPE_RECORDED           (1 << 22)
+#define BATTLE_TYPE_RECORDED_LINK      (1 << 23)
+#define BATTLE_TYPE_TRAINER_TOWER      (1 << 24)
+#define BATTLE_TYPE_SECRET_BASE        (1 << 25)
+#define BATTLE_TYPE_GHOST              (1 << 26)
+#define BATTLE_TYPE_GHOST_UNVEILED     (1 << 27)
+#define BATTLE_TYPE_RECORDED_IS_MASTER (1 << 28)
 #define BATTLE_TYPE_FRONTIER                (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_DOME | BATTLE_TYPE_PALACE | BATTLE_TYPE_ARENA | BATTLE_TYPE_FACTORY | BATTLE_TYPE_PIKE | BATTLE_TYPE_PYRAMID)
 #define BATTLE_TYPE_FRONTIER_NO_PYRAMID     (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_DOME | BATTLE_TYPE_PALACE | BATTLE_TYPE_ARENA | BATTLE_TYPE_FACTORY | BATTLE_TYPE_PIKE)
 #define BATTLE_TYPE_RECORDED_INVALID        ((BATTLE_TYPE_LINK | BATTLE_TYPE_SAFARI | BATTLE_TYPE_FIRST_BATTLE                  \
                                              | BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_ROAMER | BATTLE_TYPE_EREADER_TRAINER    \
-                                             | BATTLE_TYPE_KYOGRE_GROUDON | BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_REGI            \
-                                             | BATTLE_TYPE_RECORDED | BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_SECRET_BASE        \
-                                             | BATTLE_TYPE_RAYQUAZA))
+                                             | BATTLE_TYPE_LEGENDARY            \
+                                             | BATTLE_TYPE_RECORDED | BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_SECRET_BASE))
 
 #define BATTLE_TWO_VS_ONE_OPPONENT ((gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gTrainerBattleOpponent_B == 0xFFFF))
 #define BATTLE_TYPE_HAS_AI          (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_SAFARI | BATTLE_TYPE_ROAMER | BATTLE_TYPE_INGAME_PARTNER)
@@ -360,13 +356,6 @@
 #define B_WAIT_TIME_MED         48
 #define B_WAIT_TIME_SHORT       32
 #define B_WAIT_TIME_SHORTEST    16
-
-#define CASTFORM_NORMAL     0
-#define CASTFORM_FIRE       1
-#define CASTFORM_WATER      2
-#define CASTFORM_ICE        3
-#define NUM_CASTFORM_FORMS  4
-#define CASTFORM_SUBSTITUTE (1 << 7)
 
 #define FLEE_ITEM    1
 #define FLEE_ABILITY 2
