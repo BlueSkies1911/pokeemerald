@@ -215,16 +215,17 @@
 #define FLAG_HIGH_CRIT                            (1 << 6)
 #define FLAG_RECKLESS_BOOST                       (1 << 7)
 #define FLAG_IRON_FIST_BOOST                      (1 << 8)
-#define FLAG_DMG_MINIMISE                         (1 << 9)
-#define FLAG_DMG_UNDERGROUND                      (1 << 10)
-#define FLAG_DMG_UNDERWATER                       (1 << 11)
-#define FLAG_SOUND                                (1 << 12)
-#define FLAG_PROTECTION_MOVE                      (1 << 13)
-#define FLAG_POWDER                               (1 << 14)
-#define FLAG_DMG_2X_IN_AIR                        (1 << 15) // If target is in the air, can hit and deal double damage.
-#define FLAG_DMG_IN_AIR                           (1 << 16) // If target is in the air, can hit.
-#define FLAG_THAW_USER                            (1 << 17)
-#define FLAG_TWO_STRIKES                          (1 << 18) // A move with this flag will strike twice, and may apply its effect on each hit
+#define FLAG_STAT_STAGES_IGNORED                  (1 << 9)
+#define FLAG_DMG_MINIMISE                         (1 << 10)
+#define FLAG_DMG_UNDERGROUND                      (1 << 11)
+#define FLAG_DMG_UNDERWATER                       (1 << 12)
+#define FLAG_SOUND                                (1 << 13)
+#define FLAG_PROTECTION_MOVE                      (1 << 14)
+#define FLAG_POWDER                               (1 << 15)
+#define FLAG_DMG_2X_IN_AIR                        (1 << 16) // If target is in the air, can hit and deal double damage.
+#define FLAG_DMG_IN_AIR                           (1 << 17) // If target is in the air, can hit.
+#define FLAG_THAW_USER                            (1 << 18)
+#define FLAG_TWO_STRIKES                          (1 << 19) // A move with this flag will strike twice, and may apply its effect on each hit
 
 // Split defines.
 #define SPLIT_PHYSICAL  0x0

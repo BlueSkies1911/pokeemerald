@@ -1260,23 +1260,33 @@
 	.byte \position
 	.endm
 
-	.macro swapstatstages stat:req
+	.macro settelekinesis failInstr:req
 	.byte 0xf9
+	.4byte \failInstr
+	.endm
+
+	.macro swapstatstages stat:req
+	.byte 0xfa
+	.byte \stat
+	.endm
+
+	.macro averagestats stat:req
+	.byte 0xfb
 	.byte \stat
 	.endm
 
 	.macro jumpifoppositegenders jumpInstr:req
-	.byte 0xfa
+	.byte 0xfc
 	.4byte \jumpInstr
 	.endm
 
 	.macro tryworryseed failInstr:req
-	.byte 0xfb
+	.byte 0xfd
 	.4byte \failInstr
 	.endm
 	
 	.macro callnative func:req
-	.byte 0xfc
+	.byte 0xfe
 	.4byte \func
 	.endm
 
@@ -1436,6 +1446,35 @@
 	.4byte \failInstr
 	.endm
 
+	.macro setabilitysimple battler:req, failInstr:req
+	various \battler VARIOUS_SET_SIMPLE_BEAM
+	.4byte \failInstr
+	.endm
+
+	.macro tryentrainment failInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_ENTRAINMENT
+	.4byte \failInstr
+	.endm
+
+	.macro setlastusedability battler:req
+	various \battler, VARIOUS_SET_LAST_USED_ABILITY
+	.endm
+
+	.macro tryhealpulse battler:req, failInstr:req
+	various \battler, VARIOUS_TRY_HEAL_PULSE
+	.4byte \failInstr
+	.endm
+
+	.macro tryafteryou failInstr:req
+	various BS_ATTACKER, VARIOUS_AFTER_YOU
+	.4byte \failInstr
+	.endm
+
+	.macro trybestow failInstr:req
+	various BS_ATTACKER, VARIOUS_BESTOW
+	.4byte \failInstr
+	.endm
+
 	.macro trymefirst failInstr:req
 	various BS_ATTACKER, VARIOUS_TRY_ME_FIRST
 	.4byte \failInstr
@@ -1446,6 +1485,16 @@
 	.4byte \jumpInstr
 	.endm
 
+	.macro tryreflecttype failInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_REFLECT_TYPE
+	.4byte \failInstr
+	.endm
+
+	.macro trysoak failInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_SOAK
+	.4byte \failInstr
+	.endm
+
 	.macro jumpifcantuselastresort battler:req, jumpInstr:req
 	various \battler, VARIOUS_TRY_LAST_RESORT
 	.4byte \jumpInstr
@@ -1453,6 +1502,21 @@
 
 	.macro argumentstatuseffect
 	various BS_ATTACKER, VARIOUS_ARGUMENT_STATUS_EFFECT
+	.endm
+
+	.macro tryhitswitchtarget failInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_HIT_SWITCH_TARGET
+	.4byte \failInstr
+	.endm
+
+	.macro tryautotomise battler:req, failInstr:req
+	various \battler, VARIOUS_TRY_AUTOTOMISE
+	.4byte \failInstr
+	.endm
+
+	.macro jumpifcantusesynchronoise jumpInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_SYNCHRONOISE
+	.4byte \jumpInstr
 	.endm
 
 	.macro trycopycat failInstr:req
@@ -1533,6 +1597,11 @@
 	various \attacker, VARIOUS_PARALYZE_TYPE_IMMUNITY
 	.byte \target
 	.4byte \failInstr
+	.endm
+
+	.macro jumpifnoally battler:req, jumpInstr:req
+	various \battler, VARIOUS_JUMP_IF_NO_ALLY
+	.4byte \jumpInstr
 	.endm
 
 	.macro jumpifnoholdeffect battler:req, holdEffect:req, jumpInstr:req
@@ -1716,6 +1785,10 @@
 	manipulatedamage DMG_FULL_ATTACKER_HP
 	.endm
 
+	.macro dmgtocurrattackerhp
+	manipulatedamage DMG_CURR_ATTACKER_HP
+	.endm
+
 	.macro jumpifleafguardprotected battler:req, jumpInstr:req
 	various \battler, VARIOUS_JUMP_IF_LEAF_GUARD_PROTECTED
 	.4byte \jumpInstr
@@ -1724,4 +1797,27 @@
 	.macro jumpifsafeguard jumpInstr:req
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpInstr
 	1:
+	.endm
+
+	@ Will jump to script pointer if the target weighs less than 200 kg, or 441 lbs.
+	.macro jumpifunder200 battler:req, failInstr:req
+	various \battler, VARIOUS_JUMP_IF_UNDER_200
+	.4byte \failInstr
+	.endm
+
+	@ Sets the sky drop status and does all other necessary operations
+	.macro setskydrop
+	various 0, VARIOUS_SET_SKY_DROP
+	.endm
+
+	@ Clears the sky drop status and does all other necessary operations.
+	@ If the target fainted in before this script is called, it goes to the given script.
+	.macro clearskydrop failInstr:req
+	various 0, VARIOUS_CLEAR_SKY_DROP
+	.4byte \failInstr
+	.endm
+
+	@ Accounts for if the target of Sky Drop was in confuse_lock when the attacker falls asleep due to Yawn.
+	.macro skydropyawn
+	various 0, VARIOUS_SKY_DROP_YAWN
 	.endm

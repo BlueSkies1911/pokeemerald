@@ -46,12 +46,9 @@ static void AnimGuillotinePincer_Step1(struct Sprite *);
 static void AnimGuillotinePincer_Step2(struct Sprite *);
 static void AnimGuillotinePincer_Step3(struct Sprite *);
 static void AnimBreathPuff(struct Sprite *);
-static void AnimAngerMark(struct Sprite *);
 static void AnimPencil(struct Sprite *);
 static void AnimPencil_Step(struct Sprite *);
 static void AnimBlendThinRing(struct Sprite *);
-static void AnimHyperVoiceRing(struct Sprite *);
-static void AnimUproarRing(struct Sprite *);
 static void AnimSoftBoiledEgg(struct Sprite *);
 static void AnimSoftBoiledEgg_Step1(struct Sprite *);
 static void AnimSoftBoiledEgg_Step2(struct Sprite *);
@@ -2300,7 +2297,7 @@ static void AnimBreathPuff(struct Sprite *sprite)
 // arg 0: target mon (0 = attacker, 1 = target)
 // arg 1: x pixel offset
 // arg 2: y pixel offset
-static void AnimAngerMark(struct Sprite *sprite)
+void AnimAngerMark(struct Sprite *sprite)
 {
     u8 battler;
     if (!gBattleAnimArgs[0])
@@ -2610,7 +2607,7 @@ static void AnimHyperVoiceRing_WaitEnd(struct Sprite *sprite)
     }
 }
 
-static void AnimHyperVoiceRing(struct Sprite *sprite)
+void AnimHyperVoiceRing(struct Sprite *sprite)
 {
     u16 startX = 0;
     u16 startY = 0;
@@ -2695,7 +2692,7 @@ static void AnimHyperVoiceRing(struct Sprite *sprite)
     sprite->callback(sprite);
 }
 
-static void AnimUproarRing(struct Sprite *sprite)
+void AnimUproarRing(struct Sprite *sprite)
 {
     u8 index = IndexOfSpritePaletteTag(ANIM_TAG_THIN_RING);
     if (index != 0xFF)

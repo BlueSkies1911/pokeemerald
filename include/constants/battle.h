@@ -169,12 +169,15 @@
 #define STATUS3_UNDERWATER              (1 << 18)
 #define STATUS3_INTIMIDATE_POKES        (1 << 19)
 #define STATUS3_TRACE                   (1 << 20)
-#define STATUS3_ME_FIRST                (1 << 21)
-#define STATUS3_MIRACLE_EYED            (1 << 22)
-#define STATUS3_MAGNET_RISE             (1 << 23)
-#define STATUS3_HEAL_BLOCK              (1 << 24)
-#define STATUS3_AQUA_RING               (1 << 25)
-#define STATUS3_POWER_TRICK             (1 << 26)
+#define STATUS3_SMACKED_DOWN            (1 << 21)
+#define STATUS3_ME_FIRST                (1 << 22)
+#define STATUS3_TELEKINESIS             (1 << 23)
+#define STATUS3_MIRACLE_EYED            (1 << 24)
+#define STATUS3_MAGNET_RISE             (1 << 25)
+#define STATUS3_HEAL_BLOCK              (1 << 26)
+#define STATUS3_AQUA_RING               (1 << 27)
+#define STATUS3_POWER_TRICK             (1 << 28)
+#define STATUS3_SKY_DROPPED             (1 << 29) // Target of Sky Drop
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
 
 // Not really sure what a "hitmarker" is.
@@ -220,6 +223,8 @@
 #define SIDE_STATUS_STEALTH_ROCK            (1 << 13)
 #define SIDE_STATUS_STEALTH_ROCK_DAMAGED    (1 << 14)
 #define SIDE_STATUS_TOXIC_SPIKES_DAMAGED    (1 << 15)
+#define SIDE_STATUS_QUICK_GUARD             (1 << 16)
+#define SIDE_STATUS_WIDE_GUARD              (1 << 17)
 
 #define SIDE_STATUS_HAZARDS_ANY    (SIDE_STATUS_SPIKES | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_STEALTH_ROCK)
 #define SIDE_STATUS_SCREEN_ANY     (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN)
@@ -327,15 +332,17 @@
 #define MOVE_EFFECT_THRASH              53
 #define MOVE_EFFECT_KNOCK_OFF           54
 #define MOVE_EFFECT_DEF_SPDEF_DOWN      55
-#define MOVE_EFFECT_NOTHING_38          56
+#define MOVE_EFFECT_CLEAR_SMOG          56
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     57
-#define MOVE_EFFECT_NOTHING_39          58
-#define MOVE_EFFECT_NOTHING_3A          59
-#define MOVE_EFFECT_FEINT               60
-#define MOVE_EFFECT_BUG_BITE            61
-#define MOVE_EFFECT_RECOIL_HP_25        62
+#define MOVE_EFFECT_SMACK_DOWN          58
+#define MOVE_EFFECT_FLAME_BURST         59
+#define MOVE_EFFECT_NOTHING_3A          60
+#define MOVE_EFFECT_FEINT               61
+#define MOVE_EFFECT_BUG_BITE            62
+#define MOVE_EFFECT_RECOIL_HP_25        63
+#define MOVE_EFFECT_ROUND               64
 
-#define NUM_MOVE_EFFECTS                63
+#define NUM_MOVE_EFFECTS                65
 
 #define MOVE_EFFECT_AFFECTS_USER        0x4000
 #define MOVE_EFFECT_CERTAIN             0x8000

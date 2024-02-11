@@ -1319,8 +1319,14 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_PoisonJab, 0x0080, ANIM_TAG_POISON_JAB},
     {gBattleAnimSpriteGfx_PoisonBubble, 0x0180, ANIM_TAG_GREEN_POISON_BUBBLE},
     {gBattleAnimSpriteGfx_FlashCannonBall, 0x200, ANIM_TAG_FLASH_CANNON_BALL},
+    {gBattleAnimSpriteGfx_Punishment, 0xa00, ANIM_TAG_PUNISHMENT_BLADES},
     {gBattleAnimSpriteGfx_QuickGuard, 0x200, ANIM_TAG_QUICK_GUARD_HAND},
+    {gBattleAnimSpriteGfx_ShellRight, 0x800, ANIM_TAG_SHELL_RIGHT},
+    {gBattleAnimSpriteGfx_ShellLeft, 0x800, ANIM_TAG_SHELL_LEFT},
+    {gBattleAnimSpriteGfx_RazorShell, 0x200, ANIM_TAG_RAZOR_SHELL},
     {gBattleAnimSpriteGfx_PowerTrick, 0x800, ANIM_TAG_POWER_TRICK},
+    {gBattleAnimSpriteGfx_HeartStamp, 0x400, ANIM_TAG_HEART_STAMP},
+    {gBattleAnimSpriteGfx_MetalBits, 0x140, ANIM_TAG_METAL_BITS},
 };
 
 const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
@@ -1636,8 +1642,14 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     {gBattleAnimSpritePal_PoisonJab, ANIM_TAG_POISON_JAB},
     {gBattleAnimSpritePal_Vine, ANIM_TAG_GREEN_POISON_BUBBLE},
     {gBattleAnimSpritePal_FlashCannonBall, ANIM_TAG_FLASH_CANNON_BALL},
+    {gBattleAnimSpritePal_Punishment, ANIM_TAG_PUNISHMENT_BLADES},
     {gBattleAnimSpritePal_QuickGuard, ANIM_TAG_QUICK_GUARD_HAND},
+    {gBattleAnimSpritePal_ShellLeft, ANIM_TAG_SHELL_RIGHT},
+    {gBattleAnimSpritePal_ShellLeft, ANIM_TAG_SHELL_LEFT},
+    {gBattleAnimSpritePal_RazorShell, ANIM_TAG_RAZOR_SHELL},
     {gBattleAnimSpritePal_PowerTrick, ANIM_TAG_POWER_TRICK},
+    [ANIM_TAG_HEART_STAMP - ANIM_SPRITES_START] = {gBattleAnimSpritePal_HeartStamp, ANIM_TAG_HEART_STAMP},
+    {gBattleAnimSpritePal_BlueFlare, ANIM_TAG_METAL_BITS},
 };
 
 const struct BattleAnimBackground gBattleAnimBackgroundTable[] =
@@ -1675,7 +1687,10 @@ const struct BattleAnimBackground gBattleAnimBackgroundTable[] =
     [BG_GIGA_IMPACT_CONTEST]       = {gBattleAnimBgImage_GigaImpactContest,       gBattleAnimBgPalette_GigaImpact,              gBattleAnimBgTilemap_GigaImpactContest},
     [BG_TRICK_ROOM]                = {gBattleAnimBgImage_TrickRoom,               gBattleAnimBgPalette_TrickRoom,               gBattleAnimBgTilemap_TrickRoom},
     [BG_ROCK_WRECKER]              = {gBattleAnimBgImage_Hurricane,               gBattleAnimBgPalette_RockWrecker,             gBattleAnimBgTilemap_Hurricane},
+    [BG_HURRICANE]                 = {gBattleAnimBgImage_Hurricane,               gBattleAnimBgPalette_Hurricane,               gBattleAnimBgTilemap_Hurricane},
     [BG_FOCUS_BLAST]               = {gBattleAnimBgImage_FocusBlast,              gBattleAnimBgPalette_FocusBlast,              gBattleAnimBgTilemap_FocusBlast},
     [BG_GUNK_SHOT]                 = {gBattleAnimBgImage_FocusBlast,              gBattleAnimBgPalette_GunkShot,                gBattleAnimBgTilemap_FocusBlast},
+    [BG_WONDER_ROOM]               = {gBattleAnimBgImage_TrickRoom,               gBattleAnimBgPalette_WonderRoom,              gBattleAnimBgTilemap_TrickRoom},
+    [BG_MAGIC_ROOM]                = {gBattleAnimBgImage_TrickRoom,               gBattleAnimBgPalette_MagicRoom,               gBattleAnimBgTilemap_TrickRoom},
     [BG_AURA_SPHERE]               = {gBattleAnimBgImage_FocusBlast,              gBattleAnimBgPalette_AuraSphere,              gBattleAnimBgTilemap_FocusBlast},
 };

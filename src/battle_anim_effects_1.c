@@ -33,9 +33,7 @@ static void AnimAbsorptionOrb(struct Sprite *);
 static void AnimAbsorptionOrb_Step(struct Sprite *);
 static void AnimHyperBeamOrb(struct Sprite *);
 static void AnimHyperBeamOrb_Step(struct Sprite *);
-static void AnimSporeParticle(struct Sprite *);
 static void AnimSporeParticle_Step(struct Sprite *);
-static void AnimPetalDanceBigFlower(struct Sprite *);
 static void AnimPetalDanceBigFlower_Step(struct Sprite *);
 static void AnimPetalDanceSmallFlower(struct Sprite *);
 static void AnimPetalDanceSmallFlower_Step(struct Sprite *);
@@ -50,7 +48,6 @@ static void AnimTranslateLinearSingleSineWave_Step(struct Sprite *);
 static void AnimConstrictBinding(struct Sprite *);
 static void AnimConstrictBinding_Step1(struct Sprite *);
 static void AnimConstrictBinding_Step2(struct Sprite *);
-static void AnimMimicOrb(struct Sprite *);
 static void AnimIngrainRoot(struct Sprite *);
 static void AnimFrenzyPlantRoot(struct Sprite *);
 static void AnimRootFlickerOut(struct Sprite *);
@@ -114,7 +111,6 @@ static void AnimEndureEnergy(struct Sprite *);
 static void AnimEndureEnergy_Step(struct Sprite *);
 static void AnimSharpenSphere(struct Sprite *);
 static void AnimSharpenSphere_Step(struct Sprite *);
-static void AnimConversion(struct Sprite *);
 static void AnimConversion2(struct Sprite *);
 static void AnimConversion2_Step(struct Sprite *);
 static void AnimMoon(struct Sprite *);
@@ -3333,7 +3329,7 @@ static void AnimLeechSeedSprouts(struct Sprite *sprite)
 // arg 2: initial wave offset
 // arg 3: duration
 // arg 4: blend (0 = off, 1 = on)
-static void AnimSporeParticle(struct Sprite *sprite)
+void AnimSporeParticle(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, TRUE);
     StartSpriteAnim(sprite, gBattleAnimArgs[4]);
@@ -3395,7 +3391,7 @@ void AnimTask_SporeDoubleBattle(u8 taskId)
 // arg 1: initial y pixel offset
 // arg 2: target y pixel offset
 // arg 3: duration
-static void AnimPetalDanceBigFlower(struct Sprite *sprite)
+void AnimPetalDanceBigFlower(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, FALSE);
     sprite->data[0] = gBattleAnimArgs[3];
@@ -3762,7 +3758,7 @@ static void AnimTask_DuplicateAndShrinkToPos_Step2(u8 taskId)
 // Moves an orb from the target mon to the attacking mon.
 // arg 0: initial x pixel offset
 // arg 1: initial y pixel offset
-static void AnimMimicOrb(struct Sprite *sprite)
+void AnimMimicOrb(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {
@@ -5732,7 +5728,7 @@ static void AnimSharpenSphere_Step(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimConversion(struct Sprite *sprite)
+void AnimConversion(struct Sprite *sprite)
 {
     if (sprite->data[0] == 0)
     {

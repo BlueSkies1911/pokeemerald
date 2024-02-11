@@ -424,7 +424,7 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
         return FALSE;
     else if (gBattleMons[battler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
         return TRUE;
-    else if (gStatuses3[battler] & (STATUS3_ROOTED))
+    else if (gStatuses3[battler] & (STATUS3_ROOTED | STATUS3_SKY_DROPPED))
         return TRUE;
     else if (IsAbilityPreventingEscape(battler))
         return TRUE;
@@ -583,6 +583,9 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
             break;
         case EFFECT_SUPER_FANG:
             dmg = max(1, gBattleMons[battlerDef].hp / 2);
+            break;
+        case EFFECT_FINAL_GAMBIT:
+            dmg = gBattleMons[battlerAtk].hp;
             break;
         }
 
@@ -1067,6 +1070,16 @@ bool32 IsHazardMoveEffect(u16 moveEffect)
     }
 }
 
+bool32 IsMoveRedirectionPrevented(u16 move, u16 atkAbility)
+{
+    if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_NEGATE_UNAWARE)
+        return FALSE;
+
+    if (move == MOVE_SKY_DROP)
+        return TRUE;
+    return FALSE;
+}
+
 u32 AI_GetMoveAccuracy(u8 battlerAtk, u8 battlerDef, u16 move)
 {
     return GetTotalAccuracy(battlerAtk, battlerDef, move, AI_DATA->abilities[battlerAtk], AI_DATA->abilities[battlerDef],
@@ -1171,6 +1184,7 @@ bool32 ShouldSetRain(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
       || atkAbility == ABILITY_RAIN_DISH
       || atkAbility == ABILITY_DRY_SKIN
       || HasMoveEffect(battlerAtk, EFFECT_THUNDER)
+      || HasMoveEffect(battlerAtk, EFFECT_HURRICANE)
       || HasMoveEffect(battlerAtk, EFFECT_WEATHER_BALL)
       || HasMoveWithType(battlerAtk, TYPE_WATER))
     {
@@ -1543,6 +1557,7 @@ bool32 IsHealingMoveEffect(u16 effect)
     case EFFECT_SWALLOW:
     case EFFECT_WISH:
     case EFFECT_HEALING_WISH:
+    case EFFECT_HEAL_PULSE:
     case EFFECT_REST:
         return TRUE;
     default:
@@ -1615,6 +1630,26 @@ bool32 IsUngroundingEffect(u16 effect)
     }
 }
 
+// for anger point
+bool32 IsAttackBoostMoveEffect(u16 effect)
+{
+    switch (effect)
+    {
+    case EFFECT_ATTACK_UP:
+	case EFFECT_ATTACK_UP_2:
+    case EFFECT_ATTACK_ACCURACY_UP:
+    case EFFECT_ATTACK_SPATK_UP:
+    case EFFECT_DRAGON_DANCE:
+    case EFFECT_COIL:
+    case EFFECT_BELLY_DRUM:
+    case EFFECT_BULK_UP:
+    case EFFECT_GROWTH:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 bool32 IsStatRaisingEffect(u16 effect)
 {
     switch (effect)
@@ -1641,7 +1676,12 @@ bool32 IsStatRaisingEffect(u16 effect)
     case EFFECT_COSMIC_POWER:
 	case EFFECT_DRAGON_DANCE:
 	case EFFECT_ACUPRESSURE:
+	case EFFECT_SHELL_SMASH:
+	case EFFECT_ATTACK_ACCURACY_UP:
+	case EFFECT_ATTACK_SPATK_UP:
 	case EFFECT_GROWTH:
+	case EFFECT_COIL:
+	case EFFECT_QUIVER_DANCE:
     case EFFECT_BULK_UP:
     case EFFECT_STOCKPILE:
         return TRUE;
@@ -2893,6 +2933,8 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             else if (gBattleMons[battlerAtk].statStages[STAT_ATK] < STAT_UP_STAGE)
                 *(score)++;
         }
+        if (HasMoveEffect(battlerAtk, EFFECT_FOUL_PLAY))
+            *(score)++;
         break;
     case STAT_DEF:
         if ((HasMoveWithSplit(battlerDef, SPLIT_PHYSICAL)|| IS_MOVE_PHYSICAL(gLastMoves[battlerDef]))
@@ -2963,7 +3005,11 @@ void IncreasePoisonScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
         if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_STALL && HasMoveEffect(battlerAtk, EFFECT_PROTECT))
             (*score)++;    // stall tactic
 
-        *(score)++;
+        if (HasMoveEffect(battlerAtk, EFFECT_VENOSHOCK)
+          || HasMoveEffect(battlerAtk, EFFECT_HEX))
+            *(score) += 2;
+        else
+            *(score)++;
     }
 }
 
@@ -2980,6 +3026,9 @@ void IncreaseBurnScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
             if (CanTargetFaintAi(battlerDef, battlerAtk))
                 *score += 2; // burning the target to stay alive is cool
         }
+
+        if (HasMoveEffect(battlerAtk, EFFECT_HEX) || HasMoveEffect(BATTLE_PARTNER(battlerAtk), EFFECT_HEX))
+            (*score)++;
     }
 }
 
@@ -2994,6 +3043,7 @@ void IncreaseParalyzeScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
         u8 defSpeed = GetBattlerTotalSpeedStat(battlerDef);
 
         if ((defSpeed >= atkSpeed && defSpeed / 2 < atkSpeed) // You'll go first after paralyzing foe
+          || HasMoveEffect(battlerAtk, EFFECT_HEX)
           || HasMoveEffect(battlerAtk, EFFECT_FLINCH_HIT)
           || gBattleMons[battlerDef].status2 & STATUS2_INFATUATION
           || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
@@ -3015,6 +3065,9 @@ void IncreaseSleepScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
 
     if ((HasMoveEffect(battlerAtk, EFFECT_DREAM_EATER) || HasMoveEffect(battlerAtk, EFFECT_NIGHTMARE))
       && !(HasMoveEffect(battlerDef, EFFECT_SNORE) || HasMoveEffect(battlerDef, EFFECT_SLEEP_TALK)))
+        (*score)++;
+
+    if (HasMoveEffect(battlerAtk, EFFECT_HEX) || HasMoveEffect(BATTLE_PARTNER(battlerAtk), EFFECT_HEX))
         (*score)++;
 }
 

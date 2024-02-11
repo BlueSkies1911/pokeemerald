@@ -9,9 +9,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
-static void AnimFallingRock(struct Sprite *);
 static void AnimFallingRock_Step(struct Sprite *);
-static void AnimRockFragment(struct Sprite *);
 static void AnimFlyingSandCrescent(struct Sprite *);
 static void AnimRaiseSprite(struct Sprite *);
 static void AnimTask_Rollout_Step(u8 taskId);
@@ -21,7 +19,6 @@ static void AnimRockTomb_Step(struct Sprite *sprite);
 static void AnimRockBlastRock(struct Sprite *);
 static void AnimRockScatter(struct Sprite *);
 static void AnimRockScatter_Step(struct Sprite *sprite);
-static void AnimParticleInVortex(struct Sprite *);
 static void AnimParticleInVortex_Step(struct Sprite *sprite);
 static void AnimTask_LoadSandstormBackground_Step(u8 taskId);
 static void CreateRolloutDirtSprite(struct Task *task);
@@ -48,7 +45,7 @@ static const union AnimCmd sAnim_FlyingRock_2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_FlyingRock[] =
+const union AnimCmd *const gAnims_FlyingRock[] =
 {
     sAnim_FlyingRock_0,
     sAnim_FlyingRock_1,
@@ -60,7 +57,7 @@ const struct SpriteTemplate gFallingRockSpriteTemplate =
     .tileTag = ANIM_TAG_ROCKS,
     .paletteTag = ANIM_TAG_ROCKS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FlyingRock,
+    .anims = gAnims_FlyingRock,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFallingRock,
@@ -71,7 +68,7 @@ const struct SpriteTemplate gRockFragmentSpriteTemplate =
     .tileTag = ANIM_TAG_ROCKS,
     .paletteTag = ANIM_TAG_ROCKS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FlyingRock,
+    .anims = gAnims_FlyingRock,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimRockFragment,
@@ -359,7 +356,7 @@ static void AnimStealthRockStep2(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimFallingRock(struct Sprite *sprite)
+void AnimFallingRock(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[3] != 0)
         SetAverageBattlerPositions(gBattleAnimTarget, FALSE, &sprite->x, &sprite->y);
@@ -398,7 +395,7 @@ static void AnimFallingRock_Step(struct Sprite *sprite)
 }
 
 // Animates the rock particles that are shown on the impact for Rock Blast / Rock Smash
-static void AnimRockFragment(struct Sprite *sprite)
+void AnimRockFragment(struct Sprite *sprite)
 {
     StartSpriteAnim(sprite, gBattleAnimArgs[5]);
     AnimateSprite(sprite);
@@ -425,7 +422,7 @@ static void AnimRockFragment(struct Sprite *sprite)
 }
 
 // Swirls particle in vortex. Used for moves like Fire Spin or Sand Tomb
-static void AnimParticleInVortex(struct Sprite *sprite)
+void AnimParticleInVortex(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[6] == ANIM_ATTACKER)
         InitSpritePosToAnimAttacker(sprite, FALSE);

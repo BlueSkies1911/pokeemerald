@@ -68,32 +68,26 @@ struct DisableStruct
     s8 stockpileBeforeDef;
     s8 stockpileBeforeSpDef;
     u8 substituteHP;
-    u8 disableTimer:4;
-    u8 disableTimerStartValue:4;
     u8 encoredMovePos;
-    u8 filler_D; // Unused field.
+    u8 disableTimer:4;
     u8 encoreTimer:4;
-    u8 encoreTimerStartValue:4;
     u8 perishSongTimer:4;
-    u8 perishSongTimerStartValue:4;
     u8 furyCutterCounter;
     u8 rolloutTimer:4;
     u8 rolloutTimerStartValue:4;
     u8 chargeTimer:4;
-    u8 chargeTimerStartValue:4;
     u8 tauntTimer:4;
-    u8 tauntTimer2:4;
     u8 battlerPreventingEscape;
     u8 battlerWithSureHit;
     u8 isFirstTurn;
-    u8 filler_17; // Unused field.
     u8 truantCounter:1;
     u8 truantSwitchInHack:1;
-    u8 filler_18_2:2; // Unused field.
     u8 mimickedMoves:4;
     u8 rechargeTimer;
+    u8 autotomiseCount;
     u8 embargoTimer;
     u8 magnetRiseTimer;
+    u8 telekinesisTimer;
     u8 healBlockTimer;
     u8 wrapTurns;
     u8 usedMoves:4;
@@ -161,6 +155,7 @@ struct SpecialStatus
     u8 gemBoost:1;
     u8 multiHitOn:1;
     u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
+    u8 afterYou:1;
 };
 
 struct SideTimer
@@ -182,12 +177,15 @@ struct SideTimer
     u8 luckyChantBattlerId;
     u8 followmeTimer;
     u8 followmeTarget;
+    u8 retaliateTimer;
 };
 
 struct FieldTimer
 {
     u8 mudSportTimer;
     u8 waterSportTimer;
+    u8 wonderRoomTimer;
+    u8 magicRoomTimer;
     u8 trickRoomTimer;
     u8 gravityTimer;
 };
@@ -545,6 +543,7 @@ struct BattleStruct
     u16 moveEffect2; // For Knock Off
     u8 quickClawBattlerId;
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
+    u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
     // When using a move which hits multiple opponents which is then bounced by a target, we need to make sure, the move hits both opponents, the one with bounce, and the one without.
     u8 attackerBeforeBounce:2;
     u8 targetsDone[MAX_BATTLERS_COUNT]; // Each battler as a bit.
@@ -583,7 +582,10 @@ STATIC_ASSERT(sizeof(((struct BattleStruct *)0)->palaceFlags) * 8 >= MAX_BATTLER
 }
 
 
-#define IS_BATTLER_PROTECTED(battlerId)(gProtectStructs[battlerId].protected)
+#define IS_BATTLER_PROTECTED(battlerId)(gProtectStructs[battlerId].protected                                           \
+                                        || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD           \
+                                        || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD          \
+                                        )
 
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))

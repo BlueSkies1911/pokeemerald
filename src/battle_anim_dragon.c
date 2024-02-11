@@ -6,8 +6,6 @@
 #include "constants/rgb.h"
 
 static void AnimOutrageFlame(struct Sprite *);
-static void AnimDragonRageFirePlume(struct Sprite *);
-static void AnimDragonFireToTarget(struct Sprite *);
 static void AnimDragonDanceOrb(struct Sprite *);
 static void AnimDragonDanceOrb_Step(struct Sprite *);
 static void AnimOverheatFlame(struct Sprite *);
@@ -109,7 +107,7 @@ static const union AnimCmd sAnim_DragonRageFirePlume[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_DragonRageFirePlume[] =
+const union AnimCmd *const gAnims_DragonRageFirePlume[] =
 {
     sAnim_DragonRageFirePlume,
 };
@@ -119,7 +117,7 @@ const struct SpriteTemplate gDragonRageFirePlumeSpriteTemplate =
     .tileTag = ANIM_TAG_FIRE_PLUME,
     .paletteTag = ANIM_TAG_FIRE_PLUME,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_DragonRageFirePlume,
+    .anims = gAnims_DragonRageFirePlume,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimDragonRageFirePlume,
@@ -133,7 +131,7 @@ static const union AnimCmd sAnim_DragonRageFire[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnims_DragonRageFire[] =
+const union AnimCmd *const gAnims_DragonRageFire[] =
 {
     sAnim_DragonRageFire,
     sAnim_DragonRageFire,
@@ -151,7 +149,7 @@ static const union AffineAnimCmd sAffineAnim_DragonRageFire_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_DragonRageFire[] =
+const union AffineAnimCmd *const gAffineAnims_DragonRageFire[] =
 {
     sAffineAnim_DragonRageFire_0,
     sAffineAnim_DragonRageFire_1,
@@ -162,9 +160,9 @@ const struct SpriteTemplate gDragonRageFireSpitSpriteTemplate =
     .tileTag = ANIM_TAG_SMALL_EMBER,
     .paletteTag = ANIM_TAG_SMALL_EMBER,
     .oam = &gOamData_AffineDouble_ObjNormal_32x32,
-    .anims = sAnims_DragonRageFire,
+    .anims = gAnims_DragonRageFire,
     .images = NULL,
-    .affineAnims = sAffineAnims_DragonRageFire,
+    .affineAnims = gAffineAnims_DragonRageFire,
     .callback = AnimDragonFireToTarget,
 };
 
@@ -371,7 +369,7 @@ static void StartDragonFireTranslation(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
 }
 
-static void AnimDragonRageFirePlume(struct Sprite *sprite)
+void AnimDragonRageFirePlume(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[0] == 0)
     {
@@ -391,7 +389,7 @@ static void AnimDragonRageFirePlume(struct Sprite *sprite)
 }
 
 // For Dragon Breath and Dragon Rage
-static void AnimDragonFireToTarget(struct Sprite *sprite)
+void AnimDragonFireToTarget(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
         StartSpriteAffineAnim(sprite, 1);

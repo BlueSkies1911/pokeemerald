@@ -70,10 +70,17 @@ static const u16 sRolePlayBannedAbilities[] =
     ABILITY_FORECAST,
 };
 
+static const u16 sEntrainmentBannedAttackerAbilities[] =
+{
+    ABILITY_TRACE,
+    ABILITY_FORECAST,
+};
+
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move)
 {
     if (gSideTimers[defSide].followmeTimer == 0
-        || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0)
+        || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0
+        || gBattleMoves[move].effect == EFFECT_SKY_DROP)
         return FALSE;
 
     return TRUE;
@@ -756,8 +763,10 @@ static const u8 sMovesNotAffectedByStench[] =
     [MOVE_FIRE_FANG] = 1,
     [MOVE_FLING] = 1,
     [MOVE_HEADBUTT] = 1,
+    [MOVE_HEART_STAMP] = 1,
     [MOVE_HYPER_FANG] = 1,
     [MOVE_ICE_FANG] = 1,
+    [MOVE_ICICLE_CRASH] = 1,
     [MOVE_IRON_HEAD] = 1,
     [MOVE_NEEDLE_ARM] = 1,
     [MOVE_NONE] = 1,
@@ -766,6 +775,7 @@ static const u8 sMovesNotAffectedByStench[] =
     [MOVE_SECRET_POWER] = 1,
     [MOVE_SKY_ATTACK] = 1,
     [MOVE_SNORE] = 1,
+    [MOVE_STEAMROLLER] = 1,
     [MOVE_STOMP] = 1,
     [MOVE_THUNDER_FANG] = 1,
     [MOVE_TWISTER] = 1,
@@ -1163,7 +1173,73 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~STATUS2_UPROAR;
     gBattleMons[battler].status2 &= ~STATUS2_BIDE;
 
-    gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
+    // Clear battler's semi-invulnerable bits if they are not held by Sky Drop.
+    if (!(gStatuses3[battler] & STATUS3_SKY_DROPPED))
+        gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+
+    // Check to see if this Pokemon was in the middle of using Sky Drop. If so, release the target.
+    if (gBattleStruct->skyDropTargets[battler] != 0xFF && !(gStatuses3[battler] & STATUS3_SKY_DROPPED))
+    {
+        // Get the target's battler id
+        u8 otherSkyDropper = gBattleStruct->skyDropTargets[battler];
+
+        // Clears sky_dropped and on_air statuses
+        gStatuses3[otherSkyDropper] &= ~(STATUS3_SKY_DROPPED | STATUS3_ON_AIR);
+
+        // Makes both attacker and target's sprites visible
+        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+        gSprites[gBattlerSpriteIds[otherSkyDropper]].invisible = FALSE;
+
+        // If target was sky dropped in the middle of Outrage/Thrash/Petal Dance,
+        // confuse them upon release and display "confused by fatigue" message & animation.
+        // Don't do this if this CancelMultiTurnMoves is caused by falling asleep via Yawn.
+        if (gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE && gBattleStruct->turnEffectsTracker != 24)
+        {
+            gBattleMons[otherSkyDropper].status2 &= ~(STATUS2_LOCK_CONFUSE);
+
+            // If the target can be confused, confuse them.
+            // Don't use CanBeConfused, can cause issues in edge cases.
+            if (!(GetBattlerAbility(otherSkyDropper) == ABILITY_OWN_TEMPO
+                || gBattleMons[otherSkyDropper].status2 & STATUS2_CONFUSION))
+            {
+                // Set confused status
+                gBattleMons[otherSkyDropper].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);
+
+                // If this CancelMultiTurnMoves is occuring due to attackcanceller
+                if (gBattlescriptCurrInstr[0] == 0x0)
+                {
+                    gBattleStruct->skyDropTargets[battler] = 0xFE;
+                }
+                // If this CancelMultiTurnMoves is occuring due to VARIOUS_GRAVITY_ON_AIRBORNE_MONS
+                // Reapplying STATUS3_SKY_DROPPED allows for avoiding unecessary messages when Gravity is applied to the target.
+                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == 76)
+                {
+                    gBattleStruct->skyDropTargets[battler] = 0xFE;
+                    gStatuses3[otherSkyDropper] |= STATUS3_SKY_DROPPED;
+                }
+                // If this CancelMultiTurnMoves is occuring due to cancelmultiturnmoves script
+                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == 0)
+                {
+                    gBattlerAttacker = otherSkyDropper;
+                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 3;
+                }
+                // If this CancelMultiTurnMoves is occuring due to receiving Sleep/Freeze status
+                else if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)
+                {
+                    gBattlerAttacker = otherSkyDropper;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 1;
+                }
+            }
+        }
+
+        // Clear skyDropTargets data, unless this CancelMultiTurnMoves is caused by Yawn, attackcanceler, or VARIOUS_GRAVITY_ON_AIRBORNE_MONS
+        if (!(gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE) && gBattleStruct->skyDropTargets[battler] < 4)
+        {
+            gBattleStruct->skyDropTargets[battler] = 0xFF;
+            gBattleStruct->skyDropTargets[otherSkyDropper] = 0xFF;
+        }
+    }
 
     gDisableStructs[battler].rolloutTimer = 0;
     gDisableStructs[battler].furyCutterCounter = 0;
@@ -1268,7 +1344,9 @@ static bool32 IsGravityPreventingMove(u32 move)
     case MOVE_HI_JUMP_KICK:
     case MOVE_JUMP_KICK:
     case MOVE_MAGNET_RISE:
+    case MOVE_SKY_DROP:
     case MOVE_SPLASH:
+    case MOVE_TELEKINESIS:
         return TRUE;
     default:
         return FALSE;
@@ -1292,6 +1370,7 @@ bool32 IsHealBlockPreventingMove(u32 battler, u32 move)
     case EFFECT_ROOST:
     case EFFECT_HEALING_WISH:
     case EFFECT_WISH:
+    case EFFECT_HEAL_PULSE:
         return TRUE;
     default:
         return FALSE;
@@ -1556,6 +1635,9 @@ enum
     ENDTURN_WATER_SPORT,
     ENDTURN_MUD_SPORT,
     ENDTURN_TRICK_ROOM,
+    ENDTURN_WONDER_ROOM,
+    ENDTURN_MAGIC_ROOM,
+    ENDTURN_RETALIATE,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -1860,6 +1942,24 @@ u8 DoFieldEndTurnEffects(void)
             }
             gBattleStruct->turnCountersTracker++;
             break;
+        case ENDTURN_WONDER_ROOM:
+            if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM && --gFieldTimers.wonderRoomTimer == 0)
+            {
+                gFieldStatuses &= ~STATUS_FIELD_WONDER_ROOM;
+                BattleScriptExecute(BattleScript_WonderRoomEnds);
+                effect++;
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
+        case ENDTURN_MAGIC_ROOM:
+            if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM && --gFieldTimers.magicRoomTimer == 0)
+            {
+                gFieldStatuses &= ~STATUS_FIELD_MAGIC_ROOM;
+                BattleScriptExecute(BattleScript_MagicRoomEnds);
+                effect++;
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
         case ENDTURN_WATER_SPORT:
                 if (gFieldStatuses & STATUS_FIELD_WATERSPORT && --gFieldTimers.waterSportTimer == 0)
                 {
@@ -1885,6 +1985,13 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_GravityEnds);
                 effect++;
             }
+            gBattleStruct->turnCountersTracker++;
+            break;
+        case ENDTURN_RETALIATE:
+            if (gSideTimers[B_SIDE_PLAYER].retaliateTimer > 0)
+                gSideTimers[B_SIDE_PLAYER].retaliateTimer--;
+            if (gSideTimers[B_SIDE_OPPONENT].retaliateTimer > 0)
+                gSideTimers[B_SIDE_OPPONENT].retaliateTimer--;
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FIELD_COUNT:
@@ -1914,6 +2021,7 @@ enum
     ENDTURN_DISABLE,
     ENDTURN_ENCORE,
     ENDTURN_MAGNET_RISE,
+    ENDTURN_TELEKINESIS,
     ENDTURN_HEALBLOCK,
     ENDTURN_EMBARGO,
     ENDTURN_LOCK_ON,
@@ -2220,7 +2328,7 @@ u8 DoBattlerEndTurnEffects(void)
             break;
         case ENDTURN_THRASH:  // thrash
             // Don't decrement STATUS2_LOCK_CONFUSE if the target is held by Sky Drop
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_LOCK_CONFUSE)
+            if (gBattleMons[gActiveBattler].status2 & STATUS2_LOCK_CONFUSE && !(gStatuses3[gActiveBattler] & STATUS3_SKY_DROPPED))
             {
                 gBattleMons[gActiveBattler].status2 -= STATUS2_LOCK_CONFUSE_TURN(1);
                 if (WasUnableToUseMove(gActiveBattler))
@@ -2346,6 +2454,18 @@ u8 DoBattlerEndTurnEffects(void)
                     gStatuses3[gActiveBattler] &= ~STATUS3_MAGNET_RISE;
                     BattleScriptExecute(BattleScript_BufferEndTurn);
                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ELECTROMAGNETISM);
+                    effect++;
+                }
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_TELEKINESIS:
+            if (gStatuses3[gActiveBattler] & STATUS3_TELEKINESIS)
+            {
+                if (gDisableStructs[gActiveBattler].telekinesisTimer == 0 || --gDisableStructs[gActiveBattler].telekinesisTimer == 0)
+                {
+                    gStatuses3[gActiveBattler] &= ~STATUS3_TELEKINESIS;
+                    BattleScriptExecute(BattleScript_TelekinesisEndTurn);
                     effect++;
                 }
             }
@@ -2608,6 +2728,16 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_DESTINY_BOND;
             gStatuses3[gBattlerAttacker] &= ~STATUS3_GRUDGE;
             gBattleScripting.tripleKickPower = 0;
+            gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_SKY_DROP:
+            // If Pokemon is being held in Sky Drop
+            if (gStatuses3[gBattlerAttacker] & STATUS3_SKY_DROPPED)
+            {
+                gBattlescriptCurrInstr = BattleScript_MoveEnd;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_ASLEEP: // check being asleep
@@ -4029,6 +4159,8 @@ bool32 CanBattlerEscape(u32 battlerId) // no ability check
     else if (gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_SKY_DROPPED)
         return FALSE;
     else
         return TRUE;
@@ -5569,6 +5701,55 @@ u8 IsMonDisobedient(void)
     }
 }
 
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
+{
+    if (checkNegating)
+    {
+        if (gStatuses3[battlerId] & STATUS3_EMBARGO)
+            return HOLD_EFFECT_NONE;
+        if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
+            return HOLD_EFFECT_NONE;
+    }
+
+    gPotentialItemEffectBattler = battlerId;
+
+    return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
+}
+
+bool32 IsMoveMakingContact(u16 move, u8 battlerAtk)
+{
+    u16 atkHoldEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
+
+    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))        
+    {
+        return FALSE;
+    }
+    else if (atkHoldEffect == HOLD_EFFECT_PROTECTIVE_PADS)
+    {
+        return FALSE;
+    }
+    else
+        return TRUE;
+}
+
+bool32 IsBattlerProtected(u8 battlerId, u16 move)
+{
+    if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
+        return FALSE;
+    else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
+        return FALSE;
+    else if (gProtectStructs[battlerId].protected)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD
+             && gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
+             && GetChosenMovePriority(gBattlerAttacker) > 0)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 // Used to fix issue with ring target
 static bool32 IsBattlerGroundedRingTarget(u8 battlerId, bool32 considerInverse)
 {
@@ -5578,6 +5759,10 @@ static bool32 IsBattlerGroundedRingTarget(u8 battlerId, bool32 considerInverse)
         return TRUE;
     if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
+    if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE;
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        return FALSE;
     if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
         return FALSE;
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
@@ -5596,6 +5781,10 @@ static bool32 IsBattlerGrounded2(u8 battlerId, bool32 considerInverse)
         return TRUE;
     if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
+    if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE;
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        return FALSE;
     if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
         return FALSE;
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
@@ -5645,6 +5834,19 @@ u32 GetBattlerWeight(u8 battlerId)
 
     if (holdEffect == HOLD_EFFECT_FLOAT_STONE)
         weight /= 2;
+
+    for (i = 0; i < gDisableStructs[battlerId].autotomiseCount; i++)
+    {
+        if (weight > 1000)
+        {
+            weight -= 1000;
+        }
+        else if (weight <= 1000)
+        {
+            weight = 1;
+            break;
+        }
+    }
 
     if (weight == 0)
         weight = 1;
@@ -5724,6 +5926,8 @@ static const u16 sWeightToDamageTable[] =
     0xFFFF, 0xFFFF
 };
 
+static const u8 sSpeedDiffPowerTable[] = {40, 60, 80, 120, 150};
+static const u8 sHeatCrashPowerTable[] = {40, 40, 60, 80, 100, 120};
 static const u8 sTrumpCardPowerTable[] = {200, 80, 60, 50, 40};
 
 const struct TypePower gNaturalGiftTable[] =
@@ -5877,6 +6081,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
     case EFFECT_WRING_OUT:
         basePower = 120 * gBattleMons[battlerDef].hp / gBattleMons[battlerDef].maxHP;
         break;
+    case EFFECT_HEX:
+        if (gBattleMons[battlerDef].status1 & STATUS1_ANY)
+            basePower *= 2;
+        break;
     case EFFECT_ASSURANCE:
         if (gProtectStructs[battlerDef].physicalDmg != 0 || gProtectStructs[battlerDef].specialDmg != 0 || gProtectStructs[battlerDef].confusionSelfDmg)
             basePower *= 2;
@@ -5891,6 +6099,12 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
                 basePower = sTrumpCardPowerTable[gBattleMons[battlerAtk].pp[i]];
         }
         break;
+    case EFFECT_ACROBATICS:
+        if (gBattleMons[battlerAtk].item == ITEM_NONE
+            // Edge case, because removal of items happens after damage calculation.
+            || (gSpecialStatuses[battlerAtk].gemBoost && GetBattlerHoldEffect(battlerAtk, FALSE) == HOLD_EFFECT_GEMS))
+            basePower *= 2;
+        break;
     case EFFECT_LOW_KICK:
         weight = GetBattlerWeight(battlerDef);
         for (i = 0; sWeightToDamageTable[i] != 0xFFFF; i += 2)
@@ -5903,10 +6117,26 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         else
             basePower = 120;
         break;
+    case EFFECT_HEAT_CRASH:
+        weight = GetBattlerWeight(battlerAtk) / GetBattlerWeight(battlerDef);
+        if (weight >= ARRAY_COUNT(sHeatCrashPowerTable))
+            basePower = sHeatCrashPowerTable[ARRAY_COUNT(sHeatCrashPowerTable) - 1];
+        else
+            basePower = sHeatCrashPowerTable[weight];
+        break;
     case EFFECT_PUNISHMENT:
         basePower = 60 + (CountBattlerStatIncreases(battlerDef, FALSE) * 20);
         if (basePower > 200)
             basePower = 200;
+        break;
+    case EFFECT_STORED_POWER:
+        basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
+        break;
+    case EFFECT_ELECTRO_BALL:
+        speed = GetBattlerTotalSpeedStat(battlerAtk) / GetBattlerTotalSpeedStat(battlerDef);
+        if (speed >= ARRAY_COUNT(sSpeedDiffPowerTable))
+            speed = ARRAY_COUNT(sSpeedDiffPowerTable) - 1;
+        basePower = sSpeedDiffPowerTable[speed];
         break;
     case EFFECT_GYRO_BALL:
         basePower = ((25 * GetBattlerTotalSpeedStat(battlerDef)) / GetBattlerTotalSpeedStat(battlerAtk)) + 1;
@@ -5917,6 +6147,16 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (GetBattlerTurnOrderNum(battlerAtk) > GetBattlerTurnOrderNum(battlerDef)
             && (gDisableStructs[battlerDef].isFirstTurn != 2))
             basePower *= 2;
+        break;
+    case EFFECT_ROUND:
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (i != battlerAtk && IsBattlerAlive(i) && gLastMoves[i] == MOVE_ROUND)
+            {
+                basePower *= 2;
+                break;
+            }
+        }
         break;
     }
 
@@ -6047,6 +6287,14 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         if (gBattleMons[battlerDef].hp <= (gBattleMons[battlerDef].maxHP / 2))
             MulModifier(&modifier, UQ_4_12(2.0));
         break;
+    case EFFECT_VENOSHOCK:
+        if (gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)
+            MulModifier(&modifier, UQ_4_12(2.0));
+        break;
+    case EFFECT_RETALIATE:
+        if (gSideTimers[atkSide].retaliateTimer == 1)
+            MulModifier(&modifier, UQ_4_12(2.0));
+        break;
     case EFFECT_SOLAR_BEAM:
         if (IsBattlerWeatherAffected(battlerAtk, (B_WEATHER_HAIL | B_WEATHER_SANDSTORM | B_WEATHER_RAIN)))
             MulModifier(&modifier, UQ_4_12(0.5));
@@ -6077,15 +6325,31 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u32 atkStat;
     u16 modifier;
 
-    if (IS_MOVE_PHYSICAL(move))
+    if (gBattleMoves[move].effect == EFFECT_FOUL_PLAY)
     {
-        atkStat = gBattleMons[battlerAtk].attack;
-        atkStage = gBattleMons[battlerAtk].statStages[STAT_ATK];
+        if (IS_MOVE_PHYSICAL(move))
+        {
+            atkStat = gBattleMons[battlerDef].attack;
+            atkStage = gBattleMons[battlerDef].statStages[STAT_ATK];
+        }
+        else
+        {
+            atkStat = gBattleMons[battlerDef].spAttack;
+            atkStage = gBattleMons[battlerDef].statStages[STAT_SPATK];
+        }
     }
     else
     {
-        atkStat = gBattleMons[battlerAtk].spAttack;
-        atkStage = gBattleMons[battlerAtk].statStages[STAT_SPATK];
+        if (IS_MOVE_PHYSICAL(move))
+        {
+            atkStat = gBattleMons[battlerAtk].attack;
+            atkStage = gBattleMons[battlerAtk].statStages[STAT_ATK];
+        }
+        else
+        {
+            atkStat = gBattleMons[battlerAtk].spAttack;
+            atkStage = gBattleMons[battlerAtk].statStages[STAT_SPATK];
+        }
     }
 
     // critical hits ignore attack stat's stage drops
@@ -6208,10 +6472,18 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u32 defStat, def, spDef;
     u16 modifier;
 
-    def = gBattleMons[battlerDef].defense;
-    spDef = gBattleMons[battlerDef].spDefense;
+    if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM) // the defense stats are swapped
+    {
+        def = gBattleMons[battlerDef].spDefense;
+        spDef = gBattleMons[battlerDef].defense;
+    }
+    else
+    {
+        def = gBattleMons[battlerDef].defense;
+        spDef = gBattleMons[battlerDef].spDefense;
+    }
 
-    if (IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = def;
         defStage = gBattleMons[battlerDef].statStages[STAT_DEF];
@@ -6229,6 +6501,9 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStage = DEFAULT_STAT_STAGE;
     // pokemon with unaware ignore defense stat changes while dealing damage
     if (GetBattlerAbility(battlerAtk) == ABILITY_UNAWARE)
+        defStage = DEFAULT_STAT_STAGE;
+    // certain moves also ignore stat changes
+    if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
         defStage = DEFAULT_STAT_STAGE;
 
     defStat *= gStatStageRatios[defStage][0];
@@ -6654,6 +6929,21 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId)
         return TRUE;
 }
 
+bool32 DoBattlersShareType(u32 battler1, u32 battler2)
+{
+    s32 i;
+    u8 types1[2] = {gBattleMons[battler1].type1, gBattleMons[battler1].type2};
+    u8 types2[2] = {gBattleMons[battler2].type1, gBattleMons[battler2].type2};
+
+    for (i = 0; i < 2; i++)
+    {
+        if (types1[i] == types2[0] || types1[i] == types2[1])
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
 {
     u16 species = gBattleMons[battlerId].species;
@@ -6664,47 +6954,6 @@ bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
         return FALSE;
     else
         return TRUE;
-}
-
-u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
-{
-    if (checkNegating)
-    {
-        if (gStatuses3[battlerId] & STATUS3_EMBARGO)
-            return HOLD_EFFECT_NONE;
-    }
-
-    gPotentialItemEffectBattler = battlerId;
-
-    return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
-}
-
-bool32 IsMoveMakingContact(u16 move, u8 battlerAtk)
-{
-    u16 atkHoldEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
-
-    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))        
-    {
-        return FALSE;
-    }
-    else if (atkHoldEffect == HOLD_EFFECT_PROTECTIVE_PADS)
-    {
-        return FALSE;
-    }
-    else
-        return TRUE;
-}
-
-bool32 IsBattlerProtected(u8 battlerId, u16 move)
-{
-    if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
-        return FALSE;
-    else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
-        return FALSE;
-    else if (gProtectStructs[battlerId].protected)
-        return TRUE;
-    else
-        return FALSE;
 }
 
 bool32 TestMoveFlags(u16 move, u32 flag)
@@ -6745,6 +6994,7 @@ bool32 CanFling(u8 battlerId)
     u16 itemEffect = ItemId_GetHoldEffect(item);
 
     if (item == ITEM_NONE
+      || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
       || gDisableStructs[battlerId].embargoTimer != 0
       || GetFlingPowerFromItemId(item) == 0
       || !CanBattlerGetOrLoseItem(battlerId, item))
@@ -6771,6 +7021,17 @@ bool32 IsSkillSwapBannedAbility(u16 ability)
     for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++)
     {
         if (ability == sSkillSwapBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sEntrainmentBannedAttackerAbilities); i++)
+    {
+        if (ability == sEntrainmentBannedAttackerAbilities[i])
             return TRUE;
     }
     return FALSE;

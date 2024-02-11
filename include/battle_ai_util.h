@@ -88,6 +88,7 @@ bool32 HasMoveWithLowAccuracy(u8, u8, u8, bool32, u16, u16, u16, u16);
 bool32 TestMoveFlagsInMoveset(u8 battler, u32 flags);
 bool32 IsNonVolatileStatusMoveEffect(u16 moveEffect);
 bool32 IsStatLoweringMoveEffect(u16 moveEffect);
+bool32 IsMoveRedirectionPrevented(u16 move, u16 atkAbility);
 bool32 IsHazardMoveEffect(u16 moveEffect);
 bool32 IsEncoreEncouragedEffect(u16 moveEffect);
 void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s16 *score);
@@ -104,6 +105,7 @@ bool32 ShouldFakeOut(u8 battlerAtk, u8 battlerDef, u16 move);
 bool32 HasThawingMove(u8 battlerId);
 bool32 IsStatRaisingEffect(u16 effect);
 bool32 IsStatLoweringEffect(u16 effect);
+bool32 IsAttackBoostMoveEffect(u16 effect);
 bool32 IsUngroundingEffect(u16 effect);
 bool32 IsSemiInvulnerable(u8 battlerDef, u16 move);
 

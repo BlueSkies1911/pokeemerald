@@ -9,12 +9,10 @@ static void AnimLeechLifeNeedle(struct Sprite *);
 static void AnimTranslateWebThread(struct Sprite *);
 static void AnimTranslateWebThread_Step(struct Sprite *);
 static void AnimStringWrap(struct Sprite *);
-static void AnimStringWrap_Step(struct Sprite *);
 static void AnimSpiderWeb(struct Sprite *);
 static void AnimSpiderWeb_Step(struct Sprite *);
 static void AnimSpiderWeb_End(struct Sprite *);
 static void AnimTranslateStinger(struct Sprite *);
-static void AnimMissileArc(struct Sprite *);
 static void AnimMissileArc_Step(struct Sprite *);
 static void AnimTailGlowOrb(struct Sprite *);
 
@@ -307,7 +305,7 @@ static void AnimStringWrap(struct Sprite *sprite)
     sprite->callback = AnimStringWrap_Step;
 }
 
-static void AnimStringWrap_Step(struct Sprite *sprite)
+void AnimStringWrap_Step(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 3)
     {
@@ -415,7 +413,7 @@ static void AnimTranslateStinger(struct Sprite *sprite)
 // arg 3: target y pixel offset
 // arg 4: duration
 // arg 5: wave amplitude
-static void AnimMissileArc(struct Sprite *sprite)
+void AnimMissileArc(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, TRUE);
 

@@ -240,20 +240,46 @@ void SetSpriteNextToMonHead(u8 battler, struct Sprite *sprite);
 void AnimMoveTwisterParticle(struct Sprite *sprite);
 void AnimParticleBurst(struct Sprite *);
 void AnimNeedleArmSpike(struct Sprite *);
+void AnimSporeParticle(struct Sprite *);
+void AnimPetalDanceBigFlower(struct Sprite *sprite);
+void AnimMimicOrb(struct Sprite *);
 void AnimNeedleArmSpike_Step(struct Sprite *sprite);
+void AnimConversion(struct Sprite *);
 extern const union AnimCmd *const gRazorLeafParticleAnimTable[];
+extern const union AnimCmd *const gSporeParticleAnimTable[];
+extern const union AnimCmd *const gConversionAnimTable[];
+extern const union AffineAnimCmd *const gConversionAffineAnimTable[];
+extern const union AnimCmd *const gScratchAnimTable[];
+
+// battle_anim_effects_2.c
+void AnimUproarRing(struct Sprite *);
+void AnimAngerMark(struct Sprite *);
+void AnimHyperVoiceRing(struct Sprite *);
+extern const union AffineAnimCmd *const gThinRingExpandingAffineAnimTable[];
+extern const union AnimCmd *const gExplosionAnimTable[];
+extern const union AffineAnimCmd *const gGuardRingAffineAnimTable[];
+extern const union AffineAnimCmd *const gAngerMarkAffineAnimTable[];
+extern const union AffineAnimCmd *const gHyperVoiceRingAffineAnimTable[];
 
 // battle_anim_water.c
 void AnimWaterPulseRing(struct Sprite *sprite);
+extern const union AnimCmd *const gAnims_FlamethrowerFlame[];
 
 // battle_anim_flying.c
 void DestroyAnimSpriteAfterTimer(struct Sprite *sprite);
 void AnimAirWaveCrescent(struct Sprite *sprite);
+void AnimFlyBallUp_Step(struct Sprite *);
 extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[];
+extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
 
 // battle_anim_poison.c
 void AnimSludgeBombHitParticle(struct Sprite *);
 extern const union AffineAnimCmd *const gAffineAnims_PoisonProjectile[];
+
+// battle_anim_ghost.c
+void AnimShadowBall(struct Sprite *sprite);
+void AnimTask_GrudgeFlames_Step(u8 taskId);
+extern const union AffineAnimCmd *const gAffineAnims_ShadowBall[];
 
 // battle_anim_smokescreen.c
 u8 SmokescreenImpact(s16 x, s16 y, bool8 persist);
@@ -321,11 +347,45 @@ extern const union AnimCmd *const gAnims_SmallBubblePair[];
 extern const union AnimCmd *const gAnims_WaterBubble[];
 extern const union AffineAnimCmd *const gAffineAnims_Bite[];
 
+// battle_anim_normal.c
+extern const union AffineAnimCmd *const gAffineAnims_HitSplat[];
+void AnimHitSplatBasic(struct Sprite *sprite);
+
 // battle_anim_fight.c
+void AnimSpinningKickOrPunch(struct Sprite *);
 void AnimBrickBreakWall_Step(struct Sprite *sprite);
+void AnimBasicFistOrFoot(struct Sprite *);
+extern const union AnimCmd *const gAnims_HandsAndFeet[];
+extern const union AffineAnimCmd *const gAffineAnims_SpinningHandOrFoot[];
+
+// battle_anim_rock.c
+extern const union AnimCmd *const gAnims_FlyingRock[];
+void AnimParticleInVortex(struct Sprite *);
+void AnimFallingRock(struct Sprite *);
+void AnimRockFragment(struct Sprite *);
+
+// battle_anim_dark.c
+void AnimTearDrop(struct Sprite *);
+void AnimBite(struct Sprite *);
+extern const union AffineAnimCmd *const gAffineAnims_TearDrop[];
+
+// battle_anim_bug.c
+void AnimStringWrap_Step(struct Sprite *);
+void AnimMissileArc(struct Sprite *);
 
 // battle_anim_ice.c
+void AnimThrowMistBall(struct Sprite *);
 void AnimIceEffectParticle(struct Sprite *sprite);
 extern const union AffineAnimCmd *const gAffineAnims_IceCrystalHit[];
+
+// battle_anim_fire.c
+void AnimFireSpread(struct Sprite *sprite);
+
+// battle_anim_dragon.c
+extern const union AnimCmd *const gAnims_DragonRageFirePlume[];
+extern const union AffineAnimCmd *const gAffineAnims_DragonRageFire[];
+extern const union AnimCmd *const gAnims_DragonRageFire[];
+void AnimDragonRageFirePlume(struct Sprite *);
+void AnimDragonFireToTarget(struct Sprite *);
 
 #endif // GUARD_BATTLE_ANIM_H

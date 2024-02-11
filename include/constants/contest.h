@@ -218,5 +218,6 @@
 #define COMBO_STARTER_POUND         60
 #define COMBO_STARTER_SMOG          61
 #define COMBO_STARTER_CALM_MIND     62
+#define COMBO_STARTER_TOXIC         63
 
 #endif  // GUARD_CONSTANTS_CONTEST_H

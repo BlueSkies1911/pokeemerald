@@ -318,9 +318,15 @@
 #define ANIM_TAG_POISON_JAB                 (ANIM_SPRITES_START + 307)
 #define ANIM_TAG_GREEN_POISON_BUBBLE        (ANIM_SPRITES_START + 308)
 #define ANIM_TAG_FLASH_CANNON_BALL          (ANIM_SPRITES_START + 309)
-#define ANIM_TAG_QUICK_GUARD_HAND           (ANIM_SPRITES_START + 310)
+#define ANIM_TAG_PUNISHMENT_BLADES          (ANIM_SPRITES_START + 310)
+#define ANIM_TAG_QUICK_GUARD_HAND           (ANIM_SPRITES_START + 311)
 
-#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 311)
+#define ANIM_TAG_SHELL_RIGHT                (ANIM_SPRITES_START + 312)
+#define ANIM_TAG_SHELL_LEFT                 (ANIM_SPRITES_START + 313)
+#define ANIM_TAG_RAZOR_SHELL                (ANIM_SPRITES_START + 314)
+#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 315)
+#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 316)
+#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 317)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -382,9 +388,12 @@
 #define BG_GIGA_IMPACT_CONTEST 29
 #define BG_TRICK_ROOM 30
 #define BG_ROCK_WRECKER 31
-#define BG_FOCUS_BLAST 32
-#define BG_GUNK_SHOT 33
-#define BG_AURA_SPHERE 34
+#define BG_HURRICANE 32
+#define BG_FOCUS_BLAST 33
+#define BG_GUNK_SHOT 34
+#define BG_WONDER_ROOM 35
+#define BG_MAGIC_ROOM 36
+#define BG_AURA_SPHERE 37
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_STATS_CHANGE             0
@@ -463,6 +472,11 @@
 #define ANIM_PAL_BG             0x1
 #define ANIM_PAL_ATK            0x2
 #define ANIM_PAL_DEF            0x4
+
+// surf wave palettes
+#define ANIM_SURF_PAL_SURF           0
+#define ANIM_SURF_PAL_MUDDY_WATER    1
+#define ANIM_SURF_PAL_SLUDGE_WAVE    2
 
 // Flags given to various functions to indicate which palettes to consider.
 // Handled by UnpackSelectedBattlePalettes

@@ -34,7 +34,6 @@ static void AnimWiggleParticleTowardsTarget(struct Sprite *);
 static void AnimWaveFromCenterOfTarget(struct Sprite *);
 static void InitSwirlingFogAnim(struct Sprite *);
 static void AnimSwirlingFogAnim(struct Sprite *);
-static void AnimThrowMistBall(struct Sprite *);
 static void InitPoisonGasCloudAnim(struct Sprite *);
 static void MovePoisonGasCloud(struct Sprite *);
 static void AnimHailBegin(struct Sprite *);
@@ -1157,7 +1156,7 @@ static void AnimTask_HazeScrollingFog_Step(u8 taskId)
 // arg 3: target y offset
 // arg 4: duration
 // arg 5: ??? unknown (seems to vibrate target mon somehow)
-static void AnimThrowMistBall(struct Sprite *sprite)
+void AnimThrowMistBall(struct Sprite *sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);

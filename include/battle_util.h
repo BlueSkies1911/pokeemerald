@@ -51,6 +51,7 @@ struct TypePower
 enum
 {
     CANCELLER_FLAGS,
+    CANCELLER_SKY_DROP,
     CANCELLER_ASLEEP,
     CANCELLER_FROZEN,
     CANCELLER_TRUANT,
@@ -145,10 +146,12 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 s32 GetStealthHazardDamageByTypesAndHP(u8 hazardType, u8 type1, u8 type2, u32 maxHp);
 extern const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES];
+bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
 bool32 TestMoveFlags(u16 move, u32 flag);
 struct Pokemon *GetBattlerPartyData(u8 battlerId);
 bool32 CanFling(u8 battlerId);
+bool32 IsTelekinesisBannedSpecies(u16 species);
 bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
 bool32 IsPartnerMonFromSameTrainer(u8 battlerId);
@@ -164,6 +167,7 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
 // Ability checks
 bool32 IsRolePlayBannedAbility(u16 ability);
 bool32 IsSkillSwapBannedAbility(u16 ability);
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 
 bool32 CanSleep(u8 battlerId);
 bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget);
