@@ -78,7 +78,6 @@ static void AnimProtect_Step(struct Sprite *);
 static void AnimMilkBottle(struct Sprite *);
 static void AnimMilkBottle_Step1(struct Sprite *);
 static void AnimMilkBottle_Step2(struct Sprite *, int, int);
-static void AnimGrantingStars(struct Sprite *);
 static void AnimSparklingStars(struct Sprite *);
 static void AnimBubbleBurst(struct Sprite *);
 static void AnimBubbleBurst_Step(struct Sprite *);
@@ -5011,7 +5010,7 @@ static void AnimMilkBottle_Step2(struct Sprite *sprite, int unk1, int unk2)
         sprite->data[3] = 0;
 }
 
-static void AnimGrantingStars(struct Sprite *sprite)
+void AnimGrantingStars(struct Sprite *sprite)
 {
     if (!gBattleAnimArgs[2])
         SetSpriteCoordsToAnimAttackerCoords(sprite);

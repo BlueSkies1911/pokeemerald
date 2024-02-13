@@ -67,6 +67,7 @@ s16 KeepPanInRange(s16 panArg, int oldPan);
 s16 CalculatePanIncrement(s16 sourcePan, s16 targetPan, s16 incrementPan);
 void RelocateBattleBgPal(u16 paletteNum, u16 *dest, u32 offset, bool8 largeScreen);
 void ResetBattleAnimBg(bool8);
+void LoadMoveBg(u16 bgId);
 
 // battle_intro.c
 void SetAnimBgAttribute(u8 bgId, u8 attributeId, u8 value);
@@ -245,14 +246,20 @@ void AnimPetalDanceBigFlower(struct Sprite *sprite);
 void AnimMimicOrb(struct Sprite *);
 void AnimNeedleArmSpike_Step(struct Sprite *sprite);
 void AnimConversion(struct Sprite *);
+void AnimGrantingStars(struct Sprite *);
 extern const union AnimCmd *const gRazorLeafParticleAnimTable[];
+extern const union AnimCmd *const gPowerAbsorptionOrbAnimTable[];
+extern const union AffineAnimCmd *const gPowerAbsorptionOrbAffineAnimTable[];
 extern const union AnimCmd *const gSporeParticleAnimTable[];
+extern const union AnimCmd *const gMoonlightSparkleAnimTable[];
 extern const union AnimCmd *const gConversionAnimTable[];
 extern const union AffineAnimCmd *const gConversionAffineAnimTable[];
 extern const union AnimCmd *const gScratchAnimTable[];
 
 // battle_anim_effects_2.c
 void AnimUproarRing(struct Sprite *);
+void AnimOrbitFast(struct Sprite *);
+void AnimOrbitScatter(struct Sprite *);
 void AnimAngerMark(struct Sprite *);
 void AnimHyperVoiceRing(struct Sprite *);
 extern const union AffineAnimCmd *const gThinRingExpandingAffineAnimTable[];
@@ -275,6 +282,7 @@ extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
 // battle_anim_poison.c
 void AnimSludgeBombHitParticle(struct Sprite *);
 extern const union AffineAnimCmd *const gAffineAnims_PoisonProjectile[];
+extern const union AnimCmd *const gAnims_PoisonProjectile[];
 
 // battle_anim_ghost.c
 void AnimShadowBall(struct Sprite *sprite);
@@ -350,6 +358,9 @@ extern const union AffineAnimCmd *const gAffineAnims_Bite[];
 // battle_anim_normal.c
 extern const union AffineAnimCmd *const gAffineAnims_HitSplat[];
 void AnimHitSplatBasic(struct Sprite *sprite);
+
+// battle_anim_electric.c
+extern const union AnimCmd *const gAnims_ElectricChargingParticles[];
 
 // battle_anim_fight.c
 void AnimSpinningKickOrPunch(struct Sprite *);

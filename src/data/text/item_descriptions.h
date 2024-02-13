@@ -984,6 +984,27 @@ static const u8 sIcyRockDesc[] = _(
     "of the move Hail\n"
     "used by the holder.");
 
+// Terrain Seeds
+static const u8 sElectricSeedDesc[] = _(
+    "Boosts Defense on\n"
+    "Electric Terrain,\n"
+    "but only one time.");
+
+static const u8 sPsychicSeedDesc[] = _(
+    "Boosts Sp. Def. on\n"
+    "Psychic Terrain,\n"
+    "but only one time.");
+
+static const u8 sMistySeedDesc[] = _(
+    "Boosts Sp. Def. on\n"
+    "Misty Terrain,\n"
+    "but only one time.");
+
+static const u8 sGrassySeedDesc[] = _(
+    "Boosts Defense on\n"
+    "Grassy Terrain,\n"
+    "but only one time.");
+
 // Type-activated Stat Modifiers
 static const u8 sAbsorbBulbDesc[] = _(
     "Raises Sp. Atk if\n"
@@ -1230,6 +1251,11 @@ static const u8 sAdrenalineOrbDesc[] = _(
     "Boosts Speed if the\n"
     "user is intimidated,\n"
     "but only one time.");
+
+static const u8 sTerrainExtenderDesc[] = _(
+    "Extends the length\n"
+    "of the active\n"
+    "battle terrain.");
 
 static const u8 sProtectivePadsDesc[] = _(
     "Guard the holder\n"

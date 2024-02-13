@@ -995,6 +995,42 @@ u16 AI_GetHoldEffect(u32 battlerId)
     return holdEffect;
 }
 
+bool32 AI_IsTerrainAffected(u8 battlerId, u32 flags)
+{
+    if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
+        return FALSE;
+    else if (!(gFieldStatuses & flags))
+        return FALSE;
+    return AI_IsBattlerGrounded(battlerId);
+}
+
+// different from IsBattlerGrounded in that we don't always know battler's hold effect or ability
+bool32 AI_IsBattlerGrounded(u8 battlerId)
+{
+    u32 holdEffect = AI_DATA->holdEffects[battlerId];
+
+    if (holdEffect == HOLD_EFFECT_IRON_BALL)
+        return TRUE;
+    else if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        return FALSE;
+    else if (holdEffect == HOLD_EFFECT_AIR_BALLOON)
+        return FALSE;
+    else if (AI_DATA->abilities[battlerId] == ABILITY_LEVITATE)
+        return FALSE;
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
+        return FALSE;
+    else
+        return TRUE;
+}
+
 bool32 DoesBattlerIgnoreAbilityChecks(u16 atkAbility, u16 move)
 {
     u32 i;
@@ -1027,6 +1063,20 @@ bool32 IsNonVolatileStatusMoveEffect(u16 moveEffect)
     case EFFECT_PARALYZE:
     case EFFECT_WILL_O_WISP:
     case EFFECT_YAWN:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+bool32 IsConfusionMoveEffect(u16 moveEffect)
+{
+    switch (moveEffect)
+    {
+    case EFFECT_CONFUSE:
+    case EFFECT_SWAGGER:
+    case EFFECT_FLATTER:
+    case EFFECT_TEETER_DANCE:
         return TRUE;
     default:
         return FALSE;
@@ -2233,6 +2283,7 @@ bool32 AI_CanSleep(u8 battler, u16 ability)
       || ability == ABILITY_VITAL_SPIRIT
       || gBattleMons[battler].status1 & STATUS1_ANY
       || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
+      || (gFieldStatuses & (STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN))
       || IsAbilityStatusProtected(battler))
         return FALSE;
     return TRUE;
@@ -2261,7 +2312,8 @@ static bool32 AI_CanBePoisoned(u8 battlerAtk, u8 battlerDef)
      || gBattleMons[battlerDef].status1 & STATUS1_ANY
      || ability == ABILITY_IMMUNITY
      || gBattleMons[battlerDef].status1 & STATUS1_ANY
-     || IsAbilityStatusProtected(battlerDef))
+     || IsAbilityStatusProtected(battlerDef)
+     || AI_IsTerrainAffected(battlerDef, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
     return TRUE;
 }
@@ -2317,7 +2369,8 @@ bool32 AI_CanParalyze(u8 battlerAtk, u8 battlerDef, u16 defAbility, u16 move, u1
 bool32 AI_CanBeConfused(u8 battler, u16 ability)
 {
     if ((gBattleMons[battler].status2 & STATUS2_CONFUSION)
-      || (ability == ABILITY_OWN_TEMPO))
+      || (ability == ABILITY_OWN_TEMPO)
+      || (IsBattlerGrounded(battler) && (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)))
         return FALSE;
     return TRUE;
 }
@@ -2668,6 +2721,21 @@ bool32 PartnerMoveEffectIsWeather(u8 battlerAtkPartner, u16 partnerMove)
     return FALSE;
 }
 
+//PARTNER_MOVE_EFFECT_IS_TERRAIN
+bool32 PartnerMoveEffectIsTerrain(u8 battlerAtkPartner, u16 partnerMove)
+{
+    if (!IsDoubleBattle())
+        return FALSE;
+
+    if (gChosenMoveByBattler[battlerAtkPartner] != MOVE_NONE
+     && (gBattleMoves[partnerMove].effect == EFFECT_GRASSY_TERRAIN
+      || gBattleMoves[partnerMove].effect == EFFECT_MISTY_TERRAIN
+      || gBattleMoves[partnerMove].effect == EFFECT_ELECTRIC_TERRAIN))
+        return TRUE;
+
+    return FALSE;
+}
+
 //PARTNER_MOVE_IS_TAILWIND_TRICKROOM
 bool32 PartnerMoveIs(u8 battlerAtkPartner, u16 partnerMove, u16 moveCheck)
 {
@@ -3006,7 +3074,8 @@ void IncreasePoisonScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
             (*score)++;    // stall tactic
 
         if (HasMoveEffect(battlerAtk, EFFECT_VENOSHOCK)
-          || HasMoveEffect(battlerAtk, EFFECT_HEX))
+          || HasMoveEffect(battlerAtk, EFFECT_HEX)
+          || HasMoveEffect(battlerAtk, EFFECT_VENOM_DRENCH))
             *(score) += 2;
         else
             *(score)++;

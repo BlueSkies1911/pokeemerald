@@ -1436,6 +1436,10 @@
 	various \battler, VARIOUS_CLEAR_STATUS
 	.endm
 
+	.macro tryactivatefellstinger battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_FELL_STINGER
+	.endm
+
 	.macro setluckychant battler:req, failInstr:req
 	various \battler VARIOUS_SET_LUCKY_CHANT
 	.4byte \failInstr
@@ -1472,6 +1476,11 @@
 
 	.macro trybestow failInstr:req
 	various BS_ATTACKER, VARIOUS_BESTOW
+	.4byte \failInstr
+	.endm
+
+	.macro setterrain failInstr:req
+	various BS_ATTACKER, VARIOUS_SET_TERRAIN
 	.4byte \failInstr
 	.endm
 
@@ -1569,6 +1578,11 @@
 	various \battler, VARIOUS_GRAVITY_ON_AIRBORNE_MONS
 	.endm
 
+	.macro checkgrassyterrainheal battler:req, failInstr:req
+	various \battler, VARIOUS_CHECK_IF_GRASSY_TERRAIN_HEALS
+	.4byte \failInstr
+	.endm
+
 	.macro jumpifnotberry battler:req, jumpInstr:req
 	various \battler, VARIOUS_JUMP_IF_NOT_BERRY
 	.4byte \jumpInstr
@@ -1633,8 +1647,34 @@
 	.byte \fromBattler
 	.endm
 
+	.macro doterrainseed battler:req, failInstr:req
+	various \battler, VARIOUS_TERRAIN_SEED
+	.4byte \failInstr
+	.endm
+
 	.macro makeinvisible battler:req
 	various \battler, VARIOUS_MAKE_INVISIBLE
+	.endm
+
+	.macro jumpifterrainaffected battler:req, terrainFlags:req, jumpInstr:req
+	various \battler, VARIOUS_JUMP_IF_TERRAIN_AFFECTED
+	.4byte \terrainFlags
+	.4byte \jumpInstr
+	.endm
+
+	.macro tryhealquarterhealth battler:req, failInstr:req
+	various \battler, VARIOUS_TRY_HEAL_QUARTER_HP
+	.4byte \failInstr
+	.endm
+
+	.macro getrototillertargets failInstr:req
+	various BS_ATTACKER, VARIOUS_GET_ROTOTILLER_TARGETS
+	.4byte \failInstr
+	.endm
+
+	.macro jumpifnotrototilleraffected battler:req, jumpInstr:req
+	various \battler, VARIOUS_JUMP_IF_NOT_ROTOTILLER_AFFECTED
+	.4byte \jumpInstr
 	.endm
 
 	.macro jumpifweatheraffected battler:req, flags:req, jumpInstr:req
@@ -1787,6 +1827,15 @@
 
 	.macro dmgtocurrattackerhp
 	manipulatedamage DMG_CURR_ATTACKER_HP
+	.endm
+
+	.macro setallytonexttarget jumpInstr:req
+	jumpifbyte CMP_GREATER_THAN, gBattlerTarget, 0x1, 1f
+	addbyte gBattlerTarget, 0x2
+	goto \jumpInstr
+	1:
+	subbyte gBattlerTarget, 0x2
+	goto \jumpInstr
 	.endm
 
 	.macro jumpifleafguardprotected battler:req, jumpInstr:req

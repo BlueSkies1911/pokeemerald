@@ -61,6 +61,5 @@
 // 'other' ai logic flags
 #define AI_FLAG_ROAMING               (1 << 29)
 #define AI_FLAG_SAFARI                (1 << 30)
-#define AI_FLAG_FIRST_BATTLE          (1 << 31)
 
 #endif // GUARD_CONSTANTS_BATTLE_AI_H

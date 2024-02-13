@@ -1959,7 +1959,7 @@ const struct Item gItems[] =
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-        .secondaryId = TYPE_MYSTERY,
+        .secondaryId = TYPE_FAIRY,
     },
 
 // Species-specific Held Items
@@ -2614,6 +2614,64 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
         .flingPower = 40,
+    },
+
+// Terrain Seeds
+
+    [ITEM_ELECTRIC_SEED] =
+    {
+        .name = _("Electric Seed"),
+        .itemId = ITEM_ELECTRIC_SEED,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_SEEDS,
+        .holdEffectParam = HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN,
+        .description = sElectricSeedDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 10,
+    },
+
+    [ITEM_PSYCHIC_SEED] =
+    {
+        .name = _("Psychic Seed"),
+        .itemId = ITEM_PSYCHIC_SEED,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_SEEDS,
+        .holdEffectParam = HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN,
+        .description = sPsychicSeedDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 10,
+    },
+
+    [ITEM_MISTY_SEED] =
+    {
+        .name = _("Misty Seed"),
+        .itemId = ITEM_MISTY_SEED,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_SEEDS,
+        .holdEffectParam = HOLD_EFFECT_PARAM_MISTY_TERRAIN,
+        .description = sMistySeedDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 10,
+    },
+
+    [ITEM_GRASSY_SEED] =
+    {
+        .name = _("Grassy Seed"),
+        .itemId = ITEM_GRASSY_SEED,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_SEEDS,
+        .holdEffectParam = HOLD_EFFECT_PARAM_GRASSY_TERRAIN,
+        .description = sGrassySeedDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 10,
     },
 
 // Type-activated Stat Modifiers
@@ -3281,6 +3339,19 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
         .flingPower = 30,
+    },
+
+    [ITEM_TERRAIN_EXTENDER] =
+    {
+        .name = _("TerainExtendr"),
+        .itemId = ITEM_TERRAIN_EXTENDER,
+        .price = 4000,
+        .holdEffect = HOLD_EFFECT_TERRAIN_EXTENDER,
+        .description = sTerrainExtenderDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 60,
     },
 
     [ITEM_PROTECTIVE_PADS] =
@@ -4009,7 +4080,7 @@ const struct Item gItems[] =
         .itemId = ITEM_ROSELI_BERRY,
         .price = 20,
         .holdEffect = HOLD_EFFECT_RESIST_BERRY,
-        .holdEffectParam = TYPE_MYSTERY,
+        .holdEffectParam = TYPE_FAIRY,
         .description = sRoseliBerryDesc,
         .pocket = POCKET_BERRIES,
         .type = ITEM_USE_BAG_MENU,

@@ -64,9 +64,7 @@ static void AnimRedHeartProjectile(struct Sprite *);
 static void AnimRedHeartProjectile_Step(struct Sprite *);
 static void AnimRedHeartRising(struct Sprite *);
 static void AnimRedHeartRising_Step(struct Sprite *);
-static void AnimOrbitFast(struct Sprite *);
 static void AnimOrbitFast_Step(struct Sprite *);
-static void AnimOrbitScatter(struct Sprite *);
 static void AnimOrbitScatter_Step(struct Sprite *);
 static void AnimSpitUpOrb(struct Sprite *);
 static void AnimSpitUpOrb_Step(struct Sprite *sprite);
@@ -3427,7 +3425,7 @@ static void AnimTask_ScaryFace_Step(u8 taskId)
 // Used by MOVE_HIDDEN_POWER
 // arg 0: duration
 // arg 1: initial wave offset
-static void AnimOrbitFast(struct Sprite *sprite)
+void AnimOrbitFast(struct Sprite *sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
@@ -3478,7 +3476,7 @@ static void AnimOrbitFast_Step(struct Sprite *sprite)
 // Moves orbs away from the mon, based on where they are in their orbit.
 // Used in MOVE_HIDDEN_POWER.
 // arg 0: initial wave offset
-static void AnimOrbitScatter(struct Sprite *sprite)
+void AnimOrbitScatter(struct Sprite *sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);

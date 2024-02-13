@@ -2021,6 +2021,90 @@ static const u8 sIcicleCrashDescription[] = _(
     "Drops large icicles on the\n"
     "foe. May cause flinching.");
 
+static const u8 sBelchDescription[] = _(
+    "Lets out a loud belch.\n"
+    "Must eat a berry to use it.");
+
+static const u8 sRototillerDescription[] = _(
+    "Ups the Attack and Sp. Atk\n"
+    "of Grass-type Pokémon.");
+
+static const u8 sFellStingerDescription[] = _(
+    "If it knocks out a foe\n"
+    "the Attack stat is raised.");
+
+static const u8 sIonDelugeDescription[] = _(
+    "Electrifies Normal-type\n"
+    "moves with charged atoms.");
+
+static const u8 sPetalBlizzardDescription[] = _(
+    "Stirs up a violent storm\n"
+    "of petals to attack.");
+
+static const u8 sFreezeDryDescription[] = _(
+    "Super effective on Water-\n"
+    "types. May cause freezing.");
+
+static const u8 sDisarmingVoiceDescription[] = _(
+    "Lets out a charming cry\n"
+    "that cannot be evaded.");
+
+static const u8 sDrainingKissDescription[] = _(
+    "An attack that absorbs over\n"
+    "half the damage inflicted.");
+
+static const u8 sGrassyTerrainDescription[] = _(
+    "The ground turns to grass\n"
+    "for 5 turns. Restores HP.");
+
+static const u8 sMistyTerrainDescription[] = _(
+    "Covers the ground with mist\n"
+    "for 5 turns. Blocks status.");
+
+static const u8 sPlayRoughDescription[] = _(
+    "Plays rough with the foe.\n"
+    "May lower Attack.");
+
+static const u8 sMoonblastDescription[] = _(
+    "Attacks with the power of\n"
+    "the moon. May lower Sp. Atk.");
+
+static const u8 sPlayNiceDescription[] = _(
+    "Befriend the foe, lowering\n"
+    "its Attack without fail.");
+
+static const u8 sEerieImpulseDescription[] = _(
+    "Exposes the foe to a pulse\n"
+    "that sharply cuts Sp. Atk.");
+
+static const u8 sVenomDrenchDescription[] = _(
+    "Lowers the Attack, Sp. Atk\n"
+    "and Speed of a poisoned foe.");
+
+static const u8 sMagneticFluxDescription[] = _(
+    "Boosts the defenses of\n"
+    "those with Plus or Minus.");
+
+static const u8 sElectricTerrainDescription[] = _(
+    "Electrifies the ground for\n"
+    "5 turns. Prevents sleep.");
+
+static const u8 sDazzlingGleamDescription[] = _(
+    "Damages foes by emitting\n"
+    "a bright flash.");
+
+static const u8 sBabyDollEyesDescription[] = _(
+    "Lowers the foe's Attack\n"
+    "before it can move.");
+
+static const u8 sNuzzleDescription[] = _(
+    "Rubs its cheecks against\n"
+    "the foe, paralyzing it.");
+
+static const u8 sPowerUpPunchDescription[] = _(
+    "A hard punch that raises\n"
+    "the user's Attack.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -2537,4 +2621,25 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TAIL_SLAP - 1] = sTailSlapDescription,
     [MOVE_HURRICANE - 1] = sHurricaneDescription,
     [MOVE_ICICLE_CRASH - 1] = sIcicleCrashDescription,
+    [MOVE_BELCH - 1] = sBelchDescription,
+    [MOVE_ROTOTILLER - 1] = sRototillerDescription,
+    [MOVE_FELL_STINGER - 1] = sFellStingerDescription,
+    [MOVE_ION_DELUGE - 1] = sIonDelugeDescription,
+    [MOVE_PETAL_BLIZZARD - 1] = sPetalBlizzardDescription,
+    [MOVE_FREEZE_DRY - 1] = sFreezeDryDescription,
+    [MOVE_DISARMING_VOICE - 1] = sDisarmingVoiceDescription,
+    [MOVE_DRAINING_KISS - 1] = sDrainingKissDescription,
+    [MOVE_GRASSY_TERRAIN - 1] = sGrassyTerrainDescription,
+    [MOVE_MISTY_TERRAIN - 1] = sMistyTerrainDescription,
+    [MOVE_PLAY_ROUGH - 1] = sPlayRoughDescription,
+    [MOVE_MOONBLAST - 1] = sMoonblastDescription,
+    [MOVE_PLAY_NICE - 1] = sPlayNiceDescription,
+    [MOVE_EERIE_IMPULSE - 1] = sEerieImpulseDescription,
+    [MOVE_VENOM_DRENCH - 1] = sVenomDrenchDescription,
+    [MOVE_MAGNETIC_FLUX - 1] = sMagneticFluxDescription,
+    [MOVE_ELECTRIC_TERRAIN - 1] = sElectricTerrainDescription,
+    [MOVE_DAZZLING_GLEAM - 1] = sDazzlingGleamDescription,
+    [MOVE_BABY_DOLL_EYES - 1] = sBabyDollEyesDescription,
+    [MOVE_NUZZLE - 1] = sNuzzleDescription,
+    [MOVE_POWER_UP_PUNCH - 1] = sPowerUpPunchDescription,
 };

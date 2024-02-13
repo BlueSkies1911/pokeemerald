@@ -267,6 +267,13 @@ static bool8 ShouldSwitchIfGameStatePrompt(void)
                     )
                     switchMon = FALSE;
 
+                if (IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)) 
+                    && (gBattleMoves[AI_DATA->partnerMove].effect == EFFECT_MISTY_TERRAIN
+                        || gBattleMoves[AI_DATA->partnerMove].effect == EFFECT_ELECTRIC_TERRAIN)
+                    && IsBattlerGrounded(gActiveBattler)
+                    )
+                    switchMon = FALSE;
+
                 if (*(gBattleStruct->AI_monToSwitchIntoId + BATTLE_PARTNER(gActiveBattler)) != PARTY_SIZE) //Partner is switching
                     {
                         GetAIPartyIndexes(gActiveBattler, &firstId, &lastId);
@@ -295,6 +302,8 @@ static bool8 ShouldSwitchIfGameStatePrompt(void)
                 || holdEffect == (HOLD_EFFECT_CURE_SLP | HOLD_EFFECT_CURE_STATUS)
                 || HasMove(gActiveBattler, MOVE_SLEEP_TALK)
                 || (HasMoveEffect(gActiveBattler, MOVE_SNORE) && AI_GetTypeEffectiveness(MOVE_SNORE, gActiveBattler, opposingBattler) >= UQ_4_12(1.0))
+                || (IsBattlerGrounded(gActiveBattler)
+                    && (HasMove(gActiveBattler, MOVE_MISTY_TERRAIN) || HasMove(gActiveBattler, MOVE_ELECTRIC_TERRAIN)))
                 )
                 switchMon = FALSE;
 
@@ -305,7 +314,6 @@ static bool8 ShouldSwitchIfGameStatePrompt(void)
                 && !(gBattleMons[gActiveBattler].status2 & STATUS2_FORESIGHT)
                 && !(gStatuses3[gActiveBattler] & STATUS3_MIRACLE_EYED))     
                 switchMon = FALSE;
-
         }
 
         //Secondary Damage

@@ -153,6 +153,7 @@ struct SpecialStatus
     u8 gemParam;
     // End of byte
     u8 gemBoost:1;
+    u8 rototillerAffected:1;  // to be affected by rototiller
     u8 multiHitOn:1;
     u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 afterYou:1;
@@ -187,6 +188,7 @@ struct FieldTimer
     u8 wonderRoomTimer;
     u8 magicRoomTimer;
     u8 trickRoomTimer;
+    u8 terrainTimer;
     u8 gravityTimer;
 };
 
@@ -514,10 +516,10 @@ struct BattleStruct
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;
     bool8 overworldWeatherDone;
+    bool8 terrainDone;
     u8 atkCancellerTracker;
     struct BattleTvMovePoints tvMovePoints;
     struct BattleTv tv;
-    u8 unused_7[0x28];
     u8 AI_monToSwitchIntoId[MAX_BATTLERS_COUNT];
     s8 arenaMindPoints[2];
     s8 arenaSkillPoints[2];

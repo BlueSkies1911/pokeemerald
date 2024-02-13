@@ -60,7 +60,7 @@ static const union AnimCmd sAnim_SludgeBombHit[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const gAnims_PoisonProjectile[] =
+const union AnimCmd *const gAnims_PoisonProjectile[] =
 {
     sAnim_PoisonProjectile,
 };

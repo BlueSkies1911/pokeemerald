@@ -12,6 +12,7 @@
 #define MOVE_LIMITATION_ASSAULT_VEST            (1 << 8)
 #define MOVE_LIMITATION_GRAVITY                 (1 << 9)
 #define MOVE_LIMITATION_HEAL_BLOCK              (1 << 10)
+#define MOVE_LIMITATION_BELCH                   (1 << 11)
 #define MOVE_LIMITATIONS_ALL                    0xFFFF
 
 #define ABILITYEFFECT_ON_SWITCHIN                0
@@ -25,6 +26,8 @@
 #define ABILITYEFFECT_ATK_SYNCHRONIZE            8
 #define ABILITYEFFECT_TRACE1                     9
 #define ABILITYEFFECT_TRACE2                     10
+// Special cases
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN          254
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          255
 
 // For the first argument of ItemBattleEffects, to deteremine which block of item effects to try
@@ -159,6 +162,7 @@ void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
 void TryRestoreStolenItems(void);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
 void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
+u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 void BufferStatChange(u8 battlerId, u8 statId, u8 stringId);
@@ -175,6 +179,7 @@ bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
+bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
 
 #endif // GUARD_BATTLE_UTIL_H

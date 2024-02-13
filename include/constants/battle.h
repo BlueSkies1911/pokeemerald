@@ -236,6 +236,13 @@
 #define STATUS_FIELD_MUDSPORT                       (1 << 3)
 #define STATUS_FIELD_WATERSPORT                     (1 << 4)
 #define STATUS_FIELD_GRAVITY                        (1 << 5)
+#define STATUS_FIELD_GRASSY_TERRAIN                 (1 << 6)
+#define STATUS_FIELD_MISTY_TERRAIN                  (1 << 7)
+#define STATUS_FIELD_ELECTRIC_TERRAIN               (1 << 8)
+#define STATUS_FIELD_ION_DELUGE                     (1 << 9)
+#define STATUS_FIELD_TERRAIN_PERMANENT              (1 << 10)   // Overworld thunderstorm generates electric terrain
+
+#define STATUS_FIELD_TERRAIN_ANY        (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN)
 
 // Flags describing move's result
 #define MOVE_RESULT_MISSED             (1 << 0)

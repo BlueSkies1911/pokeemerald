@@ -279,7 +279,7 @@ static const union AnimCmd sAnim_ElectricChargingParticles_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_ElectricChargingParticles[] =
+const union AnimCmd *const gAnims_ElectricChargingParticles[] =
 {
     sAnim_ElectricChargingParticles_0,
     sAnim_ElectricChargingParticles_1,
@@ -290,7 +290,7 @@ const struct SpriteTemplate gElectricChargingParticlesSpriteTemplate =
     .tileTag = ANIM_TAG_ELECTRIC_ORBS,
     .paletteTag = ANIM_TAG_ELECTRIC_ORBS,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sAnims_ElectricChargingParticles,
+    .anims = gAnims_ElectricChargingParticles,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,

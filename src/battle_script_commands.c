@@ -967,6 +967,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_STRUGGLE] = 0xFF, // Neither Struggle
     [MOVE_AFTER_YOU] = FORBIDDEN_METRONOME,
     [MOVE_ASSIST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_BELCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
     [MOVE_BESTOW] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_BIDE] = FORBIDDEN_SLEEP_TALK,
     [MOVE_BOUNCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
@@ -5900,7 +5901,8 @@ static void Cmd_switchineffects(void)
             if (!(gBattleMons[gActiveBattler].status1 & STATUS1_ANY)
                 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)
                 && GetBattlerAbility(gActiveBattler) != ABILITY_IMMUNITY
-                && !(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD))
+                && !(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD)
+                && !(gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN))
             {
                 if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
                     gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
@@ -6946,16 +6948,20 @@ void BufferMoveToLearnIntoBattleTextBuff2(void)
 
 static void Cmd_buffermovetolearn(void)
 {
+    CMD_ARGS();
+
     BufferMoveToLearnIntoBattleTextBuff2();
-    gBattlescriptCurrInstr++;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_jumpifplayerran(void)
 {
+    CMD_ARGS(const u8 *jumpInstr);
+
     if (TryRunFromBattle(gBattlerFainted))
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = cmd->jumpInstr;
     else
-        gBattlescriptCurrInstr += 5;
+        gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_hpthresholds(void)
@@ -6989,13 +6995,15 @@ static void Cmd_hpthresholds(void)
 
 static void Cmd_hpthresholds2(void)
 {
+    CMD_ARGS(u8 battler);
+
     u8 opposingBattler;
     s32 result;
     u8 hpSwitchout;
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
     {
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        gActiveBattler = GetBattlerForBattleScript(cmd->battler);
         opposingBattler = BATTLE_OPPOSITE(gActiveBattler);
         hpSwitchout = *(gBattleStruct->hpOnSwitchout + GetBattlerSide(opposingBattler));
         result = (hpSwitchout - gBattleMons[opposingBattler].hp) * 100 / hpSwitchout;
@@ -7010,14 +7018,66 @@ static void Cmd_hpthresholds2(void)
             gBattleStruct->hpScale = 3;
     }
 
-    gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_useitemonopponent(void)
 {
+    CMD_ARGS();
+
     gBattlerInMenuId = gBattlerAttacker;
     PokemonUseItemEffects(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]], gLastUsedItem, gBattlerPartyIndexes[gBattlerAttacker], 0, TRUE);
-    gBattlescriptCurrInstr++;
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
+static bool32 HasAttackerFaintedTarget(void)
+{
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMoves[gCurrentMove].power != 0
+        && (gLastHitBy[gBattlerTarget] == 0xFF || gLastHitBy[gBattlerTarget] == gBattlerAttacker)
+        && gBattleStruct->moveTarget[gBattlerAttacker] == gBattlerTarget
+        && gBattlerTarget != gBattlerAttacker
+        && gCurrentTurnActionNumber == GetBattlerTurnOrderNum(gBattlerAttacker)
+        && (gChosenMove == gChosenMoveByBattler[gBattlerAttacker] || gChosenMove == gBattleMons[gBattlerAttacker].moves[gChosenMovePos]))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+static void HandleTerrainMove(u16 move)
+{
+    u32 statusFlag = 0;
+
+    switch (gBattleMoves[move].effect)
+    {
+    case EFFECT_MISTY_TERRAIN:
+        statusFlag = STATUS_FIELD_MISTY_TERRAIN;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        break;
+    case EFFECT_GRASSY_TERRAIN:
+        statusFlag = STATUS_FIELD_GRASSY_TERRAIN;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        break;
+    case EFFECT_ELECTRIC_TERRAIN:
+        statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+        break;
+    }
+
+    if (gFieldStatuses & statusFlag || statusFlag == 0)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+    }
+    else
+    {
+        gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
+        gFieldStatuses |= statusFlag;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
+            gFieldTimers.terrainTimer = 8;
+        else
+            gFieldTimers.terrainTimer = 5;
+        gBattlescriptCurrInstr += 7;
+    }
 }
 
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)
@@ -7114,6 +7174,19 @@ u32 GetHighestStatId(u32 battlerId)
         }
     }
     return highestId;
+}
+
+static bool32 IsRototillerAffected(u32 battlerId)
+{
+    if (!IsBattlerAlive(battlerId))
+        return FALSE;
+    if (!IsBattlerGrounded(battlerId))
+        return FALSE;   // Only grounded battlers affected
+    if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_GRASS))
+        return FALSE;   // Only grass types affected
+    if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
+        return FALSE;   // Rototiller doesn't affected semi-invulnerable battlers
+    return TRUE;
 }
 
 static bool32 IsAbilityMotorAffected(void)
@@ -7383,6 +7456,27 @@ static void Cmd_various(void)
         gSpecialStatuses[gActiveBattler].switchInAbilityDone = FALSE;
         break;
     }
+    case VARIOUS_CHECK_IF_GRASSY_TERRAIN_HEALS:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        if ((gStatuses3[gActiveBattler] & (STATUS3_SEMI_INVULNERABLE | STATUS3_HEAL_BLOCK))
+            || BATTLER_MAX_HP(gActiveBattler)
+            || !gBattleMons[gActiveBattler].hp
+            || !(IsBattlerGrounded(gActiveBattler)))
+        {
+            gBattlescriptCurrInstr = cmd->failInstr;
+        }
+        else
+        {
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gBattleMoveDamage *= -1;
+
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        return;
+    }
     case VARIOUS_GRAVITY_ON_AIRBORNE_MONS:
     {
         VARIOUS_ARGS();
@@ -7651,6 +7745,22 @@ static void Cmd_various(void)
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     }
+    case VARIOUS_TRY_ACTIVATE_FELL_STINGER:
+    {
+        VARIOUS_ARGS();
+        if (gBattleMoves[gCurrentMove].effect == EFFECT_FELL_STINGER
+            && HasAttackerFaintedTarget()
+            && !NoAliveMonsForEitherParty()
+            && CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+        {
+            SET_STATCHANGER(STAT_ATK, 3, FALSE);
+            PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
+            BattleScriptPush(cmd->nextInstr);
+            gBattlescriptCurrInstr = BattleScript_FellStingerRaisesStat;
+            return;
+        }
+        break;
+    }
     case VARIOUS_SET_LUCKY_CHANT:
     {
         VARIOUS_ARGS(const u8 *failInstr);
@@ -7736,6 +7846,12 @@ static void Cmd_various(void)
                 gBattleMoveDamage = -1;
             gBattlescriptCurrInstr = cmd->nextInstr;
         }
+        return;
+    }
+    case VARIOUS_SET_TERRAIN:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        HandleTerrainMove(gCurrentMove);
         return;
     }
     case VARIOUS_TRY_ME_FIRST:
@@ -8067,6 +8183,32 @@ static void Cmd_various(void)
         DestroyAbilityPopUp(gActiveBattler);
         break;
     }
+    case VARIOUS_TERRAIN_SEED:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_SEEDS)
+        {
+            u8 effect = 0;
+            u16 item = gBattleMons[gActiveBattler].item;
+            switch (ItemId_GetHoldEffectParam(gBattleMons[gActiveBattler].item))
+            {
+            case HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN:
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN, STAT_DEF, item, FALSE);
+                break;
+            case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_GRASSY_TERRAIN, STAT_DEF, item, FALSE);
+                break;
+            case HOLD_EFFECT_PARAM_MISTY_TERRAIN:
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN, STAT_SPDEF, item, FALSE);
+                break;
+            }
+
+            if (effect)
+                return;
+        }
+        gBattlescriptCurrInstr = cmd->failInstr;
+        return;
+    }
     case VARIOUS_MAKE_INVISIBLE:
     {
         VARIOUS_ARGS();
@@ -8076,6 +8218,30 @@ static void Cmd_various(void)
         BtlController_EmitSpriteInvisibility(BUFFER_A, TRUE);
         MarkBattlerForControllerExec(gActiveBattler);
         break;
+    }
+    case VARIOUS_JUMP_IF_TERRAIN_AFFECTED:
+    {
+        VARIOUS_ARGS(u32 flags, const u8 *jumpInstr);
+        u32 flags = cmd->flags;
+        if (IsBattlerTerrainAffected(gActiveBattler, flags))
+            gBattlescriptCurrInstr = cmd->jumpInstr;
+        else
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
+    case VARIOUS_TRY_HEAL_QUARTER_HP:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+        if (gBattleMoveDamage == 0)
+            gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+
+        if (gBattleMons[gActiveBattler].hp == gBattleMons[gActiveBattler].maxHP)
+            gBattlescriptCurrInstr = cmd->failInstr;    // fail
+        else
+            gBattlescriptCurrInstr = cmd->nextInstr;   // can heal
+        return;
     }
     case VARIOUS_JUMP_IF_UNDER_200:
     {
@@ -8153,6 +8319,43 @@ static void Cmd_various(void)
             }
         }
         break;
+    }
+    case VARIOUS_GET_ROTOTILLER_TARGETS:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        // Gets the battlers to be affected by rototiller. If there are none, print 'But it failed!'
+        {
+            u32 count = 0;
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                gSpecialStatuses[i].rototillerAffected = FALSE;
+                if (IsRototillerAffected(i))
+                {
+                    gSpecialStatuses[i].rototillerAffected = TRUE;
+                    count++;
+                }
+            }
+
+            if (count == 0)
+                gBattlescriptCurrInstr = cmd->failInstr;   // Rototiller fails
+            else
+                gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        return;
+    }
+    case VARIOUS_JUMP_IF_NOT_ROTOTILLER_AFFECTED:
+    {
+        VARIOUS_ARGS(const u8 *jumpInstr);
+        if (gSpecialStatuses[gActiveBattler].rototillerAffected)
+        {
+            gSpecialStatuses[gActiveBattler].rototillerAffected = FALSE;
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        else
+        {
+            gBattlescriptCurrInstr = cmd->jumpInstr;   // Unaffected by rototiller - print STRINGID_NOEFFECTONTARGET
+        }
+        return;
     }
     case VARIOUS_CONSUME_BERRY:
     {
@@ -8656,6 +8859,14 @@ static void Cmd_trysetrest(void)
     if (gBattleMons[gBattlerTarget].hp == gBattleMons[gBattlerTarget].maxHP)
     {
         gBattlescriptCurrInstr = failInstr;
+    }
+    else if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_ELECTRIC_TERRAIN))
+    {
+        gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
+    }
+    else if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_MISTY_TERRAIN))
+    {
+        gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
     }
     else
     {
@@ -11066,7 +11277,13 @@ static void Cmd_callterrainattack(void)
 
 u16 GetNaturePowerMove(void)
 {
-    if (sNaturePowerMoves == MOVE_NONE)
+    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+        return MOVE_MOONBLAST;
+    else if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+        return MOVE_THUNDERBOLT;
+    else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+        return MOVE_ENERGY_BALL;
+    else if (sNaturePowerMoves == MOVE_NONE)
         return MOVE_TRI_ATTACK;
     return sNaturePowerMoves[gBattleTerrain];
 }
@@ -11361,6 +11578,18 @@ static void Cmd_setyawn(void)
         || gBattleMons[gBattlerTarget].status1 & STATUS1_ANY)
     {
         gBattlescriptCurrInstr = cmd->failInstr;
+    }
+    else if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_ELECTRIC_TERRAIN))
+    {
+        // When Yawn is used while Electric Terrain is set and drowsiness is set from Yawn being used against target in the previous turn:
+        // "But it failed" will display first.
+        gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
+    }
+    else if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_MISTY_TERRAIN))
+    {
+        // When Yawn is used while Misty Terrain is set and drowsiness is set from Yawn being used against target in the previous turn:
+        // "But it failed" will display first.
+        gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
     }
     else
     {
@@ -11675,35 +11904,57 @@ static void Cmd_getsecretpowereffect(void)
 u16 GetSecretPowerMoveEffect(void)
 {
     u16 moveEffect;
-    switch (gBattleTerrain)
+    u32 fieldTerrain = gFieldStatuses & STATUS_FIELD_TERRAIN_ANY;
+    if (fieldTerrain)
     {
-    case BATTLE_TERRAIN_GRASS:      
-        moveEffect = MOVE_EFFECT_SLEEP;
-        break;
-    case BATTLE_TERRAIN_UNDERWATER:
-        moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-        break;
-    case BATTLE_TERRAIN_POND:
-        moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-        break;
-    case BATTLE_TERRAIN_MOUNTAIN:
-        moveEffect = MOVE_EFFECT_ACC_MINUS_1;
-        break;
-    case BATTLE_TERRAIN_LONG_GRASS:
-        moveEffect = MOVE_EFFECT_SLEEP;
-        break;
-    case BATTLE_TERRAIN_SAND:
-        moveEffect = MOVE_EFFECT_ACC_MINUS_1;
-        break;
-    case BATTLE_TERRAIN_WATER:
-        moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-        break;
-    case BATTLE_TERRAIN_CAVE:
-        moveEffect = MOVE_EFFECT_FLINCH;
-        break;
-    default:
-        moveEffect = MOVE_EFFECT_PARALYSIS;
-        break;
+        switch (fieldTerrain)
+        {
+        case STATUS_FIELD_MISTY_TERRAIN:
+            moveEffect = MOVE_EFFECT_SP_ATK_MINUS_1;
+            break;
+        case STATUS_FIELD_GRASSY_TERRAIN:
+            moveEffect = MOVE_EFFECT_SLEEP;
+            break;
+        case STATUS_FIELD_ELECTRIC_TERRAIN:
+            moveEffect = MOVE_EFFECT_PARALYSIS;
+            break;
+        default:
+            moveEffect = MOVE_EFFECT_PARALYSIS;
+            break;
+        }
+    }
+    else
+    {
+        switch (gBattleTerrain)
+        {
+        case BATTLE_TERRAIN_GRASS:      
+            moveEffect = MOVE_EFFECT_SLEEP;
+            break;
+        case BATTLE_TERRAIN_UNDERWATER:
+            moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+            break;
+        case BATTLE_TERRAIN_POND:
+            moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+            break;
+        case BATTLE_TERRAIN_MOUNTAIN:
+            moveEffect = MOVE_EFFECT_ACC_MINUS_1;
+            break;
+        case BATTLE_TERRAIN_LONG_GRASS:
+            moveEffect = MOVE_EFFECT_SLEEP;
+            break;
+        case BATTLE_TERRAIN_SAND:
+            moveEffect = MOVE_EFFECT_ACC_MINUS_1;
+            break;
+        case BATTLE_TERRAIN_WATER:
+            moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+            break;
+        case BATTLE_TERRAIN_CAVE:
+            moveEffect = MOVE_EFFECT_FLINCH;
+            break;
+        default:
+            moveEffect = MOVE_EFFECT_PARALYSIS;
+            break;
+        }
     }
     return moveEffect;
 }
@@ -11883,6 +12134,21 @@ static void Cmd_settypetoterrain(void)
     CMD_ARGS(const u8 *failInstr);
 
     u8 terrainType = sTerrainToType[gBattleTerrain];
+    switch(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+    {
+    case STATUS_FIELD_ELECTRIC_TERRAIN:
+        terrainType = TYPE_ELECTRIC;
+        break;
+    case STATUS_FIELD_GRASSY_TERRAIN:
+        terrainType = TYPE_GRASS;
+        break;
+    case STATUS_FIELD_MISTY_TERRAIN:
+        terrainType = TYPE_FAIRY;
+        break;
+    default:
+        terrainType = sTerrainToType[gBattleTerrain];
+        break;
+    }
 
     if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, terrainType))
     {
@@ -11900,6 +12166,8 @@ static void Cmd_settypetoterrain(void)
 // Unused
 static void Cmd_pursuitdoubles(void)
 {
+    CMD_ARGS(const u8 *failInstr);
+
     gActiveBattler = GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)));
 
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
@@ -11909,19 +12177,21 @@ static void Cmd_pursuitdoubles(void)
     {
         gActionsByTurnOrder[gActiveBattler] = B_ACTION_TRY_FINISH;
         gCurrentMove = MOVE_PURSUIT;
-        gBattlescriptCurrInstr += 5;
+        gBattlescriptCurrInstr = cmd->nextInstr;
         gBattleScripting.animTurn = 1;
         gBattleScripting.savedBattler = gBattlerAttacker;
         gBattlerAttacker = gActiveBattler;
     }
     else
     {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = cmd->failInstr;
     }
 }
 
 static void Cmd_snatchsetbattlers(void)
 {
+    CMD_ARGS();
+
     gEffectBattler = gBattlerAttacker;
 
     if (gBattlerAttacker == gBattlerTarget)
@@ -11930,7 +12200,7 @@ static void Cmd_snatchsetbattlers(void)
         gBattlerTarget = gBattleScripting.battler;
 
     gBattleScripting.battler = gEffectBattler;
-    gBattlescriptCurrInstr++;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 // Brick Break

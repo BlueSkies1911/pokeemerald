@@ -564,6 +564,186 @@ const struct SpriteTemplate gIcicleCrashSpearTemplate =
     .callback = AnimFallingRock
 };
 
+// GEN 6
+//belch
+static const union AnimCmd sAnimCmdBerryEaten[] =
+{
+    ANIMCMD_FRAME(16, 3),
+    ANIMCMD_END,
+};
+static const union AnimCmd *const sAnimCmdFramesBerryEaten[] =
+{
+    sAnimCmdBerryEaten,
+};
+const struct SpriteTemplate gBelchBerryTemplate =
+{
+    .tileTag = ANIM_TAG_BERRY_NORMAL,
+    .paletteTag = ANIM_TAG_BERRY_NORMAL,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = sAnimCmdFramesBerryEaten,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimMissileArc
+};
+
+//petal blizzard
+static const union AnimCmd sAnimCmd_PetalBlizzard1_0[] =
+{
+    ANIMCMD_FRAME(0, 10),
+    ANIMCMD_JUMP(0),
+};
+static const union AnimCmd *const sAnimCmdTable_PetalBlizzard1[] =
+{
+    sAnimCmd_PetalBlizzard1_0,
+};
+const struct SpriteTemplate gPetalBlizzardTwister1Template =
+{
+    .tileTag = ANIM_TAG_FLOWER,
+    .paletteTag = ANIM_TAG_FLOWER,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = sAnimCmdTable_PetalBlizzard1,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimMoveTwisterParticle
+};
+static const u16 sPetalBlizzardFlowerOam[] = {0x0, 0x2000,0x0800,0x0};  //todo: convert to oam data
+static const union AnimCmd sAnimCmd_PetalBlizzard2_0[] =
+{
+    ANIMCMD_FRAME(0, 4),
+    ANIMCMD_FRAME(4, 0),
+    ANIMCMD_END,
+};
+static const union AnimCmd *const sAnimCmdTable_PetalBlizzard2[] =
+{
+    sAnimCmd_PetalBlizzard2_0,
+};
+const struct SpriteTemplate gPetalBlizzardTwister2Template =
+{
+    .tileTag = ANIM_TAG_FLOWER,
+    .paletteTag = ANIM_TAG_FLOWER,
+    .oam = (const struct OamData *) &sPetalBlizzardFlowerOam,
+    .anims = sAnimCmdTable_PetalBlizzard2,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimMoveTwisterParticle
+};
+
+//grassy terrain
+const struct SpriteTemplate gGrassyTerrainOrbsTemplate =
+{
+    .tileTag = ANIM_TAG_ORBS,
+    .paletteTag = ANIM_TAG_ORBS,
+    .oam = &gOamData_AffineNormal_ObjBlend_16x16,
+    .anims = gPowerAbsorptionOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gPowerAbsorptionOrbAffineAnimTable,
+    .callback = AnimOrbitFast
+};
+
+const struct SpriteTemplate gGrassyTerrainStarTemplate =
+{
+    .tileTag = ANIM_TAG_GREEN_SPARKLE,
+    .paletteTag = ANIM_TAG_GREEN_SPARKLE,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gMoonlightSparkleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimOrbitScatter
+};
+
+//misty terrain
+const struct SpriteTemplate gMistyTerrainOrbsTemplate =
+{
+    .tileTag = ANIM_TAG_ORBS,
+    .paletteTag = ANIM_TAG_WATER_GUN,
+    .oam = &gOamData_AffineNormal_ObjBlend_16x16,
+    .anims = gPowerAbsorptionOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gPowerAbsorptionOrbAffineAnimTable,
+    .callback = AnimOrbitFast
+};
+
+const struct SpriteTemplate gMistyTerrainStarTemplate =
+{
+    .tileTag = ANIM_TAG_GREEN_SPARKLE,
+    .paletteTag = ANIM_TAG_WATER_GUN,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gMoonlightSparkleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimOrbitScatter
+};
+
+//eerie impulse
+const struct SpriteTemplate gEerieImpulseRingTemplate =
+{
+    .tileTag = ANIM_TAG_THIN_RING,
+    .paletteTag = ANIM_TAG_SPARK_2,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gHyperVoiceRingAffineAnimTable,
+    .callback = AnimHyperVoiceRing
+};
+
+const struct SpriteTemplate gEerieImpulseImpactTemplate =
+{
+    .tileTag = ANIM_TAG_GOLD_RING,
+    .paletteTag = ANIM_TAG_SPARK_H,
+    .oam = &gOamData_AffineOff_ObjNormal_16x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimGrantingStars
+};
+
+//venom drench
+const struct SpriteTemplate gVenomDrenchAcidTemplate =
+{
+    .tileTag = ANIM_TAG_POISON_BUBBLE,
+    .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimFallingRock
+};
+
+//magnetic flux
+const struct SpriteTemplate gMagneticFluxUproarTemplate =
+{
+    .tileTag = ANIM_TAG_THIN_RING,
+    .paletteTag = ANIM_TAG_SMALL_EMBER,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gThinRingExpandingAffineAnimTable,
+    .callback = AnimUproarRing
+};
+
+//electric terrain
+const struct SpriteTemplate gElectricTerrainOrbsTemplate =
+{
+    .tileTag = ANIM_TAG_ELECTRIC_ORBS,
+    .paletteTag = ANIM_TAG_ELECTRIC_ORBS,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gAnims_ElectricChargingParticles,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimOrbitFast
+};
+
+const struct SpriteTemplate gElectricTerrainFlyingBallTemplate =
+{
+    .tileTag = ANIM_TAG_ELECTRIC_ORBS,
+    .paletteTag = ANIM_TAG_ELECTRIC_ORBS,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gAnims_ElectricChargingParticles,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimOrbitScatter
+};
+
 static u8 LoadBattleAnimTarget(u8 arg)
 {
     u8 battler;

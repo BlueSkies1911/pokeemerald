@@ -318,15 +318,17 @@
 #define ANIM_TAG_POISON_JAB                 (ANIM_SPRITES_START + 307)
 #define ANIM_TAG_GREEN_POISON_BUBBLE        (ANIM_SPRITES_START + 308)
 #define ANIM_TAG_FLASH_CANNON_BALL          (ANIM_SPRITES_START + 309)
-#define ANIM_TAG_PUNISHMENT_BLADES          (ANIM_SPRITES_START + 310)
-#define ANIM_TAG_QUICK_GUARD_HAND           (ANIM_SPRITES_START + 311)
+#define ANIM_TAG_WATER_GUN                  (ANIM_SPRITES_START + 310)
+#define ANIM_TAG_PUNISHMENT_BLADES          (ANIM_SPRITES_START + 311)
+#define ANIM_TAG_QUICK_GUARD_HAND           (ANIM_SPRITES_START + 312)
 
-#define ANIM_TAG_SHELL_RIGHT                (ANIM_SPRITES_START + 312)
-#define ANIM_TAG_SHELL_LEFT                 (ANIM_SPRITES_START + 313)
-#define ANIM_TAG_RAZOR_SHELL                (ANIM_SPRITES_START + 314)
-#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 315)
-#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 316)
-#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 317)
+#define ANIM_TAG_SHELL_RIGHT                (ANIM_SPRITES_START + 313)
+#define ANIM_TAG_SHELL_LEFT                 (ANIM_SPRITES_START + 314)
+#define ANIM_TAG_RAZOR_SHELL                (ANIM_SPRITES_START + 315)
+#define ANIM_TAG_BERRY_NORMAL               (ANIM_SPRITES_START + 316)
+#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 317)
+#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 318)
+#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 319)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -389,11 +391,14 @@
 #define BG_TRICK_ROOM 30
 #define BG_ROCK_WRECKER 31
 #define BG_HURRICANE 32
-#define BG_FOCUS_BLAST 33
-#define BG_GUNK_SHOT 34
-#define BG_WONDER_ROOM 35
-#define BG_MAGIC_ROOM 36
-#define BG_AURA_SPHERE 37
+#define BG_ELECTRIC_TERRAIN 33
+#define BG_GRASSY_TERRAIN 34
+#define BG_MISTY_TERRAIN 35
+#define BG_FOCUS_BLAST 36
+#define BG_GUNK_SHOT 37
+#define BG_WONDER_ROOM 38
+#define BG_MAGIC_ROOM 39
+#define BG_AURA_SPHERE 40
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_STATS_CHANGE             0
@@ -418,12 +423,13 @@
 #define B_ANIM_FOCUS_PUNCH_SETUP        19
 #define B_ANIM_INGRAIN_HEAL             20
 #define B_ANIM_WISH_HEAL                21
-#define B_ANIM_AQUA_RING_HEAL           22
-#define B_ANIM_MON_SCARED               23
-#define B_ANIM_GHOST_GET_OUT            24
-#define B_ANIM_SILPH_SCOPED             25
-#define B_ANIM_ROCK_THROW               26
-#define B_ANIM_SAFARI_REACTION          27
+#define B_ANIM_RESTORE_BG               22 // for Terrain Endings
+#define B_ANIM_AQUA_RING_HEAL           23
+#define B_ANIM_MON_SCARED               24
+#define B_ANIM_GHOST_GET_OUT            25
+#define B_ANIM_SILPH_SCOPED             26
+#define B_ANIM_ROCK_THROW               27
+#define B_ANIM_SAFARI_REACTION          28
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
