@@ -535,4 +535,13 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BABY_DOLL_EYES] = _("BabyDollEyes"),
     [MOVE_NUZZLE] = _("Nuzzle"),
     [MOVE_POWER_UP_PUNCH] = _("PowerUpPunch"),
+    [MOVE_FIRST_IMPRESSION] = _("FrstImpressn"),
+    [MOVE_HIGH_HORSEPOWER] = _("HighHorsepwr"),
+    [MOVE_STRENGTH_SAP] = _("Strength Sap"),
+    [MOVE_SPOTLIGHT] = _("Spotlight"),
+    [MOVE_LASER_FOCUS] = _("Laser Focus"),
+    [MOVE_PSYCHIC_TERRAIN] = _("PsychcTrrain"),
+    [MOVE_POWER_TRIP] = _("Power Trip"),
+    [MOVE_BURN_UP] = _("Burn Up"),
+    [MOVE_STOMPING_TANTRUM] = _("StmpngTantrm"),
 };

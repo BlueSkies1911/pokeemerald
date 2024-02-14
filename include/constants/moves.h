@@ -551,7 +551,20 @@
 
 #define MOVES_COUNT_GEN6 535
 
-#define MOVES_COUNT         MOVES_COUNT_GEN6
+// Gen 7 moves.
+#define MOVE_FIRST_IMPRESSION 535
+#define MOVE_HIGH_HORSEPOWER 536
+#define MOVE_STRENGTH_SAP 537
+#define MOVE_SPOTLIGHT 538
+#define MOVE_LASER_FOCUS 539
+#define MOVE_PSYCHIC_TERRAIN 540
+#define MOVE_POWER_TRIP 541
+#define MOVE_BURN_UP 542
+#define MOVE_STOMPING_TANTRUM 543
+
+#define MOVES_COUNT_GEN7 544
+
+#define MOVES_COUNT         MOVES_COUNT_GEN7
 
 // Used for checks for moves affected by Disable, Mimic, etc.
 #define MOVE_UNAVAILABLE 0xFFFF

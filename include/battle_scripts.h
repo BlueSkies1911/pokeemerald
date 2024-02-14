@@ -250,6 +250,7 @@ extern const u8 BattleScript_WonderRoomEnds[];
 extern const u8 BattleScript_MagicRoomEnds[];
 extern const u8 BattleScript_ElectricTerrainEnds[];
 extern const u8 BattleScript_MistyTerrainEnds[];
+extern const u8 BattleScript_PsychicTerrainEnds[];
 extern const u8 BattleScript_MudSportEnds[];
 extern const u8 BattleScript_WaterSportEnds[];
 extern const u8 BattleScript_SturdiedMsg[];
@@ -283,6 +284,7 @@ extern const u8 BattleScript_SideStatusWoreOffReturn[];
 extern const u8 BattleScript_MoveEffectSmackDown[];
 extern const u8 BattleScript_MoveEffectFlameBurst[];
 extern const u8 BattleScript_MoveEffectFeint[];
+extern const u8 BattleScript_MoveUsedPsychicTerrainPrevents[];
 extern const u8 BattleScript_SelectingNotAllowedBelch[];
 extern const u8 BattleScript_SelectingNotAllowedBelchInPalace[];
 extern const u8 BattleScript_PowderMoveNoEffect[];
@@ -322,6 +324,7 @@ extern const u8 BattleScript_TerrainPreventsEnd2[];
 extern const u8 BattleScript_MistyTerrainPrevents[];
 extern const u8 BattleScript_ElectricTerrainPrevents[];
 extern const u8 BattleScript_MultiHitPrintStrings[];
+extern const u8 BattleScript_BurnUpRemoveType[];
 extern const u8 BattleScript_DampPreventsAftermath[];
 
 #endif // GUARD_BATTLE_SCRIPTS_H

@@ -29,7 +29,6 @@ static void AnimPowerAbsorptionOrb(struct Sprite *);
 static void AnimSolarBeamBigOrb(struct Sprite *);
 static void AnimSolarBeamSmallOrb(struct Sprite *);
 static void AnimSolarBeamSmallOrb_Step(struct Sprite *);
-static void AnimAbsorptionOrb(struct Sprite *);
 static void AnimAbsorptionOrb_Step(struct Sprite *);
 static void AnimHyperBeamOrb(struct Sprite *);
 static void AnimHyperBeamOrb_Step(struct Sprite *);
@@ -106,7 +105,6 @@ static void AnimFalseSwipeSlice_Step1(struct Sprite *);
 static void AnimFalseSwipeSlice_Step2(struct Sprite *);
 static void AnimFalseSwipeSlice_Step3(struct Sprite *);
 static void AnimFalseSwipePositionedSlice(struct Sprite *);
-static void AnimEndureEnergy(struct Sprite *);
 static void AnimEndureEnergy_Step(struct Sprite *);
 static void AnimSharpenSphere(struct Sprite *);
 static void AnimSharpenSphere_Step(struct Sprite *);
@@ -2918,7 +2916,7 @@ void AnimTask_CreateSmallSolarBeamOrbs(u8 taskId)
 // arg 1: initial y pixel offset
 // arg 2: wave amplitude
 // arg 3: wave period (lower means faster wave)
-static void AnimAbsorptionOrb(struct Sprite *sprite)
+void AnimAbsorptionOrb(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, TRUE);
     sprite->data[0] = gBattleAnimArgs[3];
@@ -5659,7 +5657,7 @@ static void AnimFalseSwipeSlice_Step3(struct Sprite *sprite)
     }
 }
 
-static void AnimEndureEnergy(struct Sprite *sprite)
+void AnimEndureEnergy(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[0] == 0)
     {

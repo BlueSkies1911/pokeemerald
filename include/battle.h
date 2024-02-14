@@ -89,6 +89,7 @@ struct DisableStruct
     u8 magnetRiseTimer;
     u8 telekinesisTimer;
     u8 healBlockTimer;
+    u8 laserFocusTimer;
     u8 wrapTurns;
     u8 usedMoves:4;
 };
@@ -535,6 +536,7 @@ struct BattleStruct
     u8 activeAbilityPopUps; // as bits for each battler
     u8 abilityPopUpSpriteIds[MAX_BATTLERS_COUNT][2];    // two per battler
     u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
+    u8 lastMoveFailed; // as bits for each battler, for the sake of Stomping Tantrum
     u16 tracedAbility[MAX_BATTLERS_COUNT];
     s8 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
     u8 aiMoveOrAction[MAX_BATTLERS_COUNT];

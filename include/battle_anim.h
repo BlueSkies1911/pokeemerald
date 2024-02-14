@@ -242,7 +242,9 @@ void AnimMoveTwisterParticle(struct Sprite *sprite);
 void AnimParticleBurst(struct Sprite *);
 void AnimNeedleArmSpike(struct Sprite *);
 void AnimSporeParticle(struct Sprite *);
+void AnimAbsorptionOrb(struct Sprite *);
 void AnimPetalDanceBigFlower(struct Sprite *sprite);
+void AnimEndureEnergy(struct Sprite *);
 void AnimMimicOrb(struct Sprite *);
 void AnimNeedleArmSpike_Step(struct Sprite *sprite);
 void AnimConversion(struct Sprite *);
@@ -250,7 +252,10 @@ void AnimGrantingStars(struct Sprite *);
 extern const union AnimCmd *const gRazorLeafParticleAnimTable[];
 extern const union AnimCmd *const gPowerAbsorptionOrbAnimTable[];
 extern const union AffineAnimCmd *const gPowerAbsorptionOrbAffineAnimTable[];
+extern const union AnimCmd *const gOctazookaAnimTable[];
+extern const union AffineAnimCmd *const gAbsorptionOrbAffineAnimTable[];
 extern const union AnimCmd *const gSporeParticleAnimTable[];
+extern const union AnimCmd *const gEndureEnergyAnimTable[];
 extern const union AnimCmd *const gMoonlightSparkleAnimTable[];
 extern const union AnimCmd *const gConversionAnimTable[];
 extern const union AffineAnimCmd *const gConversionAffineAnimTable[];
@@ -267,6 +272,10 @@ extern const union AnimCmd *const gExplosionAnimTable[];
 extern const union AffineAnimCmd *const gGuardRingAffineAnimTable[];
 extern const union AffineAnimCmd *const gAngerMarkAffineAnimTable[];
 extern const union AffineAnimCmd *const gHyperVoiceRingAffineAnimTable[];
+
+// battle_anim_effects_3.c
+void AnimTealAlert(struct Sprite *);
+extern const union AnimCmd *const gOpeningEyeAnimTable[];
 
 // battle_anim_water.c
 void AnimWaterPulseRing(struct Sprite *sprite);
@@ -367,6 +376,7 @@ void AnimSpinningKickOrPunch(struct Sprite *);
 void AnimBrickBreakWall_Step(struct Sprite *sprite);
 void AnimBasicFistOrFoot(struct Sprite *);
 extern const union AnimCmd *const gAnims_HandsAndFeet[];
+extern const union AffineAnimCmd *const gAffineAnims_MegaPunchKick[];
 extern const union AffineAnimCmd *const gAffineAnims_SpinningHandOrFoot[];
 
 // battle_anim_rock.c

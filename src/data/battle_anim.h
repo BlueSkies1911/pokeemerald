@@ -1327,8 +1327,10 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_RazorShell, 0x200, ANIM_TAG_RAZOR_SHELL},
     {gBattleAnimSpriteGfx_BerryNormal, 0x400, ANIM_TAG_BERRY_NORMAL},
     {gBattleAnimSpriteGfx_PowerTrick, 0x800, ANIM_TAG_POWER_TRICK},
+    {gBattleAnimSpriteGfx_HorseshoeFist, 0x800, ANIM_TAG_HORSESHOE_SIDE_FIST},
     {gBattleAnimSpriteGfx_HeartStamp, 0x400, ANIM_TAG_HEART_STAMP},
     {gBattleAnimSpriteGfx_MetalBits, 0x140, ANIM_TAG_METAL_BITS},
+    {gBattleAnimSpriteGfx_RocksSmall, 0x140, ANIM_TAG_SMALL_ROCK},
 };
 
 const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
@@ -1652,8 +1654,10 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     {gBattleAnimSpritePal_RazorShell, ANIM_TAG_RAZOR_SHELL},
     {gBattleAnimSpritePal_BerryNormal, ANIM_TAG_BERRY_NORMAL},
     {gBattleAnimSpritePal_PowerTrick, ANIM_TAG_POWER_TRICK},
+    {gBattleAnimSpritePal_HorseshoeFist, ANIM_TAG_HORSESHOE_SIDE_FIST},
     [ANIM_TAG_HEART_STAMP - ANIM_SPRITES_START] = {gBattleAnimSpritePal_HeartStamp, ANIM_TAG_HEART_STAMP},
     {gBattleAnimSpritePal_BlueFlare, ANIM_TAG_METAL_BITS},
+    {gBattleAnimSpritePal_NewRocks, ANIM_TAG_SMALL_ROCK},
 };
 
 const struct BattleAnimBackground gBattleAnimBackgroundTable[] =
@@ -1691,10 +1695,12 @@ const struct BattleAnimBackground gBattleAnimBackgroundTable[] =
     [BG_GIGA_IMPACT_CONTEST]       = {gBattleAnimBgImage_GigaImpactContest,       gBattleAnimBgPalette_GigaImpact,              gBattleAnimBgTilemap_GigaImpactContest},
     [BG_TRICK_ROOM]                = {gBattleAnimBgImage_TrickRoom,               gBattleAnimBgPalette_TrickRoom,               gBattleAnimBgTilemap_TrickRoom},
     [BG_ROCK_WRECKER]              = {gBattleAnimBgImage_Hurricane,               gBattleAnimBgPalette_RockWrecker,             gBattleAnimBgTilemap_Hurricane},
+    [BG_FIRE]                      = {gBattleAnimBgImage_Fire1,                   gBattleAnimBgPalette_Fire1,                   gBattleAnimBgTilemap_Fire1},
     [BG_HURRICANE]                 = {gBattleAnimBgImage_Hurricane,               gBattleAnimBgPalette_Hurricane,               gBattleAnimBgTilemap_Hurricane},
     [BG_ELECTRIC_TERRAIN]          = {gBattleAnimBgImage_ElectricTerrain,         gBattleAnimBgPalette_ElectricTerrain,         gBattleAnimBgTilemap_ElectricTerrain},
     [BG_GRASSY_TERRAIN]            = {gBattleAnimBgImage_GrassyTerrain,           gBattleAnimBgPalette_GrassyTerrain,           gBattleAnimBgTilemap_GrassyTerrain},
     [BG_MISTY_TERRAIN]             = {gBattleAnimBgImage_MistyTerrain,            gBattleAnimBgPalette_MistyTerrain,            gBattleAnimBgTilemap_MistyTerrain},
+    [BG_PSYCHIC_TERRAIN]           = {gBattleAnimBgImage_PsychicTerrain,          gBattleAnimBgPalette_PsychicTerrain,          gBattleAnimBgTilemap_PsychicTerrain},
     [BG_FOCUS_BLAST]               = {gBattleAnimBgImage_FocusBlast,              gBattleAnimBgPalette_FocusBlast,              gBattleAnimBgTilemap_FocusBlast},
     [BG_GUNK_SHOT]                 = {gBattleAnimBgImage_FocusBlast,              gBattleAnimBgPalette_GunkShot,                gBattleAnimBgTilemap_FocusBlast},
     [BG_WONDER_ROOM]               = {gBattleAnimBgImage_TrickRoom,               gBattleAnimBgPalette_WonderRoom,              gBattleAnimBgTilemap_TrickRoom},

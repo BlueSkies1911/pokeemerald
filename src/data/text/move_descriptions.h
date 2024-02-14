@@ -2105,6 +2105,42 @@ static const u8 sPowerUpPunchDescription[] = _(
     "A hard punch that raises\n"
     "the user's Attack.");
 
+static const u8 sFirstImpressionDescription[] = _(
+    "Hits hard and first.\n"
+    "Only works first turn.");
+
+static const u8 sHighHorsepowerDescription[] = _(
+    "Slams hard into the foe with\n"
+    "its entire body.");
+
+static const u8 sStrengthSapDescription[] = _(
+    "Saps the foe's Attack to\n"
+    "heal HP, then drops Attack.");
+
+static const u8 sSpotlightDescription[] = _(
+    "Makes the foe attack the\n"
+    "spotlighted Pokémon.");
+
+static const u8 sLaserFocusDescription[] = _(
+    "Guarantees the next move\n"
+    "will be a critical hit.");
+
+static const u8 sPsychicTerrainDescription[] = _(
+    "The ground turns weird for\n"
+    "5 turns. Blocks priority.");
+
+static const u8 sPowerTripDescription[] = _(
+    "It hits harder the more\n"
+    "stat boosts the user has.");
+
+static const u8 sBurnUpDescription[] = _(
+    "Burns out the user fully\n"
+    "removing the Fire type.");
+
+static const u8 sStompingTantrumDescription[] = _(
+    "Stomps around angrily.\n"
+    "Stronger after a failure.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -2642,4 +2678,13 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_BABY_DOLL_EYES - 1] = sBabyDollEyesDescription,
     [MOVE_NUZZLE - 1] = sNuzzleDescription,
     [MOVE_POWER_UP_PUNCH - 1] = sPowerUpPunchDescription,
+    [MOVE_FIRST_IMPRESSION - 1] = sFirstImpressionDescription,
+    [MOVE_HIGH_HORSEPOWER - 1] = sHighHorsepowerDescription,
+    [MOVE_STRENGTH_SAP - 1] = sStrengthSapDescription,
+    [MOVE_SPOTLIGHT - 1] = sSpotlightDescription,
+    [MOVE_LASER_FOCUS - 1] = sLaserFocusDescription,
+    [MOVE_PSYCHIC_TERRAIN - 1] = sPsychicTerrainDescription,
+    [MOVE_POWER_TRIP - 1] = sPowerTripDescription,
+    [MOVE_BURN_UP - 1] = sBurnUpDescription,
+    [MOVE_STOMPING_TANTRUM - 1] = sStompingTantrumDescription,
 };

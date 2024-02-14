@@ -327,8 +327,10 @@
 #define ANIM_TAG_RAZOR_SHELL                (ANIM_SPRITES_START + 315)
 #define ANIM_TAG_BERRY_NORMAL               (ANIM_SPRITES_START + 316)
 #define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 317)
-#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 318)
-#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 319)
+#define ANIM_TAG_HORSESHOE_SIDE_FIST        (ANIM_SPRITES_START + 318)
+#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 319)
+#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 320)
+#define ANIM_TAG_SMALL_ROCK                 (ANIM_SPRITES_START + 321)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -390,15 +392,17 @@
 #define BG_GIGA_IMPACT_CONTEST 29
 #define BG_TRICK_ROOM 30
 #define BG_ROCK_WRECKER 31
-#define BG_HURRICANE 32
-#define BG_ELECTRIC_TERRAIN 33
-#define BG_GRASSY_TERRAIN 34
-#define BG_MISTY_TERRAIN 35
-#define BG_FOCUS_BLAST 36
-#define BG_GUNK_SHOT 37
-#define BG_WONDER_ROOM 38
-#define BG_MAGIC_ROOM 39
-#define BG_AURA_SPHERE 40
+#define BG_FIRE 32
+#define BG_HURRICANE 33
+#define BG_ELECTRIC_TERRAIN 34
+#define BG_GRASSY_TERRAIN 35
+#define BG_MISTY_TERRAIN 36
+#define BG_PSYCHIC_TERRAIN 37
+#define BG_FOCUS_BLAST 38
+#define BG_GUNK_SHOT 39
+#define BG_WONDER_ROOM 40
+#define BG_MAGIC_ROOM 41
+#define BG_AURA_SPHERE 42
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_STATS_CHANGE             0

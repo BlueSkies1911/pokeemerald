@@ -1364,6 +1364,7 @@ bool32 IsHealBlockPreventingMove(u32 battler, u32 move)
     switch (gBattleMoves[move].effect)
     {
     case EFFECT_ABSORB:
+    case EFFECT_STRENGTH_SAP:
     case EFFECT_DREAM_EATER:
     case EFFECT_MORNING_SUN:
     case EFFECT_SYNTHESIS:
@@ -1669,6 +1670,7 @@ enum
     ENDTURN_ELECTRIC_TERRAIN,
     ENDTURN_MISTY_TERRAIN,
     ENDTURN_GRASSY_TERRAIN,
+    ENDTURN_PSYCHIC_TERRAIN,
     ENDTURN_ION_DELUGE,
     ENDTURN_RETALIATE,
     ENDTURN_FIELD_COUNT,
@@ -2026,6 +2028,16 @@ u8 DoFieldEndTurnEffects(void)
             }
             gBattleStruct->turnCountersTracker++;
             break;
+        case ENDTURN_PSYCHIC_TERRAIN:
+            if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN
+              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
+            {
+                gFieldStatuses &= ~STATUS_FIELD_PSYCHIC_TERRAIN;
+                BattleScriptExecute(BattleScript_PsychicTerrainEnds);
+                effect++;
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
         case ENDTURN_WATER_SPORT:
                 if (gFieldStatuses & STATUS_FIELD_WATERSPORT && --gFieldTimers.waterSportTimer == 0)
                 {
@@ -2096,6 +2108,7 @@ enum
     ENDTURN_EMBARGO,
     ENDTURN_LOCK_ON,
     ENDTURN_CHARGE,
+    ENDTURN_LASER_FOCUS,
     ENDTURN_TAUNT,
     ENDTURN_YAWN,
     ENDTURN_ITEMS2,
@@ -2514,6 +2527,14 @@ u8 DoBattlerEndTurnEffects(void)
                     }
                     effect++;
                 }
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_LASER_FOCUS:
+            if (gStatuses3[gActiveBattler] & STATUS3_LASER_FOCUS)
+            {
+                if (gDisableStructs[gActiveBattler].laserFocusTimer == 0 || --gDisableStructs[gActiveBattler].laserFocusTimer == 0)
+                    gStatuses3[gActiveBattler] &= ~STATUS3_LASER_FOCUS;
             }
             gBattleStruct->turnEffectsTracker++;
             break;
@@ -3088,7 +3109,7 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_THAW: // move thawing
             if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE)
             {
-                if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FIRE))
+                if (!(gBattleMoves[gCurrentMove].effect == EFFECT_BURN_UP && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FIRE)))
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~STATUS1_FREEZE;
                     BattleScriptPushCursor();
@@ -3154,7 +3175,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         }
 
-    } while (gBattleStruct->atkCancellerTracker != CANCELLER_END && effect == 0);
+    } while (gBattleStruct->atkCancellerTracker != CANCELLER_END && gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
 
     if (effect == 2)
     {
@@ -3162,6 +3183,38 @@ u8 AtkCanceller_UnableToUseMove(void)
         BtlController_EmitSetMonData(BUFFER_A, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
         MarkBattlerForControllerExec(gActiveBattler);
     }
+    return effect;
+}
+
+u8 AtkCanceller_UnableToUseMove2(void)
+{
+    u8 effect = 0;
+
+    do
+    {
+        switch (gBattleStruct->atkCancellerTracker)
+        {
+        case CANCELLER_END:
+            gBattleStruct->atkCancellerTracker++;
+        case CANCELLER_PSYCHIC_TERRAIN:
+            if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN
+                && IsBattlerGrounded(gBattlerTarget)
+                && GetChosenMovePriority(gBattlerAttacker) > 0
+                && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget))
+            {
+                CancelMultiTurnMoves(gBattlerAttacker);
+                gBattlescriptCurrInstr = BattleScript_MoveUsedPsychicTerrainPrevents;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_END2:
+            break;
+        }
+
+    } while (gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
+
     return effect;
 }
 
@@ -5024,6 +5077,9 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 case HOLD_EFFECT_PARAM_MISTY_TERRAIN:
                     effect = TryHandleSeed(battlerId, STATUS_FIELD_MISTY_TERRAIN, STAT_SPDEF, gLastUsedItem, TRUE);
                     break;
+                case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
+                    effect = TryHandleSeed(battlerId, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_SPDEF, gLastUsedItem, TRUE);
+                    break;
                 }
                 break;
             }
@@ -6447,6 +6503,10 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         if (IsBattlerWeatherAffected(battlerAtk, (B_WEATHER_HAIL | B_WEATHER_SANDSTORM | B_WEATHER_RAIN)))
             MulModifier(&modifier, UQ_4_12(0.5));
         break;
+    case EFFECT_STOMPING_TANTRUM:
+        if (gBattleStruct->lastMoveFailed & gBitTable[battlerAtk])
+            MulModifier(&modifier, UQ_4_12(2.0));
+        break;
     case EFFECT_BULLDOZE:
     case EFFECT_MAGNITUDE:
     case EFFECT_EARTHQUAKE:
@@ -6472,6 +6532,8 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
     if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN && moveType == TYPE_DRAGON && IsBattlerGrounded(battlerDef) && !(gStatuses3[battlerDef] & STATUS3_SEMI_INVULNERABLE))
         MulModifier(&modifier, UQ_4_12(0.5));
     if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN && moveType == TYPE_ELECTRIC && IsBattlerGrounded(battlerAtk) && !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
+        MulModifier(&modifier, UQ_4_12(1.5));
+    if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN && moveType == TYPE_PSYCHIC && IsBattlerGrounded(battlerAtk) && !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
         MulModifier(&modifier, UQ_4_12(1.5));
     if ((moveType == TYPE_ELECTRIC && gFieldStatuses & STATUS_FIELD_MUDSPORT)
         || (moveType == TYPE_FIRE && gFieldStatuses & STATUS_FIELD_WATERSPORT))

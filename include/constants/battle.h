@@ -176,8 +176,9 @@
 #define STATUS3_MAGNET_RISE             (1 << 25)
 #define STATUS3_HEAL_BLOCK              (1 << 26)
 #define STATUS3_AQUA_RING               (1 << 27)
-#define STATUS3_POWER_TRICK             (1 << 28)
-#define STATUS3_SKY_DROPPED             (1 << 29) // Target of Sky Drop
+#define STATUS3_LASER_FOCUS             (1 << 28)
+#define STATUS3_POWER_TRICK             (1 << 29)
+#define STATUS3_SKY_DROPPED             (1 << 30) // Target of Sky Drop
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
 
 // Not really sure what a "hitmarker" is.
@@ -239,10 +240,11 @@
 #define STATUS_FIELD_GRASSY_TERRAIN                 (1 << 6)
 #define STATUS_FIELD_MISTY_TERRAIN                  (1 << 7)
 #define STATUS_FIELD_ELECTRIC_TERRAIN               (1 << 8)
-#define STATUS_FIELD_ION_DELUGE                     (1 << 9)
-#define STATUS_FIELD_TERRAIN_PERMANENT              (1 << 10)   // Overworld thunderstorm generates electric terrain
+#define STATUS_FIELD_PSYCHIC_TERRAIN                (1 << 9)
+#define STATUS_FIELD_ION_DELUGE                     (1 << 10)
+#define STATUS_FIELD_TERRAIN_PERMANENT              (1 << 11)   // Overworld thunderstorm generates electric terrain
 
-#define STATUS_FIELD_TERRAIN_ANY        (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN)
+#define STATUS_FIELD_TERRAIN_ANY        (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
 
 // Flags describing move's result
 #define MOVE_RESULT_MISSED             (1 << 0)
@@ -297,7 +299,7 @@
 #define MOVE_EFFECT_PAYDAY              11
 #define MOVE_EFFECT_CHARGING            12
 #define MOVE_EFFECT_WRAP                13
-#define MOVE_EFFECT_BURN_UP             14
+#define MOVE_EFFECT_BURN_UP             14 // MOVE_EFFECT_BURN_UP replaces unused MOVE_EFFECT_RECOIL_25 so that stat change animations don't break
 #define MOVE_EFFECT_ATK_PLUS_1          15
 #define MOVE_EFFECT_DEF_PLUS_1          16
 #define MOVE_EFFECT_SPD_PLUS_1          17

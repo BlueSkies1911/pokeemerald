@@ -771,6 +771,11 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (IsNonVolatileStatusMoveEffect(moveEffect) || IsConfusionMoveEffect(moveEffect))
                 RETURN_SCORE_MINUS(20);
         }
+
+        if (AI_IsTerrainAffected(battlerAtk, STATUS_FIELD_PSYCHIC_TERRAIN) && atkPriority > 0)
+        {
+            RETURN_SCORE_MINUS(20);
+        }
     } // end check MOVE_TARGET_USER
 
 // the following checks apply to any target (including user)
@@ -1462,6 +1467,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (AI_DATA->abilities[battlerDef] == ABILITY_LIQUID_OOZE)
                 score -= 6;
             break;
+        case EFFECT_STRENGTH_SAP:
+            if (!ShouldLowerStat(battlerDef, AI_DATA->abilities[battlerDef], STAT_ATK))
+                score -= 10;
+            break;
         case EFFECT_COPYCAT:
         case EFFECT_MIRROR_MOVE:
             return AI_CheckBadMove(battlerAtk, battlerDef, predictedMove, score);
@@ -1603,6 +1612,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
               || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
             break;
+        case EFFECT_LASER_FOCUS:
+            if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS)
+                score -= 10;
+            else if (AI_DATA->abilities[battlerDef] == ABILITY_SHELL_ARMOR || AI_DATA->abilities[battlerDef] == ABILITY_BATTLE_ARMOR)
+                score -= 8;
+            break;
         case EFFECT_SKETCH:
             if (gLastMoves[battlerDef] == MOVE_NONE)
                 score -= 10;
@@ -1684,6 +1699,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
               || !(IS_BATTLER_OF_TYPE(battlerDef, TYPE_DARK))
               || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 9;
+            break;
+        case EFFECT_BURN_UP:
+            if (!IS_BATTLER_OF_TYPE(battlerAtk, TYPE_FIRE))
+                score -= 10;
             break;
         case EFFECT_DEFOG:
             if (gSideStatuses[GetBattlerSide(battlerDef)]
@@ -1907,6 +1926,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_ELECTRIC_TERRAIN:
             if (PartnerMoveEffectIsTerrain(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove) || gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+                score -= 10;
+            break;
+        case EFFECT_PSYCHIC_TERRAIN:
+            if (PartnerMoveEffectIsTerrain(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove) || gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
                 score -= 10;
             break;
         case EFFECT_MISTY_TERRAIN:
@@ -2904,6 +2927,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             score += 2;
         break;
     case EFFECT_FOCUS_ENERGY:
+    case EFFECT_LASER_FOCUS:
         if (AI_DATA->abilities[battlerAtk] == ABILITY_SUPER_LUCK
           || AI_DATA->abilities[battlerAtk] == ABILITY_SNIPER
           || AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_SCOPE_LENS
@@ -3465,6 +3489,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_FOLLOW_ME:
         if (isDoubleBattle
+          && move != MOVE_SPOTLIGHT
           && !IsBattlerIncapacitated(battlerDef, AI_DATA->abilities[battlerDef])
           && (move != MOVE_RAGE_POWDER || IsAffectedByPowder(battlerDef, AI_DATA->abilities[battlerDef], AI_DATA->holdEffects[battlerDef])) // Rage Powder doesn't affect powder immunities
           && IsBattlerAlive(BATTLE_PARTNER(battlerAtk)))
@@ -3762,6 +3787,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             score += 10;
         //fallthrough
     case EFFECT_GRASSY_TERRAIN:
+    case EFFECT_PSYCHIC_TERRAIN:
         score += 2;
         if (AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_TERRAIN_EXTENDER)
             score += 2;
@@ -4065,6 +4091,7 @@ static s16 AI_SetupFirstTurn(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_QUIVER_DANCE:
     case EFFECT_ATTACK_SPATK_UP:
     case EFFECT_ATTACK_ACCURACY_UP:
+    case EFFECT_PSYCHIC_TERRAIN:
     case EFFECT_GRASSY_TERRAIN:
     case EFFECT_ELECTRIC_TERRAIN:
     case EFFECT_MISTY_TERRAIN:

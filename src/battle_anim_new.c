@@ -744,6 +744,147 @@ const struct SpriteTemplate gElectricTerrainFlyingBallTemplate =
     .callback = AnimOrbitScatter
 };
 
+// GEN 7
+//first impression
+const struct SpriteTemplate gFirstImpressionPoundTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_RAZOR_LEAF,
+    .oam = &gOamData_AffineNormal_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_HitSplat,
+    .callback = AnimHitSplatBasic
+};
+
+//high horsepower
+const struct SpriteTemplate gHighHorsepowerHorseshoeTemplate =
+{
+    .tileTag = ANIM_TAG_HORSESHOE_SIDE_FIST,
+    .paletteTag = ANIM_TAG_HORSESHOE_SIDE_FIST,
+    .oam = &gOamData_AffineDouble_ObjNormal_32x32,
+    .anims = gAnims_HandsAndFeet,
+    .images = NULL,
+    .affineAnims = gAffineAnims_MegaPunchKick,
+    .callback = AnimSpinningKickOrPunch
+};
+
+//strength sap
+const struct SpriteTemplate gStrengthSapRedSmokeTemplate =
+{
+    .tileTag = ANIM_TAG_GRAY_SMOKE,
+    .paletteTag = ANIM_TAG_RED_HEART,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gOctazookaAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSpriteOnMonPos
+};
+
+const struct SpriteTemplate gStrengthSapRedInwardTemplate =
+{
+    .tileTag = ANIM_TAG_TEAL_ALERT,
+    .paletteTag = ANIM_TAG_RED_HEART,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimTealAlert
+};
+
+const struct SpriteTemplate gStrengthSapAbsorbTemplate =
+{
+    .tileTag = ANIM_TAG_ORBS,
+    .paletteTag = ANIM_TAG_PINK_PETAL,
+    .oam = &gOamData_AffineNormal_ObjBlend_16x16,
+    .anims = gPowerAbsorptionOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gAbsorptionOrbAffineAnimTable,
+    .callback = AnimAbsorptionOrb
+};
+
+//laser focus
+const struct SpriteTemplate gLaserFocusRedEyesTemplate =
+{
+    .tileTag = ANIM_TAG_OPENING_EYE,
+    .paletteTag = ANIM_TAG_EYE_SPARKLE,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gOpeningEyeAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSpriteOnMonPos
+};
+
+//psychic terrain
+const struct SpriteTemplate gPsychicTerrainOrbsTemplate =
+{
+    .tileTag = ANIM_TAG_ORBS,
+    .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineNormal_ObjBlend_16x16,
+    .anims = gPowerAbsorptionOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gPowerAbsorptionOrbAffineAnimTable,
+    .callback = AnimOrbitFast
+};
+
+const struct SpriteTemplate gPsychicTerrainStarTemplate =
+{
+    .tileTag = ANIM_TAG_GREEN_SPARKLE,
+    .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gMoonlightSparkleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimOrbitScatter
+};
+
+//power trip
+const struct SpriteTemplate gPowerTripFocusEnergyTemplate =
+{
+    .tileTag = ANIM_TAG_FOCUS_ENERGY,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineOff_ObjNormal_16x32,
+    .anims = gEndureEnergyAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimEndureEnergy
+};
+
+const struct SpriteTemplate gPowerTripImpactTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_PURPLE_FLAME,
+    .oam = &gOamData_AffineNormal_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_HitSplat,
+    .callback = AnimHitSplatBasic
+};
+
+//burn up
+const struct SpriteTemplate gBurnUpRedYawnTemplate =
+{
+    .tileTag = ANIM_TAG_PINK_CLOUD,
+    .paletteTag = ANIM_TAG_SMALL_RED_EYE,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimThrowMistBall
+};
+
+//stomping tantrum
+const struct SpriteTemplate gStompingTantrumRockTemplate =
+{
+    .tileTag = ANIM_TAG_SMALL_ROCK,
+    .paletteTag = ANIM_TAG_ROCKS,
+    .oam = &gOamData_AffineNormal_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_TearDrop,
+    .callback = AnimTearDrop
+};
+
 static u8 LoadBattleAnimTarget(u8 arg)
 {
     u8 battler;

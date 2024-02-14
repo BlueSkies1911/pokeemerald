@@ -1597,6 +1597,21 @@
 	various \battler, VARIOUS_TRACE_ABILITY
 	.endm
 
+	.macro getstatvalue battler:req, stat:req
+	various \battler, VARIOUS_GET_STAT_VALUE
+	.byte \stat
+	.endm
+
+	.macro jumpiffullhp battler:req, jumpInstr:req
+	various \battler, VARIOUS_JUMP_IF_FULL_HP
+	.4byte \jumpInstr
+	.endm
+
+	.macro losetype battler:req, type:req
+	various \battler, VARIOUS_LOSE_TYPE
+	.byte \type
+	.endm
+
 	.macro tryfriskmsg battler:req
 	various \battler, VARIOUS_TRY_FRISK
 	.endm

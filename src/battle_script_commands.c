@@ -1005,6 +1005,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SNATCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SNORE] = FORBIDDEN_METRONOME,
     [MOVE_SOLAR_BEAM] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_SPOTLIGHT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SWITCHEROO] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_THIEF] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_TRANSFORM] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC,
@@ -1204,6 +1205,8 @@ static void Cmd_attackcanceler(void)
         return;
     }
     if (AtkCanceller_UnableToUseMove())
+        return;
+    if (AtkCanceller_UnableToUseMove2())
         return;
     if (AbilityBattleEffects(ABILITYEFFECT_MOVES_BLOCK, gBattlerTarget, 0, 0, 0))
         return;
@@ -1654,7 +1657,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
             RecordAbilityBattle(battlerDef, abilityDef);
         critChance = -1;
     }
-    else if (gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT)
+    else if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS
+             || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT)
     {
         critChance = -2;
     }
@@ -3107,6 +3111,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_MoveEffectBugBite;
                 }
+                break;
+            case MOVE_EFFECT_BURN_UP:
+                // This seems unnecessary but is done to make it work properly with Parental Bond
+                BattleScriptPush(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = BattleScript_BurnUpRemoveType;
                 break;
             case MOVE_EFFECT_ROUND:
                 TryUpdateRoundTurnOrder(); // If another Pokémon uses Round before the user this turn, the user will use Round directly after it
@@ -4890,6 +4899,11 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_UPDATE_LAST_MOVES:
+            if (gMoveResultFlags & (MOVE_RESULT_FAILED | MOVE_RESULT_DOESNT_AFFECT_FOE))
+                gBattleStruct->lastMoveFailed |= gBitTable[gBattlerAttacker];
+            else
+                gBattleStruct->lastMoveFailed &= ~(gBitTable[gBattlerAttacker]);
+
             if (gHitMarker & HITMARKER_SWAP_ATTACKER_TARGET)
             {
                 gActiveBattler = gBattlerAttacker;
@@ -7062,6 +7076,10 @@ static void HandleTerrainMove(u16 move)
         statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         break;
+    case EFFECT_PSYCHIC_TERRAIN:
+        statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+        break;
     }
 
     if (gFieldStatuses & statusFlag || statusFlag == 0)
@@ -7320,6 +7338,25 @@ static void Cmd_various(void)
         VARIOUS_ARGS();
         gLastUsedItem = gBattleMons[gActiveBattler].item;
         break;
+    }
+    case VARIOUS_GET_STAT_VALUE:
+    {
+        VARIOUS_ARGS(u8 stat);
+        i = cmd->stat;
+        gBattleMoveDamage = *(u16 *)(&gBattleMons[gActiveBattler].attack) + (i - 1);
+        gBattleMoveDamage *= gStatStageRatios[gBattleMons[gActiveBattler].statStages[i]][0];
+        gBattleMoveDamage /= gStatStageRatios[gBattleMons[gActiveBattler].statStages[i]][1];
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
+    case VARIOUS_JUMP_IF_FULL_HP:
+    {
+        VARIOUS_ARGS(const u8 *jumpInstr);
+        if (BATTLER_MAX_HP(gActiveBattler))
+            gBattlescriptCurrInstr = cmd->jumpInstr;
+        else
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
     }
     case VARIOUS_TRY_FRISK:
     {
@@ -8079,6 +8116,17 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr = cmd->nextInstr;
         return;
     }
+    case VARIOUS_LOSE_TYPE:
+    {
+        VARIOUS_ARGS(u8 type);
+        for (i = 0; i < 3; i++)
+        {
+            if (*(u8 *)(&gBattleMons[gActiveBattler].type1 + i) == cmd->type)
+                *(u8 *)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_MYSTERY;
+        }
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
     case VARIOUS_PSYCHO_SHIFT:
     {
         VARIOUS_ARGS(const u8 *failInstr);
@@ -8200,6 +8248,9 @@ static void Cmd_various(void)
                 break;
             case HOLD_EFFECT_PARAM_MISTY_TERRAIN:
                 effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN, STAT_SPDEF, item, FALSE);
+                break;
+            case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_SPDEF, item, FALSE);
                 break;
             }
 
@@ -11283,6 +11334,8 @@ u16 GetNaturePowerMove(void)
         return MOVE_THUNDERBOLT;
     else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
         return MOVE_ENERGY_BALL;
+    else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+        return MOVE_PSYCHIC;
     else if (sNaturePowerMoves == MOVE_NONE)
         return MOVE_TRI_ATTACK;
     return sNaturePowerMoves[gBattleTerrain];
@@ -11755,6 +11808,8 @@ static void Cmd_setuserstatus3(void)
         gStatuses3[gBattlerAttacker] |= flags;
         if (flags & STATUS3_MAGNET_RISE)
             gDisableStructs[gBattlerAttacker].magnetRiseTimer = 5;
+        if (flags & STATUS3_LASER_FOCUS)
+            gDisableStructs[gBattlerAttacker].laserFocusTimer = 2;
         gBattlescriptCurrInstr = cmd->nextInstr;
     }
 }
@@ -11917,6 +11972,9 @@ u16 GetSecretPowerMoveEffect(void)
             break;
         case STATUS_FIELD_ELECTRIC_TERRAIN:
             moveEffect = MOVE_EFFECT_PARALYSIS;
+            break;
+        case STATUS_FIELD_PSYCHIC_TERRAIN:
+            moveEffect = MOVE_EFFECT_SPD_MINUS_1;
             break;
         default:
             moveEffect = MOVE_EFFECT_PARALYSIS;
@@ -12144,6 +12202,9 @@ static void Cmd_settypetoterrain(void)
         break;
     case STATUS_FIELD_MISTY_TERRAIN:
         terrainType = TYPE_FAIRY;
+        break;
+    case STATUS_FIELD_PSYCHIC_TERRAIN:
+        terrainType = TYPE_PSYCHIC;
         break;
     default:
         terrainType = sTerrainToType[gBattleTerrain];
