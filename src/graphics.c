@@ -35,10 +35,16 @@ const u32 gBattleAnimSpritePal_Punishment[] = INCBIN_U32("graphics/battle_anims/
 const u32 gBattleAnimSpriteGfx_QuickGuard[] = INCBIN_U32("graphics/battle_anims/sprites/quick_guard.4bpp.lz");
 const u32 gBattleAnimSpritePal_QuickGuard[] = INCBIN_U32("graphics/battle_anims/sprites/quick_guard.gbapal.lz");
 
+const u32 gBattleAnimSpriteGfx_AssuranceHand[] = INCBIN_U32("graphics/battle_anims/sprites/assurance_hand.4bpp.lz");
+const u32 gBattleAnimSpritePal_AssuranceHand[] = INCBIN_U32("graphics/battle_anims/sprites/assurance_hand.gbapal.lz");
+
 const u32 gBattleAnimSpriteGfx_BerryNormal[] = INCBIN_U32("graphics/battle_anims/sprites/berry_normal.4bpp.lz");
 const u32 gBattleAnimSpritePal_BerryNormal[] = INCBIN_U32("graphics/battle_anims/sprites/berry_normal.gbapal.lz");
 
 const u32 gBattleAnimSpritePal_BlueFlare[] = INCBIN_U32("graphics/battle_anims/sprites/blue_flare.gbapal.lz");
+
+const u32 gBattleAnimSpriteGfx_Confide[] = INCBIN_U32("graphics/battle_anims/sprites/confide.4bpp.lz");
+const u32 gBattleAnimSpritePal_Confide[] = INCBIN_U32("graphics/battle_anims/sprites/confide.gbapal.lz");
 
 const u32 gBattleAnimSpriteGfx_HeartStamp[] = INCBIN_U32("graphics/battle_anims/sprites/heart_stamp.4bpp.lz");
 const u32 gBattleAnimSpritePal_HeartStamp[] = INCBIN_U32("graphics/battle_anims/sprites/heart_stamp.gbapal.lz");

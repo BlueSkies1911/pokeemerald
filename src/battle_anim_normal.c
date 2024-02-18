@@ -18,7 +18,6 @@ static void AnimShakeMonOrBattleTerrain_Step(struct Sprite *);
 static void AnimShakeMonOrBattleTerrain_UpdateCoordOffsetEnabled(void);
 static void AnimHitSplatPersistent(struct Sprite *);
 static void AnimHitSplatHandleInvert(struct Sprite *);
-static void AnimHitSplatRandom(struct Sprite *);
 static void AnimHitSplatOnMonEdge(struct Sprite *);
 static void AnimCrossImpact(struct Sprite *);
 static void AnimFlashingHitSplat(struct Sprite *);
@@ -263,7 +262,7 @@ const struct SpriteTemplate gRandomPosHitSplatSpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gAffineAnims_HitSplat,
-    .callback = AnimHitSplatRandom,
+    .callback = SpriteCB_RandomCentredHits,
 };
 
 const struct SpriteTemplate gMonEdgeHitSplatSpriteTemplate =
@@ -1067,7 +1066,7 @@ static void AnimHitSplatHandleInvert(struct Sprite *sprite)
     AnimHitSplatBasic(sprite);
 }
 
-static void AnimHitSplatRandom(struct Sprite *sprite)
+void AnimHitSplatRandom(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[1] == -1)
         gBattleAnimArgs[1] = Random2() & 3;

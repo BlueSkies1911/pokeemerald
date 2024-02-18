@@ -159,8 +159,8 @@ static const u16 sPrizeListMaxEther2[]   = {ITEM_MAX_ETHER,        ITEM_ETHER, I
 static const u16 sPrizeListElixir2[]     = {ITEM_ELIXIR,           ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
 static const u16 sPrizeListBrickBreak[]  = {ITEM_TM31_BRICK_BREAK, ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
 static const u16 sPrizeListTorment[]     = {ITEM_TM41_TORMENT,     ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
-static const u16 sPrizeListSkillSwap[]   = {ITEM_TM48_SKILL_SWAP,  ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
-static const u16 sPrizeListGigaDrain[]   = {ITEM_TM19_GIGA_DRAIN,  ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
+static const u16 sPrizeListRound[]       = {ITEM_TM48_ROUND,       ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
+static const u16 sPrizeListRoost[]       = {ITEM_TM19_ROOST,       ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
 static const u16 sPrizeListAttract[]     = {ITEM_TM45_ATTRACT,     ITEM_ETHER, ITEM_MAX_POTION, ITEM_REVIVE, ITEM_POKE_DOLL, ITEM_GREAT_BALL};
 
 static const u16 *const sPrizeLists1[NUM_TRAINER_TOWER_PRIZE_LISTS] =
@@ -186,8 +186,8 @@ static const u16 *const sPrizeLists2[NUM_TRAINER_TOWER_PRIZE_LISTS] =
     sPrizeListElixir2,
     sPrizeListBrickBreak,
     sPrizeListTorment,
-    sPrizeListSkillSwap,
-    sPrizeListGigaDrain,
+    sPrizeListRound,
+    sPrizeListRoost,
     sPrizeListAttract
 };
 
@@ -1042,7 +1042,7 @@ static u16 GetPrizeItemId(void)
     // The prizes for a time under 12 minutes are:
     // - ITEM_TM_SUNNY_DAY     (Normal)
     // - ITEM_ELIXIR           (Variety)
-    // - ITEM_TM19_GIGA_DRAIN  (Unique)
+    // - ITEM_TM19_ROOST       (Unique)
     // - ITEM_TM31_BRICK_BREAK (Expert)
     // As an additional note, if players were allowed to enter a Trainer Tower challenge before
     // entering the Hall of Fame, there would be 1 additional prize possibility (ITEM_MAX_ETHER)

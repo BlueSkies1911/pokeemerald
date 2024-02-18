@@ -1909,6 +1909,10 @@ static const u8 sRoundDescription[] = _(
     "A song that inflicts damage.\n"
     "Others can join in too.");
 
+static const u8 sEchoedVoiceDescription[] = _(
+    "Does more damage every turn\n"
+    "it is used.");
+
 static const u8 sChipAwayDescription[] = _(
     "Strikes through the foe's\n"
     "stat changes.");
@@ -1929,6 +1933,10 @@ static const u8 sAllySwitchDescription[] = _(
     "The user switches places\n"
     "with its partner.");
 
+static const u8 sScaldDescription[] = _(
+    "Shoots boiling water at the\n"
+    "foe. May inflict a burn.");
+
 static const u8 sShellSmashDescription[] = _(
     "Raises offensive stats, but\n"
     "lowers defensive stats.");
@@ -1948,6 +1956,10 @@ static const u8 sSkyDropDescription[] = _(
 static const u8 sCircleThrowDescription[] = _(
     "Knocks the foe away to end\n"
     "the battle.");
+
+static const u8 sQuashDescription[] = _(
+    "Suppresses the foe, making\n"
+    "it move last.");
 
 static const u8 sAcrobaticsDescription[] = _(
     "Does double damage if the\n"
@@ -2017,6 +2029,10 @@ static const u8 sHurricaneDescription[] = _(
     "Traps the foe in a fierce\n"
     "wind. May cause confusion.");
 
+static const u8 sSnarlDescription[] = _(
+    "Yells and rants at the foe\n"
+    "lowering its Sp. Atk.");
+
 static const u8 sIcicleCrashDescription[] = _(
     "Drops large icicles on the\n"
     "foe. May cause flinching.");
@@ -2073,6 +2089,10 @@ static const u8 sPlayNiceDescription[] = _(
     "Befriend the foe, lowering\n"
     "its Attack without fail.");
 
+static const u8 sConfideDescription[] = _(
+    "Shares a secret with the\n"
+    "foe, lowering Sp. Atk.");
+
 static const u8 sEerieImpulseDescription[] = _(
     "Exposes the foe to a pulse\n"
     "that sharply cuts Sp. Atk.");
@@ -2100,6 +2120,10 @@ static const u8 sBabyDollEyesDescription[] = _(
 static const u8 sNuzzleDescription[] = _(
     "Rubs its cheecks against\n"
     "the foe, paralyzing it.");
+
+static const u8 sInfestationDescription[] = _(
+    "The foe is infested and\n"
+    "attacked for 4 or 5 turns.");
 
 static const u8 sPowerUpPunchDescription[] = _(
     "A hard punch that raises\n"
@@ -2136,6 +2160,18 @@ static const u8 sPowerTripDescription[] = _(
 static const u8 sBurnUpDescription[] = _(
     "Burns out the user fully\n"
     "removing the Fire type.");
+
+static const u8 sSmartStrikeDescription[] = _(
+    "Hits with an accurate\n"
+    "horn that never misses.");
+
+static const u8 sBrutalSwingDescription[] = _(
+    "Violently swings around\n"
+    "to hurt everyone nearby.");
+
+static const u8 sAuroraVeilDescription[] = _(
+    "Weakens all attacks, but\n"
+    "only usable with hail.");
 
 static const u8 sStompingTantrumDescription[] = _(
     "Stomps around angrily.\n"
@@ -2626,22 +2662,26 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ENTRAINMENT - 1] = sEntrainmentDescription,
     [MOVE_AFTER_YOU - 1] = sAfterYouDescription,
     [MOVE_ROUND - 1] = sRoundDescription,
+    [MOVE_ECHOED_VOICE - 1] = sEchoedVoiceDescription,
     [MOVE_CHIP_AWAY - 1] = sChipAwayDescription,
     [MOVE_CLEAR_SMOG - 1] = sClearSmogDescription,
     [MOVE_STORED_POWER - 1] = sStoredPowerDescription,
     [MOVE_QUICK_GUARD - 1] = sQuickGuardDescription,
     [MOVE_ALLY_SWITCH - 1] = sAllySwitchDescription,
+    [MOVE_SCALD - 1] = sScaldDescription,
     [MOVE_SHELL_SMASH - 1] = sShellSmashDescription,
     [MOVE_HEAL_PULSE - 1] = sHealPulseDescription,
     [MOVE_HEX - 1] = sHexDescription,
     [MOVE_SKY_DROP - 1] = sSkyDropDescription,
     [MOVE_CIRCLE_THROW - 1] = sCircleThrowDescription,
+    [MOVE_QUASH - 1] = sQuashDescription,
     [MOVE_ACROBATICS - 1] = sAcrobaticsDescription,
     [MOVE_REFLECT_TYPE - 1] = sReflectTypeDescription,
     [MOVE_RETALIATE - 1] = sRetaliateDescription,
     [MOVE_FINAL_GAMBIT - 1] = sFinalGambitDescription,
     [MOVE_BESTOW - 1] = sBestowDescription,
     [MOVE_INFERNO - 1] = sInfernoDescription,
+    [MOVE_VOLT_SWITCH - 1] = sUTurnDescription,
     [MOVE_BULLDOZE - 1] = sBulldozeDescription,
     [MOVE_FROST_BREATH - 1] = sStormThrowDescription,
     [MOVE_DRAGON_TAIL - 1] = sCircleThrowDescription,
@@ -2670,6 +2710,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_PLAY_ROUGH - 1] = sPlayRoughDescription,
     [MOVE_MOONBLAST - 1] = sMoonblastDescription,
     [MOVE_PLAY_NICE - 1] = sPlayNiceDescription,
+    [MOVE_CONFIDE - 1] = sConfideDescription,
     [MOVE_EERIE_IMPULSE - 1] = sEerieImpulseDescription,
     [MOVE_VENOM_DRENCH - 1] = sVenomDrenchDescription,
     [MOVE_MAGNETIC_FLUX - 1] = sMagneticFluxDescription,
@@ -2677,6 +2718,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_DAZZLING_GLEAM - 1] = sDazzlingGleamDescription,
     [MOVE_BABY_DOLL_EYES - 1] = sBabyDollEyesDescription,
     [MOVE_NUZZLE - 1] = sNuzzleDescription,
+    [MOVE_INFESTATION - 1] = sInfestationDescription,
     [MOVE_POWER_UP_PUNCH - 1] = sPowerUpPunchDescription,
     [MOVE_FIRST_IMPRESSION - 1] = sFirstImpressionDescription,
     [MOVE_HIGH_HORSEPOWER - 1] = sHighHorsepowerDescription,
@@ -2686,5 +2728,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_PSYCHIC_TERRAIN - 1] = sPsychicTerrainDescription,
     [MOVE_POWER_TRIP - 1] = sPowerTripDescription,
     [MOVE_BURN_UP - 1] = sBurnUpDescription,
+    [MOVE_SMART_STRIKE - 1] = sSmartStrikeDescription,
+    [MOVE_BRUTAL_SWING - 1] = sBrutalSwingDescription,
+    [MOVE_AURORA_VEIL - 1] = sAuroraVeilDescription,
     [MOVE_STOMPING_TANTRUM - 1] = sStompingTantrumDescription,
 };

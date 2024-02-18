@@ -245,6 +245,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_STORED_POWER
 	.4byte BattleScript_EffectHit                     @ EFFECT_ELECTRO_BALL
 	.4byte BattleScript_EffectHit                     @ EFFECT_GYRO_BALL
+	.4byte BattleScript_EffectHit                     @ EFFECT_ECHOED_VOICE
 	.4byte BattleScript_EffectHit                     @ EFFECT_PAYBACK
 	.4byte BattleScript_EffectRound                   @ EFFECT_ROUND
 	.4byte BattleScript_EffectHit                     @ EFFECT_BRINE
@@ -278,6 +279,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSimpleBeam              @ EFFECT_SIMPLE_BEAM
 	.4byte BattleScript_EffectEntrainment             @ EFFECT_ENTRAINMENT
 	.4byte BattleScript_EffectHealPulse               @ EFFECT_HEAL_PULSE
+	.4byte BattleScript_EffectQuash                   @ EFFECT_QUASH
 	.4byte BattleScript_EffectIonDeluge               @ EFFECT_ION_DELUGE
 	.4byte BattleScript_EffectFreezeHit               @ EFFECT_FREEZE_DRY
 	.4byte BattleScript_EffectMistyTerrain            @ EFFECT_MISTY_TERRAIN
@@ -315,6 +317,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectAfterYou                @ EFFECT_AFTER_YOU
 	.4byte BattleScript_EffectBestow                  @ EFFECT_BESTOW
 	.4byte BattleScript_EffectRototiller              @ EFFECT_ROTOTILLER
+	.4byte BattleScript_EffectAuroraVeil              @ EFFECT_AURORA_VEIL
 	.4byte BattleScript_EffectFeint                   @ EFFECT_FEINT
 	.4byte BattleScript_EffectAcupressure             @ EFFECT_ACUPRESSURE
 	.4byte BattleScript_EffectSpAtkUpHit              @ EFFECT_SP_ATTACK_UP_HIT
@@ -1259,6 +1262,18 @@ BattleScript_EffectIonDeluge:
 	attackanimation
 	waitanimation
 	printstring STRINGID_IONDELUGEON
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectQuash:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	tryquash BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_QUASHSUCCESS
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
@@ -2249,6 +2264,13 @@ BattleScript_ImmunityProtected::
 BattleScript_EffectPayDay::
 	setmoveeffect MOVE_EFFECT_PAYDAY
 	goto BattleScript_EffectHit
+
+BattleScript_EffectAuroraVeil:
+	attackcanceler
+	attackstring
+	ppreduce
+	setauroraveil BS_ATTACKER
+	goto BattleScript_PrintReflectLightScreenSafeguardString
 
 BattleScript_EffectLightScreen::
 	attackcanceler

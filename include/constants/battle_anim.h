@@ -325,12 +325,14 @@
 #define ANIM_TAG_SHELL_RIGHT                (ANIM_SPRITES_START + 313)
 #define ANIM_TAG_SHELL_LEFT                 (ANIM_SPRITES_START + 314)
 #define ANIM_TAG_RAZOR_SHELL                (ANIM_SPRITES_START + 315)
-#define ANIM_TAG_BERRY_NORMAL               (ANIM_SPRITES_START + 316)
-#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 317)
-#define ANIM_TAG_HORSESHOE_SIDE_FIST        (ANIM_SPRITES_START + 318)
-#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 319)
-#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 320)
-#define ANIM_TAG_SMALL_ROCK                 (ANIM_SPRITES_START + 321)
+#define ANIM_TAG_ASSURANCE_HAND             (ANIM_SPRITES_START + 316)
+#define ANIM_TAG_BERRY_NORMAL               (ANIM_SPRITES_START + 317)
+#define ANIM_TAG_CONFIDE                    (ANIM_SPRITES_START + 318)
+#define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 319)
+#define ANIM_TAG_HORSESHOE_SIDE_FIST        (ANIM_SPRITES_START + 320)
+#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 321)
+#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 322)
+#define ANIM_TAG_SMALL_ROCK                 (ANIM_SPRITES_START + 323)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -470,6 +472,7 @@
 #define TRAP_ANIM_WHIRLPOOL 2
 #define TRAP_ANIM_CLAMP 3
 #define TRAP_ANIM_SAND_TOMB 4
+#define TRAP_ANIM_INFESTATION 5
 
 // Weather defines for battle animation scripts.
 #define ANIM_WEATHER_NONE 0

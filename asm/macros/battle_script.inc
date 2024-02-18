@@ -1469,6 +1469,11 @@
 	.4byte \failInstr
 	.endm
 
+	.macro tryquash failInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_QUASH
+	.4byte \failInstr
+	.endm
+
 	.macro tryafteryou failInstr:req
 	various BS_ATTACKER, VARIOUS_AFTER_YOU
 	.4byte \failInstr
@@ -1567,6 +1572,10 @@
 
 	.macro argumenttomoveeffect
 	various BS_ATTACKER, VARIOUS_ARGUMENT_TO_MOVE_EFFECT
+	.endm
+
+	.macro setauroraveil battler:req
+	various \battler, VARIOUS_SET_AURORA_VEIL
 	.endm
 
 	.macro tryaccupressure battler:req, failInstr:req

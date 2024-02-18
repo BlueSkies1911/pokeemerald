@@ -125,7 +125,6 @@ static void AnimFlyingMusicNotes_Step(struct Sprite *);
 static void AnimBellyDrumHand(struct Sprite *);
 static void AnimSlowFlyingMusicNotes(struct Sprite *);
 static void AnimSlowFlyingMusicNotes_Step(struct Sprite *);
-static void AnimThoughtBubble(struct Sprite *);
 static void AnimThoughtBubble_Step(struct Sprite *);
 static void AnimMetronomeFinger(struct Sprite *);
 static void AnimMetronomeFinger_Step(struct Sprite *);
@@ -6356,7 +6355,7 @@ void SetSpriteNextToMonHead(u8 battler, struct Sprite *sprite)
     sprite->y = GetBattlerSpriteCoord(battler, BATTLER_COORD_Y_PIC_OFFSET) - (s16)GetBattlerSpriteCoordAttr(battler, BATTLER_COORD_ATTR_HEIGHT) / 4;
 }
 
-static void AnimThoughtBubble(struct Sprite *sprite)
+void AnimThoughtBubble(struct Sprite *sprite)
 {
     u8 animNum;
     u8 battler;

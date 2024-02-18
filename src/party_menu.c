@@ -229,6 +229,8 @@ EWRAM_DATA u8 gSelectedOrderFromParty[MAX_FRONTIER_PARTY_SIZE] = {0};
 static EWRAM_DATA u16 sPartyMenuItemId = 0;
 static EWRAM_DATA u16 sUnused = 0;
 EWRAM_DATA u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2] = {0}; // bits 0-3 are the current pos of Slot 1, 4-7 are Slot 2, and so on
+static EWRAM_DATA u8 sInitialLevel = 0;
+static EWRAM_DATA u8 sFinalLevel = 0;
 
 // IWRAM common
 void (*gItemUseCB)(u8, TaskFunc);
@@ -5266,10 +5268,9 @@ static void CB2_ShowSummaryScreenToForgetMove(void)
 
 static void CB2_ReturnToPartyMenuWhileLearningMove(void)
 {
-    if (gSpecialVar_ItemId == ITEM_RARE_CANDY && gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD && CheckBagHasItem(gSpecialVar_ItemId, 1))
-        InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_USE_ITEM, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
-    else
-        InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
+    if (sFinalLevel != 0)
+        SetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_LEVEL, &sFinalLevel); // to avoid displaying incorrect level
+    InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
 }
 
 static void Task_ReturnToPartyMenuWhileLearningMove(u8 taskId)
@@ -5379,7 +5380,8 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
     u16 *itemPtr = &gSpecialVar_ItemId;
     bool8 cannotUseEffect;
 
-    if (GetMonData(mon, MON_DATA_LEVEL) != MAX_LEVEL)
+    sInitialLevel = GetMonData(mon, MON_DATA_LEVEL);
+    if (sInitialLevel != MAX_LEVEL)
     {
         BufferMonStatsToTaskData(mon, arrayPtr);
         cannotUseEffect = ExecuteTableBasedItemEffect_(gPartyMenu.slotId, *itemPtr, 0);
@@ -5392,10 +5394,29 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc task)
     PlaySE(SE_SELECT);
     if (cannotUseEffect)
     {
-        gPartyMenuUseExitCallback = FALSE;
-        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
-        ScheduleBgCopyTilemapToVram(2);
-        gTasks[taskId].func = task;
+        u16 targetSpecies = SPECIES_NONE;
+
+        // Resets values to 0 so other means of teaching moves doesn't overwrite levels
+        sInitialLevel = 0;
+        sFinalLevel = 0;
+
+        targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_NORMAL, ITEM_NONE);
+
+        if (targetSpecies != SPECIES_NONE)
+        {
+            RemoveBagItem(gSpecialVar_ItemId, 1);
+            FreePartyPointers();
+            gCB2_AfterEvolution = gPartyMenu.exitCallback;
+            BeginEvolutionScene(mon, targetSpecies, TRUE, gPartyMenu.slotId);
+            DestroyTask(taskId);
+        }
+        else
+        {
+            gPartyMenuUseExitCallback = FALSE;
+            DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+            ScheduleBgCopyTilemapToVram(2);
+            gTasks[taskId].func = task;
+        }
     }
     else
     {
@@ -5441,6 +5462,7 @@ static void Task_DisplayLevelUpStatsPg2(u8 taskId)
     {
         PlaySE(SE_SELECT);
         DisplayLevelUpStatsPg2(taskId);
+        sInitialLevel += 1; // so the Pokemon doesn't learn a move meant for its previous level
         gTasks[taskId].func = Task_TryLearnNewMoves;
     }
 }
@@ -5471,43 +5493,58 @@ static void Task_TryLearnNewMoves(u8 taskId)
     if (WaitFanfare(FALSE) && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
     {
         RemoveLevelUpStatsWindow();
-        learnMove = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], TRUE);
-        gPartyMenu.learnMoveState = 1;
-        switch (learnMove)
+        for (; sInitialLevel <= sFinalLevel; sInitialLevel++)
         {
-        case 0: // No moves to learn
-            PartyMenuTryEvolution(taskId);
-            break;
-        case MON_HAS_MAX_MOVES:
-            DisplayMonNeedsToReplaceMove(taskId);
-            break;
-        case MON_ALREADY_KNOWS_MOVE:
-            gTasks[taskId].func = Task_TryLearningNextMove;
-            break;
-        default:
-            DisplayMonLearnedMove(taskId, learnMove);
-            break;
+            SetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_LEVEL, &sInitialLevel);
+            learnMove = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], TRUE);
+            gPartyMenu.learnMoveState = 1;
+            switch (learnMove)
+            {
+            case 0: // No moves to learn
+                if (sInitialLevel >= sFinalLevel)
+                    PartyMenuTryEvolution(taskId);
+                break;
+            case MON_HAS_MAX_MOVES:
+                DisplayMonNeedsToReplaceMove(taskId);
+                break;
+            case MON_ALREADY_KNOWS_MOVE:
+                gTasks[taskId].func = Task_TryLearningNextMove;
+                break;
+            default:
+                DisplayMonLearnedMove(taskId, learnMove);
+                break;
+            }
+            if (learnMove)
+                break;
         }
     }
 }
 
 static void Task_TryLearningNextMove(u8 taskId)
 {
-    u16 result = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], FALSE);
-
-    switch (result)
+    u16 result;
+    for (; sInitialLevel <= sFinalLevel; sInitialLevel++)
     {
-    case 0: // No moves to learn
-        PartyMenuTryEvolution(taskId);
-        break;
-    case MON_HAS_MAX_MOVES:
-        DisplayMonNeedsToReplaceMove(taskId);
-        break;
-    case MON_ALREADY_KNOWS_MOVE:
-        return;
-    default:
-        DisplayMonLearnedMove(taskId, result);
-        break;
+        SetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_LEVEL, &sInitialLevel);
+        result = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], FALSE);
+        switch (result)
+        {
+        case 0: // No moves to learn
+            if (sInitialLevel >= sFinalLevel)
+                PartyMenuTryEvolution(taskId);
+            break;
+        case MON_HAS_MAX_MOVES:
+            DisplayMonNeedsToReplaceMove(taskId);
+            break;
+        case MON_ALREADY_KNOWS_MOVE:
+            gTasks[taskId].func = Task_TryLearningNextMove;
+            return;
+        default:
+            DisplayMonLearnedMove(taskId, result);
+            break;
+        }
+        if (result)
+            break;
     }
 }
 
@@ -5520,11 +5557,11 @@ static void CB2_ReturnToPartyMenuUsingRareCandy(void)
 static void PartyMenuTryEvolution(u8 taskId)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-#ifdef POKEMON_EXPANSION 
-    u16 targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_NORMAL, ITEM_NONE, NULL);
-#else
     u16 targetSpecies = GetEvolutionTargetSpecies(mon, EVO_MODE_NORMAL, ITEM_NONE);
-#endif
+
+    // Resets values to 0 so other means of teaching moves doesn't overwrite levels
+    sInitialLevel = 0;
+    sFinalLevel = 0;
 
     if (targetSpecies != SPECIES_NONE)
     {

@@ -1109,6 +1109,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
               || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
                 score -= 10;
             break;
+        case EFFECT_AURORA_VEIL:
+            if (gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_AURORA_VEIL
+              || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove)
+              || !(gBattleWeather & B_WEATHER_HAIL))
+                score -= 10;
+            break;
         case EFFECT_OHKO:
             if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
                 return 0;
@@ -1706,7 +1712,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_DEFOG:
             if (gSideStatuses[GetBattlerSide(battlerDef)]
-             & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_SAFEGUARD | SIDE_STATUS_MIST)
+             & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SAFEGUARD | SIDE_STATUS_MIST)
+              || gSideTimers[GetBattlerSide(battlerDef)].auroraVeilTimer != 0
               || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_HAZARDS_ANY)
             {
                 if (PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
@@ -2041,6 +2048,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             // fallthrough
         case EFFECT_DO_NOTHING:
             score -= 10;
+            break;
+        case EFFECT_QUASH:
+            if (!isDoubleBattle
+            || AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_SLOWER
+            || PartnerMoveIsSameAsAttacker(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
+                score -= 10;
             break;
         case EFFECT_AFTER_YOU:
             if (!IsTargetingPartner(battlerAtk, battlerDef)
@@ -2876,6 +2889,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_LIGHT_SCREEN:
     case EFFECT_REFLECT:
+    case EFFECT_AURORA_VEIL:
         if (ShouldSetScreen(battlerAtk, battlerDef, moveEffect))
         {
             score += 5;
@@ -3272,6 +3286,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_HAIL:
         if (ShouldSetHail(battlerAtk, AI_DATA->abilities[battlerAtk], AI_DATA->holdEffects[battlerAtk]))
         {
+            if ((HasMoveEffect(battlerAtk, EFFECT_AURORA_VEIL) || HasMoveEffect(BATTLE_PARTNER(battlerAtk), EFFECT_AURORA_VEIL))
+              && ShouldSetScreen(battlerAtk, battlerDef, EFFECT_AURORA_VEIL))
+                score += 3;
+
             score++;
             if (AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_ICY_ROCK)
                 score++;
@@ -3616,6 +3634,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             score++;
         if (gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_LIGHTSCREEN)
             score++;
+        if (gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_AURORA_VEIL)
+            score++;
         break;
     case EFFECT_KNOCK_OFF:
         if (CanKnockOffItem(battlerDef, AI_DATA->items[battlerDef]))
@@ -3886,6 +3906,11 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_SOAK:
         if (HasMoveWithType(battlerAtk, TYPE_ELECTRIC) || HasMoveWithType(battlerAtk, TYPE_GRASS) || HasMoveEffect(battlerAtk, EFFECT_FREEZE_DRY))
             score += 2; // Get some super effective moves
+        break;
+    case EFFECT_QUASH:
+        if (isDoubleBattle
+          && AI_WhoStrikesFirst(BATTLE_PARTNER(battlerAtk), battlerDef, AI_DATA->partnerMove) == AI_IS_SLOWER) // Attacker partner wouldn't go before target
+            score++;
         break;
     case EFFECT_TAILWIND:
         if (GetBattlerSideSpeedAverage(battlerAtk) < GetBattlerSideSpeedAverage(battlerDef))
@@ -4311,6 +4336,7 @@ static s16 AI_HPAware(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             case EFFECT_CONVERSION:
             case EFFECT_REFLECT:
             case EFFECT_LIGHT_SCREEN:
+            case EFFECT_AURORA_VEIL:
             case EFFECT_MIST:
             case EFFECT_FOCUS_ENERGY:
             case EFFECT_RAGE:

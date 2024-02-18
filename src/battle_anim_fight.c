@@ -15,7 +15,6 @@ static void AnimCrossChopHand(struct Sprite *);
 static void AnimCrossChopHand_Step(struct Sprite *);
 static void AnimSlidingKick(struct Sprite *);
 static void AnimSlidingKick_Step(struct Sprite *);
-static void AnimStompFoot(struct Sprite *);
 static void AnimStompFoot_Step(struct Sprite *);
 static void AnimStompFoot_End(struct Sprite *);
 static void AnimDizzyPunchDuck(struct Sprite *);
@@ -711,7 +710,7 @@ static void AnimSpinningKickOrPunchFinish(struct Sprite *sprite)
 // arg 0: initial x pixel offset
 // arg 1: initial y pixel offset
 // arg 2: initial wait duration
-static void AnimStompFoot(struct Sprite *sprite)
+void AnimStompFoot(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, TRUE);
     sprite->data[0] = gBattleAnimArgs[2];

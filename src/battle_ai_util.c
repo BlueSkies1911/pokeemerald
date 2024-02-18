@@ -1214,6 +1214,7 @@ bool32 ShouldSetHail(u8 battler, u16 ability, u16 holdEffect)
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
       || HasMove(battler, MOVE_BLIZZARD)
+      || HasMoveEffect(battler, EFFECT_AURORA_VEIL)
       || HasMoveEffect(battler, EFFECT_WEATHER_BALL))
     {
         return TRUE;
@@ -2614,6 +2615,12 @@ bool32 ShouldSetScreen(u8 battlerAtk, u8 battlerDef, u16 moveEffect)
     u8 atkSide = GetBattlerSide(battlerAtk);
     switch (moveEffect)
     {
+    case EFFECT_AURORA_VEIL:
+        // Use only in Hail and only if AI doesn't already have Reflect, Light Screen or Aurora Veil itself active.
+        if (gBattleWeather & B_WEATHER_HAIL
+            && !(gSideStatuses[atkSide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL)))
+            return TRUE;
+        break;
     case EFFECT_REFLECT:
         // Use only if the player has a physical move and AI doesn't already have Reflect itself active.
         if (HasMoveWithSplit(battlerDef, SPLIT_PHYSICAL)

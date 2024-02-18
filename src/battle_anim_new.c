@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle_anim.h"
+#include "random.h"
 #include "gpu_regs.h"
 #include "item_icon.h"
 
@@ -8,6 +9,16 @@ static void SpriteCB_SpriteOnMonForDuration(struct Sprite *sprite);
 static void SpriteCB_ToxicThreadWrap(struct Sprite *sprite);
 static void SpriteCB_SurroundingRing(struct Sprite *sprite);
 static void AnimSkyDropBallUp(struct Sprite *sprite);
+
+// const data
+// general
+static const union AffineAnimCmd sSquishTargetAffineAnimCmds[] =
+{
+    AFFINEANIMCMD_FRAME(0, 64, 0, 16), //Flatten
+    AFFINEANIMCMD_FRAME(0, 0, 0, 64),
+    AFFINEANIMCMD_FRAME(0, -64, 0, 16),
+    AFFINEANIMCMD_END,
+};
 
 // GEN 4
 // shadow sneak
@@ -382,6 +393,18 @@ const struct SpriteTemplate gCircleThrowRingTemplate =
     .callback = AnimSpriteOnMonPos
 };
 
+//quash
+const struct SpriteTemplate gQuashArmHitTemplate =
+{
+    .tileTag = ANIM_TAG_ASSURANCE_HAND,
+    .paletteTag = ANIM_TAG_ASSURANCE_HAND,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gAnims_HandsAndFeet,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimStompFoot
+};
+
 //reflect type
 const struct SpriteTemplate gReflectTypeBlueStringTemplate =
 {
@@ -674,6 +697,18 @@ const struct SpriteTemplate gMistyTerrainStarTemplate =
     .callback = AnimOrbitScatter
 };
 
+//confide
+const struct SpriteTemplate gConfideBubbleTemplate =
+{
+    .tileTag = ANIM_TAG_CONFIDE,
+    .paletteTag = ANIM_TAG_CONFIDE,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gMetronomeThroughtBubbleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimThoughtBubble
+};
+
 //eerie impulse
 const struct SpriteTemplate gEerieImpulseRingTemplate =
 {
@@ -742,6 +777,18 @@ const struct SpriteTemplate gElectricTerrainFlyingBallTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimOrbitScatter
+};
+
+//infestation
+const struct SpriteTemplate gInfestationBubbleTemplate =
+{
+    .tileTag = ANIM_TAG_SMALL_BUBBLES,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gAnims_WaterPulseBubble,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimParticleInVortex
 };
 
 // GEN 7
@@ -873,6 +920,64 @@ const struct SpriteTemplate gBurnUpRedYawnTemplate =
     .callback = AnimThrowMistBall
 };
 
+//smart strike
+const struct SpriteTemplate gSmartStrikeGemTemplate =
+{
+    .tileTag = ANIM_TAG_POWER_GEM,
+    .paletteTag = ANIM_TAG_POWER_GEM,
+    .oam = &gOamData_AffineNormal_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimNeedleArmSpike
+};
+
+const struct SpriteTemplate gSmartStrikeImpactTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_FLASH_CANNON_BALL,
+    .oam = &gOamData_AffineNormal_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_HitSplat,
+    .callback = AnimHitSplatBasic
+};
+
+//brutal swing
+const struct SpriteTemplate gBrutalSwingRandomImpactTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineNormal_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_HitSplat,
+    .callback = AnimHitSplatRandom
+};
+
+const struct SpriteTemplate gBrutalSwingBasicImpactTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineNormal_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_HitSplat,
+    .callback = AnimHitSplatBasic
+};
+
+//aurora veil
+const struct SpriteTemplate gAuroraVeilRingTemplate =
+{
+    .tileTag = ANIM_TAG_GUARD_RING,
+    .paletteTag = ANIM_TAG_GUARD_RING,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gGuardRingAffineAnimTable,
+    .callback = SpriteCB_SurroundingRing
+};
+
 //stomping tantrum
 const struct SpriteTemplate gStompingTantrumRockTemplate =
 {
@@ -918,6 +1023,42 @@ static u8 LoadBattleAnimTarget(u8 arg)
     return battler;
 }
 
+static void InitSpritePosToAnimTargetsCentre(struct Sprite *sprite, bool8 respectMonPicOffsets)
+{
+    if (!respectMonPicOffsets)
+    {
+        sprite->x = (GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_X)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimTarget), BATTLER_COORD_X)) / 2;
+        sprite->y = (GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_Y)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimTarget), BATTLER_COORD_Y)) / 2;
+    }
+
+    SetAnimSpriteInitialXOffset(sprite, gBattleAnimArgs[0]);
+    sprite->y += gBattleAnimArgs[1];
+}
+
+static void InitSpritePosToAnimAttackersCentre(struct Sprite *sprite, bool8 respectMonPicOffsets)
+{
+    if (!respectMonPicOffsets)
+    {
+        sprite->x = (GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_X)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimAttacker), BATTLER_COORD_X)) / 2;
+        sprite->y = (GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_Y)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimAttacker), BATTLER_COORD_Y)) / 2;
+    }
+    else
+    {
+        sprite->x = (GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_X_2)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimAttacker), BATTLER_COORD_X_2)) / 2;
+        sprite->y = (GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET)
+                       +  GetBattlerSpriteCoord2(BATTLE_PARTNER(gBattleAnimAttacker), BATTLER_COORD_Y_PIC_OFFSET)) / 2;
+    }
+
+    SetAnimSpriteInitialXOffset(sprite, gBattleAnimArgs[0]);
+    sprite->y += gBattleAnimArgs[1];
+}
+
+//sprite callbacks
 static void SpriteCB_SpriteOnMonForDuration(struct Sprite *sprite)
 {
     u8 target = LoadBattleAnimTarget(0);
@@ -954,6 +1095,35 @@ static void SpriteCB_ToxicThreadWrap(struct Sprite *sprite)
     sprite->callback = AnimStringWrap_Step;
 }
 
+void SpriteCB_RandomCentredHits(struct Sprite *sprite)
+{
+    if (gBattleAnimArgs[1] == -1)
+        gBattleAnimArgs[1] = Random() & 3;
+
+    StartSpriteAffineAnim(sprite, gBattleAnimArgs[1]);
+
+    if (gBattleAnimArgs[0] == 0)
+    {
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+            InitSpritePosToAnimAttackersCentre(sprite, FALSE);
+        else
+            InitSpritePosToAnimAttacker(sprite, FALSE);
+    }
+    else
+    {
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+            InitSpritePosToAnimTargetsCentre(sprite, FALSE);
+        else
+            InitSpritePosToAnimTarget(sprite, FALSE);
+    }
+
+    sprite->x2 += (Random() % 48) - 24;
+    sprite->y2 += (Random() % 24) - 12;
+
+    StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
+    sprite->callback = RunStoredCallbackWhenAffineAnimEnds;
+}
+
 static void SpriteCB_SurroundingRing(struct Sprite *sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, 0);
@@ -974,6 +1144,23 @@ static void AnimSkyDropBallUp(struct Sprite *sprite)
     sprite->data[1] = gBattleAnimArgs[3];
     sprite->callback = AnimFlyBallUp_Step;
     gSprites[GetAnimBattlerSpriteId(ANIM_ATTACKER)].invisible = TRUE;
+}
+
+static void AnimTask_WaitAffineAnim(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+
+    if (!RunAffineAnimFromTaskData(task))
+        DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SquishTarget(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+    u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
+
+    PrepareAffineAnimInTaskData(task, spriteId, sSquishTargetAffineAnimCmds);
+    task->func = AnimTask_WaitAffineAnim;
 }
 
 void AnimTask_CreateBestowItem(u8 taskId)

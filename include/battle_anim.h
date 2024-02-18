@@ -247,6 +247,7 @@ void AnimPetalDanceBigFlower(struct Sprite *sprite);
 void AnimEndureEnergy(struct Sprite *);
 void AnimMimicOrb(struct Sprite *);
 void AnimNeedleArmSpike_Step(struct Sprite *sprite);
+void AnimThoughtBubble(struct Sprite *);
 void AnimConversion(struct Sprite *);
 void AnimGrantingStars(struct Sprite *);
 extern const union AnimCmd *const gRazorLeafParticleAnimTable[];
@@ -260,6 +261,7 @@ extern const union AnimCmd *const gMoonlightSparkleAnimTable[];
 extern const union AnimCmd *const gConversionAnimTable[];
 extern const union AffineAnimCmd *const gConversionAffineAnimTable[];
 extern const union AnimCmd *const gScratchAnimTable[];
+extern const union AnimCmd *const gMetronomeThroughtBubbleAnimTable[];
 
 // battle_anim_effects_2.c
 void AnimUproarRing(struct Sprite *);
@@ -280,6 +282,7 @@ extern const union AnimCmd *const gOpeningEyeAnimTable[];
 // battle_anim_water.c
 void AnimWaterPulseRing(struct Sprite *sprite);
 extern const union AnimCmd *const gAnims_FlamethrowerFlame[];
+extern const union AnimCmd *const gAnims_WaterPulseBubble[];
 
 // battle_anim_flying.c
 void DestroyAnimSpriteAfterTimer(struct Sprite *sprite);
@@ -367,11 +370,13 @@ extern const union AffineAnimCmd *const gAffineAnims_Bite[];
 // battle_anim_normal.c
 extern const union AffineAnimCmd *const gAffineAnims_HitSplat[];
 void AnimHitSplatBasic(struct Sprite *sprite);
+void AnimHitSplatRandom(struct Sprite *);
 
 // battle_anim_electric.c
 extern const union AnimCmd *const gAnims_ElectricChargingParticles[];
 
 // battle_anim_fight.c
+void AnimStompFoot(struct Sprite *);
 void AnimSpinningKickOrPunch(struct Sprite *);
 void AnimBrickBreakWall_Step(struct Sprite *sprite);
 void AnimBasicFistOrFoot(struct Sprite *);
@@ -408,5 +413,8 @@ extern const union AffineAnimCmd *const gAffineAnims_DragonRageFire[];
 extern const union AnimCmd *const gAnims_DragonRageFire[];
 void AnimDragonRageFirePlume(struct Sprite *);
 void AnimDragonFireToTarget(struct Sprite *);
+
+// battle_anim_new.c
+void SpriteCB_RandomCentredHits(struct Sprite *sprite);
 
 #endif // GUARD_BATTLE_ANIM_H

@@ -82,7 +82,7 @@ u8 ItemId_GetFlingPower(u16 itemId);
 /* Expands to:
  * enum
  * {
- *   ITEM_TM_FOCUS_PUNCH,
+ *   ITEM_TM_WORK_UP,
  *   ...
  *   ITEM_HM_CUT,
  *   ...

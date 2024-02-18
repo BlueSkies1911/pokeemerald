@@ -3112,6 +3112,7 @@ void FaintClearSetData(void)
     memset(&gDisableStructs[gActiveBattler], 0, sizeof(struct DisableStruct));
 
     gProtectStructs[gActiveBattler].protected = FALSE;
+    gProtectStructs[gActiveBattler].quash = FALSE;
     gProtectStructs[gActiveBattler].endured = FALSE;
     gProtectStructs[gActiveBattler].noValidMoves = FALSE;
     gProtectStructs[gActiveBattler].helpingHand = FALSE;
@@ -4477,6 +4478,9 @@ s8 GetMovePriority(u32 battlerId, u16 move)
 
     priority = gBattleMoves[move].priority;
 
+    if (gProtectStructs[battlerId].quash)
+        priority = -8;
+
     return priority;
 }
 
@@ -4672,20 +4676,17 @@ static void SetActionsAndBattlersTurnOrder(void)
 static void TurnValuesCleanUp(bool8 var0)
 {
     s32 i;
-    u8 *dataPtr;
 
     for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
     {
         if (var0)
         {
-            gProtectStructs[gActiveBattler].protected = 0;
-            gProtectStructs[gActiveBattler].endured = 0;
+            gProtectStructs[gActiveBattler].protected = FALSE;
+            gProtectStructs[gActiveBattler].quash = FALSE;
         }
         else
         {
-            dataPtr = (u8 *)(&gProtectStructs[gActiveBattler]);
-            for (i = 0; i < sizeof(struct ProtectStruct); i++)
-                dataPtr[i] = 0;
+            memset(&gProtectStructs[gActiveBattler], 0, sizeof(struct ProtectStruct));
 
             if (gDisableStructs[gActiveBattler].isFirstTurn)
                 gDisableStructs[gActiveBattler].isFirstTurn--;
@@ -4710,14 +4711,7 @@ static void TurnValuesCleanUp(bool8 var0)
 
 void SpecialStatusesClear(void)
 {
-    for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
-    {
-        s32 i;
-        u8 *dataPtr = (u8 *)(&gSpecialStatuses[gActiveBattler]);
-
-        for (i = 0; i < sizeof(struct SpecialStatus); i++)
-            dataPtr[i] = 0;
-    }
+    memset(&gSpecialStatuses, 0, sizeof(gSpecialStatuses));
 }
 
 static void CheckChosenMoveForEffectsBeforeTurnStarts(void)

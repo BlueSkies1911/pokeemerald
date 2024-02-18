@@ -122,6 +122,7 @@ struct ProtectStruct
     u32 usedGravityPreventedMove:1;
     u32 usedMicleBerry:1;
     u32 usedCustapBerry:1;    // also quick claw
+    u16 quash:1;
     u32 physicalDmg;
     u32 specialDmg;
     u8 physicalBattlerId;
@@ -173,6 +174,8 @@ struct SideTimer
     u8 spikesAmount;
     u8 toxicSpikesAmount;
     u8 stealthRockAmount;
+    u8 auroraVeilTimer;
+    u8 auroraVeilBattlerId;
     u8 tailwindTimer;
     u8 tailwindBattlerId;
     u8 luckyChantTimer;

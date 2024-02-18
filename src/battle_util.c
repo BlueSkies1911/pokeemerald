@@ -1652,6 +1652,7 @@ enum
     ENDTURN_ORDER,
     ENDTURN_REFLECT,
     ENDTURN_LIGHT_SCREEN,
+    ENDTURN_AURORA_VEIL,
     ENDTURN_MIST,
     ENDTURN_LUCKY_CHANT,
     ENDTURN_SAFEGUARD,
@@ -1704,7 +1705,9 @@ u8 DoFieldEndTurnEffects(void)
                 s32 j;
                 for (j = i + 1; j < gBattlersCount; j++)
                 {
-                    if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], FALSE))
+                    if (!gProtectStructs[i].quash
+                            && !gProtectStructs[j].quash
+                            && GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], FALSE))
                         SwapTurnOrder(i, j);
                 }
             }
@@ -1758,6 +1761,32 @@ u8 DoFieldEndTurnEffects(void)
                     break;
             }
             if (effect == 0)
+            {
+                gBattleStruct->turnCountersTracker++;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
+        case ENDTURN_AURORA_VEIL:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerAttacker = gSideTimers[side].auroraVeilBattlerId;
+                if (gSideStatuses[side] & SIDE_STATUS_AURORA_VEIL)
+                {
+                    if (--gSideTimers[side].auroraVeilTimer == 0)
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
+                        gBattleCommunication[MULTISTRING_CHOOSER] = side;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_AURORA_VEIL);
+                        effect++;
+                    }
+                }
+                gBattleStruct->turnSideTracker++;
+                if (effect != 0)
+                    break;
+            }
+            if (!effect)
             {
                 gBattleStruct->turnCountersTracker++;
                 gBattleStruct->turnSideTracker = 0;
@@ -6346,6 +6375,15 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (basePower > 150)
             basePower = 150;
         break;
+    case EFFECT_ECHOED_VOICE:
+        // gBattleStruct->sameMoveTurns incremented in ppreduce
+        if (gBattleStruct->sameMoveTurns[battlerAtk] != 0)
+        {
+            basePower += (basePower * gBattleStruct->sameMoveTurns[battlerAtk]);
+            if (basePower > 200)
+                basePower = 200;
+        }
+        break;
     case EFFECT_PAYBACK:
         if (GetBattlerTurnOrderNum(battlerAtk) > GetBattlerTurnOrderNum(battlerDef)
             && (gDisableStructs[battlerDef].isFirstTurn != 2))
@@ -6823,7 +6861,8 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
 
     // reflect, light screen, aurora veil
     if (((gSideStatuses[defSide] & SIDE_STATUS_REFLECT && IS_MOVE_PHYSICAL(move))
-            || (gSideStatuses[defSide] & SIDE_STATUS_LIGHTSCREEN && IS_MOVE_SPECIAL(move)))
+            || (gSideStatuses[defSide] & SIDE_STATUS_LIGHTSCREEN && IS_MOVE_SPECIAL(move))
+            || (gSideStatuses[defSide] & SIDE_STATUS_AURORA_VEIL))
         && !(isCrit)
         && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
     {

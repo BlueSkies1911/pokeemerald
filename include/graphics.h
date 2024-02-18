@@ -3192,9 +3192,13 @@ extern const u32 gBattleAnimSpritePal_WaterGun[];
 extern const u32 gBattleAnimSpriteGfx_Punishment[];
 extern const u32 gBattleAnimSpritePal_Punishment[];
 
+extern const u32 gBattleAnimSpriteGfx_AssuranceHand[];
+extern const u32 gBattleAnimSpritePal_AssuranceHand[];
 extern const u32 gBattleAnimSpriteGfx_BerryNormal[];
 extern const u32 gBattleAnimSpritePal_BerryNormal[];
 extern const u32 gBattleAnimSpritePal_BlueFlare[];
+extern const u32 gBattleAnimSpriteGfx_Confide[];
+extern const u32 gBattleAnimSpritePal_Confide[];
 extern const u32 gBattleAnimSpriteGfx_HeartStamp[];
 extern const u32 gBattleAnimSpritePal_HeartStamp[];
 extern const u32 gBattleAnimSpriteGfx_HorseshoeFist[];

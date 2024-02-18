@@ -312,7 +312,7 @@ static const s32 sExperienceScalingFactors[] =
 
 const u16 sTrappingMoves[NUM_TRAPPING_MOVES] =
 {
-    MOVE_BIND, MOVE_WRAP, MOVE_FIRE_SPIN, MOVE_CLAMP, MOVE_WHIRLPOOL, MOVE_SAND_TOMB,
+    MOVE_BIND, MOVE_WRAP, MOVE_FIRE_SPIN, MOVE_CLAMP, MOVE_WHIRLPOOL, MOVE_SAND_TOMB, MOVE_INFESTATION,
 };
 
 #define STAT_CHANGE_WORKED      0
@@ -993,6 +993,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_MIRROR_MOVE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
     [MOVE_NATURE_POWER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
     [MOVE_PROTECT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_QUASH] = FORBIDDEN_METRONOME,
     [MOVE_QUICK_GUARD] = FORBIDDEN_METRONOME,
     [MOVE_RAGE_POWDER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_RAZOR_WIND] = FORBIDDEN_SLEEP_TALK,
@@ -1002,6 +1003,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SKY_ATTACK] = FORBIDDEN_SLEEP_TALK,
     [MOVE_SKY_DROP] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
     [MOVE_SLEEP_TALK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_SNARL] = FORBIDDEN_METRONOME,
     [MOVE_SNATCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SNORE] = FORBIDDEN_METRONOME,
     [MOVE_SOLAR_BEAM] = FORBIDDEN_SLEEP_TALK,
@@ -1061,7 +1063,7 @@ static const u16 sRarePickupItems[] =
     ITEM_WHITE_HERB,
     ITEM_TM_REST,
     ITEM_ELIXIR,
-    ITEM_TM_FOCUS_PUNCH,
+    ITEM_TM_WORK_UP,
     ITEM_LEFTOVERS,
     ITEM_TM_EARTHQUAKE,
 };
@@ -5977,47 +5979,57 @@ static void Cmd_switchineffects(void)
 
 static void Cmd_trainerslidein(void)
 {
-    gActiveBattler = GetBattlerAtPosition(gBattlescriptCurrInstr[1]);
+    CMD_ARGS(u8 battler);
+
+    gActiveBattler = GetBattlerAtPosition(cmd->battler);
     BtlController_EmitTrainerSlide(BUFFER_A);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_playse(void)
 {
+    CMD_ARGS(u16 song);
+
     gActiveBattler = gBattlerAttacker;
-    BtlController_EmitPlaySE(BUFFER_A, T2_READ_16(gBattlescriptCurrInstr + 1));
+    BtlController_EmitPlaySE(BUFFER_A, cmd->song);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 3;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_fanfare(void)
 {
+    CMD_ARGS(u16 song);
+
     gActiveBattler = gBattlerAttacker;
-    BtlController_EmitPlayFanfareOrBGM(BUFFER_A, T2_READ_16(gBattlescriptCurrInstr + 1), FALSE);
+    BtlController_EmitPlayFanfareOrBGM(BUFFER_A, cmd->song, FALSE);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 3;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_playfaintcry(void)
 {
-    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    CMD_ARGS(u8 battler);
+
+    gActiveBattler = GetBattlerForBattleScript(cmd->battler);
     BtlController_EmitFaintingCry(BUFFER_A);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_endlinkbattle(void)
 {
+    CMD_ARGS();
+
     gActiveBattler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
     BtlController_EmitEndLinkBattle(BUFFER_A, gBattleOutcome);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 1;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void Cmd_returntoball(void)
@@ -6033,10 +6045,12 @@ static void Cmd_returntoball(void)
 
 static void Cmd_handlelearnnewmove(void)
 {
-    const u8 *learnedMovePtr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8 *nothingToLearnPtr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
+    CMD_ARGS(const u8 *learnedMovePtr, const u8 *nothingToLearnPtr, bool8 isFirstMove);
 
-    u16 learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], gBattlescriptCurrInstr[9]);
+    const u8 *learnedMovePtr = cmd->learnedMovePtr;
+    const u8 *nothingToLearnPtr = cmd->nothingToLearnPtr;
+
+    u16 learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], cmd->isFirstMove);
     while (learnMove == MON_ALREADY_KNOWS_MOVE)
         learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], FALSE);
 
@@ -6046,7 +6060,7 @@ static void Cmd_handlelearnnewmove(void)
     }
     else if (learnMove == MON_HAS_MAX_MOVES)
     {
-        gBattlescriptCurrInstr += 10;
+        gBattlescriptCurrInstr = cmd->nextInstr;
     }
     else
     {
@@ -6073,6 +6087,8 @@ static void Cmd_handlelearnnewmove(void)
 
 static void Cmd_yesnoboxlearnmove(void)
 {
+    CMD_ARGS(const u8 *forgotMovePtr);
+
     gActiveBattler = 0;
 
     switch (gBattleScripting.learnMoveState)
@@ -6151,7 +6167,7 @@ static void Cmd_yesnoboxlearnmove(void)
                 }
                 else
                 {
-                    gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = cmd->forgotMovePtr;
 
                     PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId)
 
@@ -6176,7 +6192,7 @@ static void Cmd_yesnoboxlearnmove(void)
         break;
     case 5:
         HandleBattleWindow(YESNOBOX_X_Y, WINDOW_CLEAR);
-        gBattlescriptCurrInstr += 5;
+        gBattlescriptCurrInstr = cmd->nextInstr;
         break;
     case 6:
         if (gBattleControllerExecFlags == 0)
@@ -6189,6 +6205,8 @@ static void Cmd_yesnoboxlearnmove(void)
 
 static void Cmd_yesnoboxstoplearningmove(void)
 {
+    CMD_ARGS(const u8 *noInstr);
+
     switch (gBattleScripting.learnMoveState)
     {
     case 0:
@@ -6218,16 +6236,16 @@ static void Cmd_yesnoboxstoplearningmove(void)
             PlaySE(SE_SELECT);
 
             if (gBattleCommunication[1] != 0)
-                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = cmd->noInstr;
             else
-                gBattlescriptCurrInstr += 5;
+                gBattlescriptCurrInstr = cmd->nextInstr;
 
             HandleBattleWindow(YESNOBOX_X_Y, WINDOW_CLEAR);
         }
         else if (JOY_NEW(B_BUTTON))
         {
             PlaySE(SE_SELECT);
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = cmd->noInstr;
             HandleBattleWindow(YESNOBOX_X_Y, WINDOW_CLEAR);
         }
         break;
@@ -7155,6 +7173,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
             DEFOG_CLEAR(SIDE_STATUS_REFLECT, reflectTimer, BattleScript_SideStatusWoreOffReturn, MOVE_REFLECT);
             DEFOG_CLEAR(SIDE_STATUS_LIGHTSCREEN, lightscreenTimer, BattleScript_SideStatusWoreOffReturn, MOVE_LIGHT_SCREEN);
             DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
+            DEFOG_CLEAR(SIDE_STATUS_AURORA_VEIL, auroraVeilTimer, BattleScript_SideStatusWoreOffReturn, MOVE_AURORA_VEIL);
             DEFOG_CLEAR(SIDE_STATUS_SAFEGUARD, safeguardTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SAFEGUARD);
         }
         DEFOG_CLEAR(SIDE_STATUS_SPIKES, spikesAmount, BattleScript_SpikesFree, 0);
@@ -7885,6 +7904,20 @@ static void Cmd_various(void)
         }
         return;
     }
+    case VARIOUS_TRY_QUASH:
+    {
+        VARIOUS_ARGS(const u8 *failInstr);
+        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget)) // It's true if foe is faster, has a bigger priority, or switches
+        {
+            gBattlescriptCurrInstr = cmd->failInstr; // This replaces the current battlescript with the "fail" script.
+        }
+        else // If the condition is not true, it means we are faster than the foe, so we can set the quash bit
+        {
+            gProtectStructs[gBattlerTarget].quash = TRUE;
+            gBattlescriptCurrInstr = cmd->nextInstr; // and then we proceed with the rest of our battlescript
+        }
+        return;
+    }
     case VARIOUS_SET_TERRAIN:
     {
         VARIOUS_ARGS(const u8 *failInstr);
@@ -8223,6 +8256,31 @@ static void Cmd_various(void)
     {
         VARIOUS_ARGS();
         gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
+        break;
+    }
+    case VARIOUS_SET_AURORA_VEIL:
+    {
+        VARIOUS_ARGS();
+        if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_AURORA_VEIL
+            || !(WEATHER_HAS_EFFECT && gBattleWeather & B_WEATHER_HAIL))
+        {
+            gMoveResultFlags |= MOVE_RESULT_MISSED;
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
+        else
+        {
+            gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] |= SIDE_STATUS_AURORA_VEIL;
+            if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
+                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = 8;
+            else
+                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = 5;
+            gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilBattlerId = gActiveBattler;
+
+            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
+                gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+            else
+                gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+        }
         break;
     }
     case VARIOUS_DESTROY_ABILITY_POPUP:
@@ -12279,12 +12337,15 @@ static void Cmd_removelightscreenreflect(void)
 
     if (!failed
      && (gSideTimers[side].reflectTimer
-      || gSideTimers[side].lightscreenTimer))
+      || gSideTimers[side].lightscreenTimer
+      || gSideTimers[side].auroraVeilTimer))
     {
         gSideStatuses[side] &= ~SIDE_STATUS_REFLECT;
         gSideStatuses[side] &= ~SIDE_STATUS_LIGHTSCREEN;
+        gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
         gSideTimers[side].reflectTimer = 0;
         gSideTimers[side].lightscreenTimer = 0;
+        gSideTimers[side].auroraVeilTimer = 0;
         gBattleScripting.animTurn = 1;
         gBattleScripting.animTargetsHit = 1;
     }
@@ -13059,6 +13120,7 @@ static void TryUpdateRoundTurnOrder(void)
         {
             gBattlerByTurnOrder[currRounder] = roundUsers[i];
             gActionsByTurnOrder[currRounder] = gActionsByTurnOrder[roundUsers[i]];
+            gProtectStructs[roundUsers[i]].quash = TRUE; // Make it so their turn order can't be changed again
             currRounder++;
         }
 
