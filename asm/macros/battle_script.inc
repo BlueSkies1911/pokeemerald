@@ -1436,8 +1436,17 @@
 	various \battler, VARIOUS_CLEAR_STATUS
 	.endm
 
+	.macro tryactivatemoxie battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_MOXIE
+	.endm
+
 	.macro tryactivatefellstinger battler:req
 	various \battler, VARIOUS_TRY_ACTIVATE_FELL_STINGER
+	.endm
+
+	.macro playmoveanimation battler:req, move:req
+	various \battler, VARIOUS_PLAY_MOVE_ANIMATION
+	.2byte \move
 	.endm
 
 	.macro setluckychant battler:req, failInstr:req
@@ -1868,6 +1877,7 @@
 	.endm
 
 	.macro jumpifsafeguard jumpInstr:req
+	jumpifability BS_ATTACKER, ABILITY_INFILTRATOR, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpInstr
 	1:
 	.endm

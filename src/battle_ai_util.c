@@ -28,18 +28,23 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_ADAPTABILITY] = 8,
     [ABILITY_AFTERMATH] = 5,
     [ABILITY_AIR_LOCK] = 5,
+    [ABILITY_ANALYTIC] = 5,
     [ABILITY_ANGER_POINT] = 4,
     [ABILITY_ANTICIPATION] = 2,
     [ABILITY_ARENA_TRAP] = 9,
     [ABILITY_BATTLE_ARMOR] = 2,
+    [ABILITY_BIG_PECKS] = 1,
     [ABILITY_BLAZE] = 5,
     [ABILITY_CHLOROPHYLL] = 6,
     [ABILITY_CLEAR_BODY] = 4,
     [ABILITY_CLOUD_NINE] = 5,
     [ABILITY_COLOR_CHANGE] = 2,
+    [ABILITY_COMPETITIVE] = 5,
     [ABILITY_COMPOUND_EYES] = 7,
+    [ABILITY_CURSED_BODY] = 4,
     [ABILITY_CUTE_CHARM] = 2,
     [ABILITY_DAMP] = 2,
+    [ABILITY_DEFIANT] = 5,
     [ABILITY_DOWNLOAD] = 7,
     [ABILITY_DRIZZLE] = 9,
     [ABILITY_DROUGHT] = 9,
@@ -51,9 +56,12 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_FLASH_FIRE] = 6,
     [ABILITY_FORECAST] = 6,
     [ABILITY_FOREWARN] = 2,
+    [ABILITY_FRIEND_GUARD] = 0,
     [ABILITY_FRISK] = 3,
     [ABILITY_GLUTTONY] = 3,
     [ABILITY_GUTS] = 6,
+    [ABILITY_HARVEST] = 5,
+    [ABILITY_HEALER] = 0,
     [ABILITY_HEATPROOF] = 5,
     [ABILITY_HUGE_POWER] = 10,
     [ABILITY_HUSTLE] = 7,
@@ -62,16 +70,21 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_ICE_BODY] = 3,
     [ABILITY_ILLUMINATE] = 0,
     [ABILITY_IMMUNITY] = 4,
+    [ABILITY_IMPOSTER] = 9,
+    [ABILITY_INFILTRATOR] = 6,
     [ABILITY_INNER_FOCUS] = 2,
     [ABILITY_INSOMNIA] = 4,
     [ABILITY_INTIMIDATE] = 7,
     [ABILITY_IRON_FIST] = 6,
+    [ABILITY_JUSTIFIED] = 4,
     [ABILITY_KEEN_EYE] = 1,
     [ABILITY_LEAF_GUARD] = 2,
     [ABILITY_LEVITATE] = 7,
+    [ABILITY_LIGHT_METAL] = 2,
     [ABILITY_LIGHTNING_ROD] = 7,
     [ABILITY_LIMBER] = 3,
     [ABILITY_LIQUID_OOZE] = 3,
+    [ABILITY_MAGIC_BOUNCE] = 9,
     [ABILITY_MAGIC_GUARD] = 9,
     [ABILITY_MAGMA_ARMOR] = 1,
     [ABILITY_MAGNET_PULL] = 9,
@@ -79,30 +92,39 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_MINUS] = 0,
     [ABILITY_MOLD_BREAKER] = 7,
     [ABILITY_MOTOR_DRIVE] = 6,
+    [ABILITY_MOXIE] = 7,
+    [ABILITY_MULTISCALE] = 8,
     [ABILITY_NATURAL_CURE] = 7,
     [ABILITY_NO_GUARD] = 8,
     [ABILITY_NORMALIZE] = -1,
+    [ABILITY_OVERCOAT] = 5,
     [ABILITY_OVERGROW] = 5,
     [ABILITY_OWN_TEMPO] = 3,
     [ABILITY_PICKUP] = 1,
     [ABILITY_PLUS] = 0,
     [ABILITY_POISON_HEAL] = 8,
     [ABILITY_POISON_POINT] = 4,
+    [ABILITY_POISON_TOUCH] = 4,
     [ABILITY_PRESSURE] = 5,
     [ABILITY_PURE_POWER] = 10,
     [ABILITY_QUICK_FEET] = 5,
     [ABILITY_RAIN_DISH] = 3,
+    [ABILITY_RATTLED] = 3,
     [ABILITY_RECKLESS] = 6,
+    [ABILITY_REGENERATOR] = 8,
     [ABILITY_RIVALRY] = 1,
     [ABILITY_ROCK_HEAD] = 5,
     [ABILITY_ROUGH_SKIN] = 6,
     [ABILITY_RUN_AWAY] = 0,
+    [ABILITY_SAND_FORCE] = 4,
+    [ABILITY_SAND_RUSH] = 6,
     [ABILITY_SAND_STREAM] = 9,
     [ABILITY_SAND_VEIL] = 3,
     [ABILITY_SCRAPPY] = 6,
     [ABILITY_SERENE_GRACE] = 8,
     [ABILITY_SHADOW_TAG] = 10,
     [ABILITY_SHED_SKIN] = 7,
+    [ABILITY_SHEER_FORCE] = 8,
     [ABILITY_SHELL_ARMOR] = 2,
     [ABILITY_SHIELD_DUST] = 5,
     [ABILITY_SIMPLE] = 8,
@@ -135,12 +157,15 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_TRUANT] = -2,
     [ABILITY_UNAWARE] = 6,
     [ABILITY_UNBURDEN] = 7,
+    [ABILITY_UNNERVE] = 3,
     [ABILITY_VITAL_SPIRIT] = 4,
     [ABILITY_VOLT_ABSORB] = 7,
     [ABILITY_WATER_ABSORB] = 7,
     [ABILITY_WATER_VEIL] = 4,
+    [ABILITY_WEAK_ARMOR] = 2,
     [ABILITY_WHITE_SMOKE] = 4,
     [ABILITY_WONDER_GUARD] = 10,
+    [ABILITY_WONDER_SKIN] = 4,
 };
 
 static const u16 sEncouragedEncoreEffects[] =
@@ -460,7 +485,8 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
 // move checks
 bool32 IsAffectedByPowder(u8 battler, u16 ability, u16 holdEffect)
 {
-    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)
+    if (ability == ABILITY_OVERCOAT
+        || IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)
         || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES)
         return FALSE;
     return TRUE;
@@ -1188,6 +1214,9 @@ bool32 ShouldSetSandstorm(u8 battler, u16 ability, u16 holdEffect)
         return FALSE;
 
     if (ability == ABILITY_SAND_VEIL
+      || ability == ABILITY_SAND_RUSH
+      || ability == ABILITY_SAND_FORCE
+      || ability == ABILITY_OVERCOAT
       || ability == ABILITY_MAGIC_GUARD
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
@@ -1211,6 +1240,7 @@ bool32 ShouldSetHail(u8 battler, u16 ability, u16 holdEffect)
       || ability == ABILITY_ICE_BODY
       || ability == ABILITY_FORECAST
       || ability == ABILITY_MAGIC_GUARD
+      || ability == ABILITY_OVERCOAT
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
       || HasMove(battler, MOVE_BLIZZARD)
@@ -1255,6 +1285,7 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
       || atkAbility == ABILITY_FORECAST
       || atkAbility == ABILITY_LEAF_GUARD
       || atkAbility == ABILITY_SOLAR_POWER
+      || atkAbility == ABILITY_HARVEST
       || HasMoveEffect(battlerAtk, EFFECT_SOLAR_BEAM)
       || HasMoveEffect(battlerAtk, EFFECT_MORNING_SUN)
       || HasMoveEffect(battlerAtk, EFFECT_SYNTHESIS)
@@ -1389,7 +1420,8 @@ bool32 ShouldLowerDefense(u8 battlerAtk, u8 battlerDef, u16 defAbility)
     if (gBattleMons[battlerDef].statStages[STAT_DEF] > 4
       && HasMoveWithSplit(battlerAtk, SPLIT_PHYSICAL)
       && defAbility != ABILITY_CLEAR_BODY
-      && defAbility != ABILITY_WHITE_SMOKE)
+      && defAbility != ABILITY_WHITE_SMOKE
+      && defAbility != ABILITY_BIG_PECKS)
         return TRUE;
     return FALSE;
 }
@@ -1906,7 +1938,10 @@ static bool32 BattlerAffectedBySandstorm(u8 battlerId, u16 ability)
     if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK)
       && !IS_BATTLER_OF_TYPE(battlerId, TYPE_GROUND)
       && !IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL)
-      && ability != ABILITY_SAND_VEIL)
+      && ability != ABILITY_SAND_VEIL
+      && ability != ABILITY_SAND_FORCE
+      && ability != ABILITY_SAND_RUSH
+      && ability != ABILITY_OVERCOAT)
         return TRUE;
     return FALSE;
 }
@@ -1915,6 +1950,7 @@ static bool32 BattlerAffectedByHail(u8 battlerId, u16 ability)
 {
     if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
       && ability != ABILITY_SNOW_CLOAK
+      && ability != ABILITY_OVERCOAT
       && ability != ABILITY_ICE_BODY)
         return TRUE;
     return FALSE;
@@ -2105,13 +2141,15 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 defAbility, u16 move, u8 mo
 
                     if (!IS_MOVE_STATUS(move) && (shouldSwitch
                         || (AtMaxHp(battlerDef) && (AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_FOCUS_SASH
-                        || defAbility == ABILITY_STURDY))))
+                        || defAbility == ABILITY_STURDY
+                        || defAbility == ABILITY_MULTISCALE))))
                         return PIVOT;   // pivot to break sash/sturdy/multiscale
                 }
                 else if (!hasStatBoost)
                 {
                     if (!IS_MOVE_STATUS(move) && (AtMaxHp(battlerDef) && (AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_FOCUS_SASH
-                        || (defAbility == ABILITY_STURDY))))
+                        || (defAbility == ABILITY_STURDY)
+                        || defAbility == ABILITY_MULTISCALE)))
                         return PIVOT;   // pivot to break sash/sturdy/multiscale
 
                     if (shouldSwitch)

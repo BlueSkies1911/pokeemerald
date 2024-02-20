@@ -718,9 +718,22 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 if (effectiveness < AI_EFFECTIVENESS_x2)
                     return 0;
                 break;
+            case ABILITY_JUSTIFIED:
+                if (moveType == TYPE_DARK && !IS_MOVE_STATUS(move))
+                    RETURN_SCORE_MINUS(10);
+                break;
+            case ABILITY_RATTLED:
+                if (!IS_MOVE_STATUS(move)
+                  && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG))
+                    RETURN_SCORE_MINUS(10);
+                break;
             case ABILITY_SOUNDPROOF:
                 if (TestMoveFlags(move, FLAG_SOUND))
                     RETURN_SCORE_MINUS(10);
+                break;
+            case ABILITY_MAGIC_BOUNCE:
+                if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED))
+                    RETURN_SCORE_MINUS(20);
                 break;
             case ABILITY_CLEAR_BODY:
             case ABILITY_WHITE_SMOKE:
@@ -735,6 +748,15 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             case ABILITY_KEEN_EYE:
                 if (moveEffect == EFFECT_ACCURACY_DOWN || moveEffect == EFFECT_ACCURACY_DOWN_2)
                     RETURN_SCORE_MINUS(10);
+                break;
+            case ABILITY_BIG_PECKS:
+                if (moveEffect == EFFECT_DEFENSE_DOWN || moveEffect == EFFECT_DEFENSE_DOWN_2)
+                    RETURN_SCORE_MINUS(10);
+                break;
+            case ABILITY_DEFIANT:
+            case ABILITY_COMPETITIVE:
+                if (IsStatLoweringMoveEffect(moveEffect) && !IsTargetingPartner(battlerAtk, battlerDef))
+                    RETURN_SCORE_MINUS(8);
                 break;
             case ABILITY_LEAF_GUARD:
                 if (AI_WeatherHasEffect() && (gBattleWeather & B_WEATHER_SUN)
@@ -754,6 +776,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     break;
                 case ABILITY_STORM_DRAIN:
                     if (moveType == TYPE_WATER && !IsMoveRedirectionPrevented(move, AI_DATA->abilities[battlerAtk]))
+                        RETURN_SCORE_MINUS(20);
+                    break;
+                case ABILITY_MAGIC_BOUNCE:
+                    if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED) && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD))
                         RETURN_SCORE_MINUS(20);
                     break;
                 }
@@ -1141,7 +1167,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_SUBSTITUTE:
-            if (gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE)
+            if (gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE || AI_DATA->abilities[battlerDef] == ABILITY_INFILTRATOR)
                 score -= 8;
             else if (AI_DATA->hpPercents[battlerAtk] <= 25)
                 score -= 10;
@@ -1669,7 +1695,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 if (move != MOVE_QUICK_GUARD
                   && move != MOVE_WIDE_GUARD) //These moves have infinite usage
                 {
-                    if (GetBattlerSecondaryDamage(battlerAtk) >= gBattleMons[battlerAtk].hp)
+                    if (GetBattlerSecondaryDamage(battlerAtk) >= gBattleMons[battlerAtk].hp
+                      && AI_DATA->abilities[battlerDef] != ABILITY_MOXIE)
                     {
                         score -= 10; //Don't protect if you're going to faint after protecting
                     }
@@ -2350,6 +2377,39 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                         RETURN_SCORE_PLUS(1);
                     }
                     break;
+                case ABILITY_JUSTIFIED:
+                    if (moveType == TYPE_DARK
+                      && !IS_MOVE_STATUS(move)
+                      && HasMoveWithSplit(battlerAtkPartner, SPLIT_PHYSICAL)
+                      && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_ATK)
+                      && !CanIndexMoveFaintTarget(battlerAtk, battlerAtkPartner, AI_THINKING_STRUCT->movesetIndex, 1))
+                    {
+                        RETURN_SCORE_PLUS(1);
+                    }
+                    break;
+                case ABILITY_RATTLED:
+                    if (!IS_MOVE_STATUS(move)
+                      && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
+                      && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_SPEED)
+                      && !CanIndexMoveFaintTarget(battlerAtk, battlerAtkPartner, AI_THINKING_STRUCT->movesetIndex, 1))
+                    {
+                        RETURN_SCORE_PLUS(1);
+                    }
+                    break;
+                case ABILITY_DEFIANT:
+                    if (IsStatLoweringEffect(effect)
+                      && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_ATK))
+                    {
+                        RETURN_SCORE_PLUS(1);
+                    }
+                    break;
+                case ABILITY_COMPETITIVE:
+                    if (IsStatLoweringEffect(effect)
+                      && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_SPATK))
+                    {
+                        RETURN_SCORE_PLUS(1);
+                    }
+                    break;
                 }
             } // ability checks
         } // move power check
@@ -2375,6 +2435,17 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                  && (!AI_CanBeConfused(battlerAtkPartner, TRUE)
                   || atkPartnerHoldEffect == HOLD_EFFECT_CURE_CONFUSION
                   || atkPartnerHoldEffect == HOLD_EFFECT_CURE_STATUS))
+                {
+                    RETURN_SCORE_PLUS(1);
+                }
+                break;
+            case EFFECT_BEAT_UP:
+                if (atkPartnerAbility == ABILITY_JUSTIFIED
+                  && moveType == TYPE_DARK
+                  && !IS_MOVE_STATUS(move)
+                  && HasMoveWithSplit(battlerAtkPartner, SPLIT_PHYSICAL)
+                  && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_ATK)
+                  && !CanIndexMoveFaintTarget(battlerAtk, battlerAtkPartner, AI_THINKING_STRUCT->movesetIndex, 0))
                 {
                     RETURN_SCORE_PLUS(1);
                 }
@@ -2569,6 +2640,18 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         }
     }
+
+    // attacker ability checks
+    switch (AI_DATA->abilities[battlerAtk])
+    {
+    case ABILITY_MOXIE:
+        if (AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_FASTER) // Attacker should go first
+        {
+            if (CanIndexMoveFaintTarget(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, 0))
+                score += 8; // prioritize killing target for stat boost
+        }
+        break;
+    } // ability checks
 
     // move effect checks
     switch (moveEffect)
@@ -3247,7 +3330,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_SPIKES:
     case EFFECT_STEALTH_ROCK:
     case EFFECT_TOXIC_SPIKES:
-        if (CountUsablePartyMons(battlerDef) == 0)
+        if (AI_DATA->abilities[battlerDef] == ABILITY_MAGIC_BOUNCE || CountUsablePartyMons(battlerDef) == 0)
             break;
         if (gDisableStructs[battlerAtk].isFirstTurn)
             score += 2;

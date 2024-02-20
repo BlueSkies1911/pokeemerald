@@ -411,6 +411,18 @@ static bool8 ShouldSwitchIfAbilityBenefit(void)
 
             return FALSE;
 
+        case ABILITY_REGENERATOR:
+            moduloChance = 2; //50%
+            //Don't switch if ailment
+            if (gBattleMons[gActiveBattler].status1 & STATUS1_ANY)    
+                return FALSE;  
+            if ((gBattleMons[gActiveBattler].hp <= ((gBattleMons[gActiveBattler].maxHP * 2) / 3))
+                 && GetMostSuitableMonToSwitchInto() != PARTY_SIZE
+                 && Random() % (moduloChance*chanceReducer) == 0)
+                break;
+    
+            return FALSE;
+
         default:
             return FALSE; 
     }
