@@ -9,19 +9,6 @@
 #define METATILE_BattleDome_Door_Lobby          0x209
 #define METATILE_BattleDome_Door_PreBattleRoom  0x20A
 
-// gTileset_BattleFrontierOutsideEast
-#define METATILE_BattleFrontierOutsideEast_Door              0x355
-#define METATILE_BattleFrontierOutsideEast_Door_BattleArena  0x3C9
-#define METATILE_BattleFrontierOutsideEast_Door_BattleTower  0x2CF
-
-// gTileset_BattleFrontierOutsideWest
-#define METATILE_BattleFrontierOutsideWest_Door                        0x355
-#define METATILE_BattleFrontierOutsideWest_Door_BattleDome             0x31B
-#define METATILE_BattleFrontierOutsideWest_Door_BattleFactory          0x2DB
-#define METATILE_BattleFrontierOutsideWest_LongGrass                   0x3A5
-#define METATILE_BattleFrontierOutsideWest_LongGrass_Root              0x3AD
-#define METATILE_BattleFrontierOutsideWest_LongGrass_Root_ThinTreeTop  0x3AE
-
 // gTileset_BattleFrontier
 #define METATILE_BattleFrontier_CorridorOpenDoor_Bottom  0x20F
 #define METATILE_BattleFrontier_CorridorOpenDoor_Top     0x207
@@ -36,6 +23,19 @@
 #define METATILE_BattleFrontier_Elevator_Top0            0x321
 #define METATILE_BattleFrontier_Elevator_Top1            0x322
 #define METATILE_BattleFrontier_Elevator_Top2            0x323
+
+// gTileset_BattleFrontierOutsideEast
+#define METATILE_BattleFrontierOutsideEast_Door              0x355
+#define METATILE_BattleFrontierOutsideEast_Door_BattleArena  0x3C9
+#define METATILE_BattleFrontierOutsideEast_Door_BattleTower  0x2CF
+
+// gTileset_BattleFrontierOutsideWest
+#define METATILE_BattleFrontierOutsideWest_Door                        0x355
+#define METATILE_BattleFrontierOutsideWest_Door_BattleDome             0x31B
+#define METATILE_BattleFrontierOutsideWest_Door_BattleFactory          0x2DB
+#define METATILE_BattleFrontierOutsideWest_LongGrass                   0x3A5
+#define METATILE_BattleFrontierOutsideWest_LongGrass_Root              0x3AD
+#define METATILE_BattleFrontierOutsideWest_LongGrass_Root_ThinTreeTop  0x3AE
 
 // gTileset_BattlePalace
 #define METATILE_BattlePalace_Door  0x219
@@ -625,6 +625,10 @@
 #define METATILE_TrainerTower_LobbyElevatorDoor      0x3A3
 #define METATILE_TrainerTower_RoofElevatorDoor       0x356
 
+// gTileset_TrickHouse
+#define METATILE_TrickHouse_Door_Closed  0x20B
+#define METATILE_TrickHouse_Stairs_Down  0x227
+
 // gTileset_TrickHousePuzzle
 #define METATILE_TrickHousePuzzle_Arrow_RedOnBlack_Down       0x263
 #define METATILE_TrickHousePuzzle_Arrow_RedOnBlack_Left       0x261
@@ -663,10 +667,6 @@
 #define METATILE_TrickHousePuzzle_RedDoorV_Open1              0x242
 #define METATILE_TrickHousePuzzle_RedDoorV_Retracted          0x24A
 #define METATILE_TrickHousePuzzle_Stairs_Down                 0x20B
-
-// gTileset_TrickHouse
-#define METATILE_TrickHouse_Door_Closed  0x20B
-#define METATILE_TrickHouse_Stairs_Down  0x227
 
 // gTileset_VermilionCity
 #define METATILE_VermilionCity_Door                0x29E
