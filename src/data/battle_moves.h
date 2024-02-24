@@ -1904,7 +1904,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_STATUS,
     },
 
-    [MOVE_HI_JUMP_KICK] =
+    [MOVE_HIGH_JUMP_KICK] =
     {
         .effect = EFFECT_RECOIL_IF_MISS,
         .power = 130,
@@ -3711,7 +3711,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
     },
 
-    [MOVE_SMELLING_SALT] =
+    [MOVE_SMELLING_SALTS] =
     {
         .effect = EFFECT_SMELLINGSALT,
         .power = 70,

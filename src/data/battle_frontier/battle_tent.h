@@ -1913,7 +1913,7 @@ const struct FacilityMon gFuchsiaBattleTentMons[NUM_FUCHSIA_TENT_MONS] =
     },
     [FUCHSIA_TENT_MON_MANKEY] = {
         .species = SPECIES_MANKEY,
-        .moves = {MOVE_BULK_UP, MOVE_KARATE_CHOP, MOVE_SMELLING_SALT, MOVE_SCREECH},
+        .moves = {MOVE_BULK_UP, MOVE_KARATE_CHOP, MOVE_SMELLING_SALTS, MOVE_SCREECH},
         .itemTableId = BATTLE_FRONTIER_ITEM_SALAC_BERRY,
         .evSpread = F_EV_SPREAD_DEFENSE | F_EV_SPREAD_ATTACK,
         .nature = NATURE_NAUGHTY
@@ -2738,7 +2738,7 @@ const struct FacilityMon gSaffronBattleTentMons[NUM_SAFFRON_TENT_MONS] =
     },
     [SAFFRON_TENT_MON_MANKEY] = {
         .species = SPECIES_MANKEY,
-        .moves = {MOVE_PROTECT, MOVE_KARATE_CHOP, MOVE_ENCORE, MOVE_SMELLING_SALT},
+        .moves = {MOVE_PROTECT, MOVE_KARATE_CHOP, MOVE_ENCORE, MOVE_SMELLING_SALTS},
         .itemTableId = BATTLE_FRONTIER_ITEM_BLACK_BELT,
         .evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_HP,
         .nature = NATURE_ADAMANT

@@ -1088,7 +1088,7 @@ static const struct TrainerTowerFloor sFloors_Normal[] =
                     {
                         .species = SPECIES_HITMONLEE,
                         .heldItem = ITEM_QUICK_CLAW,
-                        .moves = {MOVE_MEDITATE, MOVE_HI_JUMP_KICK, MOVE_MEGA_KICK, MOVE_ROCK_SLIDE},
+                        .moves = {MOVE_MEDITATE, MOVE_HIGH_JUMP_KICK, MOVE_MEGA_KICK, MOVE_ROCK_SLIDE},
                         .hpEV = 252,
                         .attackEV = 6,
                         .speedEV = 252,
@@ -3574,7 +3574,7 @@ static const struct TrainerTowerFloor sFloors_Unique[] = {
                                         {
                                             .species = SPECIES_HITMONLEE,
                                             .heldItem = ITEM_FOCUS_BAND,
-                                            .moves = {MOVE_MEGA_KICK, MOVE_MIND_READER, MOVE_FOCUS_ENERGY, MOVE_HI_JUMP_KICK},
+                                            .moves = {MOVE_MEGA_KICK, MOVE_MIND_READER, MOVE_FOCUS_ENERGY, MOVE_HIGH_JUMP_KICK},
                                             .hpEV = 255,
                                             .attackEV = 255,
                                             .otId = TRAINER_TOWER_OTID,

@@ -203,7 +203,7 @@ static const u8 sDisableDescription[] = _(
 
 static const u8 sAcidDescription[] = _(
     "Sprays a hide-melting acid.\n"
-    "May lower Defense.");
+    "May lower Sp. Def.");
 
 static const u8 sEmberDescription[] = _(
     "A weak fire attack that may\n"
@@ -541,7 +541,7 @@ static const u8 sSoftBoiledDescription[] = _(
     "Recovers up to half the\n"
     "user's maximum HP.");
 
-static const u8 sHiJumpKickDescription[] = _(
+static const u8 sHighJumpKickDescription[] = _(
     "A jumping knee kick. If it\n"
     "misses, the user is hurt.");
 
@@ -967,7 +967,7 @@ static const u8 sSunnyDayDescription[] = _(
 
 static const u8 sCrunchDescription[] = _(
     "Crunches with sharp fangs.\n"
-    "May lower Defence.");
+    "May lower Defense.");
 
 static const u8 sMirrorCoatDescription[] = _(
     "Counters the foe's special\n"
@@ -1057,7 +1057,7 @@ static const u8 sFocusPunchDescription[] = _(
     "A powerful loyalty attack.\n"
     "The user flinches if hit.");
 
-static const u8 sSmellingSaltDescription[] = _(
+static const u8 sSmellingSaltsDescription[] = _(
     "Powerful against paralyzed\n"
     "foes, but also heals them.");
 
@@ -2315,7 +2315,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_AMNESIA - 1] = sAmnesiaDescription,
     [MOVE_KINESIS - 1] = sKinesisDescription,
     [MOVE_SOFT_BOILED - 1] = sSoftBoiledDescription,
-    [MOVE_HI_JUMP_KICK - 1] = sHiJumpKickDescription,
+    [MOVE_HIGH_JUMP_KICK - 1] = sHighJumpKickDescription,
     [MOVE_GLARE - 1] = sGlareDescription,
     [MOVE_DREAM_EATER - 1] = sDreamEaterDescription,
     [MOVE_POISON_GAS - 1] = sPoisonGasDescription,
@@ -2444,7 +2444,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_MEMENTO - 1] = sMementoDescription,
     [MOVE_FACADE - 1] = sFacadeDescription,
     [MOVE_FOCUS_PUNCH - 1] = sFocusPunchDescription,
-    [MOVE_SMELLING_SALT - 1] = sSmellingSaltDescription,
+    [MOVE_SMELLING_SALTS - 1] = sSmellingSaltsDescription,
     [MOVE_FOLLOW_ME - 1] = sFollowMeDescription,
     [MOVE_NATURE_POWER - 1] = sNaturePowerDescription,
     [MOVE_CHARGE - 1] = sChargeDescription,
@@ -2696,6 +2696,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_PSYSTRIKE - 1] = sPsyshockDescription,
     [MOVE_TAIL_SLAP - 1] = sTailSlapDescription,
     [MOVE_HURRICANE - 1] = sHurricaneDescription,
+    [MOVE_SNARL - 1] = sSnarlDescription,
     [MOVE_ICICLE_CRASH - 1] = sIcicleCrashDescription,
     [MOVE_BELCH - 1] = sBelchDescription,
     [MOVE_ROTOTILLER - 1] = sRototillerDescription,
