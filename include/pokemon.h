@@ -328,6 +328,10 @@ struct BattleMove
     u32 flags;
     u8 split;
     u8 argument;
+    // Flags
+    u32 mirrorMoveBanned:1;
+    u32 metronomeBanned:1;
+    u32 copycatBanned:1;
 };
 
 struct LevelUpMove

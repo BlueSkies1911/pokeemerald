@@ -120,6 +120,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
 void TryClearRageAndFuryCutter(void);
 u8 AtkCanceller_UnableToUseMove(void);
+void SetAtkCancellerForCalledMove(void);
 u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
@@ -185,5 +186,6 @@ bool32 CanBeFrozen(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
+u8 GetBattlerType(u32 battler, u8 typeIndex);
 
 #endif // GUARD_BATTLE_UTIL_H

@@ -1312,6 +1312,7 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_WorrySeed, 0x0080, ANIM_TAG_WORRY_SEED},
     {gBattleAnimSpriteGfx_SmallCloud, 0x0080, ANIM_TAG_SMALL_CLOUD},
     {gBattleAnimSpriteGfx_DragonPulse, 0x0100, ANIM_TAG_DRAGON_PULSE},
+    {gBattleAnimSpriteGfx_WoodHammer, 0x0C00, ANIM_TAG_WOOD_HAMMER},
     {gBattleAnimSpriteGfx_PsychoCut, 0x0200, ANIM_TAG_PSYCHO_CUT},
     {gBattleAnimSpriteGfx_PowerGem, 0x0080, ANIM_TAG_POWER_GEM},
     {gBattleAnimSpriteGfx_StoneEdge, 0x0A00, ANIM_TAG_STONE_EDGE},
@@ -1333,6 +1334,7 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_HeartStamp, 0x400, ANIM_TAG_HEART_STAMP},
     {gBattleAnimSpriteGfx_MetalBits, 0x140, ANIM_TAG_METAL_BITS},
     {gBattleAnimSpriteGfx_RocksSmall, 0x140, ANIM_TAG_SMALL_ROCK},
+    {gBattleAnimSpriteGfx_WoodHammerHammer, 0x800, ANIM_TAG_WOOD_HAMMER_HAMMER},
 };
 
 const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
@@ -1641,6 +1643,7 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     {gBattleAnimSpritePal_WorrySeed, ANIM_TAG_WORRY_SEED},
     {gBattleAnimSpritePal_SmallCloud, ANIM_TAG_SMALL_CLOUD},
     {gBattleAnimSpritePal_DragonPulse, ANIM_TAG_DRAGON_PULSE},
+    {gBattleAnimSpritePal_WoodHammer, ANIM_TAG_WOOD_HAMMER},
     {gBattleAnimSpritePal_PsychoCut, ANIM_TAG_PSYCHO_CUT},
     {gBattleAnimSpritePal_PowerGem, ANIM_TAG_POWER_GEM},
     {gBattleAnimSpritePal_StoneEdge, ANIM_TAG_STONE_EDGE},
@@ -1662,6 +1665,7 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     [ANIM_TAG_HEART_STAMP - ANIM_SPRITES_START] = {gBattleAnimSpritePal_HeartStamp, ANIM_TAG_HEART_STAMP},
     {gBattleAnimSpritePal_BlueFlare, ANIM_TAG_METAL_BITS},
     {gBattleAnimSpritePal_NewRocks, ANIM_TAG_SMALL_ROCK},
+    {gBattleAnimSpritePal_WoodHammerHammer, ANIM_TAG_WOOD_HAMMER_HAMMER},
 };
 
 const struct BattleAnimBackground gBattleAnimBackgroundTable[] =

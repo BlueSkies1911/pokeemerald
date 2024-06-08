@@ -8,6 +8,7 @@
 #define FOE(battler) ((BATTLE_OPPOSITE(battler)) & BIT_SIDE)
 
 bool32 AI_RandLessThan(u8 val);
+bool32 BattlerHasAi(u32 battlerId);
 void RecordLastUsedMoveByTarget(void);
 bool32 IsBattlerAIControlled(u32 battlerId);
 void ClearBattlerMoveHistory(u8 battlerId);

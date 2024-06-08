@@ -10,8 +10,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
-        .flags = 0,
         .split = SPLIT_PHYSICAL,
+        .metronomeBanned = TRUE,
+        .mirrorMoveBanned = TRUE,
     },
 
     [MOVE_POUND] =
@@ -3349,7 +3350,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TWISTER] =
     {
-        .effect = EFFECT_TWISTER,
+        .effect = EFFECT_FLINCH_HIT,
         .power = 40,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -3713,7 +3714,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SMELLING_SALTS] =
     {
-        .effect = EFFECT_SMELLINGSALT,
+        .effect = EFFECT_SMELLING_SALTS,
         .power = 70,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -4176,7 +4177,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TEETER_DANCE] =
     {
-        .effect = EFFECT_TEETER_DANCE,
+        .effect = EFFECT_CONFUSE,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 100,

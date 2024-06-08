@@ -227,7 +227,6 @@ static const u16 sEncouragedEncoreEffects[] =
     EFFECT_IMPRISON,
     EFFECT_REFRESH,
     EFFECT_GRUDGE,
-    EFFECT_TEETER_DANCE,
     EFFECT_MUD_SPORT,
     EFFECT_WATER_SPORT,
     EFFECT_DRAGON_DANCE,
@@ -277,6 +276,24 @@ static const u16 sOtherMoveCallingMoves[] =
 u16 GetAIChosenMove(u8 battlerId)
 {
     return (gBattleMons[battlerId].moves[gBattleStruct->aiMoveOrAction[battlerId]]);
+}
+
+bool32 BattlerHasAi(u32 battlerId)
+{
+    switch (GetBattlerPosition(battlerId))
+    {
+    default:
+        return FALSE;
+    case B_POSITION_OPPONENT_LEFT:
+        return TRUE;
+    case B_POSITION_PLAYER_RIGHT:
+        if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
+            return TRUE;
+        else
+            return FALSE;
+    case B_POSITION_OPPONENT_RIGHT:
+        return TRUE;
+    }
 }
 
 bool32 WillAIStrikeFirst(void)
@@ -1102,7 +1119,6 @@ bool32 IsConfusionMoveEffect(u16 moveEffect)
     case EFFECT_CONFUSE:
     case EFFECT_SWAGGER:
     case EFFECT_FLATTER:
-    case EFFECT_TEETER_DANCE:
         return TRUE;
     default:
         return FALSE;

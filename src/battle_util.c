@@ -714,7 +714,7 @@ void HandleAction_NothingIsFainted(void)
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED
                     | HITMARKER_NO_PPDEDUCT | HITMARKER_STATUS_ABILITY_EFFECT | HITMARKER_IGNORE_ON_AIR
-                    | HITMARKER_IGNORE_UNDERGROUND | HITMARKER_IGNORE_UNDERWATER | HITMARKER_PASSIVE_DAMAGE
+                    | HITMARKER_IGNORE_UNDERWATER | HITMARKER_PASSIVE_DAMAGE
                     | HITMARKER_OBEYS | HITMARKER_WAKE_UP_CLEAR | HITMARKER_SYNCHRONISE_EFFECT
                     | HITMARKER_CHARGING | HITMARKER_NEVER_SET);
 }
@@ -1706,6 +1706,23 @@ enum
     ENDTURN_FIELD_COUNT,
 };
 
+static bool32 EndTurnTerrain(u32 terrainFlag, u32 stringTableId)
+{
+    if (gFieldStatuses & terrainFlag)
+    {
+        if (terrainFlag & STATUS_FIELD_GRASSY_TERRAIN)
+            BattleScriptExecute(BattleScript_GrassyTerrainHeals);
+        if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0)
+        {
+            gFieldStatuses &= ~terrainFlag;
+            gBattleCommunication[MULTISTRING_CHOOSER] = stringTableId;
+            BattleScriptExecute(BattleScript_TerrainEnds);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 u8 DoFieldEndTurnEffects(void)
 {
     u8 effect = 0;
@@ -2054,46 +2071,19 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_ELECTRIC_TERRAIN:
-            if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
-            {
-                gFieldStatuses &= ~(STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
-                BattleScriptExecute(BattleScript_ElectricTerrainEnds);
-                effect++;
-            }
+            effect = EndTurnTerrain(STATUS_FIELD_ELECTRIC_TERRAIN, B_MSG_TERRAIN_END_ELECTRIC);
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_MISTY_TERRAIN:
-            if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
-            {
-                gFieldStatuses &= ~STATUS_FIELD_MISTY_TERRAIN;
-                BattleScriptExecute(BattleScript_MistyTerrainEnds);
-                effect++;
-            }
+            effect = EndTurnTerrain(STATUS_FIELD_MISTY_TERRAIN, B_MSG_TERRAIN_END_MISTY);
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_GRASSY_TERRAIN:
-            if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
-            {
-                if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT)
-                  && (gFieldTimers.terrainTimer == 0 || --gFieldTimers.terrainTimer == 0))
-                {
-                    gFieldStatuses &= ~STATUS_FIELD_GRASSY_TERRAIN;
-                }
-                BattleScriptExecute(BattleScript_GrassyTerrainHeals);
-                effect++;
-            }
+            effect = EndTurnTerrain(STATUS_FIELD_GRASSY_TERRAIN, B_MSG_TERRAIN_END_GRASSY);
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_PSYCHIC_TERRAIN:
-            if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
-            {
-                gFieldStatuses &= ~STATUS_FIELD_PSYCHIC_TERRAIN;
-                BattleScriptExecute(BattleScript_PsychicTerrainEnds);
-                effect++;
-            }
+            effect = EndTurnTerrain(STATUS_FIELD_PSYCHIC_TERRAIN, B_MSG_TERRAIN_END_PSYCHIC);
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_WATER_SPORT:
@@ -2876,6 +2866,12 @@ void TryClearRageAndFuryCutter(void)
         if (gDisableStructs[i].furyCutterCounter != 0 && gChosenMoveByBattler[i] != MOVE_FURY_CUTTER)
             gDisableStructs[i].furyCutterCounter = 0;
     }
+}
+
+void SetAtkCancellerForCalledMove(void)
+{
+    gBattleStruct->atkCancellerTracker = CANCELLER_HEAL_BLOCKED;
+    gBattleStruct->isAtkCancelerForCalledMove = TRUE;
 }
 
 u8 AtkCanceller_UnableToUseMove(void)
@@ -3710,7 +3706,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITY_SNOW_WARNING:
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
             {
-                BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
+                BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivatesHail);
                 effect++;
             }
             break;
@@ -5974,9 +5970,10 @@ u8 IsMonDisobedient(void)
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
         return 0;
-    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT)
+    if (BattlerHasAi(gBattlerAttacker))
         return 0;
-    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && GetBattlerPosition(gBattlerAttacker) == 2)
+
+    if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && GetBattlerPosition(gBattlerAttacker) == B_POSITION_PLAYER_RIGHT)
         return 0;
     if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
         return 0;
@@ -5984,28 +5981,27 @@ u8 IsMonDisobedient(void)
         return 0;
     if (!IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
         return 0;
-    if (FlagGet(FLAG_BADGE08_GET))
+    if (FlagGet(FLAG_BADGE08_GET)) // Earth Badge, ignore obedience altogether
         return 0;
 
     obedienceLevel = 10;
 
-    if (FlagGet(FLAG_BADGE01_GET))
+    if (FlagGet(FLAG_BADGE01_GET)) // Boulder Badge
         obedienceLevel = 20;
-    if (FlagGet(FLAG_BADGE02_GET))
+    if (FlagGet(FLAG_BADGE02_GET)) // Cascade Badge
         obedienceLevel = 30;
-    if (FlagGet(FLAG_BADGE03_GET))
+    if (FlagGet(FLAG_BADGE03_GET)) // Thunder Badge
         obedienceLevel = 40;
-    if (FlagGet(FLAG_BADGE04_GET))
+    if (FlagGet(FLAG_BADGE04_GET)) // Rainbow Badge
         obedienceLevel = 50;
-    if (FlagGet(FLAG_BADGE05_GET))
+    if (FlagGet(FLAG_BADGE05_GET)) // Soul Badge
         obedienceLevel = 60;
-    if (FlagGet(FLAG_BADGE06_GET))
+    if (FlagGet(FLAG_BADGE06_GET)) // Marsh Badge
         obedienceLevel = 70;
-    if (FlagGet(FLAG_BADGE07_GET))
+    if (FlagGet(FLAG_BADGE07_GET)) // Volcano Badge
         obedienceLevel = 80;
 
-    if (gBattleMons[gBattlerAttacker].level <= obedienceLevel)
-        levelReferenced = gBattleMons[gBattlerAttacker].level;
+    levelReferenced = gBattleMons[gBattlerAttacker].level;
 
     if (levelReferenced <= obedienceLevel)
         return 0;
@@ -6044,6 +6040,7 @@ u8 IsMonDisobedient(void)
             } while (gBitTable[gCurrMovePos] & calc);
 
             gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+            SetAtkCancellerForCalledMove();
             gBattlescriptCurrInstr = BattleScript_IgnoresAndUsesRandomMove;
             gBattlerTarget = GetMoveTarget(gCalledMove, NO_TARGET_OVERRIDE);
             gHitMarker |= HITMARKER_DISOBEDIENT_MOVE;
@@ -6466,7 +6463,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP)
             basePower *= 2;
         break;
-    case EFFECT_SMELLINGSALT:
+    case EFFECT_SMELLING_SALTS:
         if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS)
             basePower *= 2;
         break;
@@ -7703,4 +7700,25 @@ static void SetRandomMultiHitCounter()
         gMultiHitCounter = 4;
     else
         gMultiHitCounter = 5;
+}
+
+u8 GetBattlerType(u32 battler, u8 typeIndex)
+{
+    u16 types[2] = {0};
+    types[0] = gBattleMons[battler].type1;
+    types[1] = gBattleMons[battler].type2;
+
+    // Handle Roost's Flying-type suppression
+    if (typeIndex == 0 || typeIndex == 1)
+    {
+        if (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_ROOST)
+        {
+            if (types[0] == TYPE_FLYING && types[1] == TYPE_FLYING)
+                return TYPE_NORMAL;
+            else
+                return types[typeIndex] == TYPE_FLYING ? TYPE_MYSTERY : types[typeIndex];
+        }
+    }
+
+    return types[typeIndex];
 }

@@ -34,11 +34,10 @@
 #define sSAVED_MOVE_EFFECT           (gBattleScripting + 0x2C) // savedMoveEffect
 #define sMOVE_EFFECT                 (gBattleScripting + 0x2E) // moveEffect
 #define sMULTIHIT_EFFECT             (gBattleScripting + 0x30) // multihitMoveEffect
-#define sILLUSION_NICK_HACK          (gBattleScripting + 0x32) // illusionNickHack
-#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x33) // fixedPopup
-#define sABILITY_OVERWRITE           (gBattleScripting + 0x34) // abilityPopupOverwrite
-#define sSWITCH_CASE                 (gBattleScripting + 0x36) // switchCase
-#define sBERRY_OVERRIDE              (gBattleScripting + 0x37) // overrideBerryRequirements
+#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x32) // fixedPopup
+#define sABILITY_OVERWRITE           (gBattleScripting + 0x33) // abilityPopupOverwrite
+#define sSWITCH_CASE                 (gBattleScripting + 0x35) // switchCase
+#define sBERRY_OVERRIDE              (gBattleScripting + 0x36) // overrideBerryRequirements
 
 // Array entries for battle communication
 #define MULTIUSE_STATE          0
@@ -105,7 +104,7 @@
 #define VARIOUS_EMIT_YESNOBOX                       13
 #define VARIOUS_DRAW_ARENA_REF_TEXT_BOX             14
 #define VARIOUS_ERASE_ARENA_REF_TEXT_BOX            15
-#define VARIOUS_ARENA_JUDGEMENT_STRING              16
+#define VARIOUS_ARENA_JUDGMENT_STRING               16
 #define VARIOUS_ARENA_WAIT_STRING                   17
 #define VARIOUS_WAIT_CRY                            18
 #define VARIOUS_RETURN_OPPONENT_MON1                19
@@ -132,7 +131,6 @@
 #define VARIOUS_SET_LAST_USED_ABILITY               40
 #define VARIOUS_TRY_HEAL_PULSE                      41
 #define VARIOUS_TRY_QUASH                           42
-#define VARIOUS_SET_TERRAIN                         43
 #define VARIOUS_TRY_ME_FIRST                        44
 #define VARIOUS_JUMP_IF_BATTLE_END                  45
 #define VARIOUS_TRY_REFLECT_TYPE                    46
@@ -143,7 +141,6 @@
 #define VARIOUS_TRY_AUTOTOMISE                      51
 #define VARIOUS_TRY_COPYCAT                         52
 #define VARIOUS_ABILITY_POPUP                       53
-#define VARIOUS_DEFOG                               54
 #define VARIOUS_JUMP_IF_TARGET_ALLY                 55
 #define VARIOUS_TRY_SYNCHRONOISE                    56
 #define VARIOUS_PSYCHO_SHIFT                        57
@@ -198,8 +195,10 @@
 #define VARIOUS_GET_BATTLER_SIDE                    106
 #define VARIOUS_JUMP_IF_ABSORB                      107
 #define VARIOUS_JUMP_IF_NO_VALID_TARGETS            108
+#define VARIOUS_STORE_HEALING_WISH                  109
+#define VARIOUS_HIT_SWITCH_TARGET_FAILED            110
 
-// Cmd_manipulatedmg
+// Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0
 #define DMG_RECOIL_FROM_MISS       1
 #define DMG_DOUBLED                2

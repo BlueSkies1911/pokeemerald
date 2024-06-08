@@ -31,3 +31,18 @@ u16 Random2(void)
     gRng2Value = ISO_RANDOMIZE1(gRng2Value);
     return gRng2Value >> 16;
 }
+
+u32 RandomUniform(enum RandomTag tag, u32 lo, u32 hi)
+{
+    return lo + (((hi - lo + 1) * Random()) >> 16);
+}
+
+u32 RandomUniformExcept(enum RandomTag tag, u32 lo, u32 hi, bool32 (*reject)(u32))
+{
+    while (TRUE)
+    {
+        u32 n = RandomUniform(tag, lo, hi);
+        if (!reject(n))
+            return n;
+    }
+}
