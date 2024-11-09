@@ -331,10 +331,11 @@
 #define ANIM_TAG_CONFIDE                    (ANIM_SPRITES_START + 319)
 #define ANIM_TAG_POWER_TRICK                (ANIM_SPRITES_START + 320)
 #define ANIM_TAG_HORSESHOE_SIDE_FIST        (ANIM_SPRITES_START + 321)
-#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 322)
-#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 323)
-#define ANIM_TAG_SMALL_ROCK                 (ANIM_SPRITES_START + 324)
-#define ANIM_TAG_WOOD_HAMMER_HAMMER         (ANIM_SPRITES_START + 325)
+#define ANIM_TAG_FAIRY_LOCK_CHAINS          (ANIM_SPRITES_START + 322)
+#define ANIM_TAG_HEART_STAMP                (ANIM_SPRITES_START + 323)
+#define ANIM_TAG_METAL_BITS                 (ANIM_SPRITES_START + 324)
+#define ANIM_TAG_SMALL_ROCK                 (ANIM_SPRITES_START + 325)
+#define ANIM_TAG_WOOD_HAMMER_HAMMER         (ANIM_SPRITES_START + 326)
 
 // battlers
 #define ANIM_ATTACKER         0
@@ -344,8 +345,8 @@
 
 // Below are used by AnimTask_ShakeMon2 and AnimTask_SetGrayscaleOrOriginalPal
 #define ANIM_PLAYER_LEFT      (MAX_BATTLERS_COUNT + 0)
-#define ANIM_PLAYER_RIGHT     (MAX_BATTLERS_COUNT + 1)
-#define ANIM_OPPONENT_LEFT    (MAX_BATTLERS_COUNT + 2)
+#define ANIM_OPPONENT_LEFT    (MAX_BATTLERS_COUNT + 1)
+#define ANIM_PLAYER_RIGHT     (MAX_BATTLERS_COUNT + 2)
 #define ANIM_OPPONENT_RIGHT   (MAX_BATTLERS_COUNT + 3)
 #define ANIM_ATTACKER_FORCE   (MAX_BATTLERS_COUNT + 4)
 
@@ -483,10 +484,15 @@
 #define ANIM_WEATHER_SANDSTORM 3
 #define ANIM_WEATHER_HAIL 4
 
-// mon pal blend
-#define ANIM_PAL_BG             0x1
-#define ANIM_PAL_ATK            0x2
-#define ANIM_PAL_DEF            0x4
+// horseshoe/fist frames
+#define ANIM_RIGHT_FIST  0
+#define ANIM_LEFT_FIST   2
+
+// fist/chop frames
+#define ANIM_FIST_1  0
+#define ANIM_FOOT_1  1
+#define ANIM_FOOT_2  2
+#define ANIM_CHOP    3
 
 // surf wave palettes
 #define ANIM_SURF_PAL_SURF           0
@@ -495,19 +501,21 @@
 
 // Flags given to various functions to indicate which palettes to consider.
 // Handled by UnpackSelectedBattlePalettes
-#define F_PAL_BG          (1 << 0)
-#define F_PAL_ATTACKER    (1 << 1)
-#define F_PAL_TARGET      (1 << 2)
-#define F_PAL_ATK_PARTNER (1 << 3)
-#define F_PAL_DEF_PARTNER (1 << 4)
-#define F_PAL_ANIM_1      (1 << 5) // Palette set for GetBattleAnimBg1Data/GetBgDataForTransform. Only used (ineffectually?) by Aromatherapy.
-#define F_PAL_ANIM_2      (1 << 6) // Palette set for GetBattleAnimBgData/GetBgDataForTransform. Unused.
-#define F_PAL_ATK_SIDE    (F_PAL_ATTACKER | F_PAL_ATK_PARTNER)
-#define F_PAL_DEF_SIDE    (F_PAL_TARGET | F_PAL_DEF_PARTNER)
-#define F_PAL_BATTLERS    (F_PAL_ATK_SIDE | F_PAL_DEF_SIDE)
+#define F_PAL_BG                  (1 << 0)
+#define F_PAL_ATTACKER            (1 << 1)
+#define F_PAL_TARGET              (1 << 2)
+#define F_PAL_ATK_PARTNER         (1 << 3)
+#define F_PAL_DEF_PARTNER         (1 << 4)
+#define F_PAL_ANIM_1              (1 << 5) // Palette set for GetBattleAnimBg1Data/GetBgDataForTransform. Only used (ineffectually?) by Aromatherapy.
+#define F_PAL_ANIM_2              (1 << 6) // Palette set for GetBattleAnimBgData/GetBgDataForTransform. Unused.
+#define F_PAL_ATK_SIDE            (F_PAL_ATTACKER | F_PAL_ATK_PARTNER)
+#define F_PAL_DEF_SIDE            (F_PAL_TARGET | F_PAL_DEF_PARTNER)
+#define F_PAL_BATTLERS            (F_PAL_ATK_SIDE | F_PAL_DEF_SIDE)
+#define F_PAL_ADJACENT            (F_PAL_DEF_SIDE | F_PAL_ATK_PARTNER)
+#define F_PAL_ALL_BUT_DEF         (F_PAL_ATK_SIDE | F_PAL_DEF_PARTNER)
+#define F_PAL_ALL_BUT_ATK_PARTNER (F_PAL_ATTACKER | F_PAL_DEF_SIDE)
 // The below are only used by AnimTask_BlendBattleAnimPal to get battler sprite palettes by position rather than by role.
 // It's redundant with F_PAL_BATTLERS, because they're only ever used together to refer to all the battlers at once.
 #define F_PAL_BATTLERS_2  (1 << 7 | 1 << 8 | 1 << 9 | 1 << 10)
-
 
 #endif // GUARD_CONSTANTS_BATTLE_ANIM_H

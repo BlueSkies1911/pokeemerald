@@ -7,6 +7,8 @@
 #include "task.h"
 #include "constants/battle_anim.h"
 
+extern struct MusicPlayerInfo gMPlayInfo_SE1;
+
 static void SoundTask_FireBlast_Step1(u8 taskId);
 static void SoundTask_FireBlast_Step2(u8 taskId);
 static void SoundTask_LoopSEAdjustPanning_Step(u8 taskId);
@@ -165,10 +167,7 @@ void SoundTask_PlayCryHighPitch(u8 taskId)
             return;
         }
 
-        if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
-            species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES);
-        else
-            species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES);
+        species = gAnimBattlerSpecies[battlerId];
     }
 
     if (species != SPECIES_NONE)
@@ -213,10 +212,7 @@ void SoundTask_PlayDoubleCry(u8 taskId)
             return;
         }
 
-        if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
-            species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES);
-        else
-            species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES);
+        species = gAnimBattlerSpecies[battlerId];
     }
 
     gTasks[taskId].data[0] = gBattleAnimArgs[1];
@@ -280,7 +276,6 @@ void SoundTask_WaitForCry(u8 taskId)
             DestroyAnimVisualTask(taskId);
     }
 }
-
 
 #define tSpecies data[1]
 #define tPan     data[2]

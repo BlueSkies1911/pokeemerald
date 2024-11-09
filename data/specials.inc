@@ -317,7 +317,6 @@ gSpecials::
 	def_special GetContestMultiplayerId
 	def_special ScriptGetPartyMonSpecies
 	def_special IsSelectedMonEgg
-	def_special TryInitBattleTowerAwardManObjectEvent
 	def_special MoveOutOfSecretBaseFromOutside
 	def_special LoadPlayerBag
 	def_special Script_FadeOutMapMusic
@@ -396,7 +395,6 @@ gSpecials::
 	def_special CallApprenticeFunction
 	def_special ShouldTryGetTrainerScript
 	def_special ShowMapNamePopup
-	def_special ShowMapNamePopup
 	def_special BufferTMHMMoveName
 	def_special IsWirelessAdapterConnected
 	def_special TryBecomeLinkLeader
@@ -460,7 +458,6 @@ gSpecials::
 	def_special CloseBattleFrontierTutorWindow
 	def_special ScrollableMultichoice_RedrawPersistentMenu
 	def_special ChooseMonForMoveTutor
-	def_special GetBattleFrontierTutorMoveIndex
 	def_special ScrollableMultichoice_ClosePersistentMenu
 	def_special ChangeBoxPokemonNickname
 	def_special GetPCBoxToSendMon
@@ -469,7 +466,6 @@ gSpecials::
 	def_special DoDomeConfetti
 	def_special GetMartEmployeeObjectEventId
 	def_special SaveForBattleTowerLink
-	def_special Unused_SetWeatherSunny
 	def_special SetUnlockedPokedexFlags
 	def_special IsTrainerRegistered
 	def_special EnableNationalPokedex
@@ -497,6 +493,7 @@ gSpecials::
 	def_special RemoveRecordsWindow
 	def_special CloseDeptStoreElevatorWindow
 	def_special TrySetBattleTowerLinkType
+   	def_special CanWaterBerryPlot
     def_special OpenMuseumFossilPic
     def_special CloseMuseumFossilPic
     def_special SetSeenMon

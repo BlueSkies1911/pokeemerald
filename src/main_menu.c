@@ -105,57 +105,6 @@
  *  - Print one of three different error messages, wait for the text to stop
  *    printing, and then wait for A or B to be pressed.
  * - Then advance to Task_HandleMainMenuBPressed.
- *
- * Task_NewGameBirchSpeech_Init
- *  - Load the sprites for the intro speech, start playing music
- * Task_NewGameBirchSpeech_WaitToShowBirch
- *  - Spawn Task_NewGameBirchSpeech_FadeInTarget1OutTarget2
- *  - Spawn Task_NewGameBirchSpeech_FadePlatformOut
- *  - Both of these tasks destroy themselves when done.
- * Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome
- * Task_NewGameBirchSpeech_ThisIsAPokemon
- *  - When the text is done printing, spawns Task_NewGameBirchSpeechSub_InitPokeball
- * Task_NewGameBirchSpeech_MainSpeech
- * Task_NewGameBirchSpeech_AndYouAre
- * Task_NewGameBirchSpeech_SlidePlatformAway
- * Task_NewGameBirchSpeech_StartPlayerFadeIn
- * Task_NewGameBirchSpeech_WaitForPlayerFadeIn
- * Task_NewGameBirchSpeech_BoyOrGirl
- * Task_NewGameBirchSpeech_WaitToShowGenderMenu
- * Task_NewGameBirchSpeech_ChooseGender
- *  - Animates by advancing to Task_NewGameBirchSpeech_SlideOutOldGenderSprite
- *    whenever the player's selection changes.
- *  - Advances to Task_NewGameBirchSpeech_WhatsYourName when done.
- *
- * Task_NewGameBirchSpeech_SlideOutOldGenderSprite
- * Task_NewGameBirchSpeech_SlideInNewGenderSprite
- *  - Returns back to Task_NewGameBirchSpeech_ChooseGender.
- *
- * Task_NewGameBirchSpeech_WhatsYourName
- * Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint
- * Task_NewGameBirchSpeech_WaitPressBeforeNameChoice
- * Task_NewGameBirchSpeech_StartNamingScreen
- * C2_NamingScreen
- *  - Returns to CB2_NewGameBirchSpeech_ReturnFromNamingScreen when done
- * CB2_NewGameBirchSpeech_ReturnFromNamingScreen
- * Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox
- * Task_NewGameBirchSpeech_SoItsPlayerName
- * Task_NewGameBirchSpeech_CreateNameYesNo
- * Task_NewGameBirchSpeech_ProcessNameYesNoMenu
- *  - If confirmed, advance to Task_NewGameBirchSpeech_SlidePlatformAway2.
- *  - Otherwise, return to Task_NewGameBirchSpeech_BoyOrGirl.
- *
- * Task_NewGameBirchSpeech_SlidePlatformAway2
- * Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter
- * Task_NewGameBirchSpeech_AreYouReady
- * Task_NewGameBirchSpeech_ShrinkPlayer
- * Task_NewGameBirchSpeech_WaitForPlayerShrink
- * Task_NewGameBirchSpeech_FadePlayerToWhite
- * Task_NewGameBirchSpeech_Cleanup
- *  - Advances to CB2_NewGame.
- *
- * Task_NewGameBirchSpeechSub_InitPokeball
- *  - Destroys itself when done.
  */
 
 #define OPTION_MENU_FLAG (1 << 15)
@@ -184,54 +133,10 @@ static void HighlightSelectedMainMenuItem(u8, u8, s16);
 static void Task_HandleMainMenuInput(u8);
 static void Task_HandleMainMenuAPressed(u8);
 static void Task_HandleMainMenuBPressed(u8);
-static void Task_NewGameBirchSpeech_Init(u8);
 static void Task_DisplayMainMenuInvalidActionError(u8);
-static void AddBirchSpeechObjects(u8);
-static void Task_NewGameBirchSpeech_WaitToShowBirch(u8);
-static void NewGameBirchSpeech_StartFadeInTarget1OutTarget2(u8, u8);
-static void NewGameBirchSpeech_StartFadePlatformOut(u8, u8);
-static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8);
-static void NewGameBirchSpeech_ShowDialogueWindow(u8, u8);
-static void NewGameBirchSpeech_ClearWindow(u8);
-static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8);
-static void Task_NewGameBirchSpeech_MainSpeech(u8);
-static void NewGameBirchSpeech_WaitForThisIsPokemonText(struct TextPrinterTemplate *, u16);
-static void Task_NewGameBirchSpeech_AndYouAre(u8);
-static void NewGameBirchSpeech_StartFadeOutTarget1InTarget2(u8, u8);
-static void NewGameBirchSpeech_StartFadePlatformIn(u8, u8);
-static void Task_NewGameBirchSpeech_SlidePlatformAway(u8);
-static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8);
-static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8);
-static void Task_NewGameBirchSpeech_BoyOrGirl(u8);
 static void LoadMainMenuWindowFrameTiles(u8, u16);
 static void DrawMainMenuWindowBorder(const struct WindowTemplate *, u16);
 static void Task_HighlightSelectedMainMenuItem(u8);
-static void Task_NewGameBirchSpeech_WaitToShowGenderMenu(u8);
-static void Task_NewGameBirchSpeech_ChooseGender(u8);
-static void NewGameBirchSpeech_ShowGenderMenu(void);
-static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void);
-static void NewGameBirchSpeech_ClearGenderWindow(u8, u8);
-static void Task_NewGameBirchSpeech_WhatsYourName(u8);
-static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8);
-static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8);
-static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8);
-static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8);
-static void Task_NewGameBirchSpeech_StartNamingScreen(u8);
-static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void);
-static void NewGameBirchSpeech_SetDefaultPlayerName(u8);
-static void Task_NewGameBirchSpeech_CreateNameYesNo(u8);
-static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8);
-void CreateYesNoMenuParameterized(u8, u8, u16, u16, u8, u8);
-static void Task_NewGameBirchSpeech_SlidePlatformAway2(u8);
-static void Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter(u8);
-static void Task_NewGameBirchSpeech_AreYouReady(u8);
-static void Task_NewGameBirchSpeech_ShrinkPlayer(u8);
-static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite *);
-static void Task_NewGameBirchSpeech_WaitForPlayerShrink(u8);
-static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8);
-static void Task_NewGameBirchSpeech_Cleanup(u8);
-static void SpriteCB_Null();
-static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8);
 static void MainMenu_FormatSavegamePlayer(void);
 static void MainMenu_FormatSavegamePokedex(void);
 static void MainMenu_FormatSavegameTime(void);
@@ -1244,7 +1149,7 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
     }
 }
 
-static void CreateMainMenuErrorWindow(const u8* str)
+static void CreateMainMenuErrorWindow(const u8 *str)
 {
     FillWindowPixelBuffer(7, PIXEL_FILL(1));
     AddTextPrinterParameterized(7, FONT_NORMAL, str, 0, 1, 2, 0);
@@ -1296,7 +1201,7 @@ static void MainMenu_FormatSavegamePokedex(void)
             dexCount = GetKantoPokedexCount(FLAG_GET_CAUGHT);
         StringExpandPlaceholders(gStringVar4, gText_ContinueMenuPokedex);
         AddTextPrinterParameterized3(2, FONT_NORMAL, 0, 33, sTextColor_MenuInfo, TEXT_SKIP_DRAW, gStringVar4);
-        ConvertIntToDecimalStringN(str, dexCount, STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(str, dexCount, STR_CONV_MODE_LEFT_ALIGN, 4);
         AddTextPrinterParameterized3(2, FONT_NORMAL, GetStringRightAlignXOffset(FONT_NORMAL, str, 100), 33, sTextColor_MenuInfo, TEXT_SKIP_DRAW, str);
     }
 }

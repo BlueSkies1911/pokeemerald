@@ -6,7 +6,8 @@
 enum
 {
     HP_CURRENT,
-    HP_MAX
+    HP_MAX,
+    HP_BOTH
 };
 
 enum
@@ -63,16 +64,17 @@ enum
     HEALTHBOX_SAFARI_BALLS_TEXT
 };
 
+u32 WhichBattleCoords(u32 battlerId);
 u8 CreateBattlerHealthboxSprites(u8 battler);
 u8 CreateSafariPlayerHealthboxSprites(void);
 void SetBattleBarStruct(u8 battler, u8 healthboxSpriteId, s32 maxVal, s32 currVal, s32 receivedValue);
 void SetHealthboxSpriteInvisible(u8 healthboxSpriteId);
 void SetHealthboxSpriteVisible(u8 healthboxSpriteId);
-void DestoryHealthboxSprite(u8 healthboxSpriteId);
 void DummyBattleInterfaceFunc(u8 healthboxSpriteId, bool8 isDoubleBattleBankOnly);
-void UpdateOamPriorityInAllHealthboxes(u8 priority);
+void UpdateOamPriorityInAllHealthboxes(u8 priority, bool32 hideHpBoxes);
 void InitBattlerHealthboxCoords(u8 battler);
-void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent);
+void GetBattlerHealthboxCoords(u8 battler, s16 *x, s16 *y);
+void UpdateHpTextInHealthbox(u32 healthboxSpriteId, u32 maxOrCurrent, s16 currHp, s16 maxHp);
 void SwapHpBarsWithHpText(void);
 u8 CreatePartyStatusSummarySprites(u8 battler, struct HpAndStatus *partyInfo, bool8 skipPlayer, bool8 isBattleStart);
 void Task_HidePartyStatusSummary(u8 taskId);

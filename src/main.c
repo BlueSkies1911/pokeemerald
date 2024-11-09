@@ -30,7 +30,9 @@ static void HBlankIntr(void);
 static void VCountIntr(void);
 static void SerialIntr(void);
 static void IntrDummy(void);
-extern void CB2_FlashNotDetectedScreen(void);
+
+// Defined in the linker script so that the test build can override it.
+extern void gInitialMainCB2(void);
 
 const u8 gGameVersion = GAME_VERSION;
 
@@ -58,8 +60,6 @@ const IntrFunc gIntrTableTemplate[] =
 
 #define INTR_COUNT ((int)(sizeof(gIntrTableTemplate)/sizeof(IntrFunc)))
 
-static u16 sUnusedVar; // Never read
-
 u16 gKeyRepeatStartDelay;
 bool8 gLinkTransferringData;
 struct Main gMain;
@@ -69,6 +69,7 @@ IntrFunc gIntrTable[INTR_COUNT];
 u8 gLinkVSyncDisabled;
 u32 IntrMain_Buffer[0x200];
 s8 gPcmDmaCounter;
+void *gAgbMainLoop_sp;
 
 static EWRAM_DATA u16 sTrainerId = 0;
 
@@ -77,7 +78,9 @@ static EWRAM_DATA u16 sTrainerId = 0;
 static void UpdateLinkAndCallCallbacks(void);
 static void InitMainCallbacks(void);
 static void CallCallbacks(void);
+#ifdef BUGFIX
 static void SeedRngWithRtc(void);
+#endif
 static void ReadKeys(void);
 void InitIntrHandlers(void);
 static void WaitForVBlank(void);
@@ -87,11 +90,6 @@ void EnableVCountIntrAtLine150(void);
 
 void AgbMain()
 {
-    // Modern compilers are liberal with the stack on entry to this function,
-    // so RegisterRamReset may crash if it resets IWRAM.
-#if !MODERN
-    RegisterRamReset(RESET_ALL);
-#endif //MODERN
     *(vu16 *)BG_PLTT = RGB_WHITE; // Set the backdrop to white on startup
     InitGpuRegManager();
     REG_WAITCNT = WAITCNT_PREFETCH_ENABLE | WAITCNT_WS0_S_1 | WAITCNT_WS0_N_3;
@@ -104,7 +102,9 @@ void AgbMain()
     CheckForFlashMemory();
     InitMainCallbacks();
     InitMapMusic();
+#ifdef BUGFIX
     SeedRngWithRtc(); // see comment at SeedRngWithRtc definition below
+#endif
     ClearDma3Requests();
     ResetBgs();
     SetDefaultFontsPointer();
@@ -113,10 +113,9 @@ void AgbMain()
     gSoftResetDisabled = FALSE;
 
     if (gFlashMemoryPresent != TRUE)
-        SetMainCallback2(CB2_FlashNotDetectedScreen);
+        SetMainCallback2(NULL);
 
     gLinkTransferringData = FALSE;
-    sUnusedVar = 0xFC0;
 
 #ifndef NDEBUG
 #if (LOG_HANDLER == LOG_HANDLER_MGBA_PRINT)
@@ -125,6 +124,12 @@ void AgbMain()
     AGBPrintfInit();
 #endif
 #endif
+    gAgbMainLoop_sp = __builtin_frame_address(0);
+    AgbMainLoop();
+}
+
+void AgbMainLoop(void)
+{
     for (;;)
     {
         ReadKeys();
@@ -177,7 +182,7 @@ static void InitMainCallbacks(void)
     gTrainerTowerVBlankCounter = NULL;
     gMain.vblankCounter2 = 0;
     gMain.callback1 = NULL;
-    SetMainCallback2(CB2_InitCopyrightScreenAfterBootup);
+    SetMainCallback2(gInitialMainCB2);
     gSaveBlock2Ptr = &gSaveblock2.block;
     gPokemonStoragePtr = &gPokemonStorage.block;
 }
@@ -199,13 +204,17 @@ void SetMainCallback2(MainCallback callback)
 
 void StartTimer1(void)
 {
-    REG_TM1CNT_H = 0x80;
+    REG_TM1CNT_H = TIMER_ENABLE;
 }
 
 void SeedRngAndSetTrainerId(void)
 {
-    u16 val = REG_TM1CNT_L;
-    SeedRng(val);
+    u32 val;
+
+    // Do it exactly like it was originally done, including not stopping
+    // the timer beforehand.
+    val = REG_TM1CNT_L;
+    SeedRng((u16)val);
     REG_TM1CNT_H = 0;
     sTrainerId = val;
 }
@@ -404,7 +413,7 @@ static void IntrDummy(void)
 static void WaitForVBlank(void)
 {
     gMain.intrCheck &= ~INTR_FLAG_VBLANK;
-    asm("swi 0x5");
+    VBlankIntrWait();
 }
 
 void SetTrainerTowerVBlankCounter(u32 *counter)

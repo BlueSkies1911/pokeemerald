@@ -103,13 +103,21 @@ BerryTree_EventScript_CheckBerryFullyGrown::
 	lock
 	faceplayer
 	special ObjectEventInteractionGetBerryCountString
+	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_CheckBerryFullyGrown_Mutation
 	msgbox BerryTree_Text_WantToPick, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_PickBerry
 	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPickingBerry
 
+.set BERRY_NORMAL_BAG_FULL, 0
+.set BERRY_NORMAL_SPACE_IN_BAG, 1
+.set BERRY_MUTATION_BAG_FULL, 2
+.set BERRY_MUTATION_SPACE_IN_BAG, 3
+
 BerryTree_EventScript_PickBerry::
 	special ObjectEventInteractionPickBerryTree
-	goto_if_eq VAR_0x8004, 0, BerryTree_EventScript_BerryPocketFull
+	goto_if_eq VAR_0x8004, BERRY_NORMAL_BAG_FULL, BerryTree_EventScript_BerryPocketFull
+	goto_if_eq VAR_0x8004, BERRY_MUTATION_BAG_FULL, BerryTree_EventScript_BerryPocketFull_Mutation
+	goto_if_eq VAR_0x8004, BERRY_MUTATION_SPACE_IN_BAG, BerryTree_EventScript_PickBerry_Mutation
 	special IncrementDailyPickedBerries
 	special ObjectEventInteractionRemoveBerryTree
 	message BerryTree_Text_PickedTheBerry
@@ -147,6 +155,8 @@ BerryTree_EventScript_ItemUsePlantBerry::
 BerryTree_EventScript_WantToWater::
 	checkitem ITEM_SQUIRT_BOTTLE
 	goto_if_eq VAR_RESULT, FALSE, BerryTree_EventScript_DontWater
+	specialvar VAR_RESULT, CanWaterBerryPlot
+	goto_if_eq VAR_RESULT, FALSE, BerryTree_EventScript_DontWater
 	special ObjectEventInteractionGetBerryName
 	msgbox BerryTree_Text_WantToWater, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_WaterBerry
@@ -182,12 +192,45 @@ BerryTree_EventScript_PlantBerry::
 	waitbuttonpress
 	return
 
+BerryTree_EventScript_CheckBerryFullyGrown_Mutation:
+	msgbox BerryTree_Text_WantToPick_Mutation, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_PickBerry
+	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPickingBerry_Mutation
+
+BerryTree_EventScript_CancelPickingBerry_Mutation::
+	message BerryTree_Text_BerryLeftUnpicked_Mutation
+	waitmessage
+	waitbuttonpress
+	release
+	end
+
+BerryTree_EventScript_BerryPocketFull_Mutation::
+	message BerryTree_Text_BerryPocketFull_Mutation
+	waitmessage
+	waitbuttonpress
+	release
+	end
+
+BerryTree_EventScript_PickBerry_Mutation::
+	special IncrementDailyPickedBerries
+	special ObjectEventInteractionRemoveBerryTree
+	message BerryTree_Text_PickedTheBerry_Mutation
+	playfanfare MUS_OBTAIN_BERRY
+	waitmessage
+	waitfanfare
+	waitbuttonpress
+	message BerryTree_Text_PutAwayBerry_Mutation
+	waitmessage
+	waitbuttonpress
+	release
+	end
+
 BerryTree_Text_ItsSoftLoamySoil:
 	.string "It's soft, loamy soil.$"
 
 BerryTree_Text_WantToPlant:
 	.string "It's soft, loamy soil.\n"
-	.string "Want to plant a Berry?$"
+	.string "Want to plant a berry?$"
 
 BerryTree_Text_PlantedOneBerry:
 	.string "{PLAYER} planted one {STR_VAR_1} in\n"
@@ -249,3 +292,28 @@ BerryTree_Text_PlantIsDelighted:
 
 BerryTree_Text_ExclamationPoint:
 	.string "!$"
+
+BerryTree_Text_WantToPick_Mutation:
+	.string "You found {STR_VAR_2} {STR_VAR_1}\n"
+	.string "and 1 {STR_VAR_3}!\p"
+	.string "Do you want to pick them?$"
+
+BerryTree_Text_BerryLeftUnpicked_Mutation:
+	.string "{PLAYER} left the {STR_VAR_1}\n"
+	.string "and the {STR_VAR_3} unpicked.$"
+
+BerryTree_Text_BerryPocketFull_Mutation:
+	.string "The Bag's Berries Pocket is full.\p"
+	.string "The {STR_VAR_1} and the\n"
+	.string "{STR_VAR_3} couldn't be taken.$"
+
+BerryTree_Text_PickedTheBerry_Mutation:
+	.string "{PLAYER} picked the {STR_VAR_2} {STR_VAR_1}\n"
+	.string "and the {STR_VAR_3}.$"
+
+BerryTree_Text_PutAwayBerry_Mutation:
+	.string "{PLAYER} put away the {STR_VAR_1}\n"
+	.string "and the {STR_VAR_3} in the Bag's\l"
+	.string "Berries Pocket.\p"
+	.string "The soil returned to its soft and\n"
+	.string "loamy state.$"

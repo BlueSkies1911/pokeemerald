@@ -21,7 +21,6 @@ static void AnimQuestionMark_Step1(struct Sprite *);
 static void AnimQuestionMark_Step2(struct Sprite *);
 static void AnimRedX(struct Sprite *);
 static void AnimSkillSwapOrb(struct Sprite *);
-static void AnimPsychoBoost(struct Sprite *);
 static void AnimTask_MeditateStretchAttacker_Step(u8);
 static void AnimTask_Teleport_Step(u8);
 static void AnimTask_ImprisonOrbs_Step(u8);
@@ -367,7 +366,7 @@ static const union AffineAnimCmd sAffineAnim_LusterPurgeCircle[] =
     AFFINEANIMCMD_END_ALT(1),
 };
 
-static const union AffineAnimCmd *const sAffineAnims_LusterPurgeCircle[] =
+const union AffineAnimCmd *const gAffineAnims_LusterPurgeCircle[] =
 {
     sAffineAnim_LusterPurgeCircle,
 };
@@ -379,7 +378,7 @@ const struct SpriteTemplate gLusterPurgeCircleSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjBlend_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_LusterPurgeCircle,
+    .affineAnims = gAffineAnims_LusterPurgeCircle,
     .callback = AnimSpriteOnMonPos,
 };
 
@@ -404,7 +403,7 @@ static const union AffineAnimCmd sAffineAnim_PsychoBoostOrb_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_PsychoBoostOrb[] =
+const union AffineAnimCmd *const gAffineAnims_PsychoBoostOrb[] =
 {
     sAffineAnim_PsychoBoostOrb_0,
     sAffineAnim_PsychoBoostOrb_1,
@@ -417,7 +416,7 @@ const struct SpriteTemplate gPsychoBoostOrbSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjBlend_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_PsychoBoostOrb,
+    .affineAnims = gAffineAnims_PsychoBoostOrb,
     .callback = AnimPsychoBoost,
 };
 
@@ -1234,7 +1233,7 @@ static void AnimTask_TransparentCloneGrowAndShrink_Step(u8 taskId)
     }
 }
 
-static void AnimPsychoBoost(struct Sprite *sprite)
+void AnimPsychoBoost(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {

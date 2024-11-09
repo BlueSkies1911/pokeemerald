@@ -163,7 +163,7 @@
 
 #define LEVEL_UP_MOVE_ID   0x01FF
 #define LEVEL_UP_MOVE_LV   0xFE00
-#define LEVEL_UP_END       0xFFFF
+#define LEVEL_UP_MOVE_END  0xFFFF
 
 #define MAX_LEVEL_UP_MOVES       20
 
@@ -192,7 +192,7 @@
 #define FRIENDSHIP_200_TO_254  5
 #define FRIENDSHIP_MAX         6
 
-// Friendship value that the majority of species use. This was changed in Generation 8 to 50.
+// Friendship value that the majority of species use.
 #define STANDARD_FRIENDSHIP 70
 
 #define MAX_FRIENDSHIP  255
@@ -202,37 +202,14 @@
 #define MAX_PER_STAT_IVS 31
 #define MAX_IV_MASK 31
 #define USE_RANDOM_IVS (MAX_PER_STAT_IVS + 1)
-#define MAX_PER_STAT_EVS 255
+#define MAX_PER_STAT_EVS 252
 #define MAX_TOTAL_EVS 510
 #define EV_ITEM_RAISE_LIMIT 100
 
-// Battle move flags
-#define FLAG_MAKES_CONTACT                        (1 << 0)
-#define FLAG_PROTECT_AFFECTED                     (1 << 1)
-#define FLAG_MAGIC_COAT_AFFECTED                  (1 << 2)
-#define FLAG_SNATCH_AFFECTED                      (1 << 3)
-#define FLAG_MIRROR_MOVE_AFFECTED                 (1 << 4)
-#define FLAG_KINGS_ROCK_AFFECTED                  (1 << 5)
-#define FLAG_HIGH_CRIT                            (1 << 6)
-#define FLAG_RECKLESS_BOOST                       (1 << 7)
-#define FLAG_IRON_FIST_BOOST                      (1 << 8)
-#define FLAG_SHEER_FORCE_BOOST                    (1 << 9)
-#define FLAG_STAT_STAGES_IGNORED                  (1 << 10)
-#define FLAG_DMG_MINIMISE                         (1 << 11)
-#define FLAG_DMG_UNDERGROUND                      (1 << 12)
-#define FLAG_DMG_UNDERWATER                       (1 << 13)
-#define FLAG_SOUND                                (1 << 14)
-#define FLAG_PROTECTION_MOVE                      (1 << 15)
-#define FLAG_POWDER                               (1 << 16)
-#define FLAG_DMG_2X_IN_AIR                        (1 << 17) // If target is in the air, can hit and deal double damage.
-#define FLAG_DMG_IN_AIR                           (1 << 18) // If target is in the air, can hit.
-#define FLAG_THAW_USER                            (1 << 19)
-#define FLAG_TWO_STRIKES                          (1 << 20) // A move with this flag will strike twice, and may apply its effect on each hit
-
-// Split defines.
-#define SPLIT_PHYSICAL  0x0
-#define SPLIT_SPECIAL   0x1
-#define SPLIT_STATUS    0x2
+// Move category defines.
+#define DAMAGE_CATEGORY_PHYSICAL    0
+#define DAMAGE_CATEGORY_SPECIAL     1
+#define DAMAGE_CATEGORY_STATUS      2
 
 // Growth rates
 #define GROWTH_MEDIUM_FAST  0
@@ -257,24 +234,24 @@
 #define F_SUMMARY_SCREEN_FLIP_SPRITE 0x80
 
 // Evolution types
-#define EVO_FRIENDSHIP       1  // Pokémon levels up with friendship ≥ 220
-#define EVO_FRIENDSHIP_DAY   2  // Pokémon levels up during the day with friendship ≥ 220
-#define EVO_FRIENDSHIP_NIGHT 3  // Pokémon levels up at night with friendship ≥ 220
-#define EVO_LEVEL            4  // Pokémon reaches the specified level
-#define EVO_TRADE            5  // Pokémon is traded
-#define EVO_TRADE_ITEM       6  // Pokémon is traded while it's holding the specified item
-#define EVO_ITEM             7  // specified item is used on Pokémon
-#define EVO_LEVEL_ATK_GT_DEF 8  // Pokémon reaches the specified level with attack > defense
-#define EVO_LEVEL_ATK_EQ_DEF 9  // Pokémon reaches the specified level with attack = defense
-#define EVO_LEVEL_ATK_LT_DEF 10 // Pokémon reaches the specified level with attack < defense
-
-#define EVOS_PER_MON 5
+#define EVOLUTIONS_END                    0xFFFF // Not an actual evolution, used to mark the end of an evolution array.
+#define EVO_NONE                          0xFFFE // Not an actual evolution, used to generate offspring that can't evolve into the specified species, like regional forms.
+#define EVO_FRIENDSHIP                    1      // Pokémon levels up with friendship ≥ 220
+#define EVO_FRIENDSHIP_DAY                2      // Pokémon levels up during the day with friendship ≥ 220
+#define EVO_FRIENDSHIP_NIGHT              3      // Pokémon levels up at night with friendship ≥ 220
+#define EVO_LEVEL                         4      // Pokémon reaches the specified level
+#define EVO_TRADE                         5      // Pokémon is traded
+#define EVO_TRADE_ITEM                    6      // Pokémon is traded while it's holding the specified item
+#define EVO_ITEM                          7      // specified item is used on Pokémon
+#define EVO_LEVEL_ATK_GT_DEF              8      // Pokémon reaches the specified level with attack > defense
+#define EVO_LEVEL_ATK_EQ_DEF              9      // Pokémon reaches the specified level with attack = defense
+#define EVO_LEVEL_ATK_LT_DEF              10     // Pokémon reaches the specified level with attack < defense
 
 // Evolution 'modes,' for GetEvolutionTargetSpecies
-#define EVO_MODE_NORMAL     0
-#define EVO_MODE_TRADE      1
-#define EVO_MODE_ITEM_USE   2
-#define EVO_MODE_ITEM_CHECK 3 // If an Everstone is being held, still want to show that the stone *could* be used on that Pokémon to evolve
+#define EVO_MODE_NORMAL            0
+#define EVO_MODE_TRADE             1
+#define EVO_MODE_ITEM_USE          2
+#define EVO_MODE_ITEM_CHECK        3 // If an Everstone is being held, still want to show that the stone *could* be used on that Pokémon to evolve
 
 #define MON_PIC_WIDTH 64
 #define MON_PIC_HEIGHT 64
@@ -282,14 +259,16 @@
 
 #define MAX_MON_PIC_FRAMES 2
 
-#define BATTLE_ALIVE_EXCEPT_ACTIVE  0
-#define BATTLE_ALIVE_ATK_SIDE       1
-#define BATTLE_ALIVE_DEF_SIDE       2
+#define BATTLE_ALIVE_EXCEPT_BATTLER  0
+#define BATTLE_ALIVE_SIDE            1
 
 #define SKIP_FRONT_ANIM (1 << 7)
 
 #define NUM_ABILITY_SLOTS (NUM_NORMAL_ABILITY_SLOTS + NUM_HIDDEN_ABILITY_SLOTS)
 #define NUM_NORMAL_ABILITY_SLOTS 2
 #define NUM_HIDDEN_ABILITY_SLOTS 1
+
+// Used as a signal for givemon to generate a default ability by personality.
+#define NUM_ABILITY_PERSONALITY 0xFF
 
 #endif // GUARD_CONSTANTS_POKEMON_H

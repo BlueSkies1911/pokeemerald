@@ -318,7 +318,6 @@ static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] =
     {
         .trainerId = TRAINER_ENGINEER_BERNIE,
         .unused = 0,
-        // Thalia and Sawyer are the only ones who use different msg ids for their battle topics
         .battleTopicTextIds = { TEXT_ID(B_TOPIC_WILD, 8), TEXT_ID(B_TOPIC_NEGATIVE, 10), TEXT_ID(B_TOPIC_POSITIVE, 10) },
         .generalTextId = TEXT_ID(GEN_TOPIC_PERSONAL, 14),
         .battleFrontierRecordStreakTextIndex = 10,
@@ -1824,7 +1823,7 @@ static void PopulateTrainerName(int matchCallId, u8 *destStr)
         }
     }
 
-    StringCopy(destStr, gTrainers[trainerId].trainerName);
+    StringCopy(destStr, GetTrainerNameFromId(trainerId));
 }
 
 static void PopulateMapName(int matchCallId, u8 *destStr)
@@ -1917,7 +1916,7 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
 
             if (numSpecies)
             {
-                StringCopy(destStr, gSpeciesNames[species[Random() % numSpecies]]);
+                StringCopy(destStr, GetSpeciesName(species[Random() % numSpecies]));
                 return;
             }
         }
@@ -1929,30 +1928,17 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
 static void PopulateSpeciesFromTrainerParty(int matchCallId, u8 *destStr)
 {
     u16 trainerId;
-    union TrainerMonPtr party;
+    const struct TrainerMon *party;
     u8 monId;
     const u8 *speciesName;
 
     trainerId = GetLastBeatenRematchTrainerId(sMatchCallTrainers[matchCallId].trainerId);
-    party = gTrainers[trainerId].party;
-    monId = Random() % gTrainers[trainerId].partySize;
-
-    switch (gTrainers[trainerId].partyFlags)
-    {
-    case 0:
-    default:
-        speciesName = gSpeciesNames[party.NoItemDefaultMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_CUSTOM_MOVESET:
-        speciesName = gSpeciesNames[party.NoItemCustomMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_HELD_ITEM:
-        speciesName = gSpeciesNames[party.ItemDefaultMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
-        speciesName = gSpeciesNames[party.ItemCustomMoves[monId].species];
-        break;
-    }
+    party = GetTrainerPartyFromId(trainerId);
+    monId = Random() % GetTrainerPartySizeFromId(trainerId);
+    if (party != NULL)
+        speciesName = GetSpeciesName(party[monId].species);
+    else
+        speciesName = GetSpeciesName(SPECIES_NONE);
 
     StringCopy(destStr, speciesName);
 }
@@ -2213,8 +2199,8 @@ void BufferPokedexRatingForMatchCall(u8 *destStr)
         *(str++) = CHAR_PROMPT_CLEAR;
         numSeen = GetNationalPokedexCount(FLAG_GET_SEEN);
         numCaught = GetNationalPokedexCount(FLAG_GET_CAUGHT);
-        ConvertIntToDecimalStringN(gStringVar1, numSeen, STR_CONV_MODE_LEFT_ALIGN, 3);
-        ConvertIntToDecimalStringN(gStringVar2, numCaught, STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gStringVar1, numSeen, STR_CONV_MODE_LEFT_ALIGN, 4);
+        ConvertIntToDecimalStringN(gStringVar2, numCaught, STR_CONV_MODE_LEFT_ALIGN, 4);
         StringExpandPlaceholders(str, gPokedexRating_Text_NationalDexSeenXOwnedY);
     }
 

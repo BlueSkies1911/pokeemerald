@@ -40,6 +40,7 @@
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "constants/pokemon_icon.h"
 
 /*
     NOTE: This file is large. Some general groups of functions have
@@ -150,6 +151,7 @@ enum {
 };
 #define MENU_WALLPAPER_SETS_START MENU_SCENERY_1
 #define MENU_WALLPAPERS_START MENU_FOREST
+#define GENDER_MASK 0x7FFF
 
 // Return IDs for input handlers
 enum {
@@ -215,12 +217,12 @@ enum {
 #define BOXID_CANCELED    201
 
 enum {
-    PALTAG_MON_ICON_0 = 56000,
+    PALTAG_MON_ICON_0 = POKE_ICON_BASE_PAL_TAG,
     PALTAG_MON_ICON_1, // Used implicitly in CreateMonIconSprite
     PALTAG_MON_ICON_2, // Used implicitly in CreateMonIconSprite
-    PALTAG_3, // Unused
-    PALTAG_4, // Unused
-    PALTAG_5, // Unused
+    PALTAG_MON_ICON_3, // Used implicitly in CreateMonIconSprite
+    PALTAG_MON_ICON_4, // Used implicitly in CreateMonIconSprite
+    PALTAG_MON_ICON_5, // Used implicitly in CreateMonIconSprite
     PALTAG_DISPLAY_MON,
     PALTAG_MISC_1,
     PALTAG_MARKING_COMBO,
@@ -574,9 +576,9 @@ EWRAM_DATA static bool8 sIsMonBeingMoved = 0;
 EWRAM_DATA static u8 sMovingMonOrigBoxId = 0;
 EWRAM_DATA static u8 sMovingMonOrigBoxPos = 0;
 EWRAM_DATA static bool8 sAutoActionOn = 0;
+EWRAM_DATA static bool8 sJustOpenedBag = 0;
 
 // Main tasks
-static void EnterPokeStorage(u8);
 static void Task_InitPokeStorage(u8);
 static void Task_PlaceMon(u8);
 static void Task_ChangeScreen(u8);
@@ -676,6 +678,7 @@ static void InitSummaryScreenData(void);
 static void SetSelectionAfterSummaryScreen(void);
 static void SetMonMarkings(u8);
 static bool8 IsRemovingLastPartyMon(void);
+static bool8 CanPlaceMon(void);
 static bool8 CanShiftMon(void);
 static bool8 IsMonBeingMoved(void);
 static void TryRefreshDisplayMon(void);
@@ -1994,7 +1997,7 @@ static void CB2_PokeStorage(void)
     BuildOamBuffer();
 }
 
-static void EnterPokeStorage(u8 boxOption)
+void EnterPokeStorage(u8 boxOption)
 {
     ResetTasks();
     sCurrentBoxOption = boxOption;
@@ -3081,6 +3084,7 @@ static void Task_TakeItemForMoving(u8 taskId)
         StartCursorAnim(CURSOR_ANIM_OPEN);
         TakeItemFromMon(sInPartyMenu ? CURSOR_AREA_IN_PARTY : CURSOR_AREA_IN_BOX, GetCursorPosition());
         sStorage->state++;
+        sJustOpenedBag = FALSE;
         break;
     case 2:
         if (!IsItemIconAnimActive())
@@ -3600,6 +3604,7 @@ static void Task_GiveItemFromBag(u8 taskId)
             sWhichToReshow = SCREEN_CHANGE_ITEM_FROM_BAG - 1;
             sStorage->screenChangeType = SCREEN_CHANGE_ITEM_FROM_BAG;
             SetPokeStorageTask(Task_ChangeScreen);
+            sJustOpenedBag = TRUE;
         }
         break;
     }
@@ -3673,9 +3678,15 @@ static void Task_OnBPressed(u8 taskId)
     case 0:
         if (IsMonBeingMoved())
         {
-            PlaySE(SE_FAILURE);
-            PrintMessage(MSG_HOLDING_POKE);
-            sStorage->state = 1;
+            if (CanPlaceMon())
+            {
+                PlaySE(SE_SELECT);
+                SetPokeStorageTask(Task_PlaceMon);
+            }
+            else
+            {
+                SetPokeStorageTask(Task_PokeStorageMain);
+            }
         }
         else if (IsMovingItem())
         {
@@ -5083,7 +5094,7 @@ static void SpriteCB_HeldMon(struct Sprite *sprite)
     sprite->y = sStorage->cursorSprite->y + sStorage->cursorSprite->y2 + 4;
 }
 
-static u16 TryLoadMonIconTiles(u16 species)
+static u16 TryLoadMonIconTiles(u16 species, u32 personality)
 {
     u16 i, offset;
 
@@ -5113,7 +5124,8 @@ static u16 TryLoadMonIconTiles(u16 species)
     sStorage->iconSpeciesList[i] = species;
     sStorage->numIconsPerSpecies[i]++;
     offset = 16 * i;
-    CpuCopy32(gMonIconTable[species], (void *)(OBJ_VRAM0) + offset * TILE_SIZE_4BPP, 0x200);
+    species &= GENDER_MASK;
+    CpuCopy32(GetMonIconTiles(species, personality), (void *)(OBJ_VRAM0) + offset * TILE_SIZE_4BPP, 0x200);
 
     return offset;
 }
@@ -5140,8 +5152,8 @@ static struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s
     struct SpriteTemplate template = sSpriteTemplate_MonIcon;
 
     species = GetIconSpecies(species, personality);
-    template.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
-    tileNum = TryLoadMonIconTiles(species);
+    template.paletteTag = PALTAG_MON_ICON_0 + gSpeciesInfo[species].iconPalIndex;
+    tileNum = TryLoadMonIconTiles(species, personality);
     if (tileNum == 0xFFFF)
         return NULL;
 
@@ -5930,7 +5942,7 @@ static bool8 UpdateCursorPos(void)
 
 static void InitNewCursorPos(u8 newCursorArea, u8 newCursorPosition)
 {
-    u16 x, y;
+    u16 x = 0, y = 0;
 
     GetCursorCoordsByPos(newCursorArea, newCursorPosition, &x, &y);
     sStorage->newCursorArea = newCursorArea;
@@ -6360,15 +6372,12 @@ static void SetMovingMonData(u8 boxId, u8 position)
 
 static void SetPlacedMonData(u8 boxId, u8 position)
 {
+    HealPokemon(&sStorage->movingMon);
+
     if (boxId == TOTAL_BOXES_COUNT)
-    {
         gPlayerParty[position] = sStorage->movingMon;
-    }
     else
-    {
-        BoxMonRestorePP(&sStorage->movingMon.box);
         SetBoxMonAt(boxId, position, &sStorage->movingMon.box);
-    }
 }
 
 static void PurgeMonOrBoxMon(u8 boxId, u8 position)
@@ -6772,6 +6781,20 @@ static bool8 IsRemovingLastPartyMon(void)
         return FALSE;
 }
 
+static bool8 CanPlaceMon(void)
+{
+    if (sIsMonBeingMoved)
+    {
+        if (sCursorArea == CURSOR_AREA_IN_PARTY && GetMonData(&gPlayerParty[sCursorPosition], MON_DATA_SPECIES) == SPECIES_NONE)
+            return TRUE;
+        else if (sCursorArea == CURSOR_AREA_IN_BOX && GetBoxMonDataAt(StorageGetCurrentBox(), sCursorPosition, MON_DATA_SPECIES_OR_EGG) == SPECIES_NONE)
+            return TRUE;
+        else
+            return FALSE;
+    }
+    return FALSE;
+}
+
 static bool8 CanShiftMon(void)
 {
     if (sIsMonBeingMoved)
@@ -6882,7 +6905,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
         sStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES_OR_EGG);
         if (sStorage->displayMonSpecies != SPECIES_NONE)
         {
-            u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
+            bool8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
             sanityIsBadEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
             if (sanityIsBadEgg)
                 sStorage->displayMonIsEgg = TRUE;
@@ -6895,7 +6918,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
             sStorage->displayMonLevel = GetLevelFromBoxMonExp(boxMon);
             sStorage->displayMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
             sStorage->displayMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
-            sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(sStorage->displayMonSpecies, otId, sStorage->displayMonPersonality);
+            sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(sStorage->displayMonSpecies, isShiny, sStorage->displayMonPersonality);
             gender = GetGenderFromSpeciesAndPersonality(sStorage->displayMonSpecies, sStorage->displayMonPersonality);
             sStorage->displayMonItemId = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
         }
@@ -6934,7 +6957,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
 
         txtPtr = sStorage->displayMonSpeciesName;
         *(txtPtr)++ = CHAR_SLASH;
-        StringCopyPadded(txtPtr, gSpeciesNames[sStorage->displayMonSpecies], CHAR_SPACE, 5);
+        StringCopyPadded(txtPtr, GetSpeciesName(sStorage->displayMonSpecies), CHAR_SPACE, 5);
 
         txtPtr = sStorage->displayMonGenderLvlText;
         *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;
@@ -8571,6 +8594,7 @@ static void MultiMove_SetPlacedMonData(void)
         u8 boxPosition = (IN_BOX_COLUMNS * i) + sMultiMove->minColumn;
         for (j = sMultiMove->minColumn; j < columnCount; j++)
         {
+            HealBoxPokemon(&sMultiMove->boxMons[monArrayId]);
             if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES))
                 SetBoxMonAt(boxId, boxPosition, &sMultiMove->boxMons[monArrayId]);
             boxPosition++;
@@ -9990,62 +10014,5 @@ static void UnkUtil_Run(void)
             data->func(data);
         }
         sUnkUtil->numActive = 0;
-    }
-}
-
-static bool8 UNUSED UnkUtil_CpuAdd(u8 *dest, u16 dLeft, u16 dTop, const u8 *src, u16 sLeft, u16 sTop, u16 width, u16 height, u16 unkArg)
-{
-    struct UnkUtilData *data;
-
-    if (sUnkUtil->numActive >= sUnkUtil->max)
-        return FALSE;
-
-    data = &sUnkUtil->data[sUnkUtil->numActive++];
-    data->size = width * 2;
-    data->dest = dest + 2 * (dTop * 32 + dLeft);
-    data->src = src + 2 * (sTop * unkArg + sLeft);
-    data->height = height;
-    data->unk = unkArg;
-    data->func = UnkUtil_CpuRun;
-    return TRUE;
-}
-
-// Functionally unused
-static void UnkUtil_CpuRun(struct UnkUtilData *data)
-{
-    u16 i;
-
-    for (i = 0; i < data->height; i++)
-    {
-        CpuCopy16(data->src, data->dest, data->size);
-        data->dest += 64;
-        data->src += data->unk * 2;
-    }
-}
-
-static bool8 UNUSED UnkUtil_DmaAdd(void *dest, u16 dLeft, u16 dTop, u16 width, u16 height)
-{
-    struct UnkUtilData *data;
-
-    if (sUnkUtil->numActive >= sUnkUtil->max)
-        return FALSE;
-
-    data = &sUnkUtil->data[sUnkUtil->numActive++];
-    data->size = width * 2;
-    data->dest = dest + (dTop * 32 + dLeft) * 2;
-    data->height = height;
-    data->func = UnkUtil_DmaRun;
-    return TRUE;
-}
-
-// Functionally unused
-static void UnkUtil_DmaRun(struct UnkUtilData *data)
-{
-    u16 i;
-
-    for (i = 0; i < data->height; i++)
-    {
-        Dma3FillLarge16_(0, data->dest, data->size);
-        data->dest += 64;
     }
 }

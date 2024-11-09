@@ -27,20 +27,20 @@ void ItemUseOutOfBattle_Berry(u8);
 void ItemUseOutOfBattle_EnigmaBerry(u8);
 void ItemUseOutOfBattle_Honey(u8);
 void ItemUseOutOfBattle_CannotUse(u8);
-void ItemUseInBattle_PokeBall(u8);
-void ItemUseInBattle_StatIncrease(u8);
-void ItemUseInBattle_Medicine(u8);
-void ItemUseInBattle_PPRecovery(u8);
-void ItemUseInBattle_Escape(u8);
-void ItemUseInBattle_EnigmaBerry(u8);
+void ItemUseInBattle_BagMenu(u8 taskId);
+void ItemUseInBattle_PartyMenu(u8 taskId);
+void ItemUseInBattle_PartyMenuChooseMove(u8 taskId);
 void Task_UseDigEscapeRopeOnField(u8 taskId);
 u8 CanUseDigOrEscapeRopeOnCurMap(void);
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId);
+void DisplayDadsAdviceCannotUseItemMessage(u8 taskId, bool8 isUsingRegisteredKeyItemOnField);
 
 enum {
     BALL_THROW_UNABLE_NO_ROOM,
     BALL_THROW_UNABLE_SEMI_INVULNERABLE,
     BALL_THROW_ABLE,
 };
+
+bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon);
 
 #endif // GUARD_ITEM_USE_H

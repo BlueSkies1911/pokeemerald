@@ -493,36 +493,44 @@
 #define STRINGID_MISTYTERRAINPREVENTS                 492
 #define STRINGID_GRASSYTERRAINHEALS                   493
 #define STRINGID_ELECTRICTERRAINPREVENTS              494
-#define STRINGID_SAFETYGOGGLESPROTECTED               495
-#define STRINGID_LASERFOCUS                           496
-#define STRINGID_GEMACTIVATES                         497
-#define STRINGID_BERRYDMGREDUCES                      498
-#define STRINGID_TARGETATEITEM                        499
-#define STRINGID_AIRBALLOONFLOAT                      500
-#define STRINGID_AIRBALLOONPOP                        501
-#define STRINGID_BUGBITE                              502
-#define STRINGID_ATTACKERLOSTFIRETYPE                 503
-#define STRINGID_HEALERCURE                           504
-#define STRINGID_DESTINYKNOTACTIVATES                 505
-#define STRINGID_AIRLOCKACTIVATES                     506
-#define STRINGID_CANACTFASTERTHANKSTO                 507
-#define STRINGID_MICLEBERRYACTIVATES                  508
-#define STRINGID_PKMNSHOOKOFFTHETAUNT                 509
-#define STRINGID_PKMNGOTOVERITSINFATUATION            510
-#define STRINGID_STICKYBARBTRANSFER                   511
-#define STRINGID_REDCARDACTIVATE                      512
-#define STRINGID_EJECTBUTTONACTIVATE                  513
-#define STRINGID_STATWASNOTLOWERED                    514
-#define STRINGID_PRESSUREENTERS                       515
-#define STRINGID_TARGETTOOHEAVY                       516
-#define STRINGID_PKMNTOOKTARGETHIGH                   517
-#define STRINGID_PKMNSABILITYPREVENTSABILITY          518
-#define STRINGID_SPIKESDISAPPEAREDFROMTEAM            519
-#define STRINGID_TOXICSPIKESDISAPPEAREDFROMTEAM       520
-#define STRINGID_STEALTHROCKDISAPPEAREDFROMTEAM       521
-#define STRINGID_STOCKPILEDEFFECTWOREOFF              522
+#define STRINGID_PSYCHICTERRAINPREVENTS               495
+#define STRINGID_SAFETYGOGGLESPROTECTED               496
+#define STRINGID_LASERFOCUS                           497
+#define STRINGID_GEMACTIVATES                         498
+#define STRINGID_BERRYDMGREDUCES                      499
+#define STRINGID_TARGETATEITEM                        500
+#define STRINGID_AIRBALLOONFLOAT                      501
+#define STRINGID_AIRBALLOONPOP                        502
+#define STRINGID_BUGBITE                              503
+#define STRINGID_ATTACKERLOSTFIRETYPE                 504
+#define STRINGID_HEALERCURE                           505
+#define STRINGID_DESTINYKNOTACTIVATES                 506
+#define STRINGID_AIRLOCKACTIVATES                     507
+#define STRINGID_CANACTFASTERTHANKSTO                 508
+#define STRINGID_MICLEBERRYACTIVATES                  509
+#define STRINGID_PKMNSHOOKOFFTHETAUNT                 510
+#define STRINGID_PKMNGOTOVERITSINFATUATION            511
+#define STRINGID_STICKYBARBTRANSFER                   512
+#define STRINGID_REDCARDACTIVATE                      513
+#define STRINGID_EJECTBUTTONACTIVATE                  514
+#define STRINGID_STATWASNOTLOWERED                    515
+#define STRINGID_PRESSUREENTERS                       516
+#define STRINGID_TARGETTOOHEAVY                       517
+#define STRINGID_PKMNTOOKTARGETHIGH                   518
+#define STRINGID_PKMNSABILITYPREVENTSABILITY          519
+#define STRINGID_SPIKESDISAPPEAREDFROMTEAM            520
+#define STRINGID_TOXICSPIKESDISAPPEAREDFROMTEAM       521
+#define STRINGID_STEALTHROCKDISAPPEAREDFROMTEAM       522
+#define STRINGID_STOCKPILEDEFFECTWOREOFF              523
+#define STRINGID_ITEMRESTOREDSPECIESHEALTH            524
+#define STRINGID_ITEMCUREDSPECIESSTATUS               525
+#define STRINGID_ITEMRESTOREDSPECIESPP                526
+#define STRINGID_CLOAKEDINAHARSHLIGHT                 527
+#define STRINGID_DIMENSIONSWERETWISTED                528
+#define STRINGID_BIZARREARENACREATED                  529
+#define STRINGID_BIZARREAREACREATED                   530
 
-#define BATTLESTRINGS_COUNT                 523
+#define BATTLESTRINGS_COUNT                 531
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,
@@ -565,17 +573,6 @@
 #define B_MSG_LEECH_SEED_FAIL  2
 #define B_MSG_LEECH_SEED_DRAIN 3
 #define B_MSG_LEECH_SEED_OOZE  4
-
-// gFirstTurnOfTwoStringIds
-#define B_MSG_TURN1_RAZOR_WIND  0
-#define B_MSG_TURN1_SOLAR_BEAM  1
-#define B_MSG_TURN1_SKULL_BASH  2
-#define B_MSG_TURN1_SKY_ATTACK  3
-#define B_MSG_TURN1_FLY         4
-#define B_MSG_TURN1_DIG         5
-#define B_MSG_TURN1_DIVE        6
-#define B_MSG_TURN1_BOUNCE      7
-#define B_MSG_TURN1_SKY_DROP    8
 
 // gMoveWeatherChangeStringIds
 #define B_MSG_STARTED_RAIN      0
@@ -758,6 +755,7 @@
 // gTerrainPreventsStringIds
 #define B_MSG_TERRAINPREVENTS_MISTY     0
 #define B_MSG_TERRAINPREVENTS_ELECTRIC  1
+#define B_MSG_TERRAINPREVENTS_PSYCHIC   2
 
 // gTerrainStringIds
 #define B_MSG_TERRAIN_SET_MISTY     0
@@ -770,6 +768,18 @@
 #define B_MSG_TERRAIN_END_GRASSY    7
 #define B_MSG_TERRAIN_COUNT         8
 
+// gStartingStatusStringIds
+#define B_MSG_TERRAIN_SET_MISTY     0
+#define B_MSG_TERRAIN_SET_ELECTRIC  1
+#define B_MSG_TERRAIN_SET_PSYCHIC   2
+#define B_MSG_TERRAIN_SET_GRASSY    3
+#define B_MSG_SET_TRICK_ROOM        4
+#define B_MSG_SET_MAGIC_ROOM        5
+#define B_MSG_SET_WONDER_ROOM       6
+#define B_MSG_SET_TAILWIND_PLAYER   7
+#define B_MSG_SET_TAILWIND_OPPONENT 8
+#define B_MSG_STARTING_STATUS_COUNT 9
+
 // gWrappedStringIds
 #define B_MSG_WRAPPED_BIND        0
 #define B_MSG_WRAPPED_WRAP        1
@@ -779,5 +789,11 @@
 #define B_MSG_WRAPPED_SAND_TOMB   5
 #define B_MSG_WRAPPED_INFESTATION 6
 #define NUM_TRAPPING_MOVES        7
+
+// gDmgHazardsStringIds
+#define B_MSG_PKMNHURTBYSPIKES   0
+#define B_MSG_STEALTHROCKDMG     1
+#define B_MSG_POINTEDSTONESFLOAT 2
+#define B_MSG_SPIKESSCATTERED    3
 
 #endif // GUARD_CONSTANTS_BATTLE_STRING_IDS_H

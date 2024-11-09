@@ -1034,7 +1034,7 @@ static void Task_OakSpeech_IStudyPokemon(u8 taskId)
 
 static u8 NewGameOakSpeech_CreateNidoranFSprite(u8 x, u8 y)
 {
-    return CreateMonPicSprite_Affine(SPECIES_NIDORAN_F, SHINY_ODDS, 0, MON_PIC_AFFINE_FRONT, x, y, 14, TAG_NONE);
+    return CreateMonPicSprite_Affine(SPECIES_NIDORAN_F, FALSE, 0, MON_PIC_AFFINE_FRONT, x, y, 14, TAG_NONE);
 }
 
 static void Task_OakSpeech_ReturnNidoranFToPokeBall(u8 taskId)

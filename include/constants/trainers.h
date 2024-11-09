@@ -14,8 +14,6 @@
 #define TRAINER_SECRET_BASE                 1024
 #define TRAINER_LINK_OPPONENT               2048
 #define TRAINER_UNION_ROOM                  3072
-#define TRAINER_STEVEN_PARTNER              3075
-#define TRAINER_CUSTOM_PARTNER              3076
 
 #define TRAINER_PIC_HIKER                  0
 #define TRAINER_PIC_AQUA_GRUNT_M           1
@@ -142,6 +140,7 @@
 #define TRAINER_PIC_CRUSH_GIRL           122
 #define TRAINER_PIC_ROCKET_GRUNT_F       123
 #define TRAINER_PIC_PAINTER              124
+#define TRAINER_PIC_COUNT                125
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_RED                    0
@@ -450,10 +449,8 @@
 
 #define F_TRAINER_FEMALE (1 << 7)
 
-// All trainer parties specify the IV, level, and species for each Pokémon in the
-// party. Some trainer parties also specify held items and custom moves for each
-// Pokémon.
-#define F_TRAINER_PARTY_CUSTOM_MOVESET (1 << 0)
-#define F_TRAINER_PARTY_HELD_ITEM      (1 << 1)
+// Trainer party defines
+#define TRAINER_MON_MALE    1
+#define TRAINER_MON_FEMALE  2
 
 #endif  // GUARD_TRAINERS_H

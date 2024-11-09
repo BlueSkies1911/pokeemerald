@@ -178,6 +178,8 @@ enum {
 
 #define NATIONAL_DEX_COUNT  NATIONAL_DEX_MEW
 
+#define POKEMON_SLOTS_NUMBER (NATIONAL_DEX_COUNT + 1)
+
 // Kanto Pokédex order
 enum {
     KANTO_DEX_NONE,
@@ -331,30 +333,21 @@ enum {
     KANTO_DEX_DRAGONAIR,
     KANTO_DEX_DRAGONITE,
     KANTO_DEX_MEWTWO,
-    // End of Kanto Dex (see KANTO_DEX_COUNT)
-    // Here below have values but are excluded from the Pokédex
-    KANTO_DEX_MEW,
-    KANTO_DEX_CROBAT,
-    KANTO_DEX_PICHU,
-    KANTO_DEX_CLEFFA,
-    KANTO_DEX_IGGLYBUFF,
-    KANTO_DEX_BELLOSSOM,
-    KANTO_DEX_POLITOED,
-    KANTO_DEX_ESPEON,
-    KANTO_DEX_UMBREON,
-    KANTO_DEX_SLOWKING,
-    KANTO_DEX_STEELIX,
-    KANTO_DEX_SCIZOR,
-    KANTO_DEX_KINGDRA,
-    KANTO_DEX_PORYGON2,
-    KANTO_DEX_TYROGUE,
-    KANTO_DEX_HITMONTOP,
-    KANTO_DEX_SMOOCHUM,
-    KANTO_DEX_ELEKID,
-    KANTO_DEX_MAGBY,
-    KANTO_DEX_BLISSEY,
 };
 
-#define KANTO_DEX_COUNT KANTO_DEX_MEWTWO
+#define KANTO_DEX_COUNT (KANTO_DEX_MEWTWO + 1)
+
+#define WEIGHT_HEIGHT_STR_LEN          16
+#define WEIGHT_HEIGHT_STR_MEM          (WEIGHT_HEIGHT_STR_LEN * sizeof(u8))
+
+#define DEX_HEADER_X                   96
+#define DEX_Y_TOP                      57
+#define DEX_Y_BOTTOM                   73
+#define DEX_MEASUREMENT_X              129
+
+#define DEX_HGSS_HEADER_X_PADDING      59
+#define DEX_HGSS_Y_TOP_PADDING         7
+#define DEX_HGSS_Y_BOTTOM_PADDING      4
+#define DEX_HGSS_MEASUREMENT_X_PADDING 51
 
 #endif // GUARD_CONSTANTS_POKEDEX_H

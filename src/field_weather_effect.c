@@ -944,7 +944,6 @@ static void InitSnowflakeSpriteMovement(struct Sprite *sprite)
 
 static void WaitSnowflakeSprite(struct Sprite *sprite)
 {
-    // Timer is never incremented
     if (++gWeatherPtr->snowflakeTimer > 18)
     {
         sprite->invisible = FALSE;
@@ -958,7 +957,6 @@ static void WaitSnowflakeSprite(struct Sprite *sprite)
 static void UpdateSnowflakeSprite(struct Sprite *sprite)
 {
     s16 x;
-    s16 y;
 
     sprite->tPosY += sprite->tDeltaY;
     sprite->y = sprite->tPosY >> 7;
@@ -1803,7 +1801,7 @@ static void UpdateFogDiagonalMovement(void)
     gWeatherPtr->fogDPosY = gSpriteCoordOffsetY + gWeatherPtr->fogDYOffset;
 }
 
-static const struct SpriteSheet gFogDiagonalSpriteSheet =
+static const struct SpriteSheet sFogDiagonalSpriteSheet =
 {
     .data = gWeatherFogDiagonalTiles,
     .size = sizeof(gWeatherFogDiagonalTiles),
@@ -1855,10 +1853,10 @@ static void CreateFogDiagonalSprites(void)
     struct SpriteSheet fogDiagonalSpriteSheet;
     u8 spriteId;
     struct Sprite *sprite;
-    
+
     if (!gWeatherPtr->fogDSpritesCreated)
     {
-        fogDiagonalSpriteSheet = gFogDiagonalSpriteSheet;
+        fogDiagonalSpriteSheet = sFogDiagonalSpriteSheet;
         LoadSpriteSheet(&fogDiagonalSpriteSheet);
         LoadCustomWeatherSpritePalette(&sFogSpritePalette);
         for (i = 0; i < NUM_FOG_DIAGONAL_SPRITES; i++)
@@ -2613,5 +2611,3 @@ static void UpdateRainCounter(u8 newWeather, u8 oldWeather)
      && (newWeather == WEATHER_RAIN || newWeather == WEATHER_RAIN_THUNDERSTORM))
         IncrementGameStat(GAME_STAT_GOT_RAINED_ON);
 }
-
-

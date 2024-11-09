@@ -97,7 +97,7 @@ struct ShopData
     u16 itemsShowed;
     u16 selectedRow;
     u16 scrollOffset;
-    u8 maxQuantity;
+    u16 maxQuantity;
     u8 scrollIndicatorsTaskId;
     u8 iconSlot;
     u8 itemSpriteIds[2];
@@ -639,8 +639,8 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
                 5);
         }
 
-        if (ItemId_GetPocket(itemId) == POCKET_TM_HM && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
-            StringCopy(gStringVar4, gText_SoldOut2);
+        if (ItemId_GetImportance(itemId) && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
+            StringCopy(gStringVar4, gText_SoldOut);
         else
             StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
         x = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 120);
@@ -811,9 +811,7 @@ static void BuyMenuDrawMapBg(void)
                 metatileLayerType = METATILE_LAYER_TYPE_COVERED;
 
             if (metatile < NUM_METATILES_IN_PRIMARY)
-            {
                 BuyMenuDrawMapMetatile(i, j, mapLayout->primaryTileset->metatiles + metatile * 12, metatileLayerType);
-            }
             else
                 BuyMenuDrawMapMetatile(i, j, mapLayout->secondaryTileset->metatiles + ((metatile - NUM_METATILES_IN_PRIMARY) * 12), metatileLayerType);
         }
@@ -1014,8 +1012,8 @@ static void Task_BuyMenu(u8 taskId)
             else
                 sShopData->totalCost = gDecorations[itemId].price;
 
-            if (ItemId_GetPocket(itemId) == POCKET_TM_HM && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
-                BuyMenuDisplayMessage(taskId, gText_SoldOut, BuyMenuReturnToItemList);
+            if (ItemId_GetImportance(itemId) && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
+                BuyMenuDisplayMessage(taskId, gText_ThatItemIsSoldOut, BuyMenuReturnToItemList);
             else if (!IsEnoughMoney(&gSaveBlock1Ptr->money, sShopData->totalCost))
             {
                 BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
@@ -1025,7 +1023,7 @@ static void Task_BuyMenu(u8 taskId)
                 if (sMartInfo.martType == MART_TYPE_NORMAL)
                 {
                     CopyItemName(itemId, gStringVar1);
-                    if (ItemId_GetPocket(itemId) == POCKET_TM_HM)
+                    if (ItemId_GetImportance(itemId))
                     {
                         ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
                         StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
@@ -1102,7 +1100,7 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
             ClearWindowTilemap(WIN_QUANTITY_IN_BAG);
             PutWindowTilemap(WIN_ITEM_LIST);
             CopyItemName(tItemId, gStringVar1);
-            ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, BAG_ITEM_CAPACITY_DIGITS);
+            ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
             ConvertIntToDecimalStringN(gStringVar3, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
             BuyMenuDisplayMessage(taskId, gText_Var1AndYouWantedVar2, BuyMenuConfirmPurchase);
         }
@@ -1133,7 +1131,6 @@ static void BuyMenuTryMakePurchase(u8 taskId)
     {
         if (AddBagItem(tItemId, tItemCount) == TRUE)
         {
-            RedrawListMenu(tListTaskId);
             RecordItemPurchase(taskId);
             BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
         }
@@ -1177,22 +1174,29 @@ static void Task_ReturnToItemListAfterItemPurchase(u8 taskId)
 
     if (JOY_NEW(A_BUTTON | B_BUTTON))
     {
-        PlaySE(SE_SELECT);
-
-        // Purchasing 10+ Poke Balls gets the player a Premier Ball
-        if ((ItemId_GetPocket(tItemId) == POCKET_POKE_BALLS) && tItemCount > 9 && AddBagItem(ITEM_PREMIER_BALL, tItemCount / 10) == TRUE)
+        u16 premierBallsToAdd = tItemCount / 10;
+        if (premierBallsToAdd >= 1 && (ItemId_GetPocket(tItemId) == POCKET_POKE_BALLS))
         {
-            if (tItemCount > 19)
-            {
-                BuyMenuDisplayMessage(taskId, gText_ThrowInPremierBalls, BuyMenuReturnToItemList);
-            }
-            else
-            {
-                BuyMenuDisplayMessage(taskId, gText_ThrowInPremierBall, BuyMenuReturnToItemList);
-            }
+            u32 spaceAvailable = GetFreeSpaceForItemInBag(ITEM_PREMIER_BALL);
+            if (spaceAvailable < premierBallsToAdd)
+                premierBallsToAdd = spaceAvailable;
         }
         else
+        {
+            premierBallsToAdd = 0;
+        }
+
+        PlaySE(SE_SELECT);
+        AddBagItem(ITEM_PREMIER_BALL, premierBallsToAdd);
+        if (premierBallsToAdd > 0)
+        {
+            ConvertIntToDecimalStringN(gStringVar1, premierBallsToAdd, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
+            BuyMenuDisplayMessage(taskId, (premierBallsToAdd >= 2 ? gText_ThrowInPremierBalls : gText_ThrowInPremierBall), BuyMenuReturnToItemList);
+        }
+        else
+        {
             BuyMenuReturnToItemList(taskId);
+        }
     }
 }
 
@@ -1210,6 +1214,7 @@ static void BuyMenuReturnToItemList(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     ClearDialogWindowAndFrameToTransparent(WIN_MESSAGE, FALSE);
+    RedrawListMenu(tListTaskId);
     BuyMenuPrintCursor(tListTaskId, COLORID_ITEM_LIST);
     PutWindowTilemap(WIN_ITEM_LIST);
     PutWindowTilemap(WIN_ITEM_DESCRIPTION);
@@ -1224,7 +1229,7 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
 
     FillWindowPixelBuffer(WIN_QUANTITY_PRICE, PIXEL_FILL(1));
     PrintMoneyAmount(WIN_QUANTITY_PRICE, 38, 1, sShopData->totalCost, TEXT_SKIP_DRAW);
-    ConvertIntToDecimalStringN(gStringVar1, tItemCount, STR_CONV_MODE_LEADING_ZEROS, BAG_ITEM_CAPACITY_DIGITS);
+    ConvertIntToDecimalStringN(gStringVar1, tItemCount, STR_CONV_MODE_LEADING_ZEROS, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
     BuyMenuPrint(WIN_QUANTITY_PRICE, gStringVar4, 0, 1, 0, COLORID_NORMAL);
 }

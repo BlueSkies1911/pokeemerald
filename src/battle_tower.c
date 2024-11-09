@@ -23,14 +23,17 @@
 #include "field_message_box.h"
 #include "tv.h"
 #include "battle_factory.h"
+#include "constants/abilities.h"
 #include "constants/apprentice.h"
 #include "constants/battle_dome.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_frontier_mons.h"
+#include "constants/battle_move_effects.h"
 #include "constants/battle_tent.h"
 #include "constants/battle_tent_mons.h"
 #include "constants/battle_tent_trainers.h"
 #include "constants/battle_tower.h"
+#include "constants/battle_partner.h"
 #include "constants/frontier_util.h"
 #include "constants/items.h"
 #include "constants/trainers.h"
@@ -753,35 +756,10 @@ static const u8 *const *const sPartnerApprenticeTextTables[NUM_APPRENTICES] =
     sPartnerApprenticeTexts16
 };
 
-struct
-{
-    u16 species;
-    u8 fixedIV;
-    u8 level;
-    u8 nature;
-    u8 evs[NUM_STATS];
-    u16 moves[MAX_MON_MOVES];
-} static const sStevenMons[MULTI_PARTY_SIZE] =
-{
-    {
-        .species = SPECIES_SCIZOR,
-        .fixedIV = MAX_PER_STAT_IVS,
-        .level = 43,
-        .nature = NATURE_IMPISH,
-        .evs = {252, 0, 0, 0, 6, 252},
-        .moves = {MOVE_TOXIC, MOVE_AERIAL_ACE, MOVE_PROTECT, MOVE_STEEL_WING}
-    },
-    {
-        .species = SPECIES_KANGASKHAN,
-        .fixedIV = MAX_PER_STAT_IVS,
-        .level = 44,
-        .nature = NATURE_ADAMANT,
-        .evs = {0, 252, 0, 0, 252, 6},
-        .moves = {MOVE_THUNDER, MOVE_PROTECT, MOVE_SOLAR_BEAM, MOVE_DRAGON_CLAW}
-    }
-};
-
 #include "data/battle_frontier/battle_tent.h"
+
+#include "data/partner_parties.h"
+#include "data/battle_partners.h"
 
 static void (* const sBattleTowerFuncs[])(void) =
 {
@@ -1430,13 +1408,9 @@ u8 GetFrontierOpponentClass(u16 trainerId)
     {
         return GetFrontierBrainTrainerClass();
     }
-    else if (trainerId == TRAINER_STEVEN_PARTNER)
+    else if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
     {
-        trainerClass = gTrainers[TRAINER_STEVEN].trainerClass;
-    }
-    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
-    {
-        trainerClass = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerClass;
+        trainerClass = gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerClass;
     }
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
@@ -1514,15 +1488,10 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId)
         CopyFrontierBrainTrainerName(dst);
         return;
     }
-    else if (trainerId == TRAINER_STEVEN_PARTNER)
+    else if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
     {
-        for (i = 0; i < PLAYER_NAME_LENGTH; i++)
-            dst[i] = gTrainers[TRAINER_STEVEN].trainerName[i];
-    }
-    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
-    {
-        for (i = 0; gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName[i] != EOS; i++)
-            dst[i] = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName[i];
+        for (i = 0; gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName[i] != EOS; i++)
+            dst[i] = gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName[i];
     }
     else if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
@@ -1734,7 +1703,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount)
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
             SetMonMoveSlot(&gEnemyParty[i + firstMonId], gFacilityTrainerMons[monId].moves[j], j);
-            if (gFacilityTrainerMons[monId].moves[j] == MOVE_FRUSTRATION)
+            if (gMovesInfo[gFacilityTrainerMons[monId].moves[j]].effect == EFFECT_FRUSTRATION)
                 friendship = 0;  // Frustration is more powerful the lower the pokemon's friendship is.
         }
 
@@ -1772,7 +1741,7 @@ static void UNUSED Unused_CreateApprenticeMons(u16 trainerId, u8 firstMonId)
         friendship = MAX_FRIENDSHIP;
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
-            if (apprentice->party[i].moves[j] == MOVE_FRUSTRATION)
+            if (gMovesInfo[apprentice->party[i].moves[j]].effect == EFFECT_FRUSTRATION)
                 friendship = 0;
         }
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_FRIENDSHIP, &friendship);
@@ -1824,9 +1793,16 @@ static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId)
 
     if (trainerId < FRONTIER_TRAINERS_COUNT)
     {
+    // By mistake Battle Tower's Level 50 challenge number is used to determine the IVs for Battle Factory.
+    #ifdef BUGFIX
         u8 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
         u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+        u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / FRONTIER_STAGES_PER_CHALLENGE;
+    #else
+        u8 UNUSED lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+        u8 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
         u8 challengeNum = gSaveBlock2Ptr->frontier.towerWinStreaks[battleMode][FRONTIER_LVL_50] / FRONTIER_STAGES_PER_CHALLENGE;
+    #endif
         if (gSaveBlock2Ptr->frontier.curChallengeBattleNum < FRONTIER_STAGES_PER_CHALLENGE - 1)
             fixedIV = GetFactoryMonFixedIV(challengeNum, FALSE);
         else
@@ -1893,7 +1869,7 @@ static void FillFactoryTentTrainerParty(u16 trainerId, u8 firstMonId)
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
             SetMonMoveAvoidReturn(&gEnemyParty[firstMonId + i], gFacilityTrainerMons[monId].moves[j], j);
-            if (gFacilityTrainerMons[monId].moves[j] == MOVE_FRUSTRATION)
+            if (gMovesInfo[gFacilityTrainerMons[monId].moves[j]].effect == EFFECT_FRUSTRATION)
                 friendship = 0;
         }
 
@@ -1974,6 +1950,13 @@ static void HandleSpecialTrainerBattleEnd(void)
         break;
     case SPECIAL_BATTLE_EREADER:
         CopyEReaderTrainerFarewellMessage();
+        break;
+    case SPECIAL_BATTLE_MULTI:
+        for (i = 0; i < 3; i++)
+        {
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES))
+                gSaveBlock1Ptr->playerParty[i] = gPlayerParty[i];
+        }
         break;
     }
 
@@ -2104,6 +2087,20 @@ void DoSpecialTrainerBattle(void)
         CreateTask(Task_StartBattleAfterTransition, 1);
         PlayMapChosenOrBattleBGM(0);
         BattleTransition_StartOnField(GetSpecialBattleTransition(B_TRANSITION_GROUP_B_PIKE));
+        break;
+    case SPECIAL_BATTLE_MULTI:
+        gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER;
+        gPartnerTrainerId = VarGet(gSpecialVar_0x8006) + TRAINER_PARTNER(PARTNER_NONE);
+        FillPartnerParty(gPartnerTrainerId);
+        CreateTask(Task_StartBattleAfterTransition, 1);
+        PlayMapChosenOrBattleBGM(0);
+        if (gSpecialVar_0x8005 & MULTI_BATTLE_2_VS_WILD)
+            BattleTransition_StartOnField(GetWildBattleTransition());
+        else
+            BattleTransition_StartOnField(GetTrainerBattleTransition());
+
+        if (gSpecialVar_0x8005 & MULTI_BATTLE_CHOOSE_MONS) // Skip mons restoring(done in the script)
+            gBattleScripting.specialTrainerBattleType = 0xFF;
         break;
     }
 }
@@ -2420,8 +2417,8 @@ static void GetPotentialPartnerMoveAndSpecies(u16 trainerId, u16 monId)
         }
     }
 
-    StringCopy(gStringVar1, gMoveNames[move]);
-    StringCopy(gStringVar2, gSpeciesNames[species]);
+    StringCopy(gStringVar1, GetMoveName(move));
+    StringCopy(gStringVar2, GetSpeciesName(species));
 }
 
 // For multi battles in the Battle Tower, the player may choose a partner by talking to them
@@ -2932,107 +2929,101 @@ void TryHideBattleTowerReporter(void)
 
 static void FillPartnerParty(u16 trainerId)
 {
-    s32 i, j;
-    u32 ivs, level;
+    s32 i, j, k;
+    u32 firstIdPart = 0, secondIdPart = 0, thirdIdPart = 0;
+    u32 ivs, level, personality;
     u32 friendship;
     u16 monId;
     u32 otID;
-    u8 trainerName[PLAYER_NAME_LENGTH + 1];
+    u8 trainerName[(PLAYER_NAME_LENGTH * 3) + 1];
+    s32 ball = -1;
     SetFacilityPtrsGetLevel();
 
-    if (trainerId == TRAINER_STEVEN_PARTNER)
+    if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
     {
-        for (i = 0; i < MULTI_PARTY_SIZE; i++)
-        {
-            do
-            {
-                j = Random32();
-            } while (IsShinyOtIdPersonality(STEVEN_OTID, j) || sStevenMons[i].nature != GetNatureFromPersonality(j));
-            CreateMon(&gPlayerParty[MULTI_PARTY_SIZE + i],
-                      sStevenMons[i].species,
-                      sStevenMons[i].level,
-                      sStevenMons[i].fixedIV,
-                      TRUE,
-                      #ifdef BUGFIX
-                      j,
-                      #else
-                      i, // BUG: personality was stored in the 'j' variable. As a result, Steven's Pokémon do not have the intended natures.
-                      #endif
-                      OT_ID_PRESET, STEVEN_OTID);
-            for (j = 0; j < PARTY_SIZE; j++)
-                SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_HP_EV + j, &sStevenMons[i].evs[j]);
-            for (j = 0; j < MAX_MON_MOVES; j++)
-                SetMonMoveSlot(&gPlayerParty[MULTI_PARTY_SIZE + i], sStevenMons[i].moves[j], j);
-            SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_OT_NAME, gTrainers[TRAINER_STEVEN].trainerName);
-            j = MALE;
-            SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_OT_GENDER, &j);
-            CalculateMonStats(&gPlayerParty[MULTI_PARTY_SIZE + i]);
-        }
-    }
-    else if (trainerId >= TRAINER_CUSTOM_PARTNER)
-    {
-        otID = Random32();
-
         for (i = 0; i < 3; i++)
             ZeroMonData(&gPlayerParty[i + 3]);
 
-        for (i = 0; i < 3 && i < gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partySize; i++)
+        for (i = 0; i < 3 && i < gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].partySize; i++)
         {
-            do
-            {
-                j = Random32();
-            } while (IsShinyOtIdPersonality(otID, j));
+            const struct TrainerMon *partyData = gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].party;
+            const u8 *partnerName = gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName;
 
-            switch (gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partyFlags)
+            for (k = 0; partnerName[k] != EOS && k < 3; k++)
             {
-            case 0:
-            {
-                const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.NoItemDefaultMoves;
-
-                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
-                break;
-            }
-            case F_TRAINER_PARTY_CUSTOM_MOVESET:
-            {
-                const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.NoItemCustomMoves;
-
-                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
-
-                for (j = 0; j < 4; j++)
+                if (k == 0)
                 {
-                    SetMonData(&gPlayerParty[i + 3], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                    SetMonData(&gPlayerParty[i + 3], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+                    firstIdPart = partnerName[k];
+                    secondIdPart = partnerName[k];
+                    thirdIdPart = partnerName[k];
                 }
-                break;
-            }
-            case F_TRAINER_PARTY_HELD_ITEM:
-            {
-                const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemDefaultMoves;
-
-                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
-
-                SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
-                break;
-            }
-            case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
-            {
-                const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemCustomMoves;
-
-                CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, partyData[i].iv * 31 / 255, TRUE, j, TRUE, otID);
-
-                SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
-
-                for (j = 0; j < 4; j++)
+                else if (k == 1)
                 {
-                    SetMonData(&gPlayerParty[i + 3], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                    SetMonData(&gPlayerParty[i + 3], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+                    secondIdPart = partnerName[k];
+                    thirdIdPart = partnerName[k];
                 }
-                break;
+                else if (k == 2)
+                {
+                    thirdIdPart = partnerName[k];
+                }
             }
-            }
+            if (trainerId == TRAINER_PARTNER(PARTNER_STEVEN))
+                otID = STEVEN_OTID;
+            else
+                otID = ((firstIdPart % 72) * 1000) + ((secondIdPart % 23) * 10) + (thirdIdPart % 37) % 65536;
 
-            StringCopy(trainerName, gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].trainerName);
+            personality = Random32();
+            if (partyData[i].gender == TRAINER_MON_MALE)
+                personality = (personality & 0xFFFFFF00) | GeneratePersonalityForGender(MON_MALE, partyData[i].species);
+            else if (partyData[i].gender == TRAINER_MON_FEMALE)
+                personality = (personality & 0xFFFFFF00) | GeneratePersonalityForGender(MON_FEMALE, partyData[i].species);
+            if (partyData[i].nature != 0)
+                ModifyPersonalityForNature(&personality, partyData[i].nature - 1);
+
+            CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, 0, TRUE, personality, OT_ID_PRESET, otID);
+            j = partyData[i].isShiny;
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_IS_SHINY, &j);
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+            CustomTrainerPartyAssignMoves(&gPlayerParty[i + 3], &partyData[i]);
+
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_IVS, &(partyData[i].iv));
+            if (partyData[i].ev != NULL)
+            {
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_HP_EV, &(partyData[i].ev[0]));
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_ATK_EV, &(partyData[i].ev[1]));
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_DEF_EV, &(partyData[i].ev[2]));
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_SPATK_EV, &(partyData[i].ev[3]));
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_SPDEF_EV, &(partyData[i].ev[4]));
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_SPEED_EV, &(partyData[i].ev[5]));
+            }
+            if (partyData[i].ability != ABILITY_NONE)
+            {
+                const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[partyData[i].species];
+                u32 maxAbilities = ARRAY_COUNT(speciesInfo->abilities);
+                for (j = 0; j < maxAbilities; j++)
+                {
+                    if (speciesInfo->abilities[j] == partyData[i].ability)
+                        break;
+                }
+                if (j < maxAbilities)
+                    SetMonData(&gPlayerParty[i + 3], MON_DATA_ABILITY_NUM, &j);
+            }
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_FRIENDSHIP, &(partyData[i].friendship));
+            if (partyData[i].ball != ITEM_NONE)
+            {
+                ball = partyData[i].ball;
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_POKEBALL, &ball);
+            }
+            if (partyData[i].nickname != NULL)
+            {
+                SetMonData(&gPlayerParty[i + 3], MON_DATA_NICKNAME, partyData[i].nickname);
+            }
+            CalculateMonStats(&gPlayerParty[i + 3]);
+
+            StringCopy(trainerName, gBattlePartners[trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName);
             SetMonData(&gPlayerParty[i + 3], MON_DATA_OT_NAME, trainerName);
+            j = gBattlePartners[SanitizeTrainerId(trainerId - TRAINER_PARTNER(PARTNER_NONE))].encounterMusic_gender >> 7;
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_OT_GENDER, &j);
         }
     }
     else if (trainerId == TRAINER_EREADER)
@@ -3059,7 +3050,7 @@ static void FillPartnerParty(u16 trainerId)
             for (j = 0; j < MAX_MON_MOVES; j++)
             {
                 SetMonMoveSlot(&gPlayerParty[MULTI_PARTY_SIZE + i], gFacilityTrainerMons[monId].moves[j], j);
-                if (gFacilityTrainerMons[monId].moves[j] == MOVE_FRUSTRATION)
+                if (gMovesInfo[gFacilityTrainerMons[monId].moves[j]].effect == EFFECT_FRUSTRATION)
                     friendship = 0;
             }
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_FRIENDSHIP, &friendship);
@@ -3494,7 +3485,7 @@ static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount)
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
             SetMonMoveSlot(&gEnemyParty[i + firstMonId], gFacilityTrainerMons[monId].moves[j], j);
-            if (gFacilityTrainerMons[monId].moves[j] == MOVE_FRUSTRATION)
+            if (gMovesInfo[gFacilityTrainerMons[monId].moves[j]].effect == EFFECT_FRUSTRATION)
                 friendship = 0;  // Frustration is more powerful the lower the pokemon's friendship is.
         }
 

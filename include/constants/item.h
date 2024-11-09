@@ -1,7 +1,7 @@
 #ifndef GUARD_ITEM_CONSTANTS_H
 #define GUARD_ITEM_CONSTANTS_H
 
-// These constants are used in gItems
+// These constants are used in gItemsInfo
 #define POCKET_NONE        0
 #define POCKET_ITEMS       1
 #define POCKET_POKE_BALLS  2
@@ -15,5 +15,9 @@
 #define BERRIES_POCKET     3
 #define KEYITEMS_POCKET    4
 #define POCKETS_COUNT      5
+
+#define REPEL_MASK         (1 << 15)
+#define REPEL_STEPS(var)   (var & (REPEL_MASK - 1))
+#define REPEL_STEP_COUNT   REPEL_STEPS(VarGet(VAR_REPEL_STEP_COUNT))
 
 #endif // GUARD_ITEM_CONSTANTS_H

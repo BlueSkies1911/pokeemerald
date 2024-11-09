@@ -213,9 +213,9 @@ BattleFrontier_OutsideEast_Text_DidScottBringYouHere:
 	.string "ever.$"
 
 BattleFrontier_OutsideEast_Text_BelieveInYouBuddy:
-	.string "Zigg!\n"
+	.string "Kitt!\n"
 	.string "I believe in you, little buddy!\p"
-	.string "I'll make my little Zigg any favorite\n"
+	.string "I'll make my little Kitt any favorite\n"
 	.string "tasty treats you like if you win!$"
 
 BattleFrontier_OutsideEast_Text_MeowthLooksVacant:

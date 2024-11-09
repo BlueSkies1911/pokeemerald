@@ -9,7 +9,6 @@
 #include "event_scripts.h"
 #include "faraway_island.h"
 #include "field_camera.h"
-#include "field_control_avatar.h"
 #include "field_effect.h"
 #include "field_effect_helpers.h"
 #include "field_player_avatar.h"
@@ -144,9 +143,9 @@ static u8 FindObjectEventPaletteIndexByTag(u16);
 static void _PatchObjectPalette(u16, u8);
 static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *, u8);
 static void SpriteCB_CameraObject(struct Sprite *);
-static void CameraObject_0(struct Sprite *);
-static void CameraObject_1(struct Sprite *);
-static void CameraObject_2(struct Sprite *);
+static void CameraObject_Init(struct Sprite *);
+static void CameraObject_UpdateMove(struct Sprite *);
+static void CameraObject_UpdateFrozen(struct Sprite *);
 static const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8, const struct ObjectEventTemplate *, u8);
 static void ClearObjectEventMovement(struct ObjectEvent *, struct Sprite *);
 static void ObjectEventSetSingleMovement(struct ObjectEvent *, struct Sprite *, u8);
@@ -169,7 +168,6 @@ static bool8 IsConnectionTreeOrRockOnScreen(const struct ObjectEventTemplate *te
 static bool8 ShouldTreeOrRockObjectBeCreated(const struct ObjectEventTemplate *template, bool8 inConnection, s16 x, s16 y);
 static bool8 IsElevationMismatchAt(u8, s16, s16);
 static bool8 AreElevationsCompatible(u8, u8);
-static void sub_8064544(struct ObjectEvent *, struct Sprite *);
 
 static const struct SpriteFrameImage sPicTable_PechaBerryTree[];
 
@@ -183,10 +181,16 @@ static const struct SpriteTemplate sCameraSpriteTemplate = {
     .callback = SpriteCB_CameraObject
 };
 
+enum {
+    CAMERA_STATE_INIT,
+    CAMERA_STATE_MOVE,
+    CAMERA_STATE_FROZEN,
+};
+
 static void (*const sCameraObjectFuncs[])(struct Sprite *) = {
-    CameraObject_0,
-    CameraObject_1,
-    CameraObject_2,
+    [CAMERA_STATE_INIT]   = CameraObject_Init,
+    [CAMERA_STATE_MOVE]   = CameraObject_UpdateMove,
+    [CAMERA_STATE_FROZEN] = CameraObject_UpdateFrozen,
 };
 
 #include "data/object_events/object_event_graphics.h"
@@ -408,13 +412,13 @@ const u8 gInitialMovementTypeFacingDirections[] = {
     [MOVEMENT_TYPE_WANDER_AROUND_SLOWER] = DIR_SOUTH,
 };
 
+#include "data/object_events/object_event_graphics_info_pointers.h"
 #include "data/field_effects/field_effect_object_template_pointers.h"
 #include "data/object_events/object_event_pic_tables.h"
 #include "data/object_events/object_event_anims.h"
 #include "data/object_events/base_oam.h"
 #include "data/object_events/object_event_subsprites.h"
 #include "data/object_events/object_event_graphics_info.h"
-#include "data/object_events/object_event_graphics_info_pointers.h"
 
 static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc1,                  OBJ_EVENT_PAL_TAG_NPC_1},
@@ -442,12 +446,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_NpcWhite,              OBJ_EVENT_PAL_TAG_NPC_WHITE},
     {gObjectEventPal_SSAnne,                OBJ_EVENT_PAL_TAG_SS_ANNE},
     {gObjectEventPal_Seagallop,             OBJ_EVENT_PAL_TAG_SEAGALLOP},
-#ifdef BUGFIX
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
-#else
-    {}, // BUG: FindObjectEventPaletteIndexByTag looks for OBJ_EVENT_PAL_TAG_NONE and not 0x0.
-        // If it's looking for a tag that isn't in this table, the game locks in an infinite loop.
-#endif
 };
 
 #include "data/object_events/berry_tree_graphics_tables.h"
@@ -1233,31 +1232,6 @@ static void SetObjectTemplateFlagIfTemporary(const struct ObjectEventTemplate *t
     }
 }
 
-u8 Unref_TryInitLocalObjectEvent(u8 localId)
-{
-    u8 i;
-    u8 objectEventCount;
-    struct ObjectEventTemplate *template;
-
-    if (gMapHeader.events != NULL)
-    {
-        if (InBattlePyramid())
-            objectEventCount = GetNumBattlePyramidObjectEvents();
-        else if (InTrainerTower())
-            objectEventCount = TOWER_TRAINERS_PER_FLOOR;
-        else
-            objectEventCount = gMapHeader.events->objectEventCount;
-
-        for (i = 0; i < objectEventCount; i++)
-        {
-            template = &gSaveBlock1Ptr->objectEventTemplates[i];
-            if (template->localId == localId && !FlagGet(template->flagId))
-                return InitObjectEventStateFromTemplate(template, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
-        }
-    }
-    return OBJECT_EVENTS_COUNT;
-}
-
 static bool8 GetAvailableObjectEventId(u16 localId, u8 mapNum, u8 mapGroup, u8 *objectEventId)
 // Looks for an empty slot.
 // Returns FALSE and the location of the available slot
@@ -1641,6 +1615,7 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
     spriteFrameImage.size = graphicsInfo->size;
     CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(objectEvent->graphicsId, objectEvent->movementType, &spriteTemplate, &subspriteTables);
     spriteTemplate.images = &spriteFrameImage;
+
     if (spriteTemplate.paletteTag != 0xFFFF)
     {
         LoadObjectEventPalette(spriteTemplate.paletteTag);
@@ -1725,7 +1700,7 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u8 graphicsId)
     sprite->x += 8;
     sprite->y += 16 + sprite->centerToCornerVecY;
     if (objectEvent->trackedByCamera)
-        CameraObjectReset1();
+        CameraObjectReset();
 }
 
 void ObjectEventSetGraphicsIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, u8 graphicsId)
@@ -1797,9 +1772,6 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u8 graphicsId)
         bard = GetCurrentMauvilleOldMan();
         return gMauvilleOldManGraphicsInfoPointers[bard];
     }
-
- // if (graphicsId >= NUM_OBJ_EVENT_GFX)
-     // graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
 
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }
@@ -1989,7 +1961,7 @@ void MoveObjectEventToMapCoords(struct ObjectEvent *objectEvent, s16 x, s16 y)
     sprite->y += 16 + sprite->centerToCornerVecY;
     ResetObjectEventFldEffData(objectEvent);
     if (objectEvent->trackedByCamera)
-        CameraObjectReset1();
+        CameraObjectReset();
 }
 
 void TryMoveObjectEventToMapCoords(u8 localId, u8 mapNum, u8 mapGroup, s16 x, s16 y)
@@ -2065,15 +2037,15 @@ void UpdateObjectEventsForCameraUpdate(s16 x, s16 y)
     RemoveObjectEventsOutsideView();
 }
 
-#define sLinkedSpriteId data[0]
-#define sState          data[1]
-
-u8 AddCameraObject(u8 linkedSpriteId)
+// The "CameraObject" functions below are responsible for an invisible sprite
+// that follows the movements of a different sprite (normally the player's sprite)
+// and tracks x/y movement distances for the camera so it knows where to move.
+u8 AddCameraObject(u8 followSpriteId)
 {
     u8 spriteId = CreateSprite(&sCameraSpriteTemplate, 0, 0, 4);
 
     gSprites[spriteId].invisible = TRUE;
-    gSprites[spriteId].sLinkedSpriteId = linkedSpriteId;
+    gSprites[spriteId].sCamera_FollowSpriteId = followSpriteId;
     return spriteId;
 }
 
@@ -2082,35 +2054,37 @@ static void SpriteCB_CameraObject(struct Sprite *sprite)
     void (*callbacks[ARRAY_COUNT(sCameraObjectFuncs)])(struct Sprite *);
 
     memcpy(callbacks, sCameraObjectFuncs, sizeof sCameraObjectFuncs);
-    callbacks[sprite->sState](sprite);
+    callbacks[sprite->sCamera_State](sprite);
 }
 
-static void CameraObject_0(struct Sprite *sprite)
+static void CameraObject_Init(struct Sprite *sprite)
 {
-    sprite->x = gSprites[sprite->sLinkedSpriteId].x;
-    sprite->y = gSprites[sprite->sLinkedSpriteId].y;
+    sprite->x = gSprites[sprite->sCamera_FollowSpriteId].x;
+    sprite->y = gSprites[sprite->sCamera_FollowSpriteId].y;
     sprite->invisible = TRUE;
-    sprite->sState = 1;
-    CameraObject_1(sprite);
+    sprite->sCamera_State = CAMERA_STATE_MOVE;
+    CameraObject_UpdateMove(sprite);
 }
 
-static void CameraObject_1(struct Sprite *sprite)
+static void CameraObject_UpdateMove(struct Sprite *sprite)
 {
-    s16 x = gSprites[sprite->sLinkedSpriteId].x;
-    s16 y = gSprites[sprite->sLinkedSpriteId].y;
+    s16 x = gSprites[sprite->sCamera_FollowSpriteId].x;
+    s16 y = gSprites[sprite->sCamera_FollowSpriteId].y;
 
-    sprite->data[2] = x - sprite->x;
-    sprite->data[3] = y - sprite->y;
+    sprite->sCamera_MoveX = x - sprite->x;
+    sprite->sCamera_MoveY = y - sprite->y;
     sprite->x = x;
     sprite->y = y;
 }
 
-static void CameraObject_2(struct Sprite *sprite)
+// Invisible sprite will continue to follow the parent sprite,
+// but no corresponding camera movement will be shown.
+static void CameraObject_UpdateFrozen(struct Sprite *sprite)
 {
-    sprite->x = gSprites[sprite->sLinkedSpriteId].x;
-    sprite->y = gSprites[sprite->sLinkedSpriteId].y;
-    sprite->data[2] = 0;
-    sprite->data[3] = 0;
+    sprite->x = gSprites[sprite->sCamera_FollowSpriteId].x;
+    sprite->y = gSprites[sprite->sCamera_FollowSpriteId].y;
+    sprite->sCamera_MoveX = 0;
+    sprite->sCamera_MoveY = 0;
 }
 
 static struct Sprite *FindCameraSprite(void)
@@ -2125,51 +2099,43 @@ static struct Sprite *FindCameraSprite(void)
     return NULL;
 }
 
-void CameraObjectReset1(void)
+void CameraObjectReset(void)
 {
-    struct Sprite *camera;
-
-    camera = FindCameraSprite();
+    struct Sprite *camera = FindCameraSprite();
     if (camera != NULL)
     {
-        camera->sState = 0;
+        camera->sCamera_State = CAMERA_STATE_INIT;
         camera->callback(camera);
     }
 }
 
 void CameraObjectSetFollowedSpriteId(u8 spriteId)
 {
-    struct Sprite *camera;
-
-    camera = FindCameraSprite();
+    struct Sprite *camera = FindCameraSprite();
     if (camera != NULL)
     {
-        camera->sLinkedSpriteId = spriteId;
-        CameraObjectReset1();
+        camera->sCamera_FollowSpriteId = spriteId;
+        CameraObjectReset();
     }
 }
 
 static u8 UNUSED CameraObjectGetFollowedSpriteId(void)
 {
-    struct Sprite *camera;
-
-    camera = FindCameraSprite();
+    struct Sprite *camera = FindCameraSprite();
     if (camera == NULL)
         return MAX_SPRITES;
 
-    return camera->sLinkedSpriteId;
+    return camera->sCamera_FollowSpriteId;
 }
 
-void CameraObjectReset2(void)
+void CameraObjectFreeze(void)
 {
-    // UB: Possible null dereference
-#ifdef UBFIX
     struct Sprite *camera = FindCameraSprite();
-    if (camera)
-        camera->sState = 2;
-#else
-    FindCameraSprite()->sState = 2;
-#endif // UBFIX
+#ifdef UBFIX // Possible null dereference
+    if (camera == NULL)
+        return;
+#endif
+    camera->sCamera_State = CAMERA_STATE_FROZEN;
 }
 
 u8 CopySprite(struct Sprite *sprite, s16 x, s16 y, u8 subpriority)
@@ -2263,8 +2229,7 @@ u16 GetBoulderRevealFlagByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
     return GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup)->trainerType;
 }
 
-// Unused
-static u8 GetObjectTrainerTypeByObjectEventId(u8 objectEventId)
+static u8 UNUSED GetObjectTrainerTypeByObjectEventId(u8 objectEventId)
 {
     return gObjectEvents[objectEventId].trainerType;
 }
@@ -4499,6 +4464,7 @@ static u8 GetCollisionInDirection(struct ObjectEvent *objectEvent, u8 direction)
 u8 GetCollisionAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u32 dir)
 {
     u8 direction = dir;
+
     if (IsCoordOutsideObjectEventMovementRange(objectEvent, x, y))
         return COLLISION_OUTSIDE_RANGE;
     else if (MapGridGetCollisionAt(x, y) || GetMapBorderIdAt(x, y) == CONNECTION_INVALID || IsMetatileDirectionallyImpassable(objectEvent, x, y, direction))
@@ -4784,28 +4750,6 @@ void UpdateObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sp
     ObjectEventUpdateSubpriority(objectEvent, sprite);
 }
 
-void sub_8063E28(struct ObjectEvent *objectEvent, struct Sprite *sprite)
-{
-    DoGroundEffects_OnSpawn(objectEvent, sprite);
-    TryEnableObjectEventAnim(objectEvent, sprite);
-    if (ObjectEventIsHeldMovementActive(objectEvent))
-    {
-        if(!sprite->animBeginning)
-            sub_8064544(objectEvent, sprite);
-    }
-    
-    if (MetatileBehavior_IsIce_2(objectEvent->currentMetatileBehavior) == TRUE
-     || MetatileBehavior_IsTrickHouseSlipperyFloor(objectEvent->currentMetatileBehavior) == TRUE)
-        objectEvent->disableAnim = TRUE;
-    else
-        objectEvent->disableAnim = FALSE;
-    DoGroundEffects_OnBeginStep(objectEvent, sprite);
-    DoGroundEffects_OnFinishStep(objectEvent, sprite);
-    UpdateObjectEventSpriteAnimPause(objectEvent, sprite);
-    UpdateObjectEventVisibility(objectEvent, sprite);
-    ObjectEventUpdateSubpriority(objectEvent, sprite);
-}
-
 #define dirn_to_anim(name, table)\
 u8 name(u32 idx)\
 {\
@@ -4892,16 +4836,6 @@ static void ObjectEventExecHeldMovementAction(struct ObjectEvent *objectEvent, s
 {
     if (gMovementActionFuncs[objectEvent->movementActionId][sprite->sActionFuncId](objectEvent, sprite))
         objectEvent->heldMovementFinished = TRUE;
-}
-
-static void sub_8064544(struct ObjectEvent *objectEvent, struct Sprite *sprite)
-{
-    if (gMovementActionFuncs[objectEvent->movementActionId][sprite->data[2]](objectEvent, sprite))
-    {
-        objectEvent->heldMovementFinished = TRUE;
-        if (objectEvent->graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER)
-            HandleBoulderFallThroughHole(objectEvent);
-    }
 }
 
 static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *objectEvent, struct Sprite *sprite)
@@ -8133,14 +8067,18 @@ static void DoGroundEffects_OnSpawn(struct ObjectEvent *objEvent, struct Sprite 
 {
     u32 flags;
 
-    if (objEvent->triggerGroundEffectsOnMove && !objEvent->invisible)
+#ifdef BUGFIX
+    if (objEvent->triggerGroundEffectsOnMove && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+#else
+    if (objEvent->triggerGroundEffectsOnMove)
+#endif
     {
         flags = 0;
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
         GetAllGroundEffectFlags_OnSpawn(objEvent, &flags);
         SetObjectEventSpriteOamTableForLongGrass(objEvent, sprite);
         DoFlaggedGroundEffects(objEvent, sprite, flags);
-        objEvent->triggerGroundEffectsOnMove = 0;
+        objEvent->triggerGroundEffectsOnMove = FALSE;
         objEvent->disableCoveringGroundEffects = 0;
     }
 }
@@ -8149,7 +8087,11 @@ static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Spr
 {
     u32 flags;
 
-    if (objEvent->triggerGroundEffectsOnMove && !objEvent->invisible)
+#ifdef BUGFIX
+    if (objEvent->triggerGroundEffectsOnMove && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+#else
+    if (objEvent->triggerGroundEffectsOnMove)
+#endif
     {
         flags = 0;
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
@@ -8157,7 +8099,7 @@ static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Spr
         SetObjectEventSpriteOamTableForLongGrass(objEvent, sprite);
         filters_out_some_ground_effects(objEvent, &flags);
         DoFlaggedGroundEffects(objEvent, sprite, flags);
-        objEvent->triggerGroundEffectsOnMove = 0;
+        objEvent->triggerGroundEffectsOnMove = FALSE;
         objEvent->disableCoveringGroundEffects = 0;
     }
 }
@@ -8166,7 +8108,11 @@ static void DoGroundEffects_OnFinishStep(struct ObjectEvent *objEvent, struct Sp
 {
     u32 flags;
 
+#ifdef BUGFIX
     if (objEvent->triggerGroundEffectsOnStop && objEvent->localId != OBJ_EVENT_ID_CAMERA)
+#else
+    if (objEvent->triggerGroundEffectsOnStop)
+#endif
     {
         flags = 0;
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
@@ -8332,11 +8278,11 @@ static const SpriteStepFunc *const sNpcStepFuncTables[] = {
 };
 
 static const s16 sStepTimes[] = {
-    [MOVE_SPEED_NORMAL] = 16,
-    [MOVE_SPEED_FAST_1] = 8,
-    [MOVE_SPEED_FAST_2] = 6,
-    [MOVE_SPEED_FASTER] = 4,
-    [MOVE_SPEED_FASTEST] = 2,
+    [MOVE_SPEED_NORMAL] = ARRAY_COUNT(sStep1Funcs),
+    [MOVE_SPEED_FAST_1] = ARRAY_COUNT(sStep2Funcs),
+    [MOVE_SPEED_FAST_2] = ARRAY_COUNT(sStep3Funcs),
+    [MOVE_SPEED_FASTER] = ARRAY_COUNT(sStep4Funcs),
+    [MOVE_SPEED_FASTEST] = ARRAY_COUNT(sStep8Funcs),
 };
 
 static bool8 NpcTakeStep(struct Sprite *sprite)
@@ -8965,7 +8911,7 @@ static void CreateLevitateMovementTask(struct ObjectEvent *objectEvent)
     u8 taskId = CreateTask(ApplyLevitateMovement, 0xFF);
     struct Task *task = &gTasks[taskId];
 
-    StoreWordInTwoHalfwords(&task->data[0], (u32)objectEvent);
+    StoreWordInTwoHalfwords((u16*) &task->data[0], (u32)objectEvent);
     objectEvent->warpArrowSpriteId = taskId;
     task->data[3] = 0xFFFF;
 }
@@ -8976,7 +8922,7 @@ static void ApplyLevitateMovement(u8 taskId)
     struct Sprite *sprite;
     struct Task *task = &gTasks[taskId];
 
-    LoadWordFromTwoHalfwords(&task->data[0], (u32 *)&objectEvent); // load the map object pointer.
+    LoadWordFromTwoHalfwords((u16*) &task->data[0], (u32 *)&objectEvent); // load the map object pointer.
     sprite = &gSprites[objectEvent->spriteId];
 
     if(!(task->data[2] & 3))
@@ -8993,7 +8939,7 @@ static void DestroyLevitateMovementTask(u8 taskId)
     struct ObjectEvent *objectEvent;
     struct Task *task = &gTasks[taskId];
 
-    LoadWordFromTwoHalfwords(&task->data[0], (u32 *)&objectEvent); // unused objectEvent
+    LoadWordFromTwoHalfwords((u16*) &task->data[0], (u32 *)&objectEvent); // unused objectEvent
     DestroyTask(taskId);
 }
 

@@ -35,8 +35,6 @@
 #include "constants/rgb.h"
 #include "constants/items.h"
 
-extern struct Evolution gEvolutionTable[][EVOS_PER_MON];
-
 struct EvoInfo
 {
     u8 preEvoSpriteId;
@@ -209,8 +207,8 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
 {
     u8 name[POKEMON_NAME_BUFFER_SIZE];
     u16 currSpecies;
-    u32 trainerId, personality;
-    const struct CompressedSpritePalette* pokePal;
+    u32 personality;
+    bool32 isShiny;
     u8 id;
 
     SetHBlankCallback(NULL);
@@ -252,17 +250,17 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
 
     GetMonData(mon, MON_DATA_NICKNAME, name);
     StringCopy_Nickname(gStringVar1, name);
-    StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
+    StringCopy(gStringVar2, GetSpeciesName(postEvoSpecies));
 
     // preEvo sprite
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
-    DecompressPicFromTable(&gMonFrontPicTable[currSpecies],
-                           gMonSpritesGfxPtr->sprites.ptr[B_POSITION_OPPONENT_LEFT],
-                           currSpecies);
-    pokePal = GetMonSpritePalStructFromOtIdPersonality(currSpecies, trainerId, personality);
-    LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
+    LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
+                        currSpecies,
+                        personality,
+                        TRUE);
+    LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(currSpecies, isShiny, personality), OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
 
     SetMultiuseSpriteTemplateToPokemon(currSpecies, B_POSITION_OPPONENT_LEFT);
     gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
@@ -273,11 +271,11 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     gSprites[id].invisible = TRUE;
 
     // postEvo sprite
-    DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                           gMonSpritesGfxPtr->sprites.ptr[B_POSITION_OPPONENT_RIGHT],
-                           postEvoSpecies);
-    pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
-    LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+    LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_RIGHT],
+                        postEvoSpecies,
+                        personality,
+                        TRUE);
+    LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(postEvoSpecies, isShiny, personality), OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 
     SetMultiuseSpriteTemplateToPokemon(postEvoSpecies, B_POSITION_OPPONENT_RIGHT);
     gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
@@ -310,13 +308,13 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
 static void CB2_EvolutionSceneLoadGraphics(void)
 {
     u8 id;
-    const struct CompressedSpritePalette* pokePal;
     u16 postEvoSpecies;
-    u32 trainerId, personality;
+    u32 personality;
     struct Pokemon *mon = &gPlayerParty[gTasks[sEvoStructPtr->evoTaskId].tPartyId];
+    bool8 isShiny;
 
     postEvoSpecies = gTasks[sEvoStructPtr->evoTaskId].tPostEvoSpecies;
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
 
     SetHBlankCallback(NULL);
@@ -350,12 +348,11 @@ static void CB2_EvolutionSceneLoadGraphics(void)
     FreeAllSpritePalettes();
     gReservedSpritePaletteCount = 4;
 
-    DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                           gMonSpritesGfxPtr->sprites.ptr[B_POSITION_OPPONENT_RIGHT],
-                           postEvoSpecies);
-    pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
-
-    LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+    LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_RIGHT],
+                        postEvoSpecies,
+                        personality,
+                        TRUE);
+    LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(postEvoSpecies, isShiny, personality), OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 
     SetMultiuseSpriteTemplateToPokemon(postEvoSpecies, B_POSITION_OPPONENT_RIGHT);
     gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
@@ -419,14 +416,13 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
         break;
     case 4:
         {
-            const struct CompressedSpritePalette* pokePal;
-            u32 trainerId = GetMonData(mon, MON_DATA_OT_ID);
+            bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
             u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
-            DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                                   gMonSpritesGfxPtr->sprites.ptr[B_POSITION_OPPONENT_RIGHT],
-                                   postEvoSpecies);
-            pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
-            LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+            LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_RIGHT],
+                                postEvoSpecies,
+                                personality,
+                                TRUE);
+            LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(postEvoSpecies, isShiny, personality), OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
             gMain.state++;
         }
         break;
@@ -468,30 +464,30 @@ void TradeEvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, u8 preEvoSprit
 {
     u8 name[POKEMON_NAME_BUFFER_SIZE];
     u16 currSpecies;
-    u32 trainerId, personality;
-    const struct CompressedSpritePalette* pokePal;
+    u32 personality;
     u8 id;
+    bool8 isShiny;
 
     GetMonData(mon, MON_DATA_NICKNAME, name);
     StringCopy_Nickname(gStringVar1, name);
-    StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
+    StringCopy(gStringVar2, GetSpeciesName(postEvoSpecies));
 
     gAffineAnimsDisabled = TRUE;
 
     // preEvo sprite
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 
     sEvoStructPtr = AllocZeroed(sizeof(struct EvoInfo));
     sEvoStructPtr->preEvoSpriteId = preEvoSpriteId;
 
-    DecompressPicFromTable(&gMonFrontPicTable[postEvoSpecies],
-                           gMonSpritesGfxPtr->sprites.ptr[B_POSITION_OPPONENT_LEFT],
-                           postEvoSpecies);
+    LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
+                        postEvoSpecies,
+                        personality,
+                        TRUE);
 
-    pokePal = GetMonSpritePalStructFromOtIdPersonality(postEvoSpecies, trainerId, personality);
-    LoadCompressedPalette(pokePal->data, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+    LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(postEvoSpecies, isShiny, personality), OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 
     SetMultiuseSpriteTemplateToPokemon(postEvoSpecies, B_POSITION_OPPONENT_LEFT);
     gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
@@ -934,7 +930,7 @@ static void Task_EvolutionScene(u8 taskId)
                 {
                     // Selected move to forget
                     u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
-                    if (IsHMMove2(move))
+                    if (IsMoveHM(move))
                     {
                         // Can't forget HMs
                         BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_TABLE_START]);
@@ -1316,7 +1312,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 {
                     // Selected move to forget
                     u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
-                    if (IsHMMove2(move))
+                    if (IsMoveHM(move))
                     {
                         // Can't forget HMs
                         BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_TABLE_START]);

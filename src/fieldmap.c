@@ -629,8 +629,8 @@ bool32 CanCameraMoveInDirection(int direction)
 
 static void SetPositionFromConnection(const struct MapConnection *connection, int direction, int x, int y)
 {
-    struct MapHeader const *mapHeader;
-    mapHeader = GetMapHeaderFromConnection(connection);
+    struct MapHeader const *mapHeader = GetMapHeaderFromConnection(connection);
+
     switch (direction)
     {
     case CONNECTION_EAST:

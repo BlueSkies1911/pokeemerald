@@ -29,7 +29,6 @@ extern struct PokemonStorage *gPokemonStoragePtr;
 void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, s32 bytesToBuffer);
 u8 CountMonsInBox(u8 boxId);
 s16 GetFirstFreeBoxSpot(u8 boxId);
-u8 CountPartyNonEggMons(void);
 u8 CountPartyAliveNonEggMonsExcept(u8 slotToIgnore);
 u16 CountPartyAliveNonEggMons_IgnoreVar0x8004Slot(void);
 u8 CountPartyMons(void);
@@ -72,5 +71,7 @@ void SetWaldaWallpaperColors(u16 color1, u16 color2);
 u8 *GetWaldaPhrasePtr(void);
 void SetWaldaPhrase(const u8 *src);
 bool32 IsWaldaPhraseEmpty(void);
+
+void EnterPokeStorage(u8 boxOption);
 
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H

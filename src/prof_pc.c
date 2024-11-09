@@ -20,42 +20,32 @@ bool16 ScriptGetPokedexInfo(void)
     return IsNationalPokedexEnabled();
 }
 
-// This shows your Kanto Pokédex rating and not your National Dex.
-const u8 *GetPokedexRatingText(u16 count)
+#define OAK_DEX_STRINGS 16
+
+static const u8 *const sOakDexRatingTexts[OAK_DEX_STRINGS] =
 {
-    if (count < 10)
-        return gPokedexRating_Text_LessThan10;
-    if (count < 20)
-        return gPokedexRating_Text_LessThan20;
-    if (count < 30)
-        return gPokedexRating_Text_LessThan30;
-    if (count < 40)
-        return gPokedexRating_Text_LessThan40;
-    if (count < 50)
-        return gPokedexRating_Text_LessThan50;
-    if (count < 60)
-        return gPokedexRating_Text_LessThan60;
-    if (count < 70)
-        return gPokedexRating_Text_LessThan70;
-    if (count < 80)
-        return gPokedexRating_Text_LessThan80;
-    if (count < 90)
-        return gPokedexRating_Text_LessThan90;
-    if (count < 100)
-        return gPokedexRating_Text_LessThan100;
-    if (count < 110)
-        return gPokedexRating_Text_LessThan110;
-    if (count < 120)
-        return gPokedexRating_Text_LessThan120;
-    if (count < 130)
-        return gPokedexRating_Text_LessThan130;
-    if (count < 140)
-        return gPokedexRating_Text_LessThan140;
-    if (count < 150)
-        return gPokedexRating_Text_LessThan150;
-    if (count == KANTO_DEX_COUNT)
-        return gPokedexRating_Text_Complete;
-    return gPokedexRating_Text_LessThan10;
+    gPokedexRating_Text_LessThan10,
+    gPokedexRating_Text_LessThan20,
+    gPokedexRating_Text_LessThan30,
+    gPokedexRating_Text_LessThan40,
+    gPokedexRating_Text_LessThan50,
+    gPokedexRating_Text_LessThan60,
+    gPokedexRating_Text_LessThan70,
+    gPokedexRating_Text_LessThan80,
+    gPokedexRating_Text_LessThan90,
+    gPokedexRating_Text_LessThan100,
+    gPokedexRating_Text_LessThan110,
+    gPokedexRating_Text_LessThan120,
+    gPokedexRating_Text_LessThan130,
+    gPokedexRating_Text_LessThan140,
+    gPokedexRating_Text_LessThan150,
+    gPokedexRating_Text_Complete,
+};
+
+// This shows your Kanto Pokédex rating and not your National Dex.
+const u8 *GetPokedexRatingText(u32 count)
+{
+    return sOakDexRatingTexts[(count * (OAK_DEX_STRINGS - 1)) / (KANTO_DEX_COUNT - 1)];
 }
 
 void ShowPokedexRatingMessage(void)

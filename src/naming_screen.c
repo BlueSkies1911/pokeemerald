@@ -1726,7 +1726,7 @@ static void DrawMonTextEntryBox(void)
 {
     u8 buffer[32];
 
-    StringCopy(buffer, gSpeciesNames[sNamingScreen->monSpecies]);
+    StringCopy(buffer, GetSpeciesName(sNamingScreen->monSpecies));
     StringAppendN(buffer, sNamingScreen->template->title, 15);
     FillWindowPixelBuffer(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], PIXEL_FILL(1));
     AddTextPrinterParameterized(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], FONT_NORMAL, buffer, 8, 1, 0, 0);
@@ -2073,32 +2073,10 @@ static bool8 IsWideLetter(u8 character)
     return FALSE;
 }
 
-// Debug? Arguments aren't sensible for non-player screens.
-static void UNUSED Debug_NamingScreenPlayer(void)
-{
-    DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToFieldWithOpenMenu);
-}
-
-static void UNUSED Debug_NamingScreenBox(void)
-{
-    DoNamingScreen(NAMING_SCREEN_BOX, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToFieldWithOpenMenu);
-}
-
-static void UNUSED Debug_NamingScreenCaughtMon(void)
-{
-    DoNamingScreen(NAMING_SCREEN_CAUGHT_MON, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToFieldWithOpenMenu);
-}
-
-static void UNUSED Debug_NamingScreenNickname(void)
-{
-    DoNamingScreen(NAMING_SCREEN_NICKNAME, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToFieldWithOpenMenu);
-}
-
 void NameRival(void)
 {
     DoNamingScreen(NAMING_SCREEN_RIVAL, gSaveBlock2Ptr->rivalName, gSaveBlock2Ptr->playerGender, MON_MALE, 0, CB2_ReturnToFieldWithOpenMenu);
 }
-
 
 //--------------------------------------------------
 // Forward-declared variables
@@ -2618,5 +2596,3 @@ static const struct SpritePalette sSpritePalettes[] =
     {gNamingScreenMenu_Pal[4], PALTAG_OK_BUTTON},
     {}
 };
-
-

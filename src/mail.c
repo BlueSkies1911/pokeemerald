@@ -69,8 +69,8 @@ struct MailRead
     /*0x021c*/ u8 monIconSpriteId;
     /*0x021d*/ u8 language;
     /*0x021e*/ bool8 international;
-    /*0x0220*/ u8 * (*parserSingle)(u8 *dest, u16 word);
-    /*0x0224*/ u8 * (*parserMultiple)(u8 *dest, const u16 *src, u16 length1, u16 length2);
+    /*0x0220*/ u8 *(*parserSingle)(u8 *dest, u16 word);
+    /*0x0224*/ u8 *(*parserMultiple)(u8 *dest, const u16 *src, u16 length1, u16 length2);
     /*0x0228*/ const struct MailLayout *layout;
     /*0x022c*/ u8 bg1TilemapBuffer[0x1000];
     /*0x122c*/ u8 bg2TilemapBuffer[0x1000];
@@ -473,7 +473,7 @@ void ReadMail(struct Mail *mail, void (*exitCallback)(void), bool8 hasText)
         sMailRead->layout = &sMailLayouts_Tall[sMailRead->mailType];
         break;
     }
-
+    species = mail->species;
     if (species > SPECIES_NONE && species < NUM_SPECIES)
     {
         switch (sMailRead->mailType)

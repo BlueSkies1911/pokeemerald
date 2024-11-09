@@ -13,7 +13,6 @@
 
 extern const struct CompressedSpriteSheet gBattleAnimPicTable[];
 extern const struct CompressedSpritePalette gBattleAnimPaletteTable[];
-extern const u8 *const gBattleAnims_StatusConditions[];
 extern const struct OamData gOamData_AffineOff_ObjNormal_8x8;
 extern const struct OamData gOamData_AffineOff_ObjBlend_64x64;
 
@@ -107,7 +106,7 @@ static const union AnimCmd sAnim_SpinningSparkle[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_SpinningSparkle[] =
+const union AnimCmd *const gAnims_SpinningSparkle[] =
 {
     sAnim_SpinningSparkle
 };
@@ -117,7 +116,7 @@ const struct SpriteTemplate gSpinningSparkleSpriteTemplate =
     .tileTag = ANIM_TAG_SPARKLE_4,
     .paletteTag = ANIM_TAG_SPARKLE_4,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_SpinningSparkle,
+    .anims = gAnims_SpinningSparkle,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpinningSparkle,
@@ -546,7 +545,7 @@ void LaunchStatusAnimation(u8 battlerId, u8 statusAnimId)
 
     gBattleAnimAttacker = battlerId;
     gBattleAnimTarget = battlerId;
-    LaunchBattleAnimation(gBattleAnims_StatusConditions, statusAnimId, FALSE);
+    LaunchBattleAnimation(ANIM_TYPE_STATUS, statusAnimId);
     taskId = CreateTask(Task_DoStatusAnimation, 10);
     gTasks[taskId].data[0] = battlerId;
 }

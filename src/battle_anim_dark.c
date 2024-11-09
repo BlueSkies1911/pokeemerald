@@ -11,7 +11,6 @@
 
 static void AnimUnusedBagSteal(struct Sprite *);
 static void AnimUnusedBagSteal_Step(struct Sprite *);
-static void AnimClawSlash(struct Sprite *);
 static void AnimTask_AttackerFadeToInvisible_Step(u8);
 static void AnimTask_AttackerFadeFromInvisible_Step(u8);
 static void AnimBite_Step1(struct Sprite *);
@@ -169,7 +168,7 @@ static const union AnimCmd sAnim_ClawSlash_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_ClawSlash[] =
+const union AnimCmd *const gAnims_ClawSlash[] =
 {
     sAnim_ClawSlash_0,
     sAnim_ClawSlash_1,
@@ -180,7 +179,7 @@ const struct SpriteTemplate gClawSlashSpriteTemplate =
     .tileTag = ANIM_TAG_CLAW_SLASH,
     .paletteTag = ANIM_TAG_CLAW_SLASH,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_ClawSlash,
+    .anims = gAnims_ClawSlash,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimClawSlash,
@@ -879,7 +878,7 @@ void AnimTask_MementoHandleBg(u8 taskId)
 }
 
 // Animates a deep slash from a claw. Used by Metal Claw, Dragon Claw, and Crush Claw
-static void AnimClawSlash(struct Sprite *sprite)
+void AnimClawSlash(struct Sprite *sprite)
 {
     sprite->x += gBattleAnimArgs[0];
     sprite->y += gBattleAnimArgs[1];

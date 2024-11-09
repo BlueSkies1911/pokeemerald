@@ -14,7 +14,6 @@
 #include "field_screen_effect.h"
 #include "field_specials.h"
 #include "fldeff_misc.h"
-#include "item.h"
 #include "item_menu.h"
 #include "link.h"
 #include "match_call.h"
@@ -34,10 +33,10 @@
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
 #include "constants/map_types.h"
+#include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainer_tower.h"
 #include "constants/metatile_behaviors.h"
-#include "constants/items.h"
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPrevMetatileBehavior = 0;
@@ -146,7 +145,6 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
 
     gSpecialVar_LastTalked = 0;
     gSelectedObjectEvent = 0;
-    
     gSpecialVar_TextColor = 0xFF;
 
     playerDirection = GetPlayerFacingDirection();
@@ -497,9 +495,10 @@ static bool8 CanLearnSurfInParty(void)
     u8 i;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL))
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
+        if (!species)
             break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanMonLearnTMHM(&gPlayerParty[i], ITEM_HM03 - ITEM_TM01))
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanLearnTeachableMove(species, MOVE_SURF))
             return TRUE;
     }
     return FALSE;

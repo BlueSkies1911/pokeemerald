@@ -26,7 +26,6 @@ static void AnimMovingClamp_End(struct Sprite *);
 static void AnimKinesisZapEnergy(struct Sprite *);
 static void AnimSwordsDanceBlade(struct Sprite *);
 static void AnimSwordsDanceBlade_Step(struct Sprite *);
-static void AnimSonicBoomProjectile(struct Sprite *);
 static void AnimAirWaveProjectile(struct Sprite *);
 static void AnimAirWaveProjectile_Step1(struct Sprite *sprite);
 static void AnimAirWaveProjectile_Step2(struct Sprite *sprite);
@@ -59,7 +58,6 @@ static void AnimSoftBoiledEgg_Step4(struct Sprite *);
 static void AnimSoftBoiledEgg_Step4_Callback(struct Sprite *);
 static void AnimSpeedDust(struct Sprite *);
 static void AnimHealBellMusicNote(struct Sprite *);
-static void AnimMagentaHeart(struct Sprite *);
 static void AnimRedHeartProjectile(struct Sprite *);
 static void AnimRedHeartProjectile_Step(struct Sprite *);
 static void AnimRedHeartRising(struct Sprite *);
@@ -980,13 +978,6 @@ const struct SpriteTemplate gHiddenPowerOrbScatterSpriteTemplate =
     .callback = AnimOrbitScatter,
 };
 
-const union AffineAnimCmd gSpitUpOrbAffineAnimCmds[] =
-{
-    AFFINEANIMCMD_FRAME(0x80, 0x80, 0, 0),
-    AFFINEANIMCMD_FRAME(0x8, 0x8, 0, 1),
-    AFFINEANIMCMD_JUMP(1),
-};
-
 const struct SpriteTemplate gPowerGemOrbSpriteTemplate =
 {
     .tileTag = ANIM_TAG_POWER_GEM,
@@ -1007,6 +998,13 @@ const struct SpriteTemplate gPowerGemOrbScatterSpriteTemplate =
     .images = NULL,
     .affineAnims = gHiddenPowerOrbAffineAnimTable,
     .callback = AnimOrbitScatter,
+};
+
+const union AffineAnimCmd gSpitUpOrbAffineAnimCmds[] =
+{
+    AFFINEANIMCMD_FRAME(0x80, 0x80, 0, 0),
+    AFFINEANIMCMD_FRAME(0x8, 0x8, 0, 1),
+    AFFINEANIMCMD_JUMP(1),
 };
 
 const union AffineAnimCmd *const gSpitUpOrbAffineAnimTable[] =
@@ -1227,7 +1225,6 @@ const union AffineAnimCmd *const gPerishSongMusicNoteAffineAnimTable[] =
     gPerishSongMusicNoteAffineAnimCmds3,
 };
 
-extern const union AnimCmd *const gMusicNotesAnimTable[];
 const struct SpriteTemplate gPerishSongMusicNoteSpriteTemplate =
 {
     .tileTag = ANIM_TAG_MUSIC_NOTES_2,
@@ -1507,7 +1504,7 @@ static void AnimSwordsDanceBlade_Step(struct Sprite *sprite)
 // arg 2: target x pixel offset
 // arg 3: target y pixel offset
 // arg 4: duration
-static void AnimSonicBoomProjectile(struct Sprite *sprite)
+void AnimSonicBoomProjectile(struct Sprite *sprite)
 {
     s16 targetXPos;
     s16 targetYPos;
@@ -1684,7 +1681,7 @@ void AnimTask_AirCutterProjectile(u8 taskId)
     }
     else
     {
-        if (GET_BATTLER_SIDE2(gBattleAnimTarget) == B_SIDE_PLAYER)
+        if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
         {
             gTasks[taskId].data[4] = 1;
             gBattleAnimArgs[0] = -gBattleAnimArgs[0];
@@ -3079,7 +3076,7 @@ static void AnimHealBellMusicNote(struct Sprite *sprite)
     SetMusicNotePalette(sprite, gBattleAnimArgs[5], gBattleAnimArgs[6]);
 }
 
-static void AnimMagentaHeart(struct Sprite *sprite)
+void AnimMagentaHeart(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 1)
         InitSpritePosToAnimAttacker(sprite, FALSE);
@@ -3690,7 +3687,6 @@ static void AnimTask_UproarDistortion_Step(u8 taskId)
 
 static void AnimJaggedMusicNote(struct Sprite *sprite)
 {
-    int var1;
     u8 battler = !gBattleAnimArgs[0] ? gBattleAnimAttacker : gBattleAnimTarget;
 
     if (GetBattlerSide(battler) == B_SIDE_OPPONENT)
@@ -3701,16 +3697,8 @@ static void AnimJaggedMusicNote(struct Sprite *sprite)
     sprite->data[0] = 0;
     sprite->data[1] = (u16)sprite->x << 3;
     sprite->data[2] = (u16)sprite->y << 3;
-
-    var1 = gBattleAnimArgs[1] << 3;
-    if (var1 < 0)
-        var1 += 7;
-    sprite->data[3] = var1 >> 3;
-
-    var1 = gBattleAnimArgs[2] << 3;
-    if (var1 < 0)
-        var1 += 7;
-    sprite->data[4] = var1 >> 3;
+    sprite->data[3] = (gBattleAnimArgs[1] << 3) / 8;
+    sprite->data[4] = (gBattleAnimArgs[2] << 3) / 8;
 
     sprite->oam.tileNum += gBattleAnimArgs[3] * 16;
     sprite->callback = AnimJaggedMusicNote_Step;

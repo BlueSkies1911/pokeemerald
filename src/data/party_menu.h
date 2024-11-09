@@ -643,19 +643,11 @@ static const u8 *const sDescriptionStringTable[] =
     [PARTYBOX_DESC_DONT_HAVE]  = gText_DontHave,
 };
 
-static const u16 sUnusedData[] =
-{
-    0x0108, 0x0151, 0x0160, 0x015b, 0x002e, 0x005c, 0x0102, 0x0153, 0x014b, 0x00ed, 0x00f1, 0x010d, 0x003a, 0x003b, 0x003f, 0x0071,
-    0x00b6, 0x00f0, 0x00ca, 0x00db, 0x00da, 0x004c, 0x00e7, 0x0055, 0x0057, 0x0059, 0x00d8, 0x005b, 0x005e, 0x00f7, 0x0118, 0x0068,
-    0x0073, 0x015f, 0x0035, 0x00bc, 0x00c9, 0x007e, 0x013d, 0x014c, 0x0103, 0x0107, 0x0122, 0x009c, 0x00d5, 0x00a8, 0x00d3, 0x011d,
-    0x0121, 0x013b, 0x000f, 0x0013, 0x0039, 0x0046, 0x0094, 0x00f9, 0x007f, 0x0123,
-};
-
 struct
 {
     const u8 *text;
     TaskFunc func;
-} static const sCursorOptions[] =
+} static const sCursorOptions[MENU_FIELD_MOVES] =
 {
     [MENU_SUMMARY] = {gText_Summary5, CursorCb_Summary},
     [MENU_SWITCH] = {gText_Switch2, CursorCb_Switch},
@@ -676,20 +668,6 @@ struct
     [MENU_TRADE1] = {gText_Trade4, CursorCb_Trade1},
     [MENU_TRADE2] = {gText_Trade4, CursorCb_Trade2},
     [MENU_TOSS] = {gMenuText_Toss, CursorCb_Toss},
-    [MENU_FIELD_MOVES + FIELD_MOVE_FLASH] = {gMoveNames[MOVE_FLASH], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_CUT] = {gMoveNames[MOVE_CUT], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_FLY] = {gMoveNames[MOVE_FLY], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_STRENGTH] = {gMoveNames[MOVE_STRENGTH], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_SURF] = {gMoveNames[MOVE_SURF], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_ROCK_SMASH] = {gMoveNames[MOVE_ROCK_SMASH], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_DIVE] = {gMoveNames[MOVE_DIVE], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_WATERFALL] = {gMoveNames[MOVE_WATERFALL], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_TELEPORT] = {gMoveNames[MOVE_TELEPORT], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_DIG] = {gMoveNames[MOVE_DIG], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_SECRET_POWER] = {gMoveNames[MOVE_SECRET_POWER], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_MILK_DRINK] = {gMoveNames[MOVE_MILK_DRINK], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_SOFT_BOILED] = {gMoveNames[MOVE_SOFT_BOILED], CursorCb_FieldMove},
-    [MENU_FIELD_MOVES + FIELD_MOVE_SWEET_SCENT] = {gMoveNames[MOVE_SWEET_SCENT], CursorCb_FieldMove},
 };
 
 static const u8 sPartyMenuAction_SummarySwitchCancel[] = {MENU_SUMMARY, MENU_SWITCH, MENU_CANCEL1};
@@ -739,12 +717,11 @@ static const u8 sPartyMenuActionCounts[] =
     [ACTIONS_REGISTER]      = ARRAY_COUNT(sPartyMenuAction_RegisterSummaryCancel),
     [ACTIONS_TRADE]         = ARRAY_COUNT(sPartyMenuAction_TradeSummaryCancel1),
     [ACTIONS_SPIN_TRADE]    = ARRAY_COUNT(sPartyMenuAction_TradeSummaryCancel2),
-    [ACTIONS_TAKEITEM_TOSS] = ARRAY_COUNT(sPartyMenuAction_TakeItemTossCancel)
+    [ACTIONS_TAKEITEM_TOSS] = ARRAY_COUNT(sPartyMenuAction_TakeItemTossCancel),
 };
 
 static const u16 sFieldMoves[FIELD_MOVES_COUNT + 1] =
 {
-    
     [FIELD_MOVE_FLASH]        = MOVE_FLASH,
     [FIELD_MOVE_CUT]          = MOVE_CUT,
     [FIELD_MOVE_FLY]          = MOVE_FLY,
@@ -790,8 +767,8 @@ static const u8 *const sUnionRoomTradeMessages[] =
 {
     [UR_TRADE_MSG_NOT_MON_PARTNER_WANTS - 1]       = gText_NotPkmnOtherTrainerWants,
     [UR_TRADE_MSG_NOT_EGG - 1]                     = gText_ThatIsntAnEgg,
-    [UR_TRADE_MSG_MON_CANT_BE_TRADED_1 - 1]        = gText_PkmnCantBeTradedNow,
-    [UR_TRADE_MSG_MON_CANT_BE_TRADED_2 - 1]        = gText_PkmnCantBeTradedNow,
+    [UR_TRADE_MSG_MON_CANT_BE_TRADED_NOW - 1]      = gText_PkmnCantBeTradedNow,
+    [UR_TRADE_MSG_MON_CANT_BE_TRADED - 1]          = gText_PkmnCantBeTraded,
     [UR_TRADE_MSG_PARTNERS_MON_CANT_BE_TRADED - 1] = gText_OtherTrainersPkmnCantBeTraded,
     [UR_TRADE_MSG_EGG_CANT_BE_TRADED -1]           = gText_EggCantBeTradedNow,
     [UR_TRADE_MSG_PARTNER_CANT_ACCEPT_MON - 1]     = gText_OtherTrainerCantAcceptPkmn,
@@ -1055,12 +1032,6 @@ static const union AnimCmd sSpriteAnim_StatusFaint[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd sSpriteAnim_Blank[] =
-{
-    ANIMCMD_FRAME(28, 0),
-    ANIMCMD_END
-};
-
 static const union AnimCmd *const sSpriteTemplate_StatusCondition[] =
 {
     sSpriteAnim_StatusPoison,
@@ -1069,8 +1040,7 @@ static const union AnimCmd *const sSpriteTemplate_StatusCondition[] =
     sSpriteAnim_StatusFrozen,
     sSpriteAnim_StatusBurn,
     sSpriteAnim_StatusPokerus,
-    sSpriteAnim_StatusFaint,
-    sSpriteAnim_Blank
+    sSpriteAnim_StatusFaint
 };
 
 static const struct CompressedSpriteSheet sSpriteSheet_StatusIcons =
@@ -1083,7 +1053,7 @@ static const struct CompressedSpritePalette sSpritePalette_StatusIcons =
     gStatusPal_Icons, TAG_STATUS_ICONS
 };
 
-static const struct SpriteTemplate sSpriteTemplate_StatusIcons =
+const struct SpriteTemplate gSpriteTemplate_StatusIcons =
 {
     .tileTag = TAG_STATUS_ICONS,
     .paletteTag = TAG_STATUS_ICONS,
@@ -1093,135 +1063,3 @@ static const struct SpriteTemplate sSpriteTemplate_StatusIcons =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,
 };
-
-static const u8 *const sUnused_StatStrings[] =
-{
-    gText_HP4,
-    gText_Attack3,
-    gText_Defense3,
-    gText_SpAtk4,
-    gText_SpDef4,
-    gText_Speed2
-};
-
-/* Expands to:
- * static const u16 sTMHMMoves[] =
- * {
- *     MOVE_WORK_UP,
- *     ...
- *     MOVE_CUT,
- *     ...
- * }; */
-#define TMHM_MOVE(id) CAT(MOVE_, id),
-static const u16 sTMHMMoves[] =
-{
-    [ITEM_TM01 - ITEM_TM01] = MOVE_WORK_UP,
-    [ITEM_TM02 - ITEM_TM01] = MOVE_DRAGON_CLAW,
-    [ITEM_TM03 - ITEM_TM01] = MOVE_PSYSHOCK,
-    [ITEM_TM04 - ITEM_TM01] = MOVE_CALM_MIND,
-    [ITEM_TM05 - ITEM_TM01] = MOVE_ROAR,
-    [ITEM_TM06 - ITEM_TM01] = MOVE_TOXIC,
-    [ITEM_TM07 - ITEM_TM01] = MOVE_HAIL,
-    [ITEM_TM08 - ITEM_TM01] = MOVE_BULK_UP,
-    [ITEM_TM09 - ITEM_TM01] = MOVE_VENOSHOCK,
-    [ITEM_TM10 - ITEM_TM01] = MOVE_HIDDEN_POWER,
-    [ITEM_TM11 - ITEM_TM01] = MOVE_SUNNY_DAY,
-    [ITEM_TM12 - ITEM_TM01] = MOVE_TAUNT,
-    [ITEM_TM13 - ITEM_TM01] = MOVE_ICE_BEAM,
-    [ITEM_TM14 - ITEM_TM01] = MOVE_BLIZZARD,
-    [ITEM_TM15 - ITEM_TM01] = MOVE_HYPER_BEAM,
-    [ITEM_TM16 - ITEM_TM01] = MOVE_LIGHT_SCREEN,
-    [ITEM_TM17 - ITEM_TM01] = MOVE_PROTECT,
-    [ITEM_TM18 - ITEM_TM01] = MOVE_RAIN_DANCE,
-    [ITEM_TM19 - ITEM_TM01] = MOVE_ROOST,
-    [ITEM_TM20 - ITEM_TM01] = MOVE_SAFEGUARD,
-    [ITEM_TM21 - ITEM_TM01] = MOVE_FRUSTRATION,
-    [ITEM_TM22 - ITEM_TM01] = MOVE_SOLAR_BEAM,
-    [ITEM_TM23 - ITEM_TM01] = MOVE_SMACK_DOWN,
-    [ITEM_TM24 - ITEM_TM01] = MOVE_THUNDERBOLT,
-    [ITEM_TM25 - ITEM_TM01] = MOVE_THUNDER,
-    [ITEM_TM26 - ITEM_TM01] = MOVE_EARTHQUAKE,
-    [ITEM_TM27 - ITEM_TM01] = MOVE_RETURN,
-    [ITEM_TM28 - ITEM_TM01] = MOVE_LEECH_LIFE,
-    [ITEM_TM29 - ITEM_TM01] = MOVE_PSYCHIC,
-    [ITEM_TM30 - ITEM_TM01] = MOVE_SHADOW_BALL,
-    [ITEM_TM31 - ITEM_TM01] = MOVE_BRICK_BREAK,
-    [ITEM_TM32 - ITEM_TM01] = MOVE_DOUBLE_TEAM,
-    [ITEM_TM33 - ITEM_TM01] = MOVE_REFLECT,
-    [ITEM_TM34 - ITEM_TM01] = MOVE_SLUDGE_WAVE,
-    [ITEM_TM35 - ITEM_TM01] = MOVE_FLAMETHROWER,
-    [ITEM_TM36 - ITEM_TM01] = MOVE_SLUDGE_BOMB,
-    [ITEM_TM37 - ITEM_TM01] = MOVE_SANDSTORM,
-    [ITEM_TM38 - ITEM_TM01] = MOVE_FIRE_BLAST,
-    [ITEM_TM39 - ITEM_TM01] = MOVE_ROCK_TOMB,
-    [ITEM_TM40 - ITEM_TM01] = MOVE_AERIAL_ACE,
-    [ITEM_TM41 - ITEM_TM01] = MOVE_TORMENT,
-    [ITEM_TM42 - ITEM_TM01] = MOVE_FACADE,
-    [ITEM_TM43 - ITEM_TM01] = MOVE_FLAME_CHARGE,
-    [ITEM_TM44 - ITEM_TM01] = MOVE_REST,
-    [ITEM_TM45 - ITEM_TM01] = MOVE_ATTRACT,
-    [ITEM_TM46 - ITEM_TM01] = MOVE_THIEF,
-    [ITEM_TM47 - ITEM_TM01] = MOVE_LOW_SWEEP,
-    [ITEM_TM48 - ITEM_TM01] = MOVE_ROUND,
-    [ITEM_TM49 - ITEM_TM01] = MOVE_ECHOED_VOICE,
-    [ITEM_TM50 - ITEM_TM01] = MOVE_OVERHEAT,
-    [ITEM_TM51 - ITEM_TM01] = MOVE_STEEL_WING,
-    [ITEM_TM52 - ITEM_TM01] = MOVE_FOCUS_BLAST,
-    [ITEM_TM53 - ITEM_TM01] = MOVE_ENERGY_BALL,
-    [ITEM_TM54 - ITEM_TM01] = MOVE_FALSE_SWIPE,
-    [ITEM_TM55 - ITEM_TM01] = MOVE_SCALD,
-    [ITEM_TM56 - ITEM_TM01] = MOVE_FLING,
-    [ITEM_TM57 - ITEM_TM01] = MOVE_CHARGE_BEAM,
-    [ITEM_TM58 - ITEM_TM01] = MOVE_SKY_DROP,
-    [ITEM_TM59 - ITEM_TM01] = MOVE_BRUTAL_SWING,
-    [ITEM_TM60 - ITEM_TM01] = MOVE_QUASH,
-    [ITEM_TM61 - ITEM_TM01] = MOVE_WILL_O_WISP,
-    [ITEM_TM62 - ITEM_TM01] = MOVE_ACROBATICS,
-    [ITEM_TM63 - ITEM_TM01] = MOVE_EMBARGO,
-    [ITEM_TM64 - ITEM_TM01] = MOVE_EXPLOSION,
-    [ITEM_TM65 - ITEM_TM01] = MOVE_SHADOW_CLAW,
-    [ITEM_TM66 - ITEM_TM01] = MOVE_PAYBACK,
-    [ITEM_TM67 - ITEM_TM01] = MOVE_SMART_STRIKE,
-    [ITEM_TM68 - ITEM_TM01] = MOVE_GIGA_IMPACT,
-    [ITEM_TM69 - ITEM_TM01] = MOVE_ROCK_POLISH,
-    [ITEM_TM70 - ITEM_TM01] = MOVE_AURORA_VEIL,
-    [ITEM_TM71 - ITEM_TM01] = MOVE_STONE_EDGE,
-    [ITEM_TM72 - ITEM_TM01] = MOVE_VOLT_SWITCH,
-    [ITEM_TM73 - ITEM_TM01] = MOVE_THUNDER_WAVE,
-    [ITEM_TM74 - ITEM_TM01] = MOVE_GYRO_BALL,
-    [ITEM_TM75 - ITEM_TM01] = MOVE_SWORDS_DANCE,
-    [ITEM_TM76 - ITEM_TM01] = MOVE_DIG,
-    [ITEM_TM77 - ITEM_TM01] = MOVE_PSYCH_UP,
-    [ITEM_TM78 - ITEM_TM01] = MOVE_BULLDOZE,
-    [ITEM_TM79 - ITEM_TM01] = MOVE_FROST_BREATH,
-    [ITEM_TM80 - ITEM_TM01] = MOVE_ROCK_SLIDE,
-    [ITEM_TM81 - ITEM_TM01] = MOVE_X_SCISSOR,
-    [ITEM_TM82 - ITEM_TM01] = MOVE_DRAGON_TAIL,
-    [ITEM_TM83 - ITEM_TM01] = MOVE_INFESTATION,
-    [ITEM_TM84 - ITEM_TM01] = MOVE_POISON_JAB,
-    [ITEM_TM85 - ITEM_TM01] = MOVE_DREAM_EATER,
-    [ITEM_TM86 - ITEM_TM01] = MOVE_GRASS_KNOT,
-    [ITEM_TM87 - ITEM_TM01] = MOVE_SWAGGER,
-    [ITEM_TM88 - ITEM_TM01] = MOVE_SLEEP_TALK,
-    [ITEM_TM89 - ITEM_TM01] = MOVE_U_TURN,
-    [ITEM_TM90 - ITEM_TM01] = MOVE_SUBSTITUTE,
-    [ITEM_TM91 - ITEM_TM01] = MOVE_FLASH_CANNON,
-    [ITEM_TM92 - ITEM_TM01] = MOVE_TRICK_ROOM,
-    [ITEM_TM93 - ITEM_TM01] = MOVE_WILD_CHARGE,
-    [ITEM_TM94 - ITEM_TM01] = MOVE_SECRET_POWER,
-    [ITEM_TM95 - ITEM_TM01] = MOVE_SNARL,
-    [ITEM_TM96 - ITEM_TM01] = MOVE_NATURE_POWER,
-    [ITEM_TM97 - ITEM_TM01] = MOVE_DARK_PULSE,
-    [ITEM_TM98 - ITEM_TM01] = MOVE_HEADBUTT,
-    [ITEM_TM99 - ITEM_TM01] = MOVE_DAZZLING_GLEAM,
-    [ITEM_TM100 - ITEM_TM01] = MOVE_CONFIDE,
-    [ITEM_HM01 - ITEM_TM01] = MOVE_CUT,
-    [ITEM_HM02 - ITEM_TM01] = MOVE_FLY,
-    [ITEM_HM03 - ITEM_TM01] = MOVE_SURF,
-    [ITEM_HM04 - ITEM_TM01] = MOVE_STRENGTH,
-    [ITEM_HM05 - ITEM_TM01] = MOVE_FLASH,
-    [ITEM_HM06 - ITEM_TM01] = MOVE_ROCK_SMASH,
-    [ITEM_HM07 - ITEM_TM01] = MOVE_WATERFALL,
-    [ITEM_HM08 - ITEM_TM01] = MOVE_DIVE,
-};
-#undef TMHM_MOVE

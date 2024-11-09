@@ -73,7 +73,7 @@ struct MatchCallOak {
 struct MatchCallRival {
     u8 type;
     u16 flag;
-    const u8 *desc;\
+    const u8 *desc;
     const match_call_text_data_t *textData;
 };
 
@@ -884,8 +884,8 @@ static void MatchCall_GetNameAndDesc_Oak(match_call_t matchCall, const u8 **desc
 
 static void MatchCall_GetNameAndDescByRematchIdx(u32 idx, const u8 **desc, const u8 **name)
 {
-    const struct Trainer *trainer = gTrainers + GetTrainerIdxByRematchIdx(idx);
-    *desc = gTrainerClassNames[trainer->trainerClass];
+    const struct Trainer *trainer = GetTrainerStructFromId(GetTrainerIdxByRematchIdx(idx));
+    *desc = gTrainerClasses[trainer->trainerClass].name;
     *name = trainer->trainerName;
 }
 

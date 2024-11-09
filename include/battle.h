@@ -13,9 +13,6 @@
 #include "battle_bg.h"
 #include "pokeball.h"
 
-#define GET_BATTLER_SIDE(battler)         (GetBattlerPosition(battler) & BIT_SIDE)
-#define GET_BATTLER_SIDE2(battler)        (gBattlerPositions[battler] & BIT_SIDE)
-
 // Used to exclude moves learned temporarily by Transform or Mimic
 #define MOVE_IS_PERMANENT(battler, moveSlot)                        \
    (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)           \
@@ -45,6 +42,20 @@
 // Special indicator value for shellBellDmg in SpecialStatus
 #define IGNORE_SHELL_BELL 0xFFFF
 
+// For defining EFFECT_HIT etc. with battle TV scores and flags etc.
+struct __attribute__((packed, aligned(2))) BattleMoveEffect
+{
+    const u8 *battleScript;
+    u16 battleTvScore:3;
+    u16 encourageEncore:1;
+    u16 twoTurnEffect:1;
+    u16 semiInvulnerableEffect:1;
+    u16 usesProtectCounter:1;
+    u16 padding:9;
+};
+
+#define GET_MOVE_BATTLESCRIPT(move) gBattleMoveEffects[gMovesInfo[move].effect].battleScript
+
 struct ResourceFlags
 {
     u32 flags[MAX_BATTLERS_COUNT];
@@ -59,10 +70,11 @@ struct ResourceFlags
 struct DisableStruct
 {
     u32 transformedMonPersonality;
+    bool8 transformedMonShininess;
     u16 disabledMove;
     u16 encoredMove;
-    u8 protectUses;
-    u8 stockpileCounter;
+    u8 protectUses:4;
+    u8 stockpileCounter:4;
     s8 stockpileDef;
     s8 stockpileSpDef;
     s8 stockpileBeforeDef;
@@ -91,7 +103,11 @@ struct DisableStruct
     u8 healBlockTimer;
     u8 laserFocusTimer;
     u8 wrapTurns;
+    u8 tormentTimer:4; // used for G-Max Meltdown
     u8 usedMoves:4;
+    u8 spikesDone:1;
+    u8 stealthRockDone:1;
+    u8 toxicSpikesDone:1;
 };
 
 struct ProtectStruct
@@ -102,11 +118,9 @@ struct ProtectStruct
     u32 helpingHand:1;
     u32 bounceMove:1;
     u32 stealMove:1;
-    u32 flag0Unknown:1; // Only set to 0 once.
     u32 prlzImmobility:1;
     u32 confusionSelfDmg:1;
     u32 targetAffected:1;
-    u32 targetNotAffected:1;
     u32 chargingTurn:1;
     u32 fleeType:2; // 0: Normal, 1: FLEE_ITEM, 2: FLEE_ABILITY
     u32 usedImprisonedMove:1;
@@ -117,12 +131,14 @@ struct ProtectStruct
     u32 flinchImmobility:1;
     u32 notFirstStrike:1;
     u32 palaceUnableToUseMove:1;
-    u32 usesBouncedMove:1;
     u32 usedHealBlockedMove:1;
     u32 usedGravityPreventedMove:1;
+    u32 statRaised:1;
     u32 usedMicleBerry:1;
     u32 usedCustapBerry:1;    // also quick claw
+    u16 statFell:1;
     u16 quash:1;
+    u16 usedAllySwitch:1;
     u32 physicalDmg;
     u32 specialDmg;
     u8 physicalBattlerId;
@@ -131,19 +147,18 @@ struct ProtectStruct
 
 struct SpecialStatus
 {
-    s32 dmg;
+    s32 shellBellDmg;
     s32 physicalDmg;
     s32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
-    u32 statLowered:1;
-    u32 lightningRodRedirected:1;
-    u32 restoredBattlerSprite: 1;
-    u32 traced:1;
-    u32 ppNotAffectedByPressure:1;
-    u32 faintedHasReplacement:1;
-    u32 focusBanded:1;
+    u8 statLowered:1;
+    u8 lightningRodRedirected:1;
+    u8 restoredBattlerSprite: 1;
+    u8 traced:1;
+    u8 faintedHasReplacement:1;
+    u8 focusBanded:1;
     u8 focusSashed:1;
     // End of byte
     u8 sturdied:1;
@@ -159,6 +174,7 @@ struct SpecialStatus
     u8 multiHitOn:1;
     u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 afterYou:1;
+    u8 preventLifeOrbDamage:1; // So that Life Orb doesn't activate various effects.
 };
 
 struct SideTimer
@@ -181,7 +197,7 @@ struct SideTimer
     u8 luckyChantTimer;
     u8 luckyChantBattlerId;
     u8 followmeTimer;
-    u8 followmeTarget;
+    u8 followmeTarget:3;
     u8 retaliateTimer;
 };
 
@@ -199,7 +215,8 @@ struct FieldTimer
 struct WishFutureKnock
 {
     u8 futureSightCounter[MAX_BATTLERS_COUNT];
-    u8 futureSightAttacker[MAX_BATTLERS_COUNT];
+    u8 futureSightBattlerIndex[MAX_BATTLERS_COUNT];
+    u8 futureSightPartyIndex[MAX_BATTLERS_COUNT];
     u16 futureSightMove[MAX_BATTLERS_COUNT];
     u8 wishCounter[MAX_BATTLERS_COUNT];
     u8 wishPartyId[MAX_BATTLERS_COUNT];
@@ -213,6 +230,7 @@ struct AI_SavedBattleMon
     u16 moves[MAX_MON_MOVES];
     u16 heldItem;
     u16 species;
+    u8 types[3];
 };
 
 struct AiPartyMon
@@ -232,10 +250,17 @@ struct AiPartyMon
 
 struct AIPartyData // Opposing battlers - party mons.
 {
-    struct AiPartyMon mons[2][PARTY_SIZE]; // 2 parties(player, opponent). Used to save information on opposing party.
-    u8 count[2];
+    struct AiPartyMon mons[NUM_BATTLE_SIDES][PARTY_SIZE]; // 2 parties(player, opponent). Used to save information on opposing party.
+    u8 count[NUM_BATTLE_SIDES];
 };
 
+struct SwitchinCandidate
+{
+    struct BattlePokemon battleMon;
+    bool8 hypotheticalStatus;
+};
+
+// Ai Data used when deciding which move to use, computed only once before each turn's start.
 struct AiLogicData
 {
     u16 abilities[MAX_BATTLERS_COUNT];
@@ -245,9 +270,16 @@ struct AiLogicData
     u16 predictedMoves[MAX_BATTLERS_COUNT];
     u8 hpPercents[MAX_BATTLERS_COUNT];
     u16 partnerMove;
+    u16 speedStats[MAX_BATTLERS_COUNT]; // Speed stats for all battles, calculated only once, same way as damages
     s32 simulatedDmg[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
     u8 effectiveness[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
+    u8 moveAccuracy[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
     u8 moveLimitations[MAX_BATTLERS_COUNT];
+    bool8 shouldSwitchMon; // Because all available moves have no/little effect. Each bit per battler.
+    u8 monToSwitchId[MAX_BATTLERS_COUNT]; // ID of the mon to switch.
+    bool8 weatherHasEffect; // The same as WEATHER_HAS_EFFECT. Stored here, so it's called only once.
+    u8 mostSuitableMonId[MAX_BATTLERS_COUNT]; // Stores result of GetMostSuitableMonToSwitchInto, which decides which generic mon the AI would switch into if they decide to switch. This can be overruled by specific mons found in ShouldSwitch; the final resulting mon is stored in AI_monToSwitchIntoId.
+    struct SwitchinCandidate switchinCandidate; // Struct used for deciding which mon to switch to in battle_ai_switch_items.c
 };
 
 struct AI_ThinkingStruct
@@ -255,13 +287,12 @@ struct AI_ThinkingStruct
     u8 aiState;
     u8 movesetIndex;
     u16 moveConsidered;
-    s8 score[MAX_MON_MOVES];
+    s32 score[MAX_MON_MOVES];
     u32 funcResult;
-    u32 aiFlags;
+    u32 aiFlags[MAX_BATTLERS_COUNT];
     u8 aiAction;
     u8 aiLogicId;
-    struct AI_SavedBattleMon saved[4];
-    bool8 switchMon; // Because all available moves have no/little effect.
+    struct AI_SavedBattleMon saved[MAX_BATTLERS_COUNT];
 };
 
 #define AI_MOVE_HISTORY_COUNT 3
@@ -308,6 +339,7 @@ struct BattleResources
     struct BattleHistory *battleHistory;
     u8 bufferA[MAX_BATTLERS_COUNT][0x200];
     u8 bufferB[MAX_BATTLERS_COUNT][0x200];
+    u8 transferBuffer[0x100];
 };
 
 #define AI_THINKING_STRUCT ((struct AI_ThinkingStruct *)(gBattleResources->ai))
@@ -323,7 +355,6 @@ struct BattleResults
     u8 numHealingItemsUsed;   // 0x3
     u8 numRevivesUsed;        // 0x4
     u8 playerMonWasDamaged:1; // 0x5
-    u8 usedMasterBall:1;      // 0x5
     u8 caughtMonBall:4;       // 0x5
     u8 shinyWildMon:1;        // 0x5
     u16 playerMon1Species;    // 0x6
@@ -435,7 +466,7 @@ struct LinkBattlerHeader
     struct BattleEnigmaBerry battleEnigmaBerry;
 };
 
-struct StolenItem
+struct LostItem
 {
     u16 originalItem:15;
     u16 stolen:1;
@@ -445,17 +476,21 @@ struct BattleStruct
 {
     u8 turnEffectsTracker;
     u8 turnEffectsBattlerId;
-    u8 unused_0;
     u8 turnCountersTracker;
-    u8 wrappedMove[MAX_BATTLERS_COUNT * 2]; // Leftover from Ruby's ewram access.
-    u8 moveTarget[MAX_BATTLERS_COUNT];
+    u16 wrappedMove[MAX_BATTLERS_COUNT];
+    u16 moveTarget[MAX_BATTLERS_COUNT];
+    u32 expShareExpValue;
+    u32 expValue;
+    u8 expGettersOrder[PARTY_SIZE]; // First battlers which were sent out, then via exp-share
     u8 expGetterMonId;
-    u8 unused_1;
+    u8 expOrderId:3;
+    u8 expGetterBattlerId:2;
+    u8 givenExpMons; // Bits for enemy party's pokemon that gave exp to player's party.
+    u8 expSentInMons; // As bits for player party mons - not including exp share mons.
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
-    u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // Each of mons can know max 4 moves.
-    u8 focusPunchBattlerId;
+    u8 focusPunchBattlers; // as bits
     u8 battlerPreventingSwitchout;
     u8 moneyMultiplier:6;
     u8 moneyMultiplierItem:1;
@@ -463,16 +498,13 @@ struct BattleStruct
     u8 switchInAbilitiesCounter;
     u8 faintedActionsState;
     u8 faintedActionsBattlerId;
-    u16 expValue;
     u8 scriptPartyIdx; // for printing the nickname
-    u8 sentInPokes;
     bool8 selectionScriptFinished[MAX_BATTLERS_COUNT];
     u8 battlerPartyIndexes[MAX_BATTLERS_COUNT];
     u8 monToSwitchIntoId[MAX_BATTLERS_COUNT];
     u8 battlerPartyOrders[MAX_BATTLERS_COUNT][PARTY_SIZE / 2];
     u8 runTries;
     u8 caughtMonNick[POKEMON_NAME_LENGTH + 1];
-    u8 unused_2;
     u8 safariGoNearCounter;
     u8 safariPkblThrowCounter;
     u8 safariEscapeFactor;
@@ -482,36 +514,30 @@ struct BattleStruct
     u8 formToChangeInto;
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];
-    u8 unused_3[3];
     u8 prevSelectedPartySlot;
-    u8 unused_4[2];
     u8 stringMoveType;
-    u8 expGetterBattlerId;
-    u8 unused_5;
     u8 absentBattlerFlags;
     u8 palaceFlags; // First 4 bits are "is <= 50% HP and not asleep" for each battler, last 4 bits are selected moves to pass to AI
     u8 field_93; // related to choosing pokemon?
-    u8 simulatedInputState[4];
-    u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // Last move that a battler was hit with. This field seems to erroneously take 16 bytes instead of 8.
+    u8 oakOldManBattleState;
+    u8 oakOldManMovesState;
+    u8 oakOldManWaitFrames;
+    u8 oakOldManMoveFrames;
+    u16 lastTakenMove[MAX_BATTLERS_COUNT]; // Last move that a battler was hit with.
     u16 hpOnSwitchout[NUM_BATTLE_SIDES];
     u32 savedBattleTypeFlags;
-    u8 abilityPreventingSwitchout;
+    u16 abilityPreventingSwitchout;
     u8 hpScale;
-    u8 synchronizeMoveEffect;
+    u16 synchronizeMoveEffect;
     bool8 anyMonHasTransformed;
     void (*savedCallback)(void);
     u16 usedHeldItems[PARTY_SIZE][NUM_BATTLE_SIDES]; // For each party member and side. For harvest, recycle
     u16 chosenItem[MAX_BATTLERS_COUNT];
-    u8 AI_itemType[2];
-    u8 AI_itemFlags[2];
     u16 choicedMove[MAX_BATTLERS_COUNT];
     u16 changedItems[MAX_BATTLERS_COUNT];
-    u8 intimidateBattler;
     u8 switchInItemsCounter;
     u8 arenaTurnCounter;
     u8 turnSideTracker;
-    u8 unused_6[3];
-    u8 givenExpMons; // Bits for enemy party's Pokémon that gave exp to player's party.
     u16 lastTakenMoveFrom[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; // a 2-D array [target][attacker]
     union {
         struct LinkBattlerHeader linkBattlerHeader;
@@ -519,9 +545,11 @@ struct BattleStruct
     } multiBuffer;
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;
-    bool8 overworldWeatherDone;
-    bool8 terrainDone;
-    u8 isAtkCancelerForCalledMove; // Certain cases in atk canceler should only be checked once, when the original move is called, however others need to be checked the twice.
+    u8 overworldWeatherDone:1;
+    u8 isAtkCancelerForCalledMove:1; // Certain cases in atk canceler should only be checked once, when the original move is called, however others need to be checked the twice.
+    u8 terrainDone:1;
+    u8 startingStatus; // status to apply at battle start. defined in constants/battle.h
+    u8 startingStatusTimer;
     u8 atkCancellerTracker;
     struct BattleTvMovePoints tvMovePoints;
     struct BattleTv tv;
@@ -539,10 +567,11 @@ struct BattleStruct
     bool8 ateBoost[MAX_BATTLERS_COUNT];
     u8 activeAbilityPopUps; // as bits for each battler
     u8 abilityPopUpSpriteIds[MAX_BATTLERS_COUNT][2];    // two per battler
+    u8 introState;
     u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
     u8 lastMoveFailed; // as bits for each battler, for the sake of Stomping Tantrum
     u16 tracedAbility[MAX_BATTLERS_COUNT];
-    s8 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
+    s32 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
     u8 aiMoveOrAction[MAX_BATTLERS_COUNT];
     u8 aiChosenTarget[MAX_BATTLERS_COUNT];
     u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
@@ -550,14 +579,25 @@ struct BattleStruct
     u8 sameMoveTurns[MAX_BATTLERS_COUNT]; // For Metronome, number of times the same moves has been SUCCESFULLY used.
     u16 moveEffect2; // For Knock Off
     u8 quickClawBattlerId;
-    struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
+    struct LostItem itemLost[PARTY_SIZE];  // Player's team that had items consumed or stolen (two bytes per party member)
+    u8 forcedSwitch:4; // For each battler
+    u8 additionalEffectsCounter:4; // A counter for the additionalEffects applied by the current move in Cmd_setadditionaleffects
+    u8 bouncedMoveIsUsed:1;
     u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
     // When using a move which hits multiple opponents which is then bounced by a target, we need to make sure, the move hits both opponents, the one with bounce, and the one without.
     u8 attackerBeforeBounce:2;
     bool8 hitSwitchTargetFailed:1;
+    bool8 effectsBeforeUsingMoveDone:1; // Mega Evo and Focus Punch/Shell Trap effects.
     u8 targetsDone[MAX_BATTLERS_COUNT]; // Each battler as a bit.
     u16 overwrittenAbilities[MAX_BATTLERS_COUNT];    // abilities overwritten during battle (keep separate from battle history in case of switching)
     u8 storedHealingWish:4; // Each battler as a bit.
+    u8 itemPartyIndex[MAX_BATTLERS_COUNT];
+    u8 itemMoveIndex[MAX_BATTLERS_COUNT];
+    u32 aiDelayTimer; // Counts number of frames AI takes to choose an action.
+    u32 aiDelayFrames; // Number of frames it took to choose an action.
+    u8 timesGotHit[NUM_BATTLE_SIDES][PARTY_SIZE];
+    u8 enduredDamage;
+    u8 quickClawRandom[MAX_BATTLERS_COUNT];
 };
 
 // The palaceFlags member of struct BattleStruct contains 1 flag per move to indicate which moves the AI should consider,
@@ -574,31 +614,33 @@ STATIC_ASSERT(sizeof(((struct BattleStruct *)0)->palaceFlags) * 8 >= MAX_BATTLER
     if (gBattleStruct->dynamicMoveType)                               \
         typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK; \
     else                                                              \
-        typeArg = gBattleMoves[move].type;                            \
+        typeArg = gMovesInfo[move].type;                            \
 }
 
-#define IS_MOVE_PHYSICAL(move)(gBattleMoves[move].split == SPLIT_PHYSICAL)
-#define IS_MOVE_SPECIAL(move)(gBattleMoves[move].split == SPLIT_SPECIAL)
-#define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)
+#define IS_MOVE_PHYSICAL(move)(gMovesInfo[move].category == DAMAGE_CATEGORY_PHYSICAL)
+#define IS_MOVE_SPECIAL(move)(gMovesInfo[move].category == DAMAGE_CATEGORY_SPECIAL)
+#define IS_MOVE_STATUS(move)(gMovesInfo[move].category == DAMAGE_CATEGORY_STATUS)
+
+#define IS_MOVE_RECOIL(move)(gMovesInfo[move].recoil > 0 || gMovesInfo[move].effect == EFFECT_RECOIL_IF_MISS)
 
 #define BATTLER_MAX_HP(battlerId)(gBattleMons[battlerId].hp == gBattleMons[battlerId].maxHP)
-#define TARGET_TURN_DAMAGED ((gSpecialStatuses[gBattlerTarget].physicalDmg != 0 || gSpecialStatuses[gBattlerTarget].specialDmg != 0))
+#define TARGET_TURN_DAMAGED ((gSpecialStatuses[gBattlerTarget].physicalDmg != 0 || gSpecialStatuses[gBattlerTarget].specialDmg != 0) || (gBattleStruct->enduredDamage & gBitTable[gBattlerTarget]))
+#define BATTLER_TURN_DAMAGED(battlerId) ((gSpecialStatuses[battlerId].physicalDmg != 0 || gSpecialStatuses[battlerId].specialDmg != 0) || (gBattleStruct->enduredDamage & gBitTable[battler]))
 
-#define IS_BATTLER_OF_TYPE(battlerId, type)((gBattleMons[battlerId].type1 == type || gBattleMons[battlerId].type2 == type))
+#define IS_BATTLER_OF_TYPE(battlerId, type)((GetBattlerType(battlerId, 0) == type || GetBattlerType(battlerId, 1) == type || (GetBattlerType(battlerId, 2) != TYPE_MYSTERY && GetBattlerType(battlerId, 2) == type)))
 
-#define IS_BATTLER_TYPELESS(battlerId)(GetBattlerType(battlerId, 0) == TYPE_MYSTERY && GetBattlerType(battlerId, 1) == TYPE_MYSTERY)
+#define IS_BATTLER_TYPELESS(battlerId)(GetBattlerType(battlerId, 0) == TYPE_MYSTERY && GetBattlerType(battlerId, 1) == TYPE_MYSTERY && GetBattlerType(battlerId, 2) == TYPE_MYSTERY)
 
-#define SET_BATTLER_TYPE(battlerId, type)   \
-{                                           \
-    gBattleMons[battlerId].type1 = type;    \
-    gBattleMons[battlerId].type2 = type;    \
+#define SET_BATTLER_TYPE(battlerId, type)           \
+{                                                   \
+    gBattleMons[battlerId].type1 = type;            \
+    gBattleMons[battlerId].type2 = type;            \
+    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 }
-
 
 #define IS_BATTLER_PROTECTED(battlerId)(gProtectStructs[battlerId].protected                                           \
                                         || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD           \
-                                        || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD          \
-                                        )
+                                        || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD)
 
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
@@ -617,12 +659,12 @@ struct BattleScripting
     s32 bideDmg;
     u8 multihitString[6];
     bool8 expOnCatch;
-    u8 twoTurnsMoveStringId;
+    u8 unused;
     u8 animArg1;
     u8 animArg2;
-    u16 tripleKickPower;
+    u16 savedStringId;
     u8 moveendState;
-    u8 battlerWithAbility;
+    u8 unused1;
     u8 shiftSwitched; // When the game tells you the next enemy's pokemon and you switch. Option for noobs but oh well.
     u8 battler;
     u8 animTurn;
@@ -645,6 +687,7 @@ struct BattleScripting
     u16 savedMoveEffect; // For moves hitting multiple targets.
     u16 moveEffect;
     u16 multihitMoveEffect;
+    u8 unused2;
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;
     u8 switchCase;  // Special switching conditions, eg. red card
@@ -735,15 +778,10 @@ struct BattleSpriteData
 struct MonSpritesGfx
 {
     void *firstDecompressed; // ptr to the decompressed sprite of the first Pokémon
-    union {
-        void *ptr[MAX_BATTLERS_COUNT];
-        u8 *byte[MAX_BATTLERS_COUNT];
-    } sprites;
+    u8 *spritesGfx[MAX_BATTLERS_COUNT];
     struct SpriteTemplate templates[MAX_BATTLERS_COUNT];
     struct SpriteFrameImage frameImages[MAX_BATTLERS_COUNT][MAX_MON_PIC_FRAMES];
-    u8 unusedArr[0x80];
     u8 *barFontGfx;
-    void *unusedPtr;
     u16 *buffer;
 };
 
@@ -760,16 +798,14 @@ extern u16 gBattle_WIN0H;
 extern u16 gBattle_WIN0V;
 extern u16 gBattle_WIN1H;
 extern u16 gBattle_WIN1V;
-extern u8 gDisplayedStringBattle[400];
+extern u8 gDisplayedStringBattle[425];
 extern u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT];
 extern u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT];
-extern u8 gBattleTextBuff3[30]; //to handle stupidly large z move names
+extern u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT + 13]; //to handle stupidly large z move names
 extern u32 gBattleTypeFlags;
 extern u8 gBattleTerrain;
-extern u32 gUnusedFirstBattleVar1;
 extern u8 *gBattleAnimBgTileBuffer;
 extern u8 *gBattleAnimBgTilemapBuffer;
-extern u8 gActiveBattler;
 extern u32 gBattleControllerExecFlags;
 extern u8 gBattlersCount;
 extern u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT];
@@ -814,14 +850,12 @@ extern u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT];
 extern u16 gMoveResultFlags;
 extern u32 gHitMarker;
 extern u8 gBideTarget[MAX_BATTLERS_COUNT];
-extern u8 gUnusedFirstBattleVar2;
 extern u32 gSideStatuses[NUM_BATTLE_SIDES];
 extern struct SideTimer gSideTimers[NUM_BATTLE_SIDES];
 extern u32 gStatuses3[MAX_BATTLERS_COUNT];
 extern struct DisableStruct gDisableStructs[MAX_BATTLERS_COUNT];
 extern u16 gPauseCounterBattle;
 extern u16 gPaydayMoney;
-extern u16 gRandomTurnNumber;
 extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];
 extern u8 gBattleOutcome;
 extern struct ProtectStruct gProtectStructs[MAX_BATTLERS_COUNT];
@@ -830,7 +864,6 @@ extern u16 gBattleWeather;
 extern struct WishFutureKnock gWishFutureKnock;
 extern u16 gIntroSlideFlags;
 extern u8 gSentPokesToOpponent[2];
-extern u16 gExpShareExp;
 extern struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT];
 extern struct BattleScripting gBattleScripting;
 extern struct BattleStruct *gBattleStruct;
@@ -843,27 +876,43 @@ extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u8 gBattlerInMenuId;
 extern bool8 gDoingBattleAnim;
 extern u32 gTransformedPersonalities[MAX_BATTLERS_COUNT];
+extern bool8 gTransformedShininess[MAX_BATTLERS_COUNT];
 extern u8 gPlayerDpadHoldFrames;
 extern struct BattleSpriteData *gBattleSpritesDataPtr;
 extern struct MonSpritesGfx *gMonSpritesGfxPtr;
-extern struct BattleHealthboxInfo *gBattleControllerOpponentHealthboxData;
-extern struct BattleHealthboxInfo *gBattleControllerOpponentFlankHealthboxData;
 extern u16 gBattleMovePower;
 extern u16 gMoveToLearn;
-extern u8 gBattleMonForms[MAX_BATTLERS_COUNT];
 extern u32 gFieldStatuses;
 extern struct FieldTimer gFieldTimers;
 extern u8 gBattlerAbility;
-extern u16 gPartnerSpriteId;
+extern const struct BattleMoveEffect gBattleMoveEffects[];
 
 extern void (*gPreBattleCallback1)(void);
 extern void (*gBattleMainFunc)(void);
 extern struct BattleResults gBattleResults;
 extern u8 gLeveledUpInBattle;
-extern void (*gBattlerControllerFuncs[MAX_BATTLERS_COUNT])(void);
 extern u8 gHealthboxSpriteIds[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;
 extern u8 gNumberOfMovesToChoose;
-extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
+
+static inline u32 GetBattlerPosition(u32 battler)
+{
+    return gBattlerPositions[battler];
+}
+
+static inline u32 GetBattlerSide(u32 battler)
+{
+    return GetBattlerPosition(battler) & BIT_SIDE;
+}
+
+static inline struct Pokemon *GetSideParty(u32 side)
+{
+    return (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
+}
+
+static inline struct Pokemon *GetBattlerParty(u32 battler)
+{
+    return GetSideParty(GetBattlerSide(battler));
+}
 
 #endif // GUARD_BATTLE_H

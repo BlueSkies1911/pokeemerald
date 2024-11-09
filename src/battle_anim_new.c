@@ -7,6 +7,9 @@
 // function declarations
 static void SpriteCB_SpriteOnMonForDuration(struct Sprite *sprite);
 static void SpriteCB_ToxicThreadWrap(struct Sprite *sprite);
+static void SpriteCB_LockingJaw(struct Sprite *sprite);
+static void SpriteCB_LockingJawStep(struct Sprite *sprite);
+static void SpriteCB_LockingJawFinish(struct Sprite *sprite);
 static void SpriteCB_SurroundingRing(struct Sprite *sprite);
 static void AnimSkyDropBallUp(struct Sprite *sprite);
 
@@ -56,7 +59,7 @@ const struct SpriteTemplate gShellSmashLeftShellSpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gAffineAnims_Bite,
-    .callback = AnimBite
+    .callback = SpriteCB_LockingJaw
 };
 
 const struct SpriteTemplate gShellSmashRightShellSpriteTemplate =
@@ -67,7 +70,7 @@ const struct SpriteTemplate gShellSmashRightShellSpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gAffineAnims_Bite,
-    .callback = AnimBite
+    .callback = SpriteCB_LockingJaw
 };
 
 const struct SpriteTemplate gShellSmashPurpleRocksSpriteTemplate =
@@ -990,6 +993,16 @@ const struct SpriteTemplate gStompingTantrumRockTemplate =
     .callback = AnimTearDrop
 };
 
+// chloroblast
+const union AffineAnimCmd sSpriteAffineAnim_HydroCannonBall[] = {
+	AFFINEANIMCMD_FRAME(16, 16, 0, 16), //Double in size
+	AFFINEANIMCMD_END
+};
+
+const union AffineAnimCmd* const sSpriteAffineAnimTable_HydroCannonBall[] = {
+	sSpriteAffineAnim_HydroCannonBall,
+};
+
 static u8 LoadBattleAnimTarget(u8 arg)
 {
     u8 battler;
@@ -1023,7 +1036,7 @@ static u8 LoadBattleAnimTarget(u8 arg)
     return battler;
 }
 
-static void InitSpritePosToAnimTargetsCentre(struct Sprite *sprite, bool8 respectMonPicOffsets)
+void InitSpritePosToAnimTargetsCentre(struct Sprite *sprite, bool32 respectMonPicOffsets)
 {
     if (!respectMonPicOffsets)
     {
@@ -1122,6 +1135,37 @@ void SpriteCB_RandomCentredHits(struct Sprite *sprite)
 
     StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
     sprite->callback = RunStoredCallbackWhenAffineAnimEnds;
+}
+
+//Creates a jaw that bites down and locks on the target.
+//args: Idk same as bite and crunch
+//arg 6: Time to hold bite for.
+static void SpriteCB_LockingJaw(struct Sprite *sprite)
+{
+    sprite->x += gBattleAnimArgs[0];
+    sprite->y += gBattleAnimArgs[1];
+    StartSpriteAffineAnim(sprite, gBattleAnimArgs[2]);
+    sprite->data[0] = gBattleAnimArgs[3];
+    sprite->data[1] = gBattleAnimArgs[4];
+    sprite->data[2] = gBattleAnimArgs[5];
+    sprite->data[6] = -gBattleAnimArgs[6];
+    sprite->callback = SpriteCB_LockingJawStep;
+}
+
+static void SpriteCB_LockingJawStep(struct Sprite *sprite)
+{
+    sprite->data[4] += sprite->data[0];
+    sprite->data[5] += sprite->data[1];
+    sprite->x2 = sprite->data[4] >> 8;
+    sprite->y2 = sprite->data[5] >> 8;
+    if (++sprite->data[3] == sprite->data[2])
+        sprite->callback = SpriteCB_LockingJawFinish;
+}
+
+static void SpriteCB_LockingJawFinish(struct Sprite *sprite)
+{
+    if (--sprite->data[3] <= sprite->data[6])
+        DestroySpriteAndMatrix(sprite);
 }
 
 static void SpriteCB_SurroundingRing(struct Sprite *sprite)

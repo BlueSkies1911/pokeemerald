@@ -27,7 +27,6 @@ static void AnimHydroCannonCharge(struct Sprite *);
 static void AnimHydroCannonCharge_Step(struct Sprite *);
 static void AnimHydroCannonBeam(struct Sprite *);
 static void AnimWaterGunDroplet(struct Sprite *);
-static void AnimSmallBubblePair(struct Sprite *);
 static void AnimSmallBubblePair_Step(struct Sprite *);
 static void AnimSmallDriftingBubbles(struct Sprite *);
 static void AnimSmallDriftingBubbles_Step(struct Sprite *);
@@ -36,7 +35,6 @@ static void AnimWaterSpoutRain(struct Sprite *);
 static void AnimWaterSpoutRainHit(struct Sprite *);
 static void AnimWaterSportDroplet(struct Sprite *);
 static void AnimWaterSportDroplet_Step(struct Sprite *);
-static void AnimWaterPulseBubble(struct Sprite *);
 static void AnimWaterPulseBubble_Step(struct Sprite *);
 static void AnimWaterPulseRingBubble(struct Sprite *);
 static void AnimWaterPulseRing_Step(struct Sprite *);
@@ -56,9 +54,6 @@ static void CreateWaterPulseRingBubbles(struct Sprite *, int, int);
 static void AnimAquaTail(struct Sprite *sprite);
 static void AnimKnockOffAquaTail(struct Sprite *sprite);
 static void AnimKnockOffAquaTailStep(struct Sprite *sprite);
-
-static const u8 sUnusedWater_Gfx[] = INCBIN_U8("graphics/battle_anims/unused/water_gfx.4bpp");
-static const u8 sUnusedWater[] = INCBIN_U8("graphics/battle_anims/unused/water.bin");
 
 static const union AnimCmd sAnim_RainDrop[] =
 {
@@ -108,7 +103,7 @@ static const union AnimCmd sAnim_WaterBubbleProjectile[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_WaterBubbleProjectile[] =
+const union AnimCmd *const gAnims_WaterBubbleProjectile[] =
 {
     sAnim_WaterBubbleProjectile,
 };
@@ -118,7 +113,7 @@ const struct SpriteTemplate gWaterBubbleProjectileSpriteTemplate =
     .tileTag = ANIM_TAG_BUBBLE,
     .paletteTag = ANIM_TAG_BUBBLE,
     .oam = &gOamData_AffineNormal_ObjBlend_16x16,
-    .anims = sAnims_WaterBubbleProjectile,
+    .anims = gAnims_WaterBubbleProjectile,
     .images = NULL,
     .affineAnims = sAffineAnims_WaterBubbleProjectile,
     .callback = AnimWaterBubbleProjectile,
@@ -935,7 +930,7 @@ static void AnimWaterGunDroplet(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }
 
-static void AnimSmallBubblePair(struct Sprite *sprite)
+void AnimSmallBubblePair(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[3] != ANIM_ATTACKER)
         InitSpritePosToAnimTarget(sprite, TRUE);
@@ -988,6 +983,7 @@ void AnimTask_CreateSurfWave(u8 taskId)
     case ANIM_SURF_PAL_SURF:
     default:
         LoadCompressedPalette(gBattleAnimBgPalette_Surf, BG_PLTT_ID(animBg.paletteId), PLTT_SIZE_4BPP);
+        break;
     case ANIM_SURF_PAL_MUDDY_WATER:
         LoadCompressedPalette(gBattleAnimBackgroundImageMuddyWater_Pal, BG_PLTT_ID(animBg.paletteId), PLTT_SIZE_4BPP);
         break;
@@ -1645,7 +1641,7 @@ static void AnimWaterSportDroplet_Step(struct Sprite *sprite)
     }
 }
 
-static void AnimWaterPulseBubble(struct Sprite *sprite)
+void AnimWaterPulseBubble(struct Sprite *sprite)
 {
     sprite->x = gBattleAnimArgs[0];
     sprite->y = gBattleAnimArgs[1];

@@ -473,7 +473,7 @@ bool32 TryWriteTrainerTower(struct EReaderTrainerTowerSet * towerSet)
     return result;
 }
 
-static bool32 TryReadTrainerTower_Internal(struct EReaderTrainerTowerSet * dest, u8 * buffer)
+static bool32 TryReadTrainerTower_Internal(struct EReaderTrainerTowerSet * dest, u8 *buffer)
 {
     if (TryReadSpecialSaveSector(SECTOR_ID_TRAINER_TOWER, buffer) != SAVE_STATUS_OK)
         return FALSE;

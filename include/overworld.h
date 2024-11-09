@@ -118,7 +118,7 @@ void SetObjectEventLoadFlag(u8 var);
 u16 GetLocationMusic(struct WarpData *warp);
 u16 GetCurrLocationDefaultMusic(void);
 u16 GetWarpDestinationMusic(void);
-bool8 sub_8055B38(u16 metatileBehavior);
+bool8 MetatileBehavior_IsSurfableInSeafoamIslands(u16 metatileBehavior);
 void Overworld_ResetMapMusic(void);
 void Overworld_PlaySpecialMapMusic(void);
 void Overworld_SetSavedMusic(u16 songNum);

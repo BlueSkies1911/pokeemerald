@@ -891,18 +891,12 @@ void AnimTask_FreeBallGfx(u8 taskId)
 
 void AnimTask_IsBallBlockedByTrainer(u8 taskId)
 {
-    switch (gBattleSpritesDataPtr->animationData->ballThrowCaseId)
-    {
-    case BALL_TRAINER_BLOCK:
+    if (gBattleSpritesDataPtr->animationData->ballThrowCaseId == BALL_TRAINER_BLOCK)
         gBattleAnimArgs[ARG_RET_ID] = -1;
-        break;
-    case BALL_GHOST_DODGE:
+    else if (gBattleSpritesDataPtr->animationData->ballThrowCaseId == BALL_GHOST_DODGE)
         gBattleAnimArgs[ARG_RET_ID] = -2;
-        break;
-    default:
+    else
         gBattleAnimArgs[ARG_RET_ID] = 0;
-        break;
-    }
 
     DestroyAnimVisualTask(taskId);
 }
@@ -993,7 +987,7 @@ static void AnimTask_ThrowBall_Step(u8 taskId)
         DestroyAnimVisualTask(taskId);
 }
 
-// Safari Zone throw / Wally's throw
+// Safari Zone throw / Old Man's throw
 void AnimTask_ThrowBall_StandingTrainer(u8 taskId)
 {
     s16 x, y;
@@ -1200,16 +1194,13 @@ static void SpriteCB_Ball_MonShrink_Step(struct Sprite *sprite)
 
 static void SpriteCB_Ball_Bounce(struct Sprite *sprite)
 {
-    s16 phase;
-
     if (sprite->animEnded)
     {
         sprite->sState = 0;
         sprite->sAmplitude = 40;
         sprite->sPhase = 0;
-        phase = 0;
-        sprite->y += Cos(phase, 40);
-        sprite->y2 = -Cos(phase, sprite->sAmplitude);
+        sprite->y += Cos(0, 40);
+        sprite->y2 = -Cos(0, sprite->sAmplitude);
         if (IsCriticalCapture())
             sprite->callback = CB_CriticalCaptureThrownBallMovement;
         else
@@ -1549,7 +1540,7 @@ static void SpriteCB_Ball_Capture_Step(struct Sprite *sprite)
     else if (sprite->sTimer == 95)
     {
         gDoingBattleAnim = FALSE;
-        UpdateOamPriorityInAllHealthboxes(1);
+        UpdateOamPriorityInAllHealthboxes(1, FALSE);
         m4aMPlayAllStop();
         PlaySE(MUS_RG_CAUGHT_INTRO);
     }
@@ -1732,7 +1723,7 @@ static void SpriteCB_Ball_Release_Wait(struct Sprite *sprite)
         sprite->sFrame = 0;
         sprite->callback = DestroySpriteAfterOneFrame;
         gDoingBattleAnim = 0;
-        UpdateOamPriorityInAllHealthboxes(1);
+        UpdateOamPriorityInAllHealthboxes(1, FALSE);
     }
 }
 
@@ -1774,7 +1765,7 @@ static void SpriteCB_Ball_Block_Step(struct Sprite *sprite)
         sprite->sFrame = 0;
         sprite->callback = DestroySpriteAfterOneFrame;
         gDoingBattleAnim = 0;
-        UpdateOamPriorityInAllHealthboxes(1);
+        UpdateOamPriorityInAllHealthboxes(1, FALSE);
     }
 }
 
@@ -1810,7 +1801,7 @@ static void GhostBallDodge2(struct Sprite *sprite)
     sprite->data[0] = 0;
     sprite->callback = DestroySpriteAfterOneFrame;
     gDoingBattleAnim = FALSE;
-    UpdateOamPriorityInAllHealthboxes(1);
+    UpdateOamPriorityInAllHealthboxes(1, FALSE);
 }
 
 static void LoadBallParticleGfx(u8 ballId)
@@ -2476,21 +2467,13 @@ void AnimTask_SetTargetToEffectBattler(u8 taskId)
 void TryShinyAnimation(u8 battler, struct Pokemon *mon)
 {
     bool8 isShiny;
-    u32 otId, personality;
-    u32 shinyValue;
     u8 taskCirc, taskDgnl;
 
-    isShiny = FALSE;
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     gBattleSpritesDataPtr->healthBoxesData[battler].triedShinyMonAnim = TRUE;
-    otId = GetMonData(mon, MON_DATA_OT_ID);
-    personality = GetMonData(mon, MON_DATA_PERSONALITY);
 
-    if (IsBattlerSpriteVisible(battler))
+    if (IsBattlerSpriteVisible(battler) && IsValidForBattle(mon))
     {
-        shinyValue = GET_SHINY_VALUE(otId, personality);
-        if (shinyValue < SHINY_ODDS)
-            isShiny = TRUE;
-
         if (isShiny)
         {
             if (GetSpriteTileStartByTag(ANIM_TAG_GOLD_STARS) == 0xFFFF)
@@ -2741,18 +2724,27 @@ void AnimTask_SafariGetReaction(u8 taskId)
 
 void AnimTask_GetTrappedMoveAnimId(u8 taskId)
 {
-    if (gBattleSpritesDataPtr->animationData->animArg == MOVE_FIRE_SPIN)
+    switch (gBattleSpritesDataPtr->animationData->animArg)
+    {
+    case MOVE_FIRE_SPIN:
         gBattleAnimArgs[0] = TRAP_ANIM_FIRE_SPIN;
-    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_WHIRLPOOL)
+        break;
+    case MOVE_WHIRLPOOL:
         gBattleAnimArgs[0] = TRAP_ANIM_WHIRLPOOL;
-    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_CLAMP)
+        break;
+    case MOVE_CLAMP:
         gBattleAnimArgs[0] = TRAP_ANIM_CLAMP;
-    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_SAND_TOMB)
+        break;
+    case MOVE_SAND_TOMB:
         gBattleAnimArgs[0] = TRAP_ANIM_SAND_TOMB;
-    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_INFESTATION)
+        break;
+    case MOVE_INFESTATION:
         gBattleAnimArgs[0] = TRAP_ANIM_INFESTATION;
-    else
+        break;
+    default:
         gBattleAnimArgs[0] = TRAP_ANIM_BIND;
+        break;
+    }
 
     DestroyAnimVisualTask(taskId);
 }

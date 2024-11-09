@@ -174,8 +174,8 @@ struct BerryBlender
     u16 progressBarValue;
     u16 maxProgressBarValue;
     u16 centerScale;
-    u16 bg_X;
-    u16 bg_Y;
+    s16 bg_X;
+    s16 bg_Y;
     u8 opponentTaskIds[BLENDER_MAX_PLAYERS - 1];
     u8 perfectOpponents; // for debugging, NPCs will always hit Best
     u16 scores[BLENDER_MAX_PLAYERS][NUM_SCORE_TYPES];
@@ -262,7 +262,7 @@ static const u8 sUnusedText_Space[] = _(" ");
 static const u8 sUnusedText_Terminating[] = _("Terminating.");
 static const u8 sUnusedText_LinkPartnerNotFound[] = _("Link partner(s) not found.\nPlease try again.\p");
 
-static const u8 sText_BerryBlenderStart[] = _("Starting up the Berry Blender.\pPlease select a Berry from your Bag\nto put in the Berry Blender.\p");
+static const u8 sText_BerryBlenderStart[] = _("Starting up the Berry Blender.\pPlease select a berry from your bag\nto put in the Berry Blender.\p");
 static const u8 sText_NewParagraph[] = _("\p");
 static const u8 sText_WasMade[] = _(" was made!");
 static const u8 sText_Mister[] = _("Mister");
@@ -285,10 +285,10 @@ static const u8 *const sBlenderOpponentsNames[] =
 static const u8 sText_PressAToStart[] = _("Press the A Button to start.");
 static const u8 sText_PleaseWaitAWhile[] = _("Please wait a while.");
 static const u8 sText_CommunicationStandby[] = _("Communication standby…");
-static const u8 sText_WouldLikeToBlendAnotherBerry[] = _("Would you like to blend another Berry?");
-static const u8 sText_RunOutOfBerriesForBlending[] = _("You've run out of Berries for\nblending in the Berry Blender.\p");
+static const u8 sText_WouldLikeToBlendAnotherBerry[] = _("Would you like to blend another berry?");
+static const u8 sText_RunOutOfBerriesForBlending[] = _("You've run out of berries for\nblending in the Berry Blender.\p");
 static const u8 sText_YourPokeblockCaseIsFull[] = _("Your {POKEBLOCK} Case is full.\p");
-static const u8 sText_HasNoBerriesToPut[] = _(" has no Berries to put in\nthe Berry Blender.");
+static const u8 sText_HasNoBerriesToPut[] = _(" has no berries to put in\nthe Berry Blender.");
 static const u8 sText_ApostropheSPokeblockCaseIsFull[] = _("'s {POKEBLOCK} Case is full.\p");
 static const u8 sText_BlendingResults[] = _("Results of blending");
 static const u8 sText_BerryUsed[] = _("Berry used");

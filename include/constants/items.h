@@ -679,13 +679,12 @@
 #define NUM_TECHNICAL_MACHINES 100
 #define NUM_HIDDEN_MACHINES 8
 
-#define MAX_BAG_ITEM_CAPACITY  99
-#define MAX_PC_ITEM_CAPACITY   999
-#define MAX_BERRY_CAPACITY     999
+#define MAX_BAG_ITEM_CAPACITY          99
+#define MAX_PC_ITEM_CAPACITY          999
+#define MAX_PYRAMID_BAG_ITEM_CAPACITY  99 // Values higher than 255 require free SaveBlock2 space.
 
-#define BAG_ITEM_CAPACITY_DIGITS 2
-#define BERRY_CAPACITY_DIGITS 3
-#define MAX_ITEM_DIGITS BERRY_CAPACITY_DIGITS
+#define MAX_ITEM_DIGITS         2
+#define MAX_PYRAMID_ITEM_DIGITS 2
 
 // Secondary IDs for rods
 #define OLD_ROD   0
@@ -697,17 +696,27 @@
 #define ACRO_BIKE 1
 
 // Item type IDs (used to determine the exit callback)
-#define ITEM_USE_MAIL        0
-#define ITEM_USE_PARTY_MENU  1
-#define ITEM_USE_FIELD       2
-#define ITEM_USE_PBLOCK_CASE 3
-#define ITEM_USE_BAG_MENU    4 // No exit callback, stays in bag menu
+#define ITEM_USE_MAIL             0
+#define ITEM_USE_PARTY_MENU       1
+#define ITEM_USE_FIELD            2
+#define ITEM_USE_PBLOCK_CASE      3
+#define ITEM_USE_BAG_MENU         4 // No exit callback, stays in bag menu
+#define ITEM_USE_PARTY_MENU_MOVES 5
 
-// Item battle usage IDs (only checked to see if nonzero)
-#define ITEM_B_USE_MEDICINE 1
-#define ITEM_B_USE_OTHER    2
+// Item battle script IDs (need to be non-zero)
+#define EFFECT_ITEM_RESTORE_HP              1
+#define EFFECT_ITEM_CURE_STATUS             2
+#define EFFECT_ITEM_HEAL_AND_CURE_STATUS    3
+#define EFFECT_ITEM_INCREASE_STAT           4
+#define EFFECT_ITEM_SET_MIST                5
+#define EFFECT_ITEM_SET_FOCUS_ENERGY        6
+#define EFFECT_ITEM_ESCAPE                  7
+#define EFFECT_ITEM_THROW_BALL              8
+#define EFFECT_ITEM_REVIVE                  9
+#define EFFECT_ITEM_RESTORE_PP              10
+#define EFFECT_ITEM_INCREASE_ALL_STATS      11
 
-// Check if the item is one that can be used on a Pokémon.
-#define ITEM_HAS_EFFECT(item) ((item) >= ITEM_POTION && (item) <= LAST_BERRY_INDEX)
+// Enigma Berry dummy constant
+#define EFFECT_ITEM_ENIGMA_BERRY_EREADER    1
 
 #endif  // GUARD_CONSTANTS_ITEMS_H

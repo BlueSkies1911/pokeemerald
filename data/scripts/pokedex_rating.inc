@@ -13,10 +13,11 @@ PokedexRating_EventScript_NormalIntro::
 	return
 
 PokedexRating_EventScript_ShowRatingMsg::
-	compare VAR_RESULT, FALSE
-	call_if_eq PokedexRating_EventScript_NormalFanfare
-	compare VAR_RESULT, TRUE
-	call_if_eq PokedexRating_EventScript_DexCompleteFanfare
+	copyvar VAR_0x8004, VAR_0x8009
+	special ShowPokedexRatingMessage
+	waitmessage
+	call_if_eq VAR_RESULT, FALSE, PokedexRating_EventScript_NormalFanfare
+	call_if_eq VAR_RESULT, TRUE, PokedexRating_EventScript_DexCompleteFanfare
 	waitfanfare
 	waitbuttonpress
 	return

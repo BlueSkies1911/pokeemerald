@@ -561,7 +561,7 @@ gText_ApprenticePleaseTeach13::
 	.string "I decided I'll battle Pokémon and\n"
 	.string "toughen myself up.\p"
 	.string "You're {PLAYER}{KUN}, aren't you?\n"
-	.string "The Pokémon League CHAMP?\p"
+	.string "The Pokémon League Champ?\p"
 	.string "Listen, can I get you to give me\n"
 	.string "advice?$"
 
@@ -1716,7 +1716,7 @@ gText_ApprenticeWhichMon9::
 gText_ApprenticeMonThanks9::
 	.string "Uh-huh, one {STR_VAR_1} it is!\n"
 	.string "OK, A-OK!\l"
-	.string "I'll get one in a Ball, like, cram!\p"
+	.string "I'll get one in a ball, like, cram!\p"
 	.string "All right, thanks, as always!\n"
 	.string "Adios!$"
 

@@ -1,5 +1,10 @@
 ViridianForest_MapScripts::
-    .byte 0
+	map_script MAP_SCRIPT_ON_TRANSITION, ViridianForest_OnTransition
+	.byte 0
+
+ViridianForest_OnTransition:
+	randomweather
+	end
 
 ViridianForest_EventScript_Youngster::
     msgbox ViridianForest_Text_FriendsItchingToBattle, MSGBOX_NPC

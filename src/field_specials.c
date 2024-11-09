@@ -87,7 +87,7 @@ static EWRAM_DATA u8 sTutorMoveAndElevatorWindowId = 0;
 static EWRAM_DATA u16 sLilycoveDeptStore_NeverRead = 0;
 static EWRAM_DATA u16 sLilycoveDeptStore_DefaultFloorChoice = 0;
 static EWRAM_DATA struct ListMenuItem *sScrollableMultichoice_ListMenuItem = NULL;
-static EWRAM_DATA u16 sScrollableMultichoice_ScrollOffset = 0;
+
 static EWRAM_DATA u16 sFrontierExchangeCorner_NeverRead = 0;
 static EWRAM_DATA u8 sScrollableMultichoice_ItemSpriteId = 0;
 static EWRAM_DATA u8 sBattlePointsWindowId = 0;
@@ -96,6 +96,7 @@ static EWRAM_DATA u8 sPCBoxToSendMon = 0;
 static EWRAM_DATA u32 sBattleTowerMultiBattleTypeFlags = 0;
 
 struct ListMenuTemplate gScrollableMultichoice_ListMenuTemplate;
+EWRAM_DATA u16 gScrollableMultichoice_ScrollOffset = 0;
 
 void TryLoseFansFromPlayTime(void);
 void SetPlayerGotFirstFans(void);
@@ -592,21 +593,7 @@ u16 GetWeekCount(void)
 
 u8 GetLeadMonFriendshipScore(void)
 {
-    struct Pokemon *pokemon = &gPlayerParty[GetLeadMonIndex()];
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) == MAX_FRIENDSHIP)
-        return FRIENDSHIP_MAX;
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 200)
-        return FRIENDSHIP_200_TO_254;
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 150)
-        return FRIENDSHIP_150_TO_199;
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 100)
-        return FRIENDSHIP_100_TO_149;
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 50)
-        return FRIENDSHIP_50_TO_99;
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 1)
-        return FRIENDSHIP_1_TO_49;
-
-    return FRIENDSHIP_NONE;
+    return GetMonFriendshipScore(&gPlayerParty[GetLeadMonIndex()]);
 }
 
 static void CB2_FieldShowRegionMap(void)
@@ -723,6 +710,7 @@ static void PCTurnOffEffect(void)
 
     // Get where the PC should be, depending on where the player is looking.
     u8 playerDirection = GetPlayerFacingDirection();
+
     switch (playerDirection)
     {
     case DIR_NORTH:
@@ -743,6 +731,7 @@ static void PCTurnOffEffect(void)
         metatileId = METATILE_Building_PC_Off;
     else if (gSpecialVar_0x8004 == PC_LOCATION_PLAYERS_HOUSE)
         metatileId = METATILE_GenericBuilding1_PlayersPCOff;
+
     MapGridSetMetatileIdAt(gSaveBlock1Ptr->pos.x + dx + MAP_OFFSET, gSaveBlock1Ptr->pos.y + dy + MAP_OFFSET, metatileId | MAPGRID_COLLISION_MASK);
     DrawWholeMapView();
 }
@@ -1194,12 +1183,6 @@ void SetVermilionTrashCans(void)
     }
 }
 
-// Removed for Emerald
-void TryInitBattleTowerAwardManObjectEvent(void)
-{
-    //TryInitLocalObjectEvent(6);
-}
-
 u16 GetDaysUntilPacifidlogTMAvailable(void)
 {
     u16 tmReceivedDay = VarGet(VAR_PACIFIDLOG_TM_RECEIVED_DAY);
@@ -1287,7 +1270,7 @@ bool8 BufferTMHMMoveName(void)
 {
     if (gSpecialVar_0x8004 >= ITEM_TM01 && gSpecialVar_0x8004 <= ITEM_HM08)
     {
-        StringCopy(gStringVar2, gMoveNames[ItemIdToBattleMoveId(gSpecialVar_0x8004)]);
+        StringCopy(gStringVar2, GetMoveName(ItemIdToBattleMoveId(gSpecialVar_0x8004)));
         return TRUE;
     }
 
@@ -1443,87 +1426,14 @@ void StopPokemonLeagueLightingEffectTask(void)
     }
 }
 
-static const u8 sCapeBrinkCompatibleSpecies[] = {
-    SPECIES_VENUSAUR,
-    SPECIES_CHARIZARD,
-    SPECIES_BLASTOISE
-};
-
 bool8 CapeBrinkGetMoveToTeachLeadPokemon(void)
 {
-    // Returns:
-    //   8005 = Move tutor index
-    //   8006 = Num moves known by lead mon
-    //   8007 = Index of lead mon
-    //   to specialvar = whether a move can be taught in the first place
-    u8 tutorMonId = 0;
-    u8 numMovesKnown = 0;
-    u8 leadMonSlot = GetLeadMonIndex();
-    u8 i;
-    gSpecialVar_0x8007 = leadMonSlot;
-    for (i = 0; i < NELEMS(sCapeBrinkCompatibleSpecies); i++)
-    {
-        if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_SPECIES_OR_EGG, NULL) == sCapeBrinkCompatibleSpecies[i])
-        {
-            tutorMonId = i;
-            break;
-        }
-    }
-    if (i == NELEMS(sCapeBrinkCompatibleSpecies) || GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_FRIENDSHIP) != 255)
-        return FALSE;
-    if (tutorMonId == 0)
-    {
-        StringCopy(gStringVar2, gMoveNames[MOVE_FRENZY_PLANT]);
-        gSpecialVar_0x8005 = TUTOR_MOVE_FRENZY_PLANT;
-        if (FlagGet(FLAG_TUTOR_FRENZY_PLANT) == TRUE)
-            return FALSE;
-    }
-    else if (tutorMonId == 1)
-    {
-        StringCopy(gStringVar2, gMoveNames[MOVE_BLAST_BURN]);
-        gSpecialVar_0x8005 = TUTOR_MOVE_BLAST_BURN;
-        if (FlagGet(FLAG_TUTOR_BLAST_BURN) == TRUE)
-            return FALSE;
-    }
-    else
-    {
-        StringCopy(gStringVar2, gMoveNames[MOVE_HYDRO_CANNON]);
-        gSpecialVar_0x8005 = TUTOR_MOVE_HYDRO_CANNON;
-        if (FlagGet(FLAG_TUTOR_HYDRO_CANNON) == TRUE)
-            return FALSE;
-    }
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE1) != MOVE_NONE)
-        numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE2) != MOVE_NONE)
-        numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE3) != MOVE_NONE)
-        numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE4) != MOVE_NONE)
-        numMovesKnown++;
-    gSpecialVar_0x8006 = numMovesKnown;
-    return TRUE;
+    return FALSE;
 }
 
 bool8 HasLearnedAllMovesFromCapeBrinkTutor(void)
 {
-    // 8005 is set by CapeBrinkGetMoveToTeachLeadPokemon
-    u8 r4 = 0;
-    if (gSpecialVar_0x8005 == TUTOR_MOVE_FRENZY_PLANT)
-        FlagSet(FLAG_TUTOR_FRENZY_PLANT);
-    else if (gSpecialVar_0x8005 == TUTOR_MOVE_BLAST_BURN)
-        FlagSet(FLAG_TUTOR_BLAST_BURN);
-    else
-        FlagSet(FLAG_TUTOR_HYDRO_CANNON);
-    if (FlagGet(FLAG_TUTOR_FRENZY_PLANT) == TRUE)
-        r4++;
-    if (FlagGet(FLAG_TUTOR_BLAST_BURN) == TRUE)
-        r4++;
-    if (FlagGet(FLAG_TUTOR_HYDRO_CANNON) == TRUE)
-        r4++;
-    if (r4 == 3)
-        return TRUE;
-    else
-        return FALSE;
+    return FALSE;
 }
 
 bool8 CutMoveRuinValleyCheck(void)
@@ -1652,81 +1562,81 @@ void SetDeptStoreFloor(void)
     u16 deptStoreFloor;
     if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(SILPH_CO_1F))
     {
-    switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
-    {
-    case MAP_NUM(SILPH_CO_1F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
-        break;
-    case MAP_NUM(SILPH_CO_2F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
-        break;
-    case MAP_NUM(SILPH_CO_3F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
-        break;
-    case MAP_NUM(SILPH_CO_4F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
-        break;
-    case MAP_NUM(SILPH_CO_5F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
-        break;
-    case MAP_NUM(SILPH_CO_6F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_6F;
-        break;
-    case MAP_NUM(SILPH_CO_7F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_7F;
-        break;
-    case MAP_NUM(SILPH_CO_8F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_8F;
-        break;
-    case MAP_NUM(SILPH_CO_9F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_9F;
-        break;
-    case MAP_NUM(SILPH_CO_10F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_10F;
-        break;
-    case MAP_NUM(SILPH_CO_11F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_11F;
-        break;
-    }
-    }
-    if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(ROCKET_HIDEOUT_B1F))
-    {
-    switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
-    {
-    case MAP_NUM(ROCKET_HIDEOUT_B1F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_B1F;
-        break;
-    case MAP_NUM(ROCKET_HIDEOUT_B2F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_B2F;
-        break;
-    case MAP_NUM(ROCKET_HIDEOUT_B4F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_B4F;
-        break;
-    }
-    }
-    if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(CELADON_CITY_DEPARTMENT_STORE_1F))
-    {
-    switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
-    {
-    case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_1F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
-        break;
-    case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_2F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
-        break;
-    case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_3F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
-        break;
-    case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_4F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
-        break;
-    case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_5F):
-        deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
-        break;
-    default:
-        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
-        break;
-    }
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+        case MAP_NUM(SILPH_CO_1F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+            break;
+        case MAP_NUM(SILPH_CO_2F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
+            break;
+        case MAP_NUM(SILPH_CO_3F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
+            break;
+        case MAP_NUM(SILPH_CO_4F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
+            break;
+        case MAP_NUM(SILPH_CO_5F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
+            break;
+        case MAP_NUM(SILPH_CO_6F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_6F;
+            break;
+        case MAP_NUM(SILPH_CO_7F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_7F;
+            break;
+        case MAP_NUM(SILPH_CO_8F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_8F;
+            break;
+        case MAP_NUM(SILPH_CO_9F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_9F;
+            break;
+        case MAP_NUM(SILPH_CO_10F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_10F;
+            break;
+        case MAP_NUM(SILPH_CO_11F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_11F;
+            break;
+        }
+        }
+        if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(ROCKET_HIDEOUT_B1F))
+        {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+        case MAP_NUM(ROCKET_HIDEOUT_B1F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_B1F;
+            break;
+        case MAP_NUM(ROCKET_HIDEOUT_B2F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_B2F;
+            break;
+        case MAP_NUM(ROCKET_HIDEOUT_B4F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_B4F;
+            break;
+        }
+        }
+        if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(CELADON_CITY_DEPARTMENT_STORE_1F))
+        {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+        case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_1F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+            break;
+        case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_2F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
+            break;
+        case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_3F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
+            break;
+        case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_4F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
+            break;
+        case MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_5F):
+            deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
+            break;
+        default:
+            deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+            break;
+        }
     }
     VarSet(VAR_DEPT_STORE_FLOOR, deptStoreFloor);
 }
@@ -2223,6 +2133,8 @@ void ShowFrontierManiacMessage(void)
         else
             winStreak = gSaveBlock2Ptr->frontier.pyramidWinStreaks[FRONTIER_LVL_OPEN];
         break;
+    default:
+        return;
     }
 
     for (i = 0; i < FRONTIER_MANIAC_MESSAGE_COUNT - 1 && sFrontierManiacStreakThresholds[facility][i] < winStreak; i++);
@@ -2625,7 +2537,7 @@ static void Task_ShowScrollableMultichoice(u8 taskId)
     struct Task *task = &gTasks[taskId];
 
     LockPlayerFieldControls();
-    sScrollableMultichoice_ScrollOffset = 0;
+    gScrollableMultichoice_ScrollOffset = 0;
     sScrollableMultichoice_ItemSpriteId = MAX_SPRITES;
     FillFrontierExchangeCornerWindowAndItemIcon(task->tScrollMultiId, 0);
     ShowBattleFrontierTutorWindow(task->tScrollMultiId, 0);
@@ -2699,7 +2611,7 @@ static void ScrollableMultichoice_MoveCursor(s32 itemIndex, bool8 onInit, struct
         u16 selection;
         struct Task *task = &gTasks[taskId];
         ListMenuGetScrollAndRow(task->tListTaskId, &selection, NULL);
-        sScrollableMultichoice_ScrollOffset = selection;
+        gScrollableMultichoice_ScrollOffset = selection;
         ListMenuGetCurrentItemArrayId(task->tListTaskId, &selection);
         HideFrontierExchangeCornerItemIcon(task->tScrollMultiId, sFrontierExchangeCorner_NeverRead);
         FillFrontierExchangeCornerWindowAndItemIcon(task->tScrollMultiId, selection);
@@ -2820,7 +2732,7 @@ static void ScrollableMultichoice_UpdateScrollArrows(u8 taskId)
         template.secondY = task->tHeight * 8 + 10;
         template.fullyUpThreshold = 0;
         template.fullyDownThreshold = task->tNumItems - task->tMaxItemsOnScreen;
-        task->tScrollArrowId = AddScrollIndicatorArrowPair(&template, &sScrollableMultichoice_ScrollOffset);
+        task->tScrollArrowId = AddScrollIndicatorArrowPair(&template, &gScrollableMultichoice_ScrollOffset);
     }
 }
 
@@ -3130,40 +3042,9 @@ static void HideFrontierExchangeCornerItemIcon(u16 menu, u16 unused)
     }
 }
 
-static const u16 sBattleFrontier_TutorMoves1[] =
-{
-    MOVE_SOFT_BOILED,
-    MOVE_SEISMIC_TOSS,
-    MOVE_DREAM_EATER,
-    MOVE_MEGA_PUNCH,
-    MOVE_MEGA_KICK,
-    MOVE_BODY_SLAM,
-    MOVE_ROCK_SLIDE,
-    MOVE_COUNTER,
-    MOVE_THUNDER_WAVE,
-    MOVE_SWORDS_DANCE
-};
-
-static const u16 sBattleFrontier_TutorMoves2[] =
-{
-    MOVE_DEFENSE_CURL,
-    MOVE_SNORE,
-    MOVE_MUD_SLAP,
-    MOVE_SWIFT,
-    MOVE_ICY_WIND,
-    MOVE_ENDURE,
-    MOVE_PSYCH_UP,
-    MOVE_ICE_PUNCH,
-    MOVE_THUNDER_PUNCH,
-    MOVE_FIRE_PUNCH
-};
-
 void BufferBattleFrontierTutorMoveName(void)
 {
-    if (gSpecialVar_0x8005 != 0)
-        StringCopy(gStringVar1, gMoveNames[sBattleFrontier_TutorMoves2[gSpecialVar_0x8004]]);
-    else
-        StringCopy(gStringVar1, gMoveNames[sBattleFrontier_TutorMoves1[gSpecialVar_0x8004]]);
+    StringCopy(gStringVar1, GetMoveName(gSpecialVar_0x8005));
 }
 
 static void ShowBattleFrontierTutorWindow(u8 menu, u16 selection)
@@ -3259,44 +3140,6 @@ void ScrollableMultichoice_RedrawPersistentMenu(void)
     }
 }
 
-void GetBattleFrontierTutorMoveIndex(void)
-{
-    u8 i;
-    u16 moveTutor = 0;
-    u16 moveIndex = 0;
-    gSpecialVar_0x8005 = 0;
-
-    moveTutor = VarGet(VAR_TEMP_FRONTIER_TUTOR_ID);
-    moveIndex = VarGet(VAR_TEMP_FRONTIER_TUTOR_SELECTION);
-
-    if (moveTutor != 0)
-    {
-        i = 0;
-        do
-        {
-            if (gTutorMoves[i] == sBattleFrontier_TutorMoves2[moveIndex])
-            {
-                gSpecialVar_0x8005 = i;
-                break;
-            }
-            i++;
-        } while (i < TUTOR_MOVE_COUNT);
-    }
-    else
-    {
-        i = 0;
-        do
-        {
-            if (gTutorMoves[i] == sBattleFrontier_TutorMoves1[moveIndex])
-            {
-                gSpecialVar_0x8005 = i;
-                break;
-            }
-            i++;
-        } while (i < TUTOR_MOVE_COUNT);
-    }
-}
-
 // Never called
 // Close a scrollable multichoice that stays open after selection
 void ScrollableMultichoice_ClosePersistentMenu(void)
@@ -3378,11 +3221,6 @@ bool8 IsDestinationBoxFull(void)
             box = 0;
     } while (box != StorageGetCurrentBox());
     return FALSE;
-}
-
-void Unused_SetWeatherSunny(void)
-{
-    SetCurrentAndNextWeather(WEATHER_SUNNY);
 }
 
 // All mart employees have a local id of 1, so function always returns 1
@@ -4148,7 +3986,7 @@ void SampleResortGorgeousMonAndReward(void)
         VarSet(VAR_RESORT_GORGEOUS_REWARD, SampleResortGorgeousReward());
         VarSet(VAR_RESORT_GOREGEOUS_STEP_COUNTER, 0);
     }
-    StringCopy(gStringVar1, gSpeciesNames[VarGet(VAR_RESORT_GORGEOUS_REQUESTED_MON)]);
+    StringCopy(gStringVar1, GetSpeciesName(VarGet(VAR_RESORT_GORGEOUS_REQUESTED_MON)));
 }
 
 static u16 SampleResortGorgeousMon(void)

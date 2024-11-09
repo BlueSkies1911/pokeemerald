@@ -237,7 +237,7 @@ static void DrawMetatileAt(const struct MapLayout *mapLayout, u16 offset, int x,
         metatiles = mapLayout->secondaryTileset->metatiles;
         metatileId -= NUM_METATILES_IN_PRIMARY;
     }
-    DrawMetatile(MapGridGetMetatileLayerTypeAt(x, y), metatiles + metatileId * 12, offset);
+    DrawMetatile(MapGridGetMetatileLayerTypeAt(x, y), metatiles + metatileId * NUM_TILES_PER_METATILE, offset);
 }
 
 static void DrawMetatile(s32 metatileLayerType, const u16 *tiles, u16 offset)
@@ -262,7 +262,6 @@ static void DrawMetatile(s32 metatileLayerType, const u16 *tiles, u16 offset)
         gOverworldTilemapBuffer_Bg1[offset + 1] = tiles[5];
         gOverworldTilemapBuffer_Bg1[offset + 0x20] = tiles[6];
         gOverworldTilemapBuffer_Bg1[offset + 0x21] = tiles[7];
-
     }
     else
     {
@@ -283,10 +282,8 @@ static void DrawMetatile(s32 metatileLayerType, const u16 *tiles, u16 offset)
         gOverworldTilemapBuffer_Bg1[offset + 1] = tiles[9];
         gOverworldTilemapBuffer_Bg1[offset + 0x20] = tiles[10];
         gOverworldTilemapBuffer_Bg1[offset + 0x21] = tiles[11];
-
-
     }
-    
+
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
     ScheduleBgCopyTilemapToVram(3);
@@ -316,8 +313,8 @@ static void CameraUpdateCallback(struct CameraObject *fieldCamera)
 {
     if (fieldCamera->spriteId != 0)
     {
-        fieldCamera->movementSpeedX = gSprites[fieldCamera->spriteId].data[2];
-        fieldCamera->movementSpeedY = gSprites[fieldCamera->spriteId].data[3];
+        fieldCamera->movementSpeedX = gSprites[fieldCamera->spriteId].sCamera_MoveX;
+        fieldCamera->movementSpeedY = gSprites[fieldCamera->spriteId].sCamera_MoveY;
     }
 }
 

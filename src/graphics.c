@@ -46,6 +46,8 @@ const u32 gBattleAnimSpritePal_BlueFlare[] = INCBIN_U32("graphics/battle_anims/s
 const u32 gBattleAnimSpriteGfx_Confide[] = INCBIN_U32("graphics/battle_anims/sprites/confide.4bpp.lz");
 const u32 gBattleAnimSpritePal_Confide[] = INCBIN_U32("graphics/battle_anims/sprites/confide.gbapal.lz");
 
+const u32 gBattleAnimSpritePal_DracoMeteor[] = INCBIN_U32("graphics/battle_anims/sprites/draco_meteor.gbapal.lz");
+
 const u32 gBattleAnimSpriteGfx_HeartStamp[] = INCBIN_U32("graphics/battle_anims/sprites/heart_stamp.4bpp.lz");
 const u32 gBattleAnimSpritePal_HeartStamp[] = INCBIN_U32("graphics/battle_anims/sprites/heart_stamp.gbapal.lz");
 
@@ -951,9 +953,9 @@ const u32 gBattleAnimSpritePal_HandsAndFeet[] = INCBIN_U32("graphics/battle_anim
 const u32 gBattleAnimSpriteGfx_Confetti[] = INCBIN_U32("graphics/battle_anims/sprites/confetti.4bpp.lz");
 const u32 gBattleAnimSpritePal_Confetti[] = INCBIN_U32("graphics/battle_anims/sprites/confetti.gbapal.lz");
 
-const u32 gSubstituteDollPal[] = INCBIN_U32("graphics/battle_anims/sprites/substitute.gbapal.lz");
-const u32 gSubstituteDollFrontGfx[] = INCBIN_U32("graphics/battle_anims/sprites/substitute.4bpp.lz");
-const u32 gSubstituteDollBackGfx[] = INCBIN_U32("graphics/battle_anims/sprites/substitute_back.4bpp.lz");
+const u32 gBattleAnimSpriteGfx_Substitute[] = INCBIN_U32("graphics/battle_anims/sprites/substitute.4bpp.lz");
+const u32 gBattleAnimSpriteGfx_SubstituteBack[] = INCBIN_U32("graphics/battle_anims/sprites/substitute_back.4bpp.lz");
+const u32 gBattleAnimSpritePal_Substitute[] = INCBIN_U32("graphics/battle_anims/sprites/substitute.gbapal.lz");
 
 const u32 gBattleAnimSpriteGfx_GreenStar[] = INCBIN_U32("graphics/battle_anims/sprites/green_star.4bpp.lz");
 const u32 gBattleAnimSpritePal_GreenStar[] = INCBIN_U32("graphics/battle_anims/sprites/green_star.gbapal.lz");
@@ -1032,7 +1034,6 @@ const u32 gBattleAnimSpritePal_FlatRock[] = INCBIN_U32("graphics/battle_anims/sp
 
 const u32 gBattleAnimUnusedPal_Unknown2[] = INCBIN_U32("graphics/battle_anims/unused/unknown_2.gbapal.lz");
 
-#include "data/graphics/pokemon.h"
 #include "data/graphics/trainers.h"
 
 const u32 gBattleVSFrame_Gfx[] = INCBIN_U32("graphics/battle_transitions/vs_frame.4bpp.lz");
@@ -1380,7 +1381,6 @@ const u16 gFrontierPassMedalsGold_Pal[] = INCBIN_U16("graphics/frontier_pass/gol
 
 // Pokédex
 const u16 gPokedexBgKanto_Pal[] = INCBIN_U16("graphics/pokedex/bg_kanto.gbapal");
-const u16 gPokedexCaughtScreen_Pal[] = INCBIN_U16("graphics/pokedex/caught_screen.gbapal");
 const u16 gPokedexSearchResults_Pal[] = INCBIN_U16("graphics/pokedex/search_results_bg.gbapal");
 const u16 gPokedexBgNational_Pal[] = INCBIN_U16("graphics/pokedex/bg_national.gbapal");
 const u32 gPokedexMenu_Gfx[] = INCBIN_U32("graphics/pokedex/menu.4bpp.lz");

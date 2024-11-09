@@ -46,7 +46,7 @@ bool8 TrySetPortholeWarpDestination(void)
     s16 x, y;
 
     SetWarpDestination(mapGroup, mapNum, WARP_ID_NONE, x, y);
-        return TRUE;
+    return TRUE;
 }
 
 void Task_HandlePorthole(u8 taskId)

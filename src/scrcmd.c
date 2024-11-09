@@ -54,7 +54,7 @@
 #include "constants/weather.h"
 
 typedef u16 (*SpecialFunc)(void);
-typedef void (*NativeFunc)(void);
+typedef void (*NativeFunc)(struct ScriptContext *ctx);
 
 EWRAM_DATA const u8 *gRamScriptRetAddr = NULL;
 static EWRAM_DATA u32 sAddressOffset = 0; // For relative addressing in vgoto etc., used by saved scripts (e.g. Mystery Event)
@@ -87,7 +87,7 @@ static const u8 sScriptConditionTable[6][3] =
     {1, 0, 1}, // !=
 };
 
-static u8 * const sScriptStringVars[] =
+static u8 *const sScriptStringVars[] =
 {
     gStringVar1,
     gStringVar2,
@@ -138,7 +138,7 @@ bool8 ScrCmd_callnative(struct ScriptContext *ctx)
 {
     NativeFunc func = (NativeFunc)ScriptReadWord(ctx);
 
-    func();
+    func(ctx);
     return FALSE;
 }
 
@@ -492,7 +492,7 @@ bool8 ScrCmd_additem(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    gSpecialVar_Result = AddBagItem(itemId, (u8)quantity);
+    gSpecialVar_Result = AddBagItem(itemId, quantity);
     return FALSE;
 }
 
@@ -501,7 +501,7 @@ bool8 ScrCmd_removeitem(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    gSpecialVar_Result = RemoveBagItem(itemId, (u8)quantity);
+    gSpecialVar_Result = RemoveBagItem(itemId, quantity);
     return FALSE;
 }
 
@@ -510,7 +510,7 @@ bool8 ScrCmd_checkitemspace(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    gSpecialVar_Result = CheckBagHasSpace(itemId, (u8)quantity);
+    gSpecialVar_Result = CheckBagHasSpace(itemId, quantity);
     return FALSE;
 }
  
@@ -519,7 +519,7 @@ bool8 ScrCmd_checkpcspace(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    gSpecialVar_Result = CheckPCHasSpace(itemId, (u8)quantity);
+    gSpecialVar_Result = CheckPCHasSpace(itemId, quantity);
     return FALSE;
 }
 
@@ -528,7 +528,7 @@ bool8 ScrCmd_checkitem(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    gSpecialVar_Result = CheckBagHasItem(itemId, (u8)quantity);
+    gSpecialVar_Result = CheckBagHasItem(itemId, quantity);
     return FALSE;
 }
 
@@ -795,8 +795,8 @@ bool8 ScrCmd_warphole(struct ScriptContext *ctx)
 {
     u8 mapGroup = ScriptReadByte(ctx);
     u8 mapNum = ScriptReadByte(ctx);
-    u16 x;
-    u16 y;
+    s16 x;
+    s16 y;
 
     PlayerGetDestCoords(&x, &y);
     if (mapGroup == MAP_GROUP(UNDEFINED) && mapNum == MAP_NUM(UNDEFINED))
@@ -1432,10 +1432,10 @@ bool8 ScrCmd_multichoicegrid(struct ScriptContext *ctx)
 
 bool8 ScrCmd_erasebox(struct ScriptContext *ctx)
 {
-    u8 left = ScriptReadByte(ctx);
-    u8 top = ScriptReadByte(ctx);
-    u8 right = ScriptReadByte(ctx);
-    u8 bottom = ScriptReadByte(ctx);
+    u8 UNUSED left = ScriptReadByte(ctx);
+    u8 UNUSED top = ScriptReadByte(ctx);
+    u8 UNUSED right = ScriptReadByte(ctx);
+    u8 UNUSED bottom = ScriptReadByte(ctx);
 
     // Menu_EraseWindowRect(left, top, right, bottom);
     return FALSE;
@@ -1443,10 +1443,10 @@ bool8 ScrCmd_erasebox(struct ScriptContext *ctx)
 
 bool8 ScrCmd_drawboxtext(struct ScriptContext *ctx)
 {
-    u8 left = ScriptReadByte(ctx);
-    u8 top = ScriptReadByte(ctx);
-    u8 multichoiceId = ScriptReadByte(ctx);
-    bool8 ignoreBPress = ScriptReadByte(ctx);
+    u8 UNUSED left = ScriptReadByte(ctx);
+    u8 UNUSED top = ScriptReadByte(ctx);
+    u8 UNUSED multichoiceId = ScriptReadByte(ctx);
+    bool8 UNUSED ignoreBPress = ScriptReadByte(ctx);
 
     /*if (Multichoice(left, top, multichoiceId, ignoreBPress) == TRUE)
     {
@@ -1564,7 +1564,7 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
     u8 stringVarIndex = ScriptReadByte(ctx);
     u16 species = VarGet(ScriptReadHalfword(ctx));
 
-    StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
+    StringCopy(sScriptStringVars[stringVarIndex], GetSpeciesName(species));
     return FALSE;
 }
 
@@ -1575,7 +1575,7 @@ bool8 ScrCmd_bufferleadmonspeciesname(struct ScriptContext *ctx)
     u8 *dest = sScriptStringVars[stringVarIndex];
     u8 partyIndex = GetLeadMonIndex();
     u32 species = GetMonData(&gPlayerParty[partyIndex], MON_DATA_SPECIES, NULL);
-    StringCopy(dest, gSpeciesNames[species]);
+    StringCopy(dest, GetSpeciesName(species));
     return FALSE;
 }
 
@@ -1622,7 +1622,7 @@ bool8 ScrCmd_buffermovename(struct ScriptContext *ctx)
     u8 stringVarIndex = ScriptReadByte(ctx);
     u16 moveId = VarGet(ScriptReadHalfword(ctx));
 
-    StringCopy(sScriptStringVars[stringVarIndex], gMoveNames[moveId]);
+    StringCopy(sScriptStringVars[stringVarIndex], GetMoveName(moveId));
     return FALSE;
 }
 
@@ -1691,19 +1691,6 @@ bool8 ScrCmd_bufferboxname(struct ScriptContext *ctx)
     return FALSE;
 }
 
-bool8 ScrCmd_givemon(struct ScriptContext *ctx)
-{
-    u16 species = VarGet(ScriptReadHalfword(ctx));
-    u8 level = ScriptReadByte(ctx);
-    u16 item = VarGet(ScriptReadHalfword(ctx));
-    u32 unkParam1 = ScriptReadWord(ctx);
-    u32 unkParam2 = ScriptReadWord(ctx);
-    u8 unkParam3 = ScriptReadByte(ctx);
-
-    gSpecialVar_Result = ScriptGiveMon(species, level, item, unkParam1, unkParam2, unkParam3);
-    return FALSE;
-}
-
 bool8 ScrCmd_giveegg(struct ScriptContext *ctx)
 {
     u16 species = VarGet(ScriptReadHalfword(ctx));
@@ -1740,13 +1727,14 @@ bool8 ScrCmd_checkpartymove(struct ScriptContext *ctx)
             break;
         }
     }
-    if (gSpecialVar_Result == PARTY_SIZE && (CheckBagHasItem(MoveToHM(moveId), 1))){
+    if (gSpecialVar_Result == PARTY_SIZE && (CheckBagHasItem(MoveToHM(moveId), 1)))
+    {
         for (i = 0; i < PARTY_SIZE; i++)
         {
             u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
             if (!species)
                 break;
-            if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanMonLearnTMHM(&gPlayerParty[i], MoveToHM(moveId) - ITEM_TM01))
+            if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanLearnTeachableMove(species, moveId))
             {
                 gSpecialVar_Result = i;
                 gSpecialVar_0x8004 = species;
@@ -1809,8 +1797,8 @@ bool8 ScrCmd_hidemoneybox(struct ScriptContext *ctx)
 
 bool8 ScrCmd_updatemoneybox(struct ScriptContext *ctx)
 {
-    u8 x = ScriptReadByte(ctx);
-    u8 y = ScriptReadByte(ctx);
+    u8 UNUSED x = ScriptReadByte(ctx);
+    u8 UNUSED y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
     if (!ignore)
@@ -1829,8 +1817,8 @@ bool8 ScrCmd_showcoinsbox(struct ScriptContext *ctx)
 
 bool8 ScrCmd_hidecoinsbox(struct ScriptContext *ctx)
 {
-    u8 x = ScriptReadByte(ctx);
-    u8 y = ScriptReadByte(ctx);
+    u8 UNUSED x = ScriptReadByte(ctx);
+    u8 UNUSED y = ScriptReadByte(ctx);
 
     HideCoinsWindow();
     return FALSE;
@@ -1838,8 +1826,8 @@ bool8 ScrCmd_hidecoinsbox(struct ScriptContext *ctx)
 
 bool8 ScrCmd_updatecoinsbox(struct ScriptContext *ctx)
 {
-    u8 x = ScriptReadByte(ctx);
-    u8 y = ScriptReadByte(ctx);
+    u8 UNUSED x = ScriptReadByte(ctx);
+    u8 UNUSED y = ScriptReadByte(ctx);
 
     PrintCoinsString(GetCoins());
     return FALSE;
@@ -2136,10 +2124,10 @@ bool8 ScrCmd_setdoorclosed(struct ScriptContext *ctx)
 // Below two are functions for elevators in RS, do nothing in Emerald
 bool8 ScrCmd_addelevmenuitem(struct ScriptContext *ctx)
 {
-    u8 v3 = ScriptReadByte(ctx);
-    u16 v5 = VarGet(ScriptReadHalfword(ctx));
-    u16 v7 = VarGet(ScriptReadHalfword(ctx));
-    u16 v9 = VarGet(ScriptReadHalfword(ctx));
+    u8 UNUSED v3 = ScriptReadByte(ctx);
+    u16 UNUSED v5 = VarGet(ScriptReadHalfword(ctx));
+    u16 UNUSED v7 = VarGet(ScriptReadHalfword(ctx));
+    u16 UNUSED v9 = VarGet(ScriptReadHalfword(ctx));
 
     //ScriptAddElevatorMenuItem(v3, v5, v7, v9);
     return FALSE;
@@ -2327,6 +2315,12 @@ bool8 ScrCmd_randomweather(struct ScriptContext * ctx)
     u16 rand = Random() % 100;
     u8 oldWeather = gSaveBlock1Ptr->randomWeather;
 
+    // Set weather to sunny during credits
+    if(FlagGet(FLAG_HIDE_MAP_NAME_POPUP))
+    {
+        return FALSE;
+    }
+
     RtcCalcLocalTime();
     if (gLocalTime.hours > gSaveBlock1Ptr->timeWeather + 5)
     {
@@ -2335,7 +2329,13 @@ bool8 ScrCmd_randomweather(struct ScriptContext * ctx)
 
     if (FlagGet(FLAG_RANDOM_WEATHER_RESET))
     {
-        SetSavedWeather(oldWeather);
+        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(VIRIDIAN_FOREST)
+          && gSaveBlock1Ptr->location.mapNum == MAP_NUM(VIRIDIAN_FOREST)
+          && oldWeather == WEATHER_DROUGHT)
+            SetSavedWeather(WEATHER_SUNNY);
+        else
+            SetSavedWeather(oldWeather);
+
         gSaveBlock1Ptr->randomWeather = oldWeather;
     }
     else
@@ -2354,7 +2354,12 @@ bool8 ScrCmd_randomweather(struct ScriptContext * ctx)
             }
             else
             {
-                SetSavedWeather(WEATHER_DROUGHT);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(VIRIDIAN_FOREST)
+                && gSaveBlock1Ptr->location.mapNum == MAP_NUM(VIRIDIAN_FOREST))
+                    SetSavedWeather(WEATHER_SUNNY);
+                else
+                    SetSavedWeather(WEATHER_DROUGHT);
+                
                 gSaveBlock1Ptr->randomWeather = WEATHER_DROUGHT;
             }
         }

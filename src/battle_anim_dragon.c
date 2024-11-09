@@ -5,16 +5,14 @@
 #include "trig.h"
 #include "constants/rgb.h"
 
-static void AnimOutrageFlame(struct Sprite *);
-static void AnimDragonDanceOrb(struct Sprite *);
 static void AnimDragonDanceOrb_Step(struct Sprite *);
-static void AnimOverheatFlame(struct Sprite *);
 static void AnimOverheatFlame_Step(struct Sprite *);
 static void AnimTask_DragonDanceWaver_Step(u8);
 static void UpdateDragonDanceScanlineEffect(struct Task *);
 static void AnimDragonRushStep(struct Sprite *sprite);
 static void AnimSpinningDracoMeteor(struct Sprite *sprite);
 static void AnimSpinningDracoMeteorFinish(struct Sprite *sprite);
+static void AnimDracoMeteorRock_Step(struct Sprite *sprite);
 
 EWRAM_DATA static u16 sUnusedOverheatData[7] = {0};
 
@@ -60,7 +58,7 @@ static const union AnimCmd sAnim_DragonBreathFire_1[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnims_DragonBreathFire[] =
+const union AnimCmd *const gAnims_DragonBreathFire[] =
 {
     sAnim_DragonBreathFire_0,
     sAnim_DragonBreathFire_1,
@@ -80,7 +78,7 @@ static const union AffineAnimCmd sAffineAnim_DragonBreathFire_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_DragonBreathFire[] =
+const union AffineAnimCmd *const gAffineAnims_DragonBreathFire[] =
 {
     sAffineAnim_DragonBreathFire_0,
     sAffineAnim_DragonBreathFire_1,
@@ -91,9 +89,9 @@ const struct SpriteTemplate gDragonBreathFireSpriteTemplate =
     .tileTag = ANIM_TAG_SMALL_EMBER,
     .paletteTag = ANIM_TAG_SMALL_EMBER,
     .oam = &gOamData_AffineDouble_ObjNormal_32x32,
-    .anims = sAnims_DragonBreathFire,
+    .anims = gAnims_DragonBreathFire,
     .images = NULL,
-    .affineAnims = sAffineAnims_DragonBreathFire,
+    .affineAnims = gAffineAnims_DragonBreathFire,
     .callback = AnimDragonFireToTarget,
 };
 
@@ -186,6 +184,30 @@ const struct SpriteTemplate gOverheatFlameSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimOverheatFlame,
+};
+
+// Draco Meteor Rocks
+const struct SpriteTemplate gDracoMeteorRocksSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_ROCKS,
+    .paletteTag = ANIM_TAG_FAIRY_LOCK_CHAINS,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimDracoMeteorRock,
+};
+
+// Draco Meteor Tail
+const struct SpriteTemplate gDracoMeteorTailSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_WATER_GUN,
+    .paletteTag = ANIM_TAG_WATER_GUN,
+    .oam = &gOamData_AffineDouble_ObjBlend_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = sSpriteAffineAnimTable_HydroCannonBall,
+    .callback = AnimDracoMeteorRock,
 };
 
 const union AnimCmd gDragonRushAnimCmds[] =
@@ -318,7 +340,7 @@ static void AnimSpinningDracoMeteor(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, AnimSpinningDracoMeteorFinish);
 }
 
-static void AnimOutrageFlame(struct Sprite *sprite)
+void AnimOutrageFlame(struct Sprite *sprite)
 {
     sprite->x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
@@ -397,7 +419,7 @@ void AnimDragonFireToTarget(struct Sprite *sprite)
     StartDragonFireTranslation(sprite);
 }
 
-static void AnimDragonDanceOrb(struct Sprite *sprite)
+void AnimDragonDanceOrb(struct Sprite *sprite)
 {
     u16 r5;
     u16 r0;
@@ -544,7 +566,7 @@ static void UpdateDragonDanceScanlineEffect(struct Task *task)
     task->data[5] = (task->data[5] + 9) & 0xFF;
 }
 
-static void AnimOverheatFlame(struct Sprite *sprite)
+void AnimOverheatFlame(struct Sprite *sprite)
 {
     int i;
     int yAmplitude = (gBattleAnimArgs[2] * 3) / 5;
@@ -568,4 +590,40 @@ static void AnimOverheatFlame_Step(struct Sprite *sprite)
     sprite->y2 = sprite->data[5] / 10;
     if (++sprite->data[0] > sprite->data[3])
         DestroyAnimSprite(sprite);
+}
+
+void AnimDracoMeteorRock(struct Sprite *sprite)
+{
+	if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
+	{
+		sprite->data[0] = sprite->x - gBattleAnimArgs[0];
+		sprite->data[2] = sprite->x - gBattleAnimArgs[2];
+	}
+	else
+	{
+		sprite->data[0] = sprite->x + gBattleAnimArgs[0];
+		sprite->data[2] = sprite->x + gBattleAnimArgs[2];
+	}
+
+	sprite->data[1] = sprite->y + gBattleAnimArgs[1];
+	sprite->data[3] = sprite->y + gBattleAnimArgs[3];
+	sprite->data[4] = gBattleAnimArgs[4];
+
+	sprite->data[6] = gBattleAnimArgs[2];
+	sprite->data[7] = gBattleAnimArgs[3];
+
+	sprite->x = sprite->data[0];
+	sprite->y = sprite->data[1];
+	sprite->callback = AnimDracoMeteorRock_Step;
+}
+
+static void AnimDracoMeteorRock_Step(struct Sprite *sprite)
+{
+	sprite->x2 = ((sprite->data[2] - sprite->data[0]) * sprite->data[5]) / sprite->data[4];
+	sprite->y2 = ((sprite->data[3] - sprite->data[1]) * sprite->data[5]) / sprite->data[4];
+
+	if (sprite->data[5] == sprite->data[4])
+		DestroyAnimSprite(sprite);
+
+	sprite->data[5]++;
 }

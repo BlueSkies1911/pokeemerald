@@ -351,7 +351,7 @@ static const TaskFunc sContextMenuFuncs[] = {
     [ITEMMENULOCATION_QUIZ_LADY] =              Task_ItemContext_Normal,
     [ITEMMENULOCATION_APPRENTICE] =             Task_ItemContext_Normal,
     [ITEMMENULOCATION_WALLY] =                  NULL,
-    [ITEMMENULOCATION_PCBOX] =                  Task_ItemContext_GiveToPC
+    [ITEMMENULOCATION_PCBOX] =                  Task_ItemContext_GiveToPC,
 };
 
 static const struct YesNoFuncTable sYesNoTossFunctions = {ConfirmToss, CancelToss};
@@ -899,7 +899,7 @@ static void GetItemName(u8 *dest, u16 itemId)
     switch (gBagPosition.pocket)
     {
     case TMHM_POCKET:
-        StringCopy(gStringVar2, gMoveNames[ItemIdToBattleMoveId(itemId)]);
+        StringCopy(gStringVar2, GetMoveName(ItemIdToBattleMoveId(itemId)));
         if (itemId >= ITEM_HM01)
         {
             // Get HM number
@@ -971,7 +971,7 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y)
         if (gBagPosition.pocket == BERRIES_POCKET)
         {
             // Print berry quantity
-            ConvertIntToDecimalStringN(gStringVar1, itemQuantity, STR_CONV_MODE_RIGHT_ALIGN, BERRY_CAPACITY_DIGITS);
+            ConvertIntToDecimalStringN(gStringVar1, itemQuantity, STR_CONV_MODE_RIGHT_ALIGN, MAX_ITEM_DIGITS);
             StringExpandPlaceholders(gStringVar4, gText_xVar1);
             offset = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 119);
             BagMenu_Print(windowId, FONT_NARROW, gStringVar4, offset, y, 0, 0, TEXT_SKIP_DRAW, COLORID_NORMAL);
@@ -979,7 +979,7 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y)
         else if (gBagPosition.pocket != KEYITEMS_POCKET && ItemId_GetImportance(itemId) == FALSE)
         {
             // Print item quantity
-            ConvertIntToDecimalStringN(gStringVar1, itemQuantity, STR_CONV_MODE_RIGHT_ALIGN, BAG_ITEM_CAPACITY_DIGITS);
+            ConvertIntToDecimalStringN(gStringVar1, itemQuantity, STR_CONV_MODE_RIGHT_ALIGN, MAX_ITEM_DIGITS);
             StringExpandPlaceholders(gStringVar4, gText_xVar1);
             offset = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 119);
             BagMenu_Print(windowId, FONT_NARROW, gStringVar4, offset, y, 0, 0, TEXT_SKIP_DRAW, COLORID_NORMAL);
@@ -1192,8 +1192,7 @@ static void AddItemQuantityWindow(u8 windowType)
 
 static void PrintItemQuantity(u8 windowId, s16 quantity)
 {
-    u8 numDigits = (gBagPosition.pocket == BERRIES_POCKET) ? BERRY_CAPACITY_DIGITS : BAG_ITEM_CAPACITY_DIGITS;
-    ConvertIntToDecimalStringN(gStringVar1, quantity, STR_CONV_MODE_LEADING_ZEROS, numDigits);
+    ConvertIntToDecimalStringN(gStringVar1, quantity, STR_CONV_MODE_LEADING_ZEROS, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
     AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar4, GetStringCenterAlignXOffset(FONT_NORMAL, gStringVar4, 0x28), 2, 0, 0);
 }
@@ -1201,8 +1200,7 @@ static void PrintItemQuantity(u8 windowId, s16 quantity)
 // Prints the quantity of items to be sold and the amount that would be earned
 static void PrintItemSoldAmount(int windowId, int numSold, int moneyEarned)
 {
-    u8 numDigits = (gBagPosition.pocket == BERRIES_POCKET) ? BERRY_CAPACITY_DIGITS : BAG_ITEM_CAPACITY_DIGITS;
-    ConvertIntToDecimalStringN(gStringVar1, numSold, STR_CONV_MODE_LEADING_ZEROS, numDigits);
+    ConvertIntToDecimalStringN(gStringVar1, numSold, STR_CONV_MODE_LEADING_ZEROS, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
     AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar4, 0, 1, TEXT_SKIP_DRAW, 0);
     PrintMoneyAmount(windowId, 38, 1, moneyEarned, 0);
@@ -1985,11 +1983,18 @@ static void ItemMenu_Cancel(u8 taskId)
 
 static void ItemMenu_UseInBattle(u8 taskId)
 {
-    if (ItemId_GetBattleFunc(gSpecialVar_ItemId))
-    {
-        RemoveContextWindow();
-        ItemId_GetBattleFunc(gSpecialVar_ItemId)(taskId);
-    }
+    // Safety check
+    u16 type = ItemId_GetType(gSpecialVar_ItemId);
+    if (!ItemId_GetBattleUsage(gSpecialVar_ItemId))
+        return;
+
+    RemoveContextWindow();
+    if (type == ITEM_USE_BAG_MENU)
+        ItemUseInBattle_BagMenu(taskId);
+    else if (type == ITEM_USE_PARTY_MENU)
+        ItemUseInBattle_PartyMenu(taskId);
+    else if (type == ITEM_USE_PARTY_MENU_MOVES)
+        ItemUseInBattle_PartyMenuChooseMove(taskId);
 }
 
 void CB2_ReturnToBagMenuPocket(void)
@@ -2562,34 +2567,34 @@ static void PrintTMHMMoveData(u16 itemId)
     else
     {
         moveId = ItemIdToBattleMoveId(itemId);
-        BlitMenuInfoIcon(WIN_TMHM_INFO, gBattleMoves[moveId].type + 1, 0, 0);
+        BlitMenuInfoIcon(WIN_TMHM_INFO, gMovesInfo[moveId].type + 1, 0, 0);
 
         // Print TMHM power
-        if (gBattleMoves[moveId].power <= 1)
+        if (gMovesInfo[moveId].power <= 1)
         {
             text = gText_ThreeDashes;
         }
         else
         {
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveId].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, gMovesInfo[moveId].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
             text = gStringVar1;
         }
         BagMenu_Print(WIN_TMHM_INFO, FONT_NORMAL, text, 7, 12, 0, 0, TEXT_SKIP_DRAW, COLORID_TMHM_INFO);
 
         // Print TMHM accuracy
-        if (gBattleMoves[moveId].accuracy == 0)
+        if (gMovesInfo[moveId].accuracy == 0)
         {
             text = gText_ThreeDashes;
         }
         else
         {
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveId].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, gMovesInfo[moveId].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
             text = gStringVar1;
         }
         BagMenu_Print(WIN_TMHM_INFO, FONT_NORMAL, text, 7, 24, 0, 0, TEXT_SKIP_DRAW, COLORID_TMHM_INFO);
 
         // Print TMHM pp
-        ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveId].pp, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gStringVar1, gMovesInfo[moveId].pp, STR_CONV_MODE_RIGHT_ALIGN, 3);
         BagMenu_Print(WIN_TMHM_INFO, FONT_NORMAL, gStringVar1, 7, 36, 0, 0, TEXT_SKIP_DRAW, COLORID_TMHM_INFO);
 
         CopyWindowToVram(WIN_TMHM_INFO, COPYWIN_GFX);

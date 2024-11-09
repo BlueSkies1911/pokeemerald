@@ -41,6 +41,7 @@ const u32 gBattleTerrainTilemap_Indoor[] = INCBIN_U32("graphics/battle_terrain/i
 
 const u32 gBattleTerrainPalette_Building[] = INCBIN_U32("graphics/battle_terrain/building/palette.gbapal.lz");
 
+const u32 gBattleTerrainPalette_Kyogre[] = INCBIN_U32("graphics/battle_terrain/water/kyogre.gbapal.lz");
 const u32 gBattleTerrainPalette_BuildingGym[] = INCBIN_U32("graphics/battle_terrain/building/palette2.gbapal.lz");
 const u32 gBattleTerrainPalette_BuildingLeader[] = INCBIN_U32("graphics/battle_terrain/building/palette3.gbapal.lz");
 const u32 gBattleTerrainPalette_Indoor2[] = INCBIN_U32("graphics/battle_terrain/indoor/2.gbapal.lz");

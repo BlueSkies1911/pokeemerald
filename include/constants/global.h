@@ -1,5 +1,6 @@
 #ifndef GUARD_CONSTANTS_GLOBAL_H
 #define GUARD_CONSTANTS_GLOBAL_H
+
 // Invalid Versions show as "----------" in Gen 4 and Gen 5's summary screen.
 // In Gens 6 and 7, invalid versions instead show "a distant land" in the summary screen.
 // In Gen 4 only, migrated Pokémon with Diamond, Pearl, or Platinum's ID show as "----------".
@@ -16,6 +17,8 @@
 #define VERSION_PEARL 11
 #define VERSION_PLATINUM 12
 #define VERSION_GAMECUBE 15
+
+#define NUM_VERSIONS 15
 
 #define LANGUAGE_JAPANESE 1
 #define LANGUAGE_ENGLISH  2
@@ -92,6 +95,7 @@
 
 // string lengths
 #define ITEM_NAME_LENGTH 14
+#define ITEM_NAME_PLURAL_LENGTH ITEM_NAME_LENGTH + 2 // 2 is used for the instance where a word's suffix becomes y->ies
 #define POKEMON_NAME_LENGTH 10
 #define POKEMON_NAME_BUFFER_SIZE max(20, POKEMON_NAME_LENGTH + 1) // Frequently used buffer size. Larger than necessary
 #define PLAYER_NAME_LENGTH 7

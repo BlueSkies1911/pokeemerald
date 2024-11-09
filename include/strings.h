@@ -465,6 +465,7 @@ extern const u8 gText_MailMessageWillBeLost[];
 extern const u8 gText_MailTakenFromPkmn[];
 extern const u8 gText_NoMoreThanVar1Pkmn[];
 extern const u8 gText_PkmnCantBeTradedNow[];
+extern const u8 gText_PkmnCantBeTraded[];
 extern const u8 gText_EggCantBeTradedNow[];
 extern const u8 gText_OnlyPkmnForBattle[];
 extern const u8 gJPText_AreYouSureYouWantToSpinTradeMon[];
@@ -1023,8 +1024,8 @@ extern const u8 gText_ThrowInPremierBalls[];
 extern const u8 gText_ShopBuy[];
 extern const u8 gText_ShopSell[];
 extern const u8 gText_ShopQuit[];
+extern const u8 gText_ThatItemIsSoldOut[];
 extern const u8 gText_SoldOut[];
-extern const u8 gText_SoldOut2[];
 
 extern const u8 gText_OhABite[];
 extern const u8 gText_PokemonOnHook[];
@@ -3025,7 +3026,7 @@ extern const u8 gText_LoweringStats[];
 extern const u8 gText_KeepAnEyeOnHP[];
 extern const u8 gText_OakNoRunningFromATrainer[];
 extern const u8 gText_WinEarnsPrizeMoney[];
-extern const u8 gText_HowDissapointing[];
+extern const u8 gText_HowDisappointing[];
 extern const u8 gText_WhatWillOldManDo[];
 
 // credits

@@ -64,6 +64,7 @@
 #include "constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
+#include "constants/moves.h"
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
@@ -135,7 +136,7 @@ static void UpdateAllLinkPlayers(u16 *, s32);
 static u8 FlipVerticalAndClearForced(u8, u8);
 static u8 LinkPlayerGetCollision(u8, u8, s16, s16);
 static void CreateLinkPlayerSprite(u8, u8);
-static void GetLinkPlayerCoords(u8, u16 *, u16 *);
+static void GetLinkPlayerCoords(u8, s16 *, s16 *);
 static u8 GetLinkPlayerFacingDirection(u8);
 static u8 GetLinkPlayerElevation(u8);
 static u8 GetLinkPlayerIdAt(s16, s16);
@@ -860,7 +861,8 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     ResetFieldTasksArgs();
     RunOnResumeMapScript();
 
-    if (gMapHeader.regionMapSectionId != sLastMapSectionId)
+    if (gMapHeader.regionMapSectionId != MAPSEC_BATTLE_FRONTIER
+     || gMapHeader.regionMapSectionId != sLastMapSectionId)
         ShowMapNamePopup();
 }
 
@@ -956,7 +958,7 @@ static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *pla
         return PLAYER_AVATAR_FLAG_ON_FOOT;
     else if (mapType == MAP_TYPE_UNDERWATER)
         return PLAYER_AVATAR_FLAG_UNDERWATER;
-    else if (sub_8055B38(metatileBehavior) == TRUE)
+    else if (MetatileBehavior_IsSurfableInSeafoamIslands(metatileBehavior) == TRUE)
         return PLAYER_AVATAR_FLAG_ON_FOOT;
     else if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) == TRUE)
         return PLAYER_AVATAR_FLAG_SURFING;
@@ -970,7 +972,7 @@ static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *pla
         return PLAYER_AVATAR_FLAG_ACRO_BIKE;
 }
 
-bool8 sub_8055B38(u16 metatileBehavior)
+bool8 MetatileBehavior_IsSurfableInSeafoamIslands(u16 metatileBehavior)
 {
     if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) != TRUE)
         return FALSE;
@@ -1029,9 +1031,10 @@ static bool8 CanLearnFlashInParty(void)
     u8 i;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL))
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
+        if (!species)
             break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanMonLearnTMHM(&gPlayerParty[i], ITEM_HM05 - ITEM_TM01))
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanLearnTeachableMove(species, MOVE_FLASH))
             return TRUE;
     }
     return FALSE;
@@ -3046,7 +3049,7 @@ static u8 GetSpriteForLinkedPlayer(u8 linkPlayerId)
     return objEvent->spriteId;
 }
 
-static void GetLinkPlayerCoords(u8 linkPlayerId, u16 *x, u16 *y)
+static void GetLinkPlayerCoords(u8 linkPlayerId, s16 *x, s16 *y)
 {
     u8 objEventId = gLinkPlayerObjectEvents[linkPlayerId].objEventId;
     struct ObjectEvent *objEvent = &gObjectEvents[objEventId];
@@ -3101,7 +3104,7 @@ static void SetPlayerFacingDirection(u8 linkPlayerId, u8 facing)
     {
         if (facing > FACING_FORCED_RIGHT)
         {
-            objEvent->triggerGroundEffectsOnMove = 1;
+            objEvent->triggerGroundEffectsOnMove = TRUE;
         }
         else
         {
@@ -3250,7 +3253,7 @@ static void CreateLinkPlayerSprite(u8 linkPlayerId, u8 gameVersion)
         sprite = &gSprites[objEvent->spriteId];
         sprite->coordOffsetEnabled = TRUE;
         sprite->data[0] = linkPlayerId;
-        objEvent->triggerGroundEffectsOnMove = 0;
+        objEvent->triggerGroundEffectsOnMove = FALSE;
     }
 }
 

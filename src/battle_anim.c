@@ -26,7 +26,10 @@
 #define ANIM_SPRITE_INDEX_COUNT 8
 
 extern const u16 gMovesWithQuietBGM[];
+extern const u8 *const gBattleAnims_General[];
 extern const u8 *const gBattleAnims_Moves[];
+extern const u8 *const gBattleAnims_Special[];
+extern const u8 *const gBattleAnims_StatusConditions[];
 
 static void Cmd_loadspritegfx(void);
 static void Cmd_unloadspritegfx(void);
@@ -79,7 +82,6 @@ static void Cmd_stopsound(void);
 static void Cmd_createvisualtaskontargets(void);
 static void Cmd_createspriteontargets(void);
 static void Cmd_createspriteontargets_onpos(void);
-
 static void RunAnimScriptCommand(void);
 static void Task_UpdateMonBg(u8 taskId);
 static void FlipBattlerBgTiles(void);
@@ -114,6 +116,7 @@ EWRAM_DATA u8 gBattleAnimAttacker = 0;
 EWRAM_DATA u8 gBattleAnimTarget = 0;
 EWRAM_DATA u16 gAnimBattlerSpecies[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gAnimCustomPanning = 0;
+EWRAM_DATA static bool8 sAnimHideHpBoxes = FALSE;
 
 #include "data/battle_anim.h"
 
@@ -207,17 +210,64 @@ void DoMoveAnim(u16 move)
 {
     gBattleAnimAttacker = gBattlerAttacker;
     gBattleAnimTarget = gBattlerTarget;
-    LaunchBattleAnimation(gBattleAnims_Moves, move, TRUE);
+    // Make sure the anim target of moves hitting everyone is at the opposite side.
+    if (gMovesInfo[move].target & MOVE_TARGET_FOES_AND_ALLY && IsDoubleBattle())
+    {
+        while (GetBattlerSide(gBattleAnimAttacker) == GetBattlerSide(gBattleAnimTarget))
+        {
+            if (++gBattleAnimTarget >= MAX_BATTLERS_COUNT)
+                gBattleAnimTarget = 0;
+        }
+    }
+    LaunchBattleAnimation(ANIM_TYPE_MOVE, move);
 }
 
-void LaunchBattleAnimation(const u8 *const animsTable[], u16 tableId, bool8 isMoveAnim)
+void LaunchBattleAnimation(u32 animType, u32 animId)
 {
     s32 i;
+    const u8 *const *animsTable;
+
+    switch (animType)
+    {
+    case ANIM_TYPE_GENERAL:
+    default:
+        animsTable = gBattleAnims_General;
+        break;
+    case ANIM_TYPE_MOVE:
+        animsTable = gBattleAnims_Moves;
+        break;
+    case ANIM_TYPE_STATUS:
+        animsTable = gBattleAnims_StatusConditions;
+        break;
+    case ANIM_TYPE_SPECIAL:
+        animsTable = gBattleAnims_Special;
+        break;
+    }
+
+    sAnimHideHpBoxes = !(animType == ANIM_TYPE_MOVE && animId == MOVE_TRANSFORM);
+    if (animType != ANIM_TYPE_MOVE)
+    {
+        switch (animId)
+        {
+        case B_ANIM_TURN_TRAP:
+        case B_ANIM_LEECH_SEED_DRAIN:
+        case B_ANIM_MON_HIT:
+        case B_ANIM_SNATCH_MOVE:
+        case B_ANIM_FUTURE_SIGHT_HIT:
+        case B_ANIM_DOOM_DESIRE_HIT:
+        case B_ANIM_WISH_HEAL:
+            sAnimHideHpBoxes = TRUE;
+            break;
+        default:
+            sAnimHideHpBoxes = FALSE;
+            break;
+        }
+    }
 
     if (!IsContest())
     {
         InitPrioritiesForVisibleBattlers();
-        UpdateOamPriorityInAllHealthboxes(0);
+        UpdateOamPriorityInAllHealthboxes(0, sAnimHideHpBoxes);
         for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         {
             if (GetBattlerSide(i) != B_SIDE_PLAYER)
@@ -232,17 +282,17 @@ void LaunchBattleAnimation(const u8 *const animsTable[], u16 tableId, bool8 isMo
             gAnimBattlerSpecies[i] = gContestResources->moveAnim->species;
     }
 
-    if (!isMoveAnim)
+    if (animType != ANIM_TYPE_MOVE)
         gAnimMoveIndex = 0;
     else
-        gAnimMoveIndex = tableId;
+        gAnimMoveIndex = animId;
 
     for (i = 0; i < ANIM_ARGS_COUNT; i++)
         gBattleAnimArgs[i] = 0;
 
     sMonAnimTaskIdArray[0] = TASK_NONE;
     sMonAnimTaskIdArray[1] = TASK_NONE;
-    sBattleAnimScriptPtr = animsTable[tableId];
+    sBattleAnimScriptPtr = animsTable[animId];
     gAnimScriptActive = TRUE;
     sAnimFramesToWait = 0;
     gAnimScriptCallback = RunAnimScriptCommand;
@@ -250,11 +300,11 @@ void LaunchBattleAnimation(const u8 *const animsTable[], u16 tableId, bool8 isMo
     for (i = 0; i < ANIM_SPRITE_INDEX_COUNT; i++)
         sAnimSpriteIndexArray[i] = 0xFFFF;
 
-    if (isMoveAnim)
+    if (animType == ANIM_TYPE_MOVE)
     {
         for (i = 0; gMovesWithQuietBGM[i] != 0xFFFF; i++)
         {
-            if (tableId == gMovesWithQuietBGM[i])
+            if (animId == gMovesWithQuietBGM[i])
             {
                 m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 128);
                 break;
@@ -364,29 +414,45 @@ static void Cmd_unloadspritegfx(void)
 
 static u8 GetBattleAnimMoveTargets(u8 battlerArgIndex, u8 *targets)
 {
-    u8 numTargets = 1;
-    switch (gBattleMoves[gAnimMoveIndex].target)
+    u8 numTargets = 0;
+    u32 battlerAnimId = gBattleAnimArgs[battlerArgIndex];   // ANIM_xx input
+    u32 i;
+    u32 ignoredTgt = gBattlerAttacker;
+    u32 target = gMovesInfo[gAnimMoveIndex].target;
+    
+    switch (battlerAnimId)
     {
-    case MOVE_TARGET_BOTH:
-        targets[0] = gBattleAnimArgs[battlerArgIndex];
-        numTargets = 1;
-        if (IsBattlerAlive(targets[0] ^ BIT_FLANK)) {
-            targets[1] = targets[0] ^ BIT_FLANK;
-            numTargets++;
+    case ANIM_ATTACKER:
+    case ANIM_ATK_PARTNER:
+        ignoredTgt = gBattlerTarget;
+        break;
+    case ANIM_TARGET:
+    case ANIM_DEF_PARTNER:
+        ignoredTgt = gBattlerAttacker;
+        break;
+    }
+    
+    switch (target)
+    {
+    case MOVE_TARGET_FOES_AND_ALLY:
+        if (battlerAnimId == ANIM_ATTACKER)
+        {
+            targets[numTargets++] = gBattleAnimAttacker;
+        }
+        else
+        {
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (i != gBattleAnimAttacker && IS_ALIVE_AND_PRESENT(i))
+                    targets[numTargets++] = i + MAX_BATTLERS_COUNT; // anim ids for battler ids
+            }
         }
         break;
-    case MOVE_TARGET_FOES_AND_ALLY:
-        targets[0] = gBattleAnimArgs[battlerArgIndex];
-        numTargets = 1;
-        
-        if (IsBattlerAlive(targets[0] ^ BIT_FLANK)) {
-            targets[1] = targets[0] ^ BIT_FLANK;
-            numTargets++;
-        }
-        
-        if (IsBattlerAlive(gBattleAnimAttacker ^ BIT_FLANK)) {
-            targets[2] = gBattleAnimAttacker ^ BIT_FLANK; 
-            numTargets++;
+    case MOVE_TARGET_BOTH: // all opponents
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (i != ignoredTgt && !IsAlly(i, ignoredTgt) && IS_ALIVE_AND_PRESENT(i))
+                targets[numTargets++] = i + MAX_BATTLERS_COUNT;
         }
         break;
     default:
@@ -394,14 +460,14 @@ static u8 GetBattleAnimMoveTargets(u8 battlerArgIndex, u8 *targets)
         numTargets = 1;
         break;
     }
-    
+
     return numTargets;
 }
 
 static s16 GetSubpriorityForMoveAnim(u8 argVar)
 {
     s16 subpriority;
-    
+
     if (argVar & ANIMSPRITE_IS_TARGET)
     {
         argVar ^= ANIMSPRITE_IS_TARGET;
@@ -424,7 +490,7 @@ static s16 GetSubpriorityForMoveAnim(u8 argVar)
 
     if (subpriority < 3)
         subpriority = 3;
-    
+
     return subpriority;
 }
 
@@ -451,65 +517,49 @@ static void Cmd_createsprite(void)
         sBattleAnimScriptPtr += 2;
     }
 
-    if (argVar & ANIMSPRITE_IS_TARGET)
-    {
-        argVar ^= ANIMSPRITE_IS_TARGET;
-        if (argVar >= 64)
-            argVar -= 64;
-        else
-            argVar *= -1;
+    subpriority = GetSubpriorityForMoveAnim(argVar);
 
-        subpriority = GetBattlerSpriteSubpriority(gBattleAnimTarget) + (s8)(argVar);
-    }
-    else
-    {
-        if (argVar >= 64)
-            argVar -= 64;
-        else
-            argVar *= -1;
-
-        subpriority = GetBattlerSpriteSubpriority(gBattleAnimAttacker) + (s8)(argVar);
-    }
-
-    if (subpriority < 3)
-        subpriority = 3;
-
-    CreateSpriteAndAnimate(
-        template,
+    if (CreateSpriteAndAnimate(template,
         GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2),
         GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET),
-        subpriority);
-    gAnimVisualTaskCount++;
+        subpriority) != MAX_SPRITES) // Don't increment the task count if the sprite couldn't be created(i.e. there are too many created sprites atm).
+     {
+         gAnimVisualTaskCount++;
+     }
 }
 
 static void CreateSpriteOnTargets(const struct SpriteTemplate *template, u8 argVar, u8 battlerArgIndex, u8 argsCount, bool32 overwriteAnimTgt)
 {
-    u32 i;
+    u32 i, battler;
     u8 targets[MAX_BATTLERS_COUNT];
     int ntargets;
     s16 subpriority;
-    
+
     for (i = 0; i < argsCount; i++)
     {
         gBattleAnimArgs[i] = T1_READ_16(sBattleAnimScriptPtr);
         sBattleAnimScriptPtr += 2;
     }
-    
+
     subpriority = GetSubpriorityForMoveAnim(argVar);
-    
+
     ntargets = GetBattleAnimMoveTargets(battlerArgIndex, targets);
-    
-    for (i = 0; i < ntargets; i++) {
-        
+    if (ntargets == 0)
+        return;
+
+    for (i = 0; i < ntargets; i++)
+    {
+        battler = GetAnimBattlerId(targets[i]);
         if (overwriteAnimTgt)
             gBattleAnimArgs[battlerArgIndex] = targets[i];
-        
-        CreateSpriteAndAnimate(
-            template,
-            GetBattlerSpriteCoord(targets[i], BATTLER_COORD_X_2),
-            GetBattlerSpriteCoord(targets[i], BATTLER_COORD_Y_PIC_OFFSET),
-            subpriority);
-        gAnimVisualTaskCount++;
+
+        if (CreateSpriteAndAnimate(template,
+            GetBattlerSpriteCoord(battler, BATTLER_COORD_X_2),
+            GetBattlerSpriteCoord(battler, BATTLER_COORD_Y_PIC_OFFSET),
+            subpriority) != MAX_SPRITES) // Don't increment the task count if the sprite couldn't be created(i.e. there are too many created sprites atm).
+        {
+            gAnimVisualTaskCount++;
+        }
     }
 }
 
@@ -527,13 +577,13 @@ static void Cmd_createspriteontargets_onpos(void)
 
     argVar = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     battlerArgIndex = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
 
     argsCount = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, FALSE);
 }
 
@@ -551,13 +601,13 @@ static void Cmd_createspriteontargets(void)
 
     argVar = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     battlerArgIndex = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
 
     argsCount = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, TRUE);
 }
 
@@ -608,21 +658,24 @@ static void Cmd_createvisualtaskontargets(void)
 
     taskPriority = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     battlerArgIndex = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
 
     numArgs = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
-    
+
     // copy task arguments
-    for (i = 0; i < numArgs; i++) {
+    for (i = 0; i < numArgs; i++)
+    {
         gBattleAnimArgs[i] = T1_READ_16(sBattleAnimScriptPtr);
         sBattleAnimScriptPtr += 2;
     }
-    
+
     numArgs = GetBattleAnimMoveTargets(battlerArgIndex, targets);
-    
+    if (numArgs == 0)
+        return;
+
     for (i = 0; i < numArgs; i++)
     {
         gBattleAnimArgs[battlerArgIndex] = targets[i];
@@ -712,7 +765,8 @@ static void Cmd_end(void)
         if (!IsContest())
         {
             InitPrioritiesForVisibleBattlers();
-            UpdateOamPriorityInAllHealthboxes(1);
+            UpdateOamPriorityInAllHealthboxes(1, sAnimHideHpBoxes);
+            sAnimHideHpBoxes = FALSE;
         }
         gAnimScriptActive = FALSE;
     }
@@ -839,14 +893,20 @@ static void Cmd_monbg(void)
 
 u8 GetAnimBattlerId(u8 wantedBattler)
 {
-    if (wantedBattler == ANIM_ATTACKER)
+    switch (wantedBattler)
+    {
+    case ANIM_ATTACKER:
+    default:
         return gBattleAnimAttacker;
-    else if (wantedBattler == ANIM_TARGET)
+    case ANIM_TARGET:
         return gBattleAnimTarget;
-    else if (wantedBattler == ANIM_ATK_PARTNER)
+    case ANIM_ATK_PARTNER:
         return BATTLE_PARTNER(gBattleAnimAttacker);
-    else
+    case ANIM_DEF_PARTNER:
         return BATTLE_PARTNER(gBattleAnimTarget);
+    case ANIM_PLAYER_LEFT ... ANIM_OPPONENT_RIGHT:
+        return wantedBattler - MAX_BATTLERS_COUNT;
+    }
 }
 
 bool8 IsBattlerSpriteVisible(u8 battlerId)

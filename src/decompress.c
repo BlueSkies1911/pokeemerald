@@ -49,6 +49,16 @@ void LoadCompressedSpritePalette(const struct CompressedSpritePalette *src)
     LoadSpritePalette(&dest);
 }
 
+void LoadCompressedSpritePaletteWithTag(const u32 *pal, u16 tag)
+{
+    struct SpritePalette dest;
+
+    LZ77UnCompWram(pal, gDecompressionBuffer);
+    dest.data = (void *) gDecompressionBuffer;
+    dest.tag = tag;
+    LoadSpritePalette(&dest);
+}
+
 void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePalette *src, void *buffer)
 {
     struct SpritePalette dest;
@@ -59,12 +69,9 @@ void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePale
     LoadSpritePalette(&dest);
 }
 
-void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void *buffer, s32 species)
+void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void *buffer)
 {
-    if (species > NUM_SPECIES)
-        LZ77UnCompWram(gMonFrontPicTable[0].data, buffer);
-    else
-        LZ77UnCompWram(src->data, buffer);
+    LZ77UnCompWram(src->data, buffer);
 }
 
 void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, s32 species, u32 personality)
@@ -74,19 +81,21 @@ void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, s32 species, u32 pe
 
 void LoadSpecialPokePic(void *dest, s32 species, u32 personality, bool8 isFrontPic)
 {
-    if (species > NUM_SPECIES) // is species unknown? draw the ? icon
+    species = SanitizeSpeciesId(species);
+
+    if (isFrontPic)
     {
-        if (isFrontPic)
-            LZ77UnCompWram(gMonFrontPicTable[0].data, dest);
+        if (gSpeciesInfo[species].frontPic != NULL)
+            LZ77UnCompWram(gSpeciesInfo[species].frontPic, dest);
         else
-            LZ77UnCompWram(gMonBackPicTable[0].data, dest);
+            LZ77UnCompWram(gSpeciesInfo[SPECIES_NONE].frontPic, dest);
     }
     else
     {
-        if (isFrontPic)
-            LZ77UnCompWram(gMonFrontPicTable[species].data, dest);
+        if (gSpeciesInfo[species].backPic != NULL)
+            LZ77UnCompWram(gSpeciesInfo[species].backPic, dest);
         else
-            LZ77UnCompWram(gMonBackPicTable[species].data, dest);
+            LZ77UnCompWram(gSpeciesInfo[SPECIES_NONE].backPic, dest);
     }
 }
 
