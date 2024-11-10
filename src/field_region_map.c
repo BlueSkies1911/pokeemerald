@@ -20,7 +20,7 @@
  *
  *  For the region map in the pokenav, see pokenav_region_map.c
  *  For the region map in the pokedex, see pokdex_area_screen.c/pokedex_area_region_map.c
- *  For the fly map, and utility functions all of the maps use, see region_map.c
+ *  For the teleport map, and utility functions all of the maps use, see region_map.c
  */
 
 enum {

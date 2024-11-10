@@ -52,7 +52,7 @@ CeruleanCity_House1_EventScript_DescribeCascadeBadge::
     end
 
 CeruleanCity_House1_EventScript_DescribeThunderBadge::
-    msgbox CeruleanCity_House1_Text_SpeedStatFly, MSGBOX_DEFAULT
+    msgbox CeruleanCity_House1_Text_SpeedStatRockSmash, MSGBOX_DEFAULT
     goto CeruleanCity_House1_EventScript_DescribeAnotherBadge
     end
 
@@ -67,7 +67,7 @@ CeruleanCity_House1_EventScript_DescribeSoulBadge::
     end
 
 CeruleanCity_House1_EventScript_DescribeMarshBadge::
-    msgbox CeruleanCity_House1_Text_ObeyLv70RockSmash, MSGBOX_DEFAULT
+    msgbox CeruleanCity_House1_Text_ObeyLv70Teleport, MSGBOX_DEFAULT
     goto CeruleanCity_House1_EventScript_DescribeAnotherBadge
     end
 
@@ -117,11 +117,11 @@ CeruleanCity_House1_Text_ObeyLv30Cut::
     .string "It also lets you use the move\n"
     .string "Cut outside of battle.$"
 
-CeruleanCity_House1_Text_SpeedStatFly::
+CeruleanCity_House1_Text_SpeedStatRockSmash::
     .string "The Speed stat of all your\n"
     .string "Pokémon increases a little bit.\p"
     .string "It also lets you use the move\n"
-    .string "Fly outside of battle.$"
+    .string "Rock Smash outside of battle.$"
 
 CeruleanCity_House1_Text_ObeyLv50Strength::
     .string "Pokémon up to Lv. 50 will obey\n"
@@ -139,7 +139,7 @@ CeruleanCity_House1_Text_DefenseStatSurf::
     .string "It also lets you use the move\n"
     .string "Surf outside of battle.$"
 
-CeruleanCity_House1_Text_ObeyLv70RockSmash::
+CeruleanCity_House1_Text_ObeyLv70Teleport::
     .string "Pokémon up to Lv. 70 will obey\n"
     .string "you.\p"
     .string "That includes even outsiders you\n"
@@ -147,7 +147,7 @@ CeruleanCity_House1_Text_ObeyLv70RockSmash::
     .string "Pokémon of higher levels will\n"
     .string "be unruly in battle, however.\p"
     .string "It also lets you use the move\n"
-    .string "Rock Smash outside of battle.$"
+    .string "Teleport outside of battle.$"
 
 CeruleanCity_House1_Text_SpStatsWaterfall::
     .string "The Sp. Atk and Sp. Def stats of\n"

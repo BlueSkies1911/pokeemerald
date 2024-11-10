@@ -381,18 +381,6 @@ void DoWhiteOut(void)
     WarpIntoMap();
 }
 
-void Overworld_ResetStateAfterFly(void)
-{
-    ResetInitialPlayerAvatarState();
-    FlagClear(FLAG_SYS_CYCLING_ROAD);
-    VarSet(VAR_MAP_SCENE_ROUTE16, 0);
-    FlagClear(FLAG_SYS_CRUISE_MODE);
-    FlagClear(FLAG_SYS_SAFARI_MODE);
-    VarSet(VAR_MAP_SCENE_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE, 0);
-    FlagClear(FLAG_SYS_USE_STRENGTH);
-    FlagClear(FLAG_SYS_USE_FLASH);
-}
-
 void Overworld_ResetStateAfterTeleport(void)
 {
     ResetInitialPlayerAvatarState();
@@ -1395,7 +1383,7 @@ bool8 IsMapTypeOutdoors(u8 mapType)
         return FALSE;
 }
 
-bool8 Overworld_MapTypeAllowsTeleportAndFly(u8 mapType)
+bool8 Overworld_MapTypeAllowsTeleport(u8 mapType)
 {
     if (mapType == MAP_TYPE_ROUTE
      || mapType == MAP_TYPE_TOWN

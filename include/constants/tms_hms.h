@@ -105,7 +105,7 @@
 
 #define FOREACH_HM(F) \
     F(CUT) \
-    F(FLY) \
+    F(TELEPORT) \
     F(SURF) \
     F(STRENGTH) \
     F(FLASH) \

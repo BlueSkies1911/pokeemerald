@@ -922,31 +922,6 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_MountainDisguise = {
     .callback = UpdateDisguiseFieldEffect,
 };
 
-static const struct SpriteFrameImage sPicTable_Bird[] = {
-    obj_frame_tiles(gFieldEffectObjectPic_Bird),
-};
-
-static const union AnimCmd sAnim_Bird[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-
-static const union AnimCmd *const sAnimTable_Bird[] =
-{
-    sAnim_Bird,
-};
-
-const struct SpriteTemplate gFieldEffectObjectTemplate_Bird = {
-    .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_PLAYER,
-    .oam = &gObjectEventBaseOam_32x32,
-    .anims = sAnimTable_Bird,
-    .images = sPicTable_Bird,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCallbackDummy,
-};
-
 static const struct SpriteFrameImage sPicTable_ShortGrass[] = {
     overworld_frame(gFieldEffectObjectPic_ShortGrass, 2, 2, 0),
     overworld_frame(gFieldEffectObjectPic_ShortGrass, 2, 2, 1),

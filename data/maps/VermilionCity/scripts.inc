@@ -1,4 +1,4 @@
-.equ LOCALID_FERRY_SAILOR, 6
+.equ LOCALID_FERRY_SAILOR, 12
 
 VermilionCity_MapScripts::
     map_script MAP_SCRIPT_ON_TRANSITION, VermilionCity_OnTransition
@@ -50,8 +50,20 @@ VermilionCity_EventScript_OldMan1SSAnneLeft::
     release
     end
 
-VermilionCity_EventScript_OldMan2::
-    msgbox VermilionCity_Text_BuildingOnThisLand, MSGBOX_NPC
+VermilionCity_EventScript_RockSmashMan::
+    lock
+    faceplayer
+    goto_if_set FLAG_GOT_HM06, VermilionCity_EventScript_AlreadyGotHM06
+    msgbox VermilionCity_Text_BuildingOnThisLand, MSGBOX_DEFAULT
+    giveitem ITEM_HM06
+    setflag FLAG_GOT_HM06
+    msgbox VermilionCity_Text_ExplainHM06, MSGBOX_DEFAULT
+    release
+    end
+
+VermilionCity_EventScript_AlreadyGotHM06::
+    msgbox VermilionCity_Text_ExplainHM06, MSGBOX_DEFAULT
+    release
     end
 
 VermilionCity_EventScript_Machop::
@@ -300,7 +312,17 @@ VermilionCity_Text_BuildingOnThisLand::
     .string "I'm putting up a building on this\n"
     .string "plot of land. I own it all.\p"
     .string "My Pokémon is tamping the land\n"
-    .string "to lay the foundation.$"
+    .string "to lay the foundation but I\l"
+    .string "could really use your help!\p"
+    .string "Here, take this!\n"
+    .string "Use it to help smash the rocks!$"
+
+VermilionCity_Text_ExplainHM06::
+    .string "You can use Rock Smash to\n"
+    .string "shatter boulders as if they\l"
+    .string "were made of crackers.\p"
+    .string "However, you will need the\n"
+    .string "Badge from Vermillion's Gym.$"
 
 VermilionCity_Text_Machop::
     .string "Machop: Guoh! Gogogoh!$"

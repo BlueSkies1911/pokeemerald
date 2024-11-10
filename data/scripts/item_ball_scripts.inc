@@ -266,6 +266,10 @@ SeafoamIslands_B2F_EventScript_ItemBigPearl::
     finditem ITEM_BIG_PEARL
     end
 
+SeafoamIslands_B3F_EventScript_ItemHM07::
+	finditem ITEM_HM07
+	end
+
 SeafoamIslands_B4F_EventScript_ItemUltraBall::
     finditem ITEM_ULTRA_BALL
     end

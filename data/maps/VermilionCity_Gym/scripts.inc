@@ -339,8 +339,8 @@ VermilionCity_Gym_Text_ReceivedThunderBadge::
 VermilionCity_Gym_Text_ExplainThunderBadgeTakeThis::
     .string "The ThunderBadge cranks up your\n"
     .string "Pokémon's Speed!\p"
-    .string "It also lets your Pokémon fly\n"
-    .string "lightning-quick anytime, kid!\p"
+    .string "It also lets your Pokémon smash\n"
+    .string "rocks lightning-fast anytime, kid!\p"
     .string "You're special, kid!\n"
     .string "Take this!$"
 

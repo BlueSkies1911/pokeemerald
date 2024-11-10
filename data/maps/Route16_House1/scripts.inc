@@ -46,7 +46,7 @@ Route16_House_Text_ReceivedHM02FromGirl::
     .string "from the girl.$"
 
 Route16_House_Text_ExplainHM02::
-    .string "HM02 is Fly.\n"
+    .string "HM02 is Teleport.\n"
     .string "It's a wonderfully convenient move.\p"
     .string "Please, put it to good use.$"
 

@@ -32,9 +32,6 @@ gFieldEffectScriptPointers::
 	.4byte gFieldEffectScript_UseSecretPowerShrub       @ FLDEFF_USE_SECRET_POWER_SHRUB
 	.4byte gFieldEffectScript_TreeDisguise              @ FLDEFF_TREE_DISGUISE
 	.4byte gFieldEffectScript_MountainDisguise          @ FLDEFF_MOUNTAIN_DISGUISE
-	.4byte gFieldEffectScript_NPCUseFly                 @ FLDEFF_NPCFLY_OUT
-	.4byte gFieldEffectScript_UseFly                    @ FLDEFF_USE_FLY
-	.4byte gFieldEffectScript_FlyIn                     @ FLDEFF_FLY_IN
 	.4byte gFieldEffectScript_QuestionMarkIcon          @ FLDEFF_QUESTION_MARK_ICON
 	.4byte gFieldEffectScript_FeetInFlowingWater        @ FLDEFF_FEET_IN_FLOWING_WATER
 	.4byte gFieldEffectScript_BikeTireTracks            @ FLDEFF_BIKE_TIRE_TRACKS
@@ -172,18 +169,6 @@ gFieldEffectScript_TreeDisguise::
 
 gFieldEffectScript_MountainDisguise::
 	field_eff_callnative ShowMountainDisguiseFieldEffect
-	field_eff_end
-
-gFieldEffectScript_NPCUseFly::
-	field_eff_callnative FldEff_NPCFlyOut
-	field_eff_end
-
-gFieldEffectScript_UseFly::
-	field_eff_callnative FldEff_UseFly
-	field_eff_end
-
-gFieldEffectScript_FlyIn::
-	field_eff_callnative FldEff_FlyIn
 	field_eff_end
 
 gFieldEffectScript_QuestionMarkIcon::

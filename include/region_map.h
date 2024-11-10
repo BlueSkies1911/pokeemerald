@@ -19,8 +19,8 @@ enum
 enum {
     MAPSECTYPE_NONE,
     MAPSECTYPE_ROUTE,
-    MAPSECTYPE_CITY_CANFLY,
-    MAPSECTYPE_CITY_CANTFLY,
+    MAPSECTYPE_CITY_CANTELEPORT,
+    MAPSECTYPE_CITY_CANTTELEPORT,
     MAPSECTYPE_BATTLE_FRONTIER,
     NUM_MAPSEC_TYPES
 };
@@ -109,7 +109,7 @@ u8 *GetMapNameHandleAquaHideout(u8 *dest, u16 mapSecId);
 u16 CorrectSpecialMapSecId(u16 mapSecId);
 void ShowRegionMapForPokedexAreaScreen(struct RegionMap *regionMap);
 void PokedexAreaScreen_UpdateRegionMapVariablesAndVideoRegs(s16 x, s16 y);
-void CB2_OpenFlyMap(void);
+void CB2_OpenTeleportMap(void);
 bool8 IsRegionMapZoomed(void);
 void TrySetPlayerIconBlink(void);
 void BlendRegionMap(u16 color, u32 coeff);

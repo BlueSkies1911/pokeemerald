@@ -119,13 +119,12 @@ enum {
 enum {
     FIELD_MOVE_FLASH,       // FLAG_BADGE01_GET
     FIELD_MOVE_CUT,         // FLAG_BADGE02_GET
-    FIELD_MOVE_FLY,         // FLAG_BADGE03_GET
+    FIELD_MOVE_ROCK_SMASH,  // FLAG_BADGE03_GET
     FIELD_MOVE_STRENGTH,    // FLAG_BADGE04_GET
     FIELD_MOVE_SURF,        // FLAG_BADGE05_GET
-    FIELD_MOVE_ROCK_SMASH,  // FLAG_BADGE06_GET
+    FIELD_MOVE_TELEPORT,    // FLAG_BADGE06_GET
     FIELD_MOVE_DIVE,        // FLAG_BADGE07_GET
     FIELD_MOVE_WATERFALL,   // FLAG_BADGE08_GET
-    FIELD_MOVE_TELEPORT,
     FIELD_MOVE_DIG,
     FIELD_MOVE_SECRET_POWER,
     FIELD_MOVE_MILK_DRINK,
@@ -492,7 +491,7 @@ static void CursorCb_Trade2(u8);
 static void CursorCb_Toss(u8);
 static void CursorCb_FieldMove(u8);
 static bool8 SetUpFieldMove_Surf(void);
-static bool8 SetUpFieldMove_Fly(void);
+static bool8 SetUpFieldMove_Teleport(void);
 static bool8 SetUpFieldMove_Waterfall(void);
 static bool8 SetUpFieldMove_Dive(void);
 static void ShowMoveSelectWindow(u8 slot);
@@ -2820,8 +2819,8 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
             {
                 // If Mon already knows CUT and the HM is in the bag, prevent it from being added to action list
                 if (sFieldMoves[j] != MOVE_CUT || !CheckBagHasItem(ITEM_HM01_CUT, 1)){
-                    // If Mon already knows FLY and the HM is in the bag, prevent it from being added to action list
-                    if (sFieldMoves[j] != MOVE_FLY || !CheckBagHasItem(ITEM_HM02_FLY, 1)){ 
+                    // If Mon already knows TELEPORT and the HM is in the bag, prevent it from being added to action list
+                    if (sFieldMoves[j] != MOVE_TELEPORT || !CheckBagHasItem(ITEM_HM02_TELEPORT, 1)){ 
                         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                     }
                 }
@@ -2835,9 +2834,9 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     // If Mon can learn HM01 and action list consists of < 4 moves, add CUT to action list
     if (sPartyMenuInternal->numActions < 5 && CanLearnTeachableMove(species, MOVE_CUT) && CheckBagHasItem(ITEM_HM01_CUT, 1)) 
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, 1 + MENU_FIELD_MOVES);
-    // If Mon can learn HM02 and action list consists of < 4 moves, add FLY to action list
-    if (sPartyMenuInternal->numActions < 5 && CanLearnTeachableMove(species, MOVE_FLY) && CheckBagHasItem(ITEM_HM02_FLY, 1)) 
-        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, 2 + MENU_FIELD_MOVES);
+    // If Mon can learn HM02 and action list consists of < 4 moves, add TELEPORT to action list
+    if (sPartyMenuInternal->numActions < 5 && CanLearnTeachableMove(species, MOVE_TELEPORT) && CheckBagHasItem(ITEM_HM02_TELEPORT, 1)) 
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, 5 + MENU_FIELD_MOVES);
 
     if (!InBattlePike())
     {
@@ -3958,11 +3957,8 @@ static void CursorCb_FieldMove(u8 taskId)
                 ChooseMonForSoftboiled(taskId);
                 break;
             case FIELD_MOVE_TELEPORT:
-                mapHeader = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->lastHealLocation.mapGroup, gSaveBlock1Ptr->lastHealLocation.mapNum);
-                GetMapNameGeneric(gStringVar1, mapHeader->regionMapSectionId);
-                StringExpandPlaceholders(gStringVar4, gText_ReturnToHealingSpot);
-                DisplayFieldMoveExitAreaMessage(taskId);
-                sPartyMenuInternal->data[0] = fieldMove;
+                gPartyMenu.exitCallback = CB2_OpenTeleportMap;
+                Task_ClosePartyMenu(taskId);
                 break;
             case FIELD_MOVE_DIG:
                 mapHeader = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->escapeWarp.mapGroup, gSaveBlock1Ptr->escapeWarp.mapNum);
@@ -3970,10 +3966,6 @@ static void CursorCb_FieldMove(u8 taskId)
                 StringExpandPlaceholders(gStringVar4, gText_EscapeFromHere);
                 DisplayFieldMoveExitAreaMessage(taskId);
                 sPartyMenuInternal->data[0] = fieldMove;
-                break;
-            case FIELD_MOVE_FLY:
-                gPartyMenu.exitCallback = CB2_OpenFlyMap;
-                Task_ClosePartyMenu(taskId);
                 break;
             default:
                 gPartyMenu.exitCallback = CB2_ReturnToField;
@@ -4111,15 +4103,15 @@ static void DisplayCantUseSurfMessage(void)
     }
 }
 
-static bool8 SetUpFieldMove_Fly(void)
+static bool8 SetUpFieldMove_Teleport(void)
 {
-    if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) == TRUE)
+    if (Overworld_MapTypeAllowsTeleport(gMapHeader.mapType) == TRUE)
         return TRUE;
     else
         return FALSE;
 }
 
-void CB2_ReturnToPartyMenuFromFlyMap(void)
+void CB2_ReturnToPartyMenuFromTeleportMap(void)
 {
     InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, CB2_ReturnToFieldWithOpenMenu);
 }
@@ -5207,7 +5199,7 @@ int MoveToHM(u16 move)
     case MOVE_CUT:
         item = ITEM_HM01;
         break;
-    case MOVE_FLY:
+    case MOVE_TELEPORT:
         item = ITEM_HM02;
         break;
     case MOVE_SURF:

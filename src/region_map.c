@@ -29,7 +29,7 @@
 #include "constants/weather.h"
 
 /*
- *  This file handles region maps generally, and the map used when selecting a fly destination.
+ *  This file handles region maps generally, and the map used when selecting a teleport destination.
  *  Specific features of other region map uses are handled elsewhere
  *
  *  For the region map in the pokenav, see pokenav_region_map.c
@@ -45,22 +45,22 @@
 #define MAPCURSOR_X_MAX (MAPCURSOR_X_MIN + MAP_WIDTH - 1)
 #define MAPCURSOR_Y_MAX (MAPCURSOR_Y_MIN + MAP_HEIGHT - 1)
 
-#define FLYDESTICON_RED_OUTLINE 6
+#define TELEPORTDESTICON_RED_OUTLINE 6
 
 enum {
     TAG_CURSOR,
     TAG_PLAYER_ICON,
-    TAG_FLY_ICON,
+    TAG_TELEPORT_ICON,
 };
 
-// Window IDs for the fly map
+// Window IDs for the teleport map
 enum {
     WIN_MAPSEC_NAME,
-    WIN_MAPSEC_NAME_TALL, // For fly destinations with subtitles (just Ever Grande)
-    WIN_FLY_TO_WHERE,
+    WIN_MAPSEC_NAME_TALL, // For teleport destinations with subtitles (just Ever Grande)
+    WIN_TELEPORT_TO_WHERE,
 };
 
-struct MultiNameFlyDest
+struct MultiNameTeleportDest
 {
     const u8 *const *name;
     u16 mapSecId;
@@ -76,10 +76,10 @@ static EWRAM_DATA struct {
     struct RegionMap regionMap;
     u8 tileBuffer[0x1c0];
     u8 nameBuffer[0x26]; // never read
-    bool8 choseFlyLocation;
-} *sFlyMap = NULL;
+    bool8 choseTeleportLocation;
+} *sTeleportMap = NULL;
 
-static bool32 sDrawFlyDestTextWindow;
+static bool32 sDrawTeleportDestTextWindow;
 
 static u8 ProcessRegionMapInput_Full(void);
 static u8 MoveRegionMapCursor_Full(void);
@@ -102,17 +102,17 @@ static void UnhideRegionMapPlayerIcon(void);
 static void SpriteCB_PlayerIconMapZoomed(struct Sprite *sprite);
 static void SpriteCB_PlayerIconMapFull(struct Sprite *sprite);
 static void SpriteCB_PlayerIcon(struct Sprite *sprite);
-static void VBlankCB_FlyMap(void);
-static void CB2_FlyMap(void);
-static void SetFlyMapCallback(void callback(void));
-static void DrawFlyDestTextWindow(void);
-static void LoadFlyDestIcons(void);
-static void CreateFlyDestIcons(void);
-static void TryCreateRedOutlineFlyDestIcons(void);
-static void SpriteCB_FlyDestIcon(struct Sprite *sprite);
-static void CB_FadeInFlyMap(void);
-static void CB_HandleFlyMapInput(void);
-static void CB_ExitFlyMap(void);
+static void VBlankCB_TeleportMap(void);
+static void CB2_TeleportMap(void);
+static void SetTeleportMapCallback(void callback(void));
+static void DrawTeleportDestTextWindow(void);
+static void LoadTeleportDestIcons(void);
+static void CreateTeleportDestIcons(void);
+static void TryCreateRedOutlineTeleportDestIcons(void);
+static void SpriteCB_TeleportDestIcon(struct Sprite *sprite);
+static void CB_FadeInTeleportMap(void);
+static void CB_HandleTeleportMapInput(void);
+static void CB_ExitTeleportMap(void);
 
 static const u16 sRegionMapCursorPal[] = INCBIN_U16("graphics/pokenav/region_map/cursor.gbapal");
 static const u32 sRegionMapCursorSmallGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/cursor_small.4bpp.lz");
@@ -237,8 +237,8 @@ static const u8 sMapSecIdsOffMap[] =
 static const u16 sRegionMapFramePal[] = INCBIN_U16("graphics/pokenav/region_map/frame.gbapal");
 static const u32 sRegionMapFrameGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/frame.4bpp.lz");
 static const u32 sRegionMapFrameTilemapLZ[] = INCBIN_U32("graphics/pokenav/region_map/frame.bin.lz");
-static const u16 sFlyTargetIcons_Pal[] = INCBIN_U16("graphics/pokenav/region_map/fly_target_icons.gbapal");
-static const u32 sFlyTargetIcons_Gfx[] = INCBIN_U32("graphics/pokenav/region_map/fly_target_icons.4bpp.lz");
+static const u16 sTeleportTargetIcons_Pal[] = INCBIN_U16("graphics/pokenav/region_map/teleport_target_icons.gbapal");
+static const u32 sTeleportTargetIcons_Gfx[] = INCBIN_U32("graphics/pokenav/region_map/teleport_target_icons.4bpp.lz");
 
 static const u8 sMapHealLocations[][3] =
 {
@@ -310,7 +310,7 @@ static const u8 *const sEverGrandeCityNames[] =
     gText_PokemonCenter
 };
 
-static const struct MultiNameFlyDest sMultiNameFlyDestinations[] =
+static const struct MultiNameTeleportDest sMultiNameTeleportDestinations[] =
 {
     {
         .name = sEverGrandeCityNames,
@@ -319,7 +319,7 @@ static const struct MultiNameFlyDest sMultiNameFlyDestinations[] =
     }
 };
 
-static const struct BgTemplate sFlyMapBgTemplates[] =
+static const struct BgTemplate sTeleportMapBgTemplates[] =
 {
     {
         .bg = 0,
@@ -347,7 +347,7 @@ static const struct BgTemplate sFlyMapBgTemplates[] =
     }
 };
 
-static const struct WindowTemplate sFlyMapWindowTemplates[] =
+static const struct WindowTemplate sTeleportMapWindowTemplates[] =
 {
     [WIN_MAPSEC_NAME] = {
         .bg = 0,
@@ -367,7 +367,7 @@ static const struct WindowTemplate sFlyMapWindowTemplates[] =
         .paletteNum = 15,
         .baseBlock = 0x19
     },
-    [WIN_FLY_TO_WHERE] = {
+    [WIN_TELEPORT_TO_WHERE] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 18,
@@ -379,13 +379,13 @@ static const struct WindowTemplate sFlyMapWindowTemplates[] =
     DUMMY_WIN_TEMPLATE
 };
 
-static const struct SpritePalette sFlyTargetIconsSpritePalette =
+static const struct SpritePalette sTeleportTargetIconsSpritePalette =
 {
-    .data = sFlyTargetIcons_Pal,
-    .tag = TAG_FLY_ICON
+    .data = sTeleportTargetIcons_Pal,
+    .tag = TAG_TELEPORT_ICON
 };
 
-static const u16 sRedOutlineFlyDestinations[][2] =
+static const u16 sRedOutlineTeleportDestinations[][2] =
 {
     {
         FLAG_LANDMARK_BATTLE_FRONTIER,
@@ -397,73 +397,73 @@ static const u16 sRedOutlineFlyDestinations[][2] =
     }
 };
 
-static const struct OamData sFlyDestIcon_OamData =
+static const struct OamData sTeleportDestIcon_OamData =
 {
     .shape = SPRITE_SHAPE(8x8),
     .size = SPRITE_SIZE(8x8),
     .priority = 2
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_8x8CanFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_8x8CanTeleport[] =
 {
     ANIMCMD_FRAME( 0, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_16x8CanFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_16x8CanTeleport[] =
 {
     ANIMCMD_FRAME( 1, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_8x16CanFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_8x16CanTeleport[] =
 {
     ANIMCMD_FRAME( 3, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_8x8CantFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_8x8CantTeleport[] =
 {
     ANIMCMD_FRAME( 5, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_16x8CantFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_16x8CantTeleport[] =
 {
     ANIMCMD_FRAME( 6, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd sFlyDestIcon_Anim_8x16CantFly[] =
+static const union AnimCmd sTeleportDestIcon_Anim_8x16CantTeleport[] =
 {
     ANIMCMD_FRAME( 8, 5),
     ANIMCMD_END
 };
 
 // Only used by Battle Frontier
-static const union AnimCmd sFlyDestIcon_Anim_RedOutline[] =
+static const union AnimCmd sTeleportDestIcon_Anim_RedOutline[] =
 {
     ANIMCMD_FRAME(10, 5),
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sFlyDestIcon_Anims[] =
+static const union AnimCmd *const sTeleportDestIcon_Anims[] =
 {
-    [SPRITE_SHAPE(8x8)]       = sFlyDestIcon_Anim_8x8CanFly,
-    [SPRITE_SHAPE(16x8)]      = sFlyDestIcon_Anim_16x8CanFly,
-    [SPRITE_SHAPE(8x16)]      = sFlyDestIcon_Anim_8x16CanFly,
-    [SPRITE_SHAPE(8x8)  + 3]  = sFlyDestIcon_Anim_8x8CantFly,
-    [SPRITE_SHAPE(16x8) + 3]  = sFlyDestIcon_Anim_16x8CantFly,
-    [SPRITE_SHAPE(8x16) + 3]  = sFlyDestIcon_Anim_8x16CantFly,
-    [FLYDESTICON_RED_OUTLINE] = sFlyDestIcon_Anim_RedOutline
+    [SPRITE_SHAPE(8x8)]            = sTeleportDestIcon_Anim_8x8CanTeleport,
+    [SPRITE_SHAPE(16x8)]           = sTeleportDestIcon_Anim_16x8CanTeleport,
+    [SPRITE_SHAPE(8x16)]           = sTeleportDestIcon_Anim_8x16CanTeleport,
+    [SPRITE_SHAPE(8x8)  + 3]       = sTeleportDestIcon_Anim_8x8CantTeleport,
+    [SPRITE_SHAPE(16x8) + 3]       = sTeleportDestIcon_Anim_16x8CantTeleport,
+    [SPRITE_SHAPE(8x16) + 3]       = sTeleportDestIcon_Anim_8x16CantTeleport,
+    [TELEPORTDESTICON_RED_OUTLINE] = sTeleportDestIcon_Anim_RedOutline
 };
 
-static const struct SpriteTemplate sFlyDestIconSpriteTemplate =
+static const struct SpriteTemplate sTeleportDestIconSpriteTemplate =
 {
-    .tileTag = TAG_FLY_ICON,
-    .paletteTag = TAG_FLY_ICON,
-    .oam = &sFlyDestIcon_OamData,
-    .anims = sFlyDestIcon_Anims,
+    .tileTag = TAG_TELEPORT_ICON,
+    .paletteTag = TAG_TELEPORT_ICON,
+    .oam = &sTeleportDestIcon_OamData,
+    .anims = sTeleportDestIcon_Anims,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy
@@ -1079,41 +1079,41 @@ static u8 GetMapsecType(u16 mapSecId)
     case MAPSEC_NONE:
         return MAPSECTYPE_NONE;
     case MAPSEC_PALLET_TOWN:
-        return FlagGet(FLAG_WORLD_MAP_PALLET_TOWN) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_PALLET_TOWN) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_VIRIDIAN_CITY:
-        return FlagGet(FLAG_WORLD_MAP_VIRIDIAN_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_VIRIDIAN_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_PEWTER_CITY:
-        return FlagGet(FLAG_WORLD_MAP_PEWTER_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_PEWTER_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_CERULEAN_CITY:
-        return FlagGet(FLAG_WORLD_MAP_CERULEAN_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_CERULEAN_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_VERMILION_CITY:
-        return FlagGet(FLAG_WORLD_MAP_VERMILION_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_VERMILION_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_LAVENDER_TOWN:
-        return FlagGet(FLAG_WORLD_MAP_LAVENDER_TOWN) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_LAVENDER_TOWN) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_CELADON_CITY:
-        return FlagGet(FLAG_WORLD_MAP_CELADON_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_CELADON_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_FUCHSIA_CITY:
-        return FlagGet(FLAG_WORLD_MAP_FUCHSIA_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_FUCHSIA_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_SAFFRON_CITY:
-        return FlagGet(FLAG_WORLD_MAP_SAFFRON_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_SAFFRON_CITY) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_CINNABAR_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_CINNABAR_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_CINNABAR_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_INDIGO_PLATEAU:
-        return FlagGet(FLAG_WORLD_MAP_INDIGO_PLATEAU) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_INDIGO_PLATEAU) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_ONE_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_ONE_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_ONE_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_TWO_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_TWO_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_TWO_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_THREE_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_THREE_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_THREE_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_FOUR_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_FOUR_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_FOUR_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_FIVE_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_FIVE_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_FIVE_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_SIX_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_SIX_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_SIX_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_SEVEN_ISLAND:
-        return FlagGet(FLAG_WORLD_MAP_SEVEN_ISLAND) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+        return FlagGet(FLAG_WORLD_MAP_SEVEN_ISLAND) ? MAPSECTYPE_CITY_CANTELEPORT : MAPSECTYPE_CITY_CANTTELEPORT;
     case MAPSEC_BATTLE_FRONTIER:
         return FlagGet(FLAG_LANDMARK_BATTLE_FRONTIER) ? MAPSECTYPE_BATTLE_FRONTIER : MAPSECTYPE_NONE;
     default:
@@ -1512,7 +1512,7 @@ bool32 IsEventIslandMapSecId(u8 mapSecId)
     return FALSE;
 }
 
-void CB2_OpenFlyMap(void)
+void CB2_OpenTeleportMap(void)
 {
     switch (gMain.state)
     {
@@ -1527,8 +1527,8 @@ void CB2_OpenFlyMap(void)
         SetGpuReg(REG_OFFSET_BG2HOFS, 0);
         SetGpuReg(REG_OFFSET_BG3HOFS, 0);
         SetGpuReg(REG_OFFSET_BG3VOFS, 0);
-        sFlyMap = Alloc(sizeof(*sFlyMap));
-        if (sFlyMap == NULL)
+        sTeleportMap = Alloc(sizeof(*sTeleportMap));
+        if (sTeleportMap == NULL)
         {
             SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
         }
@@ -1543,11 +1543,11 @@ void CB2_OpenFlyMap(void)
         break;
     case 1:
         ResetBgsAndClearDma3BusyFlags(0);
-        InitBgsFromTemplates(1, sFlyMapBgTemplates, ARRAY_COUNT(sFlyMapBgTemplates));
+        InitBgsFromTemplates(1, sTeleportMapBgTemplates, ARRAY_COUNT(sTeleportMapBgTemplates));
         gMain.state++;
         break;
     case 2:
-        InitWindows(sFlyMapWindowTemplates);
+        InitWindows(sTeleportMapWindowTemplates);
         DeactivateAllTextPrinters();
         gMain.state++;
         break;
@@ -1557,13 +1557,13 @@ void CB2_OpenFlyMap(void)
         gMain.state++;
         break;
     case 4:
-        InitRegionMap(&sFlyMap->regionMap, FALSE);
+        InitRegionMap(&sTeleportMap->regionMap, FALSE);
         CreateRegionMapCursor(TAG_CURSOR, TAG_CURSOR);
         CreateRegionMapPlayerIcon(TAG_PLAYER_ICON, TAG_PLAYER_ICON);
-        sFlyMap->mapSecId = sFlyMap->regionMap.mapSecId;
-        StringFill(sFlyMap->nameBuffer, CHAR_SPACE, MAP_NAME_LENGTH);
-        sDrawFlyDestTextWindow = TRUE;
-        DrawFlyDestTextWindow();
+        sTeleportMap->mapSecId = sTeleportMap->regionMap.mapSecId;
+        StringFill(sTeleportMap->nameBuffer, CHAR_SPACE, MAP_NAME_LENGTH);
+        sDrawTeleportDestTextWindow = TRUE;
+        DrawTeleportDestTextWindow();
         gMain.state++;
         break;
     case 5:
@@ -1576,19 +1576,19 @@ void CB2_OpenFlyMap(void)
         break;
     case 7:
         LoadPalette(sRegionMapFramePal, BG_PLTT_ID(1), sizeof(sRegionMapFramePal));
-        PutWindowTilemap(WIN_FLY_TO_WHERE);
-        FillWindowPixelBuffer(WIN_FLY_TO_WHERE, PIXEL_FILL(0));
-        AddTextPrinterParameterized(WIN_FLY_TO_WHERE, FONT_NORMAL, gText_FlyToWhere, 0, 1, 0, NULL);
+        PutWindowTilemap(WIN_TELEPORT_TO_WHERE);
+        FillWindowPixelBuffer(WIN_TELEPORT_TO_WHERE, PIXEL_FILL(0));
+        AddTextPrinterParameterized(WIN_TELEPORT_TO_WHERE, FONT_NORMAL, gText_TeleportToWhere, 0, 1, 0, NULL);
         ScheduleBgCopyTilemapToVram(0);
         gMain.state++;
         break;
     case 8:
-        LoadFlyDestIcons();
+        LoadTeleportDestIcons();
         gMain.state++;
         break;
     case 9:
         BlendPalettes(PALETTES_ALL, 16, 0);
-        SetVBlankCallback(VBlankCB_FlyMap);
+        SetVBlankCallback(VBlankCB_TeleportMap);
         gMain.state++;
         break;
     case 10:
@@ -1597,65 +1597,65 @@ void CB2_OpenFlyMap(void)
         ShowBg(0);
         ShowBg(1);
         ShowBg(2);
-        SetFlyMapCallback(CB_FadeInFlyMap);
-        SetMainCallback2(CB2_FlyMap);
+        SetTeleportMapCallback(CB_FadeInTeleportMap);
+        SetMainCallback2(CB2_TeleportMap);
         gMain.state++;
         break;
     }
 }
 
-static void VBlankCB_FlyMap(void)
+static void VBlankCB_TeleportMap(void)
 {
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
 }
 
-static void CB2_FlyMap(void)
+static void CB2_TeleportMap(void)
 {
-    sFlyMap->callback();
+    sTeleportMap->callback();
     AnimateSprites();
     BuildOamBuffer();
     DoScheduledBgTilemapCopiesToVram();
 }
 
-static void SetFlyMapCallback(void callback(void))
+static void SetTeleportMapCallback(void callback(void))
 {
-    sFlyMap->callback = callback;
-    sFlyMap->state = 0;
+    sTeleportMap->callback = callback;
+    sTeleportMap->state = 0;
 }
 
-static void DrawFlyDestTextWindow(void)
+static void DrawTeleportDestTextWindow(void)
 {
     u16 i;
     bool32 namePrinted;
     const u8 *name;
 
-    if (sFlyMap->regionMap.mapSecType > MAPSECTYPE_NONE && sFlyMap->regionMap.mapSecType < NUM_MAPSEC_TYPES)
+    if (sTeleportMap->regionMap.mapSecType > MAPSECTYPE_NONE && sTeleportMap->regionMap.mapSecType < NUM_MAPSEC_TYPES)
     {
         namePrinted = FALSE;
-        for (i = 0; i < ARRAY_COUNT(sMultiNameFlyDestinations); i++)
+        for (i = 0; i < ARRAY_COUNT(sMultiNameTeleportDestinations); i++)
         {
-            if (sFlyMap->regionMap.mapSecId == sMultiNameFlyDestinations[i].mapSecId)
+            if (sTeleportMap->regionMap.mapSecId == sMultiNameTeleportDestinations[i].mapSecId)
             {
-                if (FlagGet(sMultiNameFlyDestinations[i].flag))
+                if (FlagGet(sMultiNameTeleportDestinations[i].flag))
                 {
-                    StringLength(sMultiNameFlyDestinations[i].name[sFlyMap->regionMap.posWithinMapSec]);
+                    StringLength(sMultiNameTeleportDestinations[i].name[sTeleportMap->regionMap.posWithinMapSec]);
                     namePrinted = TRUE;
                     ClearStdWindowAndFrameToTransparent(WIN_MAPSEC_NAME, FALSE);
                     DrawStdFrameWithCustomTileAndPalette(WIN_MAPSEC_NAME_TALL, FALSE, 101, 13);
-                    AddTextPrinterParameterized(WIN_MAPSEC_NAME_TALL, FONT_NORMAL, sFlyMap->regionMap.mapSecName, 0, 1, 0, NULL);
-                    name = sMultiNameFlyDestinations[i].name[sFlyMap->regionMap.posWithinMapSec];
+                    AddTextPrinterParameterized(WIN_MAPSEC_NAME_TALL, FONT_NORMAL, sTeleportMap->regionMap.mapSecName, 0, 1, 0, NULL);
+                    name = sMultiNameTeleportDestinations[i].name[sTeleportMap->regionMap.posWithinMapSec];
                     AddTextPrinterParameterized(WIN_MAPSEC_NAME_TALL, FONT_NORMAL, name, GetStringRightAlignXOffset(FONT_NORMAL, name, 96), 17, 0, NULL);
                     ScheduleBgCopyTilemapToVram(0);
-                    sDrawFlyDestTextWindow = TRUE;
+                    sDrawTeleportDestTextWindow = TRUE;
                 }
                 break;
             }
         }
         if (!namePrinted)
         {
-            if (sDrawFlyDestTextWindow == TRUE)
+            if (sDrawTeleportDestTextWindow == TRUE)
             {
                 ClearStdWindowAndFrameToTransparent(WIN_MAPSEC_NAME_TALL, FALSE);
                 DrawStdFrameWithCustomTileAndPalette(WIN_MAPSEC_NAME, FALSE, 101, 13);
@@ -1665,15 +1665,15 @@ static void DrawFlyDestTextWindow(void)
                 // Window is already drawn, just empty it
                 FillWindowPixelBuffer(WIN_MAPSEC_NAME, PIXEL_FILL(1));
             }
-            AddTextPrinterParameterized(WIN_MAPSEC_NAME, FONT_NORMAL, sFlyMap->regionMap.mapSecName, 0, 1, 0, NULL);
+            AddTextPrinterParameterized(WIN_MAPSEC_NAME, FONT_NORMAL, sTeleportMap->regionMap.mapSecName, 0, 1, 0, NULL);
             ScheduleBgCopyTilemapToVram(0);
-            sDrawFlyDestTextWindow = FALSE;
+            sDrawTeleportDestTextWindow = FALSE;
         }
     }
     else
     {
-        // Selection is on MAPSECTYPE_NONE, draw empty fly destination text window
-        if (sDrawFlyDestTextWindow == TRUE)
+        // Selection is on MAPSECTYPE_NONE, draw empty teleport destination text window
+        if (sDrawTeleportDestTextWindow == TRUE)
         {
             ClearStdWindowAndFrameToTransparent(WIN_MAPSEC_NAME_TALL, FALSE);
             DrawStdFrameWithCustomTileAndPalette(WIN_MAPSEC_NAME, FALSE, 101, 13);
@@ -1681,32 +1681,32 @@ static void DrawFlyDestTextWindow(void)
         FillWindowPixelBuffer(WIN_MAPSEC_NAME, PIXEL_FILL(1));
         CopyWindowToVram(WIN_MAPSEC_NAME, COPYWIN_GFX);
         ScheduleBgCopyTilemapToVram(0);
-        sDrawFlyDestTextWindow = FALSE;
+        sDrawTeleportDestTextWindow = FALSE;
     }
 }
 
 
-static void LoadFlyDestIcons(void)
+static void LoadTeleportDestIcons(void)
 {
     struct SpriteSheet sheet;
 
-    LZ77UnCompWram(sFlyTargetIcons_Gfx, sFlyMap->tileBuffer);
-    sheet.data = sFlyMap->tileBuffer;
-    sheet.size = sizeof(sFlyMap->tileBuffer);
-    sheet.tag = TAG_FLY_ICON;
+    LZ77UnCompWram(sTeleportTargetIcons_Gfx, sTeleportMap->tileBuffer);
+    sheet.data = sTeleportMap->tileBuffer;
+    sheet.size = sizeof(sTeleportMap->tileBuffer);
+    sheet.tag = TAG_TELEPORT_ICON;
     LoadSpriteSheet(&sheet);
-    LoadSpritePalette(&sFlyTargetIconsSpritePalette);
-    CreateFlyDestIcons();
-    TryCreateRedOutlineFlyDestIcons();
+    LoadSpritePalette(&sTeleportTargetIconsSpritePalette);
+    CreateTeleportDestIcons();
+    TryCreateRedOutlineTeleportDestIcons();
 }
 
-// Sprite data for SpriteCB_FlyDestIcon
+// Sprite data for SpriteCB_TeleportDestIcon
 #define sIconMapSec   data[0]
 #define sFlickerTimer data[1]
 
-static void CreateFlyDestIcons(void)
+static void CreateTeleportDestIcons(void)
 {
-    u16 canFlyFlag;
+    u16 canTeleportFlag;
     u16 mapSecId;
     u16 x;
     u16 y;
@@ -1715,7 +1715,7 @@ static void CreateFlyDestIcons(void)
     u16 shape;
     u8 spriteId;
 
-    canFlyFlag = FLAG_WORLD_MAP_PALLET_TOWN;
+    canTeleportFlag = FLAG_WORLD_MAP_PALLET_TOWN;
     for (mapSecId = MAPSEC_PALLET_TOWN; mapSecId <= MAPSEC_INDIGO_PLATEAU; mapSecId++)
     {
         GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
@@ -1729,26 +1729,26 @@ static void CreateFlyDestIcons(void)
         else
             shape = SPRITE_SHAPE(8x8);
 
-        spriteId = CreateSprite(&sFlyDestIconSpriteTemplate, x, y, 10);
+        spriteId = CreateSprite(&sTeleportDestIconSpriteTemplate, x, y, 10);
         if (spriteId != MAX_SPRITES)
         {
             gSprites[spriteId].oam.shape = shape;
 
-            if (FlagGet(canFlyFlag))
-                gSprites[spriteId].callback = SpriteCB_FlyDestIcon;
+            if (FlagGet(canTeleportFlag))
+                gSprites[spriteId].callback = SpriteCB_TeleportDestIcon;
             else
                 shape += 3;
 
             StartSpriteAnim(&gSprites[spriteId], shape);
             gSprites[spriteId].sIconMapSec = mapSecId;
         }
-        canFlyFlag++;
+        canTeleportFlag++;
     }
 }
 
 // Draw a red outline box on the mapsec if its corresponding flag has been set
 // Only used for Battle Frontier, but set up to handle more
-static void TryCreateRedOutlineFlyDestIcons(void)
+static void TryCreateRedOutlineTeleportDestIcons(void)
 {
     u16 i;
     u16 x;
@@ -1758,30 +1758,30 @@ static void TryCreateRedOutlineFlyDestIcons(void)
     u16 mapSecId;
     u8 spriteId;
 
-    for (i = 0; sRedOutlineFlyDestinations[i][1] != MAPSEC_NONE; i++)
+    for (i = 0; sRedOutlineTeleportDestinations[i][1] != MAPSEC_NONE; i++)
     {
-        if (FlagGet(sRedOutlineFlyDestinations[i][0]))
+        if (FlagGet(sRedOutlineTeleportDestinations[i][0]))
         {
-            mapSecId = sRedOutlineFlyDestinations[i][1];
+            mapSecId = sRedOutlineTeleportDestinations[i][1];
             GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
             x = (x + MAPCURSOR_X_MIN) * 8;
             y = (y + MAPCURSOR_Y_MIN) * 8;
-            spriteId = CreateSprite(&sFlyDestIconSpriteTemplate, x, y, 10);
+            spriteId = CreateSprite(&sTeleportDestIconSpriteTemplate, x, y, 10);
             if (spriteId != MAX_SPRITES)
             {
                 gSprites[spriteId].oam.size = SPRITE_SIZE(16x16);
-                gSprites[spriteId].callback = SpriteCB_FlyDestIcon;
-                StartSpriteAnim(&gSprites[spriteId], FLYDESTICON_RED_OUTLINE);
+                gSprites[spriteId].callback = SpriteCB_TeleportDestIcon;
+                StartSpriteAnim(&gSprites[spriteId], TELEPORTDESTICON_RED_OUTLINE);
                 gSprites[spriteId].sIconMapSec = mapSecId;
             }
         }
     }
 }
 
-// Flickers fly destination icon color (by hiding the fly icon sprite) if the cursor is currently on it
-static void SpriteCB_FlyDestIcon(struct Sprite *sprite)
+// Flickers teleport destination icon color (by hiding the teleport icon sprite) if the cursor is currently on it
+static void SpriteCB_TeleportDestIcon(struct Sprite *sprite)
 {
-    if (sFlyMap->regionMap.mapSecId == sprite->sIconMapSec)
+    if (sTeleportMap->regionMap.mapSecId == sprite->sIconMapSec)
     {
         if (++sprite->sFlickerTimer > 16)
         {
@@ -1799,26 +1799,26 @@ static void SpriteCB_FlyDestIcon(struct Sprite *sprite)
 #undef sIconMapSec
 #undef sFlickerTimer
 
-static void CB_FadeInFlyMap(void)
+static void CB_FadeInTeleportMap(void)
 {
-    switch (sFlyMap->state)
+    switch (sTeleportMap->state)
     {
     case 0:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
-        sFlyMap->state++;
+        sTeleportMap->state++;
         break;
     case 1:
         if (!UpdatePaletteFade())
         {
-            SetFlyMapCallback(CB_HandleFlyMapInput);
+            SetTeleportMapCallback(CB_HandleTeleportMapInput);
         }
         break;
     }
 }
 
-static void CB_HandleFlyMapInput(void)
+static void CB_HandleTeleportMapInput(void)
 {
-    if (sFlyMap->state == 0)
+    if (sTeleportMap->state == 0)
     {
         switch (DoRegionMapInputCallback())
         {
@@ -1827,40 +1827,40 @@ static void CB_HandleFlyMapInput(void)
         case MAP_INPUT_MOVE_CONT:
             break;
         case MAP_INPUT_MOVE_END:
-            DrawFlyDestTextWindow();
+            DrawTeleportDestTextWindow();
             break;
         case MAP_INPUT_A_BUTTON:
-            if (sFlyMap->regionMap.mapSecType == MAPSECTYPE_CITY_CANFLY || sFlyMap->regionMap.mapSecType == MAPSECTYPE_BATTLE_FRONTIER)
+            if (sTeleportMap->regionMap.mapSecType == MAPSECTYPE_CITY_CANTELEPORT || sTeleportMap->regionMap.mapSecType == MAPSECTYPE_BATTLE_FRONTIER)
             {
                 m4aSongNumStart(SE_SELECT);
-                sFlyMap->choseFlyLocation = TRUE;
-                SetFlyMapCallback(CB_ExitFlyMap);
+                sTeleportMap->choseTeleportLocation = TRUE;
+                SetTeleportMapCallback(CB_ExitTeleportMap);
             }
             break;
         case MAP_INPUT_B_BUTTON:
             m4aSongNumStart(SE_SELECT);
-            sFlyMap->choseFlyLocation = FALSE;
-            SetFlyMapCallback(CB_ExitFlyMap);
+            sTeleportMap->choseTeleportLocation = FALSE;
+            SetTeleportMapCallback(CB_ExitTeleportMap);
             break;
         }
     }
 }
 
-static void CB_ExitFlyMap(void)
+static void CB_ExitTeleportMap(void)
 {
-    switch (sFlyMap->state)
+    switch (sTeleportMap->state)
     {
     case 0:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-        sFlyMap->state++;
+        sTeleportMap->state++;
         break;
     case 1:
         if (!UpdatePaletteFade())
         {
             FreeRegionMapIconResources();
-            if (sFlyMap->choseFlyLocation)
+            if (sTeleportMap->choseTeleportLocation)
             {
-                switch (sFlyMap->regionMap.mapSecId)
+                switch (sTeleportMap->regionMap.mapSecId)
                 {
                 case MAPSEC_BATTLE_FRONTIER:
                     SetWarpDestinationToHealLocation(HEAL_LOCATION_BATTLE_FRONTIER_OUTSIDE_EAST);
@@ -1869,22 +1869,22 @@ static void CB_ExitFlyMap(void)
                     SetWarpDestinationToHealLocation(gSaveBlock2Ptr->playerGender == MALE ? HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE : HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE);
                     break;
                 case MAPSEC_EVER_GRANDE_CITY:
-                    SetWarpDestinationToHealLocation(FlagGet(FLAG_LANDMARK_POKEMON_LEAGUE) && sFlyMap->regionMap.posWithinMapSec == 0 ? HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE : HEAL_LOCATION_EVER_GRANDE_CITY);
+                    SetWarpDestinationToHealLocation(FlagGet(FLAG_LANDMARK_POKEMON_LEAGUE) && sTeleportMap->regionMap.posWithinMapSec == 0 ? HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE : HEAL_LOCATION_EVER_GRANDE_CITY);
                     break;
                 default:
-                    if (sMapHealLocations[sFlyMap->regionMap.mapSecId][2] != HEAL_LOCATION_NONE)
-                        SetWarpDestinationToHealLocation(sMapHealLocations[sFlyMap->regionMap.mapSecId][2]);
+                    if (sMapHealLocations[sTeleportMap->regionMap.mapSecId][2] != HEAL_LOCATION_NONE)
+                        SetWarpDestinationToHealLocation(sMapHealLocations[sTeleportMap->regionMap.mapSecId][2]);
                     else
-                        SetWarpDestinationToMapWarp(sMapHealLocations[sFlyMap->regionMap.mapSecId][0], sMapHealLocations[sFlyMap->regionMap.mapSecId][1], WARP_ID_NONE);
+                        SetWarpDestinationToMapWarp(sMapHealLocations[sTeleportMap->regionMap.mapSecId][0], sMapHealLocations[sTeleportMap->regionMap.mapSecId][1], WARP_ID_NONE);
                     break;
                 }
-                ReturnToFieldFromFlyMapSelect();
+                ReturnToFieldFromTeleportMapSelect();
             }
             else
             {
-                SetMainCallback2(CB2_ReturnToPartyMenuFromFlyMap);
+                SetMainCallback2(CB2_ReturnToPartyMenuFromTeleportMap);
             }
-            TRY_FREE_AND_SET_NULL(sFlyMap);
+            TRY_FREE_AND_SET_NULL(sTeleportMap);
             FreeAllWindowBuffers();
         }
         break;

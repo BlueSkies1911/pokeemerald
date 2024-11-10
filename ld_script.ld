@@ -295,7 +295,6 @@ SECTIONS {
         src/intro_credits_graphics.o(.text);
         src/evolution_graphics.o(.text);
         src/bard_music.o(.text);
-        src/fldeff_teleport.o(.text);
         src/battle_tv.o(.text);
         src/pokemon_animation.o(.text);
         src/recorded_battle.o(.text);
