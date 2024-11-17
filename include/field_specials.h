@@ -14,6 +14,7 @@ bool32 ShouldDoOakCall(void);
 bool32 ShouldDoDaisyCall(void);
 bool32 ShouldDoBrockCall(void);
 bool32 ShouldDoOldSeaMapCall(void);
+bool32 ShouldDoKoichiCall(void);
 bool32 CountSSTidalStep(u16 delta);
 void ShowScrollableMultichoice(void);
 void FrontierGamblerSetWonOrLost(bool8 won);

@@ -633,6 +633,11 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
             ScriptContext_SetupScript(ProfessorOaksLab_EventScript_OldSeaMapCall);
             return TRUE;
         }
+        if (ShouldDoKoichiCall() == TRUE)
+        {
+            ScriptContext_SetupScript(SaffronCity_Dojo_Text_KoichiCall);
+            return TRUE;
+        }
     }
 
     if (SafariZoneTakeStep() == TRUE)

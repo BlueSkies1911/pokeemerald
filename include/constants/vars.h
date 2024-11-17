@@ -88,7 +88,7 @@
 #define VAR_TRICK_HOUSE_LEVEL                0x4044
 #define VAR_POKELOT_PRIZE_ITEM               0x4045
 #define VAR_NATIONAL_DEX                     0x4046
-#define VAR_UNUSED_0x4047                    0x4047
+#define VAR_KOICHI_CALL_STEP_COUNTER         0x4047
 #define VAR_ASH_GATHER_COUNT                 0x4048
 #define VAR_BIRCH_STATE                      0x4049
 #define VAR_CRUISE_STEP_COUNT                0x404A

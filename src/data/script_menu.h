@@ -329,10 +329,10 @@ static const struct MenuAction MultichoiceList_GameCornerTMs[] =
 
 static const struct MenuAction MultichoiceList_GameCornerPokemon[] =
 {
-    {gText_Abra_180Coins},
-    {gText_Clefairy_500Coins},
-    {gText_Dratini_2800Coins},
-    {gText_Scyther_5500Coins},
+    {gText_Eevee_1500Coins},
+    {gText_Pinsir_3000Coins},
+    {gText_Scyther_3000Coins},
+    {gText_Dratini_5500Coins},
     {gText_Porygon_9999Coins},
     {gText_NoThanks},
 };
