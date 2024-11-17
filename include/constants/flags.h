@@ -188,8 +188,8 @@
 #define FLAG_HIDE_POWER_PLANT_ELECTRODE_2                            0xAE
 #define FLAG_FOUGHT_ZAPDOS                                           0xAF
 #define FLAG_HIDE_ZAPDOS                                             0xB0
-#define FLAG_HIDE_CINNABAR_BILL                                      0xB1
-#define FLAG_HIDE_CINNABAR_SEAGALLOP                                 0xB2
+#define FLAG_UNUSED_0xB1                                             0xB1
+#define FLAG_UNUSED_0xB2                                             0xB2
 #define FLAG_GOT_FOSSIL_POKEMON                                      0xB3
 #define FLAG_REVIVED_DOME                                            0xB4
 #define FLAG_REVIVED_HELIX                                           0xB5
@@ -319,7 +319,7 @@
 #define FLAG_RECEIVED_GLASS_ORNAMENT                                0x130
 #define FLAG_RECEIVED_SILVER_SHIELD                                 0x131
 #define FLAG_RECEIVED_GOLD_SHIELD                                   0x132
-#define FLAG_HIDE_CINNABAR_POKECENTER_BILL                          0x133
+#define FLAG_UNUSED_0x133                                           0x133
 #define FLAG_DEFEATED_SS_TIDAL_TRAINERS                             0x134
 #define FLAG_RECEIVED_SPELON_BERRY                                  0x135
 #define FLAG_RECEIVED_PAMTRE_BERRY                                  0x136
