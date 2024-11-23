@@ -335,7 +335,7 @@ enum {
     KANTO_DEX_MEWTWO,
 };
 
-#define KANTO_DEX_COUNT (KANTO_DEX_MEWTWO + 1)
+#define KANTO_DEX_COUNT KANTO_DEX_MEWTWO
 
 #define WEIGHT_HEIGHT_STR_LEN          16
 #define WEIGHT_HEIGHT_STR_MEM          (WEIGHT_HEIGHT_STR_LEN * sizeof(u8))

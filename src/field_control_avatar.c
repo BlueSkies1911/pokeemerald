@@ -635,7 +635,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         }
         if (ShouldDoKoichiCall() == TRUE)
         {
-            ScriptContext_SetupScript(SaffronCity_Dojo_Text_KoichiCall);
+            ScriptContext_SetupScript(SaffronCity_Dojo_EventScript_KoichiCall);
             return TRUE;
         }
     }

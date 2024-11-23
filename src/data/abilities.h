@@ -220,9 +220,9 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 4,
     },
 
-    [ABILITY_SYNCHRONIZE] =
+    [ABILITY_SYNCHRONISE] =
     {
-        .name = _("Synchronize"),
+        .name = _("Synchronise"),
         .description = COMPOUND_STRING("Passes on status problems."),
         .aiRating = 4,
     },

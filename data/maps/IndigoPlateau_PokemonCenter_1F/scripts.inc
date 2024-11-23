@@ -9,15 +9,7 @@ IndigoPlateau_PokemonCenter_1F_MapScripts::
 
 IndigoPlateau_PokemonCenter_1F_OnTransition:
     setrespawn HEAL_LOCATION_INDIGO_PLATEAU
-    specialvar VAR_RESULT, IsNationalPokedexEnabled
-    compare VAR_RESULT, TRUE
-    call_if_eq IndigoPlateau_PokemonCenter_1F_EventScript_CheckBlockDoor
     end
-
-IndigoPlateau_PokemonCenter_1F_EventScript_CheckBlockDoor::
-    goto_if_set FLAG_SYS_CAN_LINK_WITH_RS, Common_EventScript_NopReturn
-    setobjectxyperm LOCALID_DOOR_GUARD, 4, 2
-    return
 
 IndigoPlateau_PokemonCenter_1F_EventScript_Nurse::
     setvar VAR_0x800B, LOCALID_NURSE
@@ -51,24 +43,7 @@ IndigoPlateau_PokemonCenter_1F_Items::
     end
 
 IndigoPlateau_PokemonCenter_1F_EventScript_DoorGuard::
-    lock
-    faceplayer
-    specialvar VAR_RESULT, IsNationalPokedexEnabled
-    compare VAR_RESULT, TRUE
-    goto_if_eq IndigoPlateau_PokemonCenter_1F_EventScript_CheckSeviiIslandComplete
-    msgbox IndigoPlateau_PokemonCenter_1F_Text_FaceEliteFourGoodLuck, MSGBOX_DEFAULT
-    release
-    end
-
-IndigoPlateau_PokemonCenter_1F_EventScript_CheckSeviiIslandComplete::
-    goto_if_set FLAG_SYS_CAN_LINK_WITH_RS, IndigoPlateau_PokemonCenter_1F_EventScript_SeviiIslandComplete
-    msgbox IndigoPlateau_PokemonCenter_1F_Text_LoreleiIsAbsentClosedForTimeBeing, MSGBOX_DEFAULT
-    release
-    end
-
-IndigoPlateau_PokemonCenter_1F_EventScript_SeviiIslandComplete::
-    msgbox IndigoPlateau_PokemonCenter_1F_Text_FaceEliteFourGoodLuck, MSGBOX_DEFAULT
-    release
+    msgbox IndigoPlateau_PokemonCenter_1F_Text_FaceEliteFourGoodLuck, MSGBOX_NPC
     end
 
 IndigoPlateau_PokemonCenter_1F_EventScript_GymGuy::
@@ -92,14 +67,6 @@ IndigoPlateau_PokemonCenter_1F_Text_FaceEliteFourGoodLuck::
     .string "Elite Four one by one.\p"
     .string "If you win, a door opens to the\n"
     .string "next Trainer. Good luck!$"
-
-IndigoPlateau_PokemonCenter_1F_Text_LoreleiIsAbsentClosedForTimeBeing::
-    .string "I am so sorry, but you've wasted\n"
-    .string "your time coming here.\p"
-    .string "Lorelei of the Elite Four is\n"
-    .string "absent, you see.\p"
-    .string "As a result, the Pokémon League is\n"
-    .string "closed for the time being.$"
 
 IndigoPlateau_PokemonCenter_1F_Text_GymGuyAdvice::
     .string "Yo!\n"

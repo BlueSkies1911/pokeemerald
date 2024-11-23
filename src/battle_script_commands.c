@@ -2702,14 +2702,14 @@ void SetMoveEffect(bool32 primary, bool32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STATUSED;
             }
 
-            // for synchronize
+            // for synchronise
 
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON
              || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC
              || gBattleScripting.moveEffect == MOVE_EFFECT_PARALYSIS
              || gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
              {
-                gBattleStruct->synchronizeMoveEffect = gBattleScripting.moveEffect;
+                gBattleStruct->synchroniseMoveEffect = gBattleScripting.moveEffect;
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
              }
             return;
@@ -4752,8 +4752,8 @@ static void Cmd_moveend(void)
             }
             gBattleScripting.moveendState++;
             break;
-        case MOVEEND_SYNCHRONIZE_TARGET: // target synchronize
-            if (AbilityBattleEffects(ABILITYEFFECT_SYNCHRONIZE, gBattlerTarget, 0, 0, 0))
+        case MOVEEND_SYNCHRONISE_TARGET: // target synchronise
+            if (AbilityBattleEffects(ABILITYEFFECT_SYNCHRONISE, gBattlerTarget, 0, 0, 0))
                 effect = TRUE;
             gBattleScripting.moveendState++;
             break;

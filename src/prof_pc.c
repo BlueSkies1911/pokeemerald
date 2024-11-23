@@ -45,7 +45,7 @@ static const u8 *const sOakDexRatingTexts[OAK_DEX_STRINGS] =
 // This shows your Kanto Pokédex rating and not your National Dex.
 const u8 *GetPokedexRatingText(u32 count)
 {
-    return sOakDexRatingTexts[(count * (OAK_DEX_STRINGS - 1)) / (KANTO_DEX_COUNT - 1)];
+    return sOakDexRatingTexts[(count * (OAK_DEX_STRINGS - 1)) / KANTO_DEX_COUNT];
 }
 
 void ShowPokedexRatingMessage(void)

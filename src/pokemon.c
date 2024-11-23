@@ -101,7 +101,7 @@ static const struct CombinedMove sCombinedMoves[2] =
 #define KANTO_TO_NATIONAL(name)     [KANTO_DEX_##name - 1] = NATIONAL_DEX_##name
 
 // Assigns all Kanto Dex Indexes to a National Dex Index
-static const u16 sKantoToNationalOrder[KANTO_DEX_COUNT - 1] =
+static const u16 sKantoToNationalOrder[KANTO_DEX_COUNT] =
 {
     KANTO_TO_NATIONAL(BULBASAUR),
     KANTO_TO_NATIONAL(IVYSAUR),
@@ -3707,7 +3707,7 @@ u16 NationalToKantoOrder(u16 nationalNum)
     while (kantoNum < (KANTO_DEX_COUNT - 1) && sKantoToNationalOrder[kantoNum] != nationalNum)
         kantoNum++;
 
-    if (kantoNum >= KANTO_DEX_COUNT - 1)
+    if (kantoNum > KANTO_DEX_COUNT - 1)
         return 0;
 
     return kantoNum + 1;
@@ -3731,7 +3731,7 @@ u16 SpeciesToKantoPokedexNum(u16 species)
 
 u16 KantoToNationalOrder(u16 kantoNum)
 {
-    if (!kantoNum || kantoNum >= KANTO_DEX_COUNT)
+    if (!kantoNum || kantoNum > KANTO_DEX_COUNT)
         return 0;
 
     return sKantoToNationalOrder[kantoNum - 1];

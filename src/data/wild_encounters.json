@@ -5593,9 +5593,9 @@
                   "species": "SPECIES_GEODUDE"
                 },
                 {
-                  "min_level": 46,
-                  "max_level": 46,
-                  "species": "SPECIES_ARBOK"
+                  "min_level": 34,
+                  "max_level": 34,
+                  "species": "SPECIES_GEODUDE"
                 },
                 {
                   "min_level": 46,
@@ -5608,9 +5608,9 @@
                   "species": "SPECIES_MACHOP"
                 },
                 {
-                  "min_level": 42,
-                  "max_level": 42,
-                  "species": "SPECIES_PRIMEAPE"
+                  "min_level": 46,
+                  "max_level": 46,
+                  "species": "SPECIES_ARBOK"
                 },
                 {
                   "min_level": 46,
@@ -10635,7 +10635,7 @@
                 {
                   "min_level": 15,
                   "max_level": 25,
-                  "species": "SPECIES_STARYU"
+                  "species": "SPECIES_SHELLDER"
                 },
                 {
                   "min_level": 25,
@@ -10677,7 +10677,7 @@
                 {
                   "min_level": 15,
                   "max_level": 25,
-                  "species": "SPECIES_SHELLDER"
+                  "species": "SPECIES_STARYU"
                 },
                 {
                   "min_level": 15,
@@ -11830,9 +11830,9 @@
                   "species": "SPECIES_MEOWTH"
                 },
                 {
-                  "min_level": 10,
-                  "max_level": 10,
-                  "species": "SPECIES_ABRA"
+                  "min_level": 13,
+                  "max_level": 16,
+                  "species": "SPECIES_GROWLITHE"
                 },
                 {
                   "min_level": 13,
@@ -11840,9 +11840,9 @@
                   "species": "SPECIES_GROWLITHE"
                 },
                 {
-                  "min_level": 8,
-                  "max_level": 8,
-                  "species": "SPECIES_ABRA"
+                  "min_level": 13,
+                  "max_level": 13,
+                  "species": "SPECIES_GROWLITHE"
                 },
                 {
                   "min_level": 15,
@@ -11850,9 +11850,9 @@
                   "species": "SPECIES_GROWLITHE"
                 },
                 {
-                  "min_level": 12,
-                  "max_level": 12,
-                  "species": "SPECIES_ABRA"
+                  "min_level": 15,
+                  "max_level": 15,
+                  "species": "SPECIES_GROWLITHE"
                 }
               ],
               [
@@ -14326,14 +14326,14 @@
                   "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 28,
-                  "max_level": 28,
-                  "species": "SPECIES_WEEPINBELL"
+                  "min_level": 15,
+                  "max_level": 15,
+                  "species": "SPECIES_BULBASAUR"
                 },
                 {
-                  "min_level": 30,
-                  "max_level": 30,
-                  "species": "SPECIES_WEEPINBELL"
+                  "min_level": 15,
+                  "max_level": 15,
+                  "species": "SPECIES_BULBASAUR"
                 },
                 {
                   "min_level": 30,
@@ -14388,14 +14388,14 @@
                   "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 28,
-                  "max_level": 28,
-                  "species": "SPECIES_WEEPINBELL"
+                  "min_level": 15,
+                  "max_level": 15,
+                  "species": "SPECIES_BULBASAUR"
                 },
                 {
-                  "min_level": 30,
-                  "max_level": 30,
-                  "species": "SPECIES_WEEPINBELL"
+                  "min_level": 15,
+                  "max_level": 15,
+                  "species": "SPECIES_BULBASAUR"
                 },
                 {
                   "min_level": 30,
@@ -14763,19 +14763,19 @@
                   "species": "SPECIES_TANGELA"
                 },
                 {
-                  "min_level": 30,
-                  "max_level": 30,
+                  "min_level": 28,
+                  "max_level": 28,
                   "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 15,
-                  "max_level": 15,
-                  "species": "SPECIES_BULBASAUR"
+                  "min_level": 28,
+                  "max_level": 28,
+                  "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 15,
-                  "max_level": 15,
-                  "species": "SPECIES_BULBASAUR"
+                  "min_level": 30,
+                  "max_level": 30,
+                  "species": "SPECIES_WEEPINBELL"
                 },
                 {
                   "min_level": 30,
@@ -14825,19 +14825,19 @@
                   "species": "SPECIES_PIDGEOTTO"
                 },
                 {
-                  "min_level": 30,
-                  "max_level": 30,
+                  "min_level": 28,
+                  "max_level": 28,
                   "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 15,
-                  "max_level": 15,
-                  "species": "SPECIES_BULBASAUR"
+                  "min_level": 28,
+                  "max_level": 28,
+                  "species": "SPECIES_WEEPINBELL"
                 },
                 {
-                  "min_level": 15,
-                  "max_level": 15,
-                  "species": "SPECIES_BULBASAUR"
+                  "min_level": 30,
+                  "max_level": 30,
+                  "species": "SPECIES_WEEPINBELL"
                 },
                 {
                   "min_level": 30,

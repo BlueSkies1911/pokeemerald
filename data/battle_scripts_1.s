@@ -1757,7 +1757,7 @@ BattleScript_MultiHitPrintStrings::
 BattleScript_MultiHitEnd::
 	setadditionaleffects
 	tryfaintmon BS_TARGET
-	moveendcase MOVEEND_SYNCHRONIZE_TARGET
+	moveendcase MOVEEND_SYNCHRONISE_TARGET
 	moveendfrom MOVEEND_STATUS_IMMUNITY_ABILITIES
 	end
 
@@ -5713,7 +5713,7 @@ BattleScript_AbilityStatusEffect::
 	seteffectsecondary
 	return
 
-BattleScript_SynchronizeActivates::
+BattleScript_SynchroniseActivates::
 	waitstate
 	call BattleScript_AbilityPopUp
 	seteffectprimary

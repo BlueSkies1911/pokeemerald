@@ -224,7 +224,7 @@
 // cases for Cmd_moveend
 #define MOVEEND_SUM_DAMAGE                        0
 #define MOVEEND_RAGE                              1
-#define MOVEEND_SYNCHRONIZE_TARGET                2
+#define MOVEEND_SYNCHRONISE_TARGET                2
 #define MOVEEND_ABILITIES                         3
 #define MOVEEND_ABILITIES_ATTACKER                4
 #define MOVEEND_STATUS_IMMUNITY_ABILITIES         5

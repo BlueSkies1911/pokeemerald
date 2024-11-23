@@ -147,7 +147,7 @@ SaffronCity_Dojo_EventScript_MasterKoichi::
     end
 
 SaffronCity_Dojo_EventScript_MasterKoichiAlreadyGotHitmon::
-    goto_if_set FLAG_GIVE_SECOND_HITMON, SaffronCity_Dojo_EventScript_KarateMasterGiveHitmon
+    goto_if_set FLAG_GIVE_SECOND_HITMON, SaffronCity_Dojo_EventScript_KarateMasterGiveHitmonBegin
     msgbox SaffronCity_Dojo_Text_StayAndTrainWithUs, MSGBOX_DEFAULT
     release
     end
@@ -157,10 +157,25 @@ SaffronCity_Dojo_EventScript_DefeatedMasterKoichi::
     release
     end
 
-SaffronCity_Dojo_EventScript_KarateMasterGiveHitmon::
+SaffronCity_Dojo_EventScript_KarateMasterGiveHitmonBegin::
     msgbox SaffronCity_Dojo_Text_CongratsOnBecomingChampion, MSGBOX_DEFAULT
-    call_if_set FLAG_HIDE_DOJO_HITMONLEE_BALL, SaffronCity_Dojo_EventScript_GiveHitmonchan
-    call_if_set FLAG_HIDE_DOJO_HITMONCHAN_BALL, SaffronCity_Dojo_EventScript_GiveHitmonlee
+    goto_if_set FLAG_HIDE_DOJO_HITMONLEE_BALL, SaffronCity_Dojo_EventScript_GiveHitmonchan
+    goto_if_set FLAG_HIDE_DOJO_HITMONCHAN_BALL, SaffronCity_Dojo_EventScript_GiveHitmonlee
+    end
+
+SaffronCity_Dojo_EventScript_GiveHitmonchan::
+    removeobject LOCALID_HITMONCHAN_BALL
+    setvar VAR_TEMP_1, SPECIES_HITMONCHAN
+    goto SaffronCity_Dojo_EventScript_KarateMasterGiveHitmonEnd
+    end
+
+SaffronCity_Dojo_EventScript_GiveHitmonlee::
+    removeobject LOCALID_HITMONLEE_BALL
+    setvar VAR_TEMP_1, SPECIES_HITMONLEE
+    goto SaffronCity_Dojo_EventScript_KarateMasterGiveHitmonEnd
+    end
+
+SaffronCity_Dojo_EventScript_KarateMasterGiveHitmonEnd::
     givemon VAR_TEMP_1, 25, ITEM_NONE
     compare VAR_RESULT, 0
     goto_if_eq SaffronCity_Dojo_EventScript_ReceivedSecondHitmonParty
@@ -170,16 +185,6 @@ SaffronCity_Dojo_EventScript_KarateMasterGiveHitmon::
     goto_if_eq Common_EventScript_NoMoreRoomForPokemon
     release
     end
-
-SaffronCity_Dojo_EventScript_GiveHitmonchan::
-    removeobject LOCALID_HITMONCHAN_BALL
-    setvar VAR_TEMP_1, SPECIES_HITMONCHAN
-    return
-
-SaffronCity_Dojo_EventScript_GiveHitmonlee::
-    removeobject LOCALID_HITMONLEE_BALL
-    setvar VAR_TEMP_1, SPECIES_HITMONLEE
-    return
 
 SaffronCity_Dojo_EventScript_ReceivedSecondHitmonParty::
     bufferspeciesname 0, VAR_TEMP_1

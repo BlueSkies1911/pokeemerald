@@ -23,8 +23,8 @@
 #define ABILITYEFFECT_MOVE_END_ATTACKER          4
 #define ABILITYEFFECT_MOVE_END                   5
 #define ABILITYEFFECT_IMMUNITY                   6
-#define ABILITYEFFECT_SYNCHRONIZE                7
-#define ABILITYEFFECT_ATK_SYNCHRONIZE            8
+#define ABILITYEFFECT_SYNCHRONISE                7
+#define ABILITYEFFECT_ATK_SYNCHRONISE            8
 #define ABILITYEFFECT_TRACE1                     9
 #define ABILITYEFFECT_TRACE2                     10
 #define ABILITYEFFECT_SWITCH_IN_TERRAIN          16

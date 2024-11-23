@@ -40,7 +40,7 @@ const u8 gEasyChatWord_Ground[] = _("Ground");
 const u8 gEasyChatWord_Limber[] = _("Limber");
 const u8 gEasyChatWord_MagnetPull[] = _("Magnet Pull");
 const u8 gEasyChatWord_WhiteSmoke[] = _("White Smoke");
-const u8 gEasyChatWord_Synchronize[] = _("Synchronise");
+const u8 gEasyChatWord_Synchronise[] = _("Synchronise");
 const u8 gEasyChatWord_Overgrow[] = _("Overgrow");
 const u8 gEasyChatWord_SwiftSwim[] = _("Swift Swim");
 const u8 gEasyChatWord_SandStream[] = _("Sand Stream");
@@ -361,9 +361,9 @@ const struct EasyChatWordInfo gEasyChatGroup_Status[] = {
         .alphabeticalOrder = 71,
         .enabled = TRUE,
     },
-    [EC_INDEX(EC_WORD_SYNCHRONIZE)] =
+    [EC_INDEX(EC_WORD_SYNCHRONISE)] =
     {
-        .text = gEasyChatWord_Synchronize,
+        .text = gEasyChatWord_Synchronise,
         .alphabeticalOrder = 100,
         .enabled = TRUE,
     },
