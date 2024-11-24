@@ -6707,7 +6707,16 @@ static inline u32 CalcDefenseStat(u32 move, u32 battlerAtk, u32 battlerDef, u32 
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(2.0));
         break;
     case HOLD_EFFECT_EVIOLITE:
-        if (CanEvolve(gBattleMons[battlerDef].species))
+        if (CanEvolve(gBattleMons[battlerDef].species)
+         || gBattleMons[battlerDef].species == SPECIES_PRIMEAPE
+         || gBattleMons[battlerDef].species == SPECIES_MAGNETON
+         || gBattleMons[battlerDef].species == SPECIES_FARFETCHD
+         || gBattleMons[battlerDef].species == SPECIES_LICKITUNG
+         || gBattleMons[battlerDef].species == SPECIES_RHYDON
+         || gBattleMons[battlerDef].species == SPECIES_TANGELA
+         || gBattleMons[battlerDef].species == SPECIES_ELECTABUZZ
+         || gBattleMons[battlerDef].species == SPECIES_MAGMAR
+         || gBattleMons[battlerDef].species == SPECIES_PORYGON2)
             modifier = uq4_12_multiply_half_down(modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_ASSAULT_VEST:
